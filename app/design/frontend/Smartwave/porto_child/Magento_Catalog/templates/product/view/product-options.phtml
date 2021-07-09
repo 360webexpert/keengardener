@@ -1,0 +1,7 @@
+    <?php
+    $product = $block->getProduct();
+    ?>
+	<?php $productOptions = $product->getData('c2c_upgrade_options'); ?>
+	<?php if (!empty($productOptions)): ?>
+		<p><?php echo $productOptions; ?></p>
+	<?php endif; ?>

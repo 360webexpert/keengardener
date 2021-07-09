@@ -1,0 +1,32 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationPro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<div class="items">
+    <select name="layer_<?= /** @noEscape */ $block->getAttributeCode() ?>"
+            class="layer_filter_select" <?= /** @noEscape */ $block->isMultipleMode() ? 'multiple' : '' ?>
+            url="<?= /** @noEscape */ $block->getBlankUrl() ?>"
+            search="<?= /** @noEscape */ $block->isSearchEnable() ? 'true' : 'false' ?>">
+        <?php foreach ($block->getOptions() as $key => $option) : ?>
+            <option value="<?= /** @noEscape */ $block->escapeUrl($option['value']) ?>" <?= /** @noEscape */ $option['selected'] ? 'selected' : '' ?> <?= /** @noEscape */ $option['disabled'] ? 'disabled' : '' ?>><?= /** @noEscape */ $option['label'] ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>

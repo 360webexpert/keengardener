@@ -1,0 +1,79 @@
+"Add Rule","Add Rule"
+"Apply Rules","Apply Rules"
+"Save Rule","Save Rule"
+"Save & Apply","Save & Apply"
+"Save and Continue Edit","Save and Continue Edit"
+"Edit Rule '%1'","Edit Rule '%1'"
+"New Rule","New Rule"
+Action,Action
+"Meta Title Template","Meta Title Template"
+"Meta Description Template","Meta Description Template"
+"It is best to keep meta descriptions between 150 and 160 characters. It is same with Meta Title syntax. <a href=""https://www.mageplaza.com/magento-2-seo-extension/rule-syntax.html"" target=""_blank"">Learn more</a>. ","It is best to keep meta descriptions between 150 and 160 characters. It is same with Meta Title syntax. <a href=""https://www.mageplaza.com/magento-2-seo-extension/rule-syntax.html"" target=""_blank"">Learn more</a>. "
+"Meta Keywords Template","Meta Keywords Template"
+"It is best to keep meta keywords between 3-5 keywords. It is same with Meta Title syntax. <a href=""https://www.mageplaza.com/magento-2-seo-extension/rule-syntax.html"" target=""_blank"">Learn more</a>. ","It is best to keep meta keywords between 3-5 keywords. It is same with Meta Title syntax. <a href=""https://www.mageplaza.com/magento-2-seo-extension/rule-syntax.html"" target=""_blank"">Learn more</a>. "
+"Robots Template","Robots Template"
+"Apply Template","Apply Template"
+"<b>Skip if ready defined</b>: if admin manually add meta tag: title, description, so it will not apply this template.","<b>Skip if ready defined</b>: if admin manually add meta tag: title, description, so it will not apply this template."
+Condition,Condition
+"Rule conditions","Rule conditions"
+"Attribute is","Attribute is"
+Attribute,Attribute
+"Page ID","Page ID"
+Title,Title
+Position,Position
+Conditions,Conditions
+"Rule Information","Rule Information"
+Name,Name
+Status,Status
+"Store View","Store View"
+Priority,Priority
+"If you have other Rules in same period, set the priority of this one (lower number means higher priority with 0 being the highest)","If you have other Rules in same period, set the priority of this one (lower number means higher priority with 0 being the highest)"
+Preview,Preview
+Actions,Actions
+Promotions,Promotions
+"We found updated rules that are not applied. Please click ""Apply Rules"" to update your catalog.","We found updated rules that are not applied. Please click ""Apply Rules"" to update your catalog."
+SeoRule,SeoRule
+"Manage Rules","Manage Rules"
+"Updated rules applied.","Updated rules applied."
+"The Rule has been deleted.","The Rule has been deleted."
+"Rule to delete was not found.","Rule to delete was not found."
+"Edit Rule","Edit Rule"
+"New Seo Rule","New Seo Rule"
+"Mageplaza SEO extension is being disabled, so rules will be not applied. Please enable it  <a href=""%1"">here</a>","Mageplaza SEO extension is being disabled, so rules will be not applied. Please enable it  <a href=""%1"">here</a>"
+"SEO Rules","SEO Rules"
+"The wrong rule is specified.","The wrong rule is specified."
+"The Rule has been saved","The Rule has been saved"
+"The Rule has been saved and applied.","The Rule has been saved and applied."
+"The Rule has been saved.","The Rule has been saved."
+"Something went wrong while saving the Rule.","Something went wrong while saving the Rule."
+"Conditions Combination","Conditions Combination"
+All,All
+"Product Attribute Set","Product Attribute Set"
+"Specific Products","Specific Products"
+"Specific Page","Specific Page"
+"Specific Categories","Specific Categories"
+"Specific Posts","Specific Posts"
+"Skip if ready defined","Skip if ready defined"
+"Force update","Force update"
+Product,Product
+Category,Category
+Page,Page
+"Layered Navigation","Layered Navigation"
+Products,Products
+Categories,Categories
+Pages,Pages
+Enable,Enable
+Disable,Disable
+"Preview Template(demo random)","Preview Template(demo random)"
+Reload,Reload
+"Meta Title: ","Meta Title: "
+"Meta Description: ","Meta Description: "
+"Meta Keywords: ","Meta Keywords: "
+"Conditions (don't add conditions if rule is applied to all category)","Conditions (don't add conditions if rule is applied to all category)"
+"Enable SEO Rules","Enable SEO Rules"
+"Use H1 Heading for Product Pages","Use H1 Heading for Product Pages"
+"Use H1 Heading for Category Pages","Use H1 Heading for Category Pages"
+"Enable Automatic Alt Image","Enable Automatic Alt Image"
+ID,ID
+"Entity Type","Entity Type"
+"Added by Mageplaza Seo Rule","Added by Mageplaza Seo Rule"

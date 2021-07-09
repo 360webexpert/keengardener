@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckUseOnlyOneTypeForShipping">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Use Only One Shipping Type For Shipping Method"/>
+            <description value="Check Use Only One Shipping Type For Shipping Method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-06"/>
+            <group value="ShippingTableRatesShipType"/>
+            <group value="STRCheckUseOnlyOneTypeForShipping"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationShippingTypeSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+                <argument name="settingUseOnlyOneShippingType" value="useOnlyOneShippingType.yes"/>
+                <argument name="settingShippingTypeForConfigurable" value="shippingTypeForConfigurable.default"/>
+            </actionGroup>
+            <!-- This test run with ShippingTableRate suits. For test need customize shipping type for products:
+                _theBagImpulseDuffleData - light;
+                _theBagOvernightDuffle - medium. -->
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckUseOnlyOneTypeForShipping"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rates Rule-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckUseOnlyOneTypeForShipping"/>
+        </actionGroup>
+        <!-- Add First Rate In Rule-->
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule1">
+            <argument name="shippingTableRateData" value="ruleSTRCheckUseOnlyOneTypeForShipping"/>
+            <argument name="conditionsSTRData" value="_conditionSTRLight"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckUseOnlyOneTypeForShipping1"/>
+        </actionGroup>
+        <!-- Add Second Rate In Rule-->
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule2">
+            <argument name="shippingTableRateData" value="ruleSTRCheckUseOnlyOneTypeForShipping"/>
+            <argument name="conditionsSTRData" value="_conditionSTRMedium"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckUseOnlyOneTypeForShipping2"/>
+        </actionGroup>
+        <!-- Add Third Rate In Rule-->
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule3">
+            <argument name="shippingTableRateData" value="ruleSTRCheckUseOnlyOneTypeForShipping"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckUseOnlyOneTypeForShipping3"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart1">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagOvernightDuffle"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkFirstPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckUseOnlyOneTypeForShipping.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckUseOnlyOneTypeForShipping.name"/>
+        </actionGroup>
+
+        <!--Delete First Product From the Cart-->
+        <actionGroup ref="DeleteProductFromTheCart" stepKey="DeleteProductFromTheCart">
+            <argument name="products" value="_theBagOvernightDuffle"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart2">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagImpulseDuffleData"/>
+        </actionGroup>
+
+        <!--Check Second Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkSecondPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckUseOnlyOneTypeForShipping.priceSTRTwo"/>
+            <argument name="methodSTRName" value="ruleSTRCheckUseOnlyOneTypeForShipping.name"/>
+        </actionGroup>
+
+        <!--Add Third Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart3">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagOvernightDuffle"/>
+        </actionGroup>
+
+        <!--Check Third Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkThirdPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckUseOnlyOneTypeForShipping.priceSTRThree"/>
+            <argument name="methodSTRName" value="ruleSTRCheckUseOnlyOneTypeForShipping.name"/>
+        </actionGroup>
+
+    </test>
+</tests>

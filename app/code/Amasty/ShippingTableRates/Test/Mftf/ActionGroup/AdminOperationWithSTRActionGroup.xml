@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AdminCreateSTRRule">
+        <arguments>
+            <argument name="shippingTableRateData"/>
+        </arguments>
+        <amOnPage url="{{AdminSTRGridPage.url}}" stepKey="navigateToShippingTableRatesGrid"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminSTRGridSection.AddNewRuleButton}}" stepKey="clickOnAddNewRule"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminSTRSection.GeneralTab}}" stepKey="clickOnGeneralTab"/>
+        <fillField selector="{{AdminSTRSection.Name}}" userInput="{{shippingTableRateData.name}}" stepKey="enterName"/>
+        <selectOption selector="{{AdminSTRSection.Status}}"
+                      userInput="{{shippingTableRateData.status}}" stepKey="ActivateRule"/>
+        <click selector="{{AdminSTRSection.SaveAndContinueEdit}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="300" stepKey="waitForPageLoad3"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminOpenSTRRule">
+        <arguments>
+            <argument name="shippingTableRateData"/>
+        </arguments>
+        <amOnPage url="{{AdminSTRGridPage.url}}" stepKey="navigateToCartPriceRulePage1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminSTRGridSection.ResetFilter}}" stepKey="resetFilter"/>
+        <fillField selector="{{AdminSTRGridSection.FilterByNameInput}}" userInput="{{shippingTableRateData.name}}" stepKey="FilterByName"/>
+        <click selector="{{AdminSTRGridSection.SearchButton}}" stepKey="doFilter"/>
+        <click selector="{{AdminSTRGridSection.TableRowOne}}" stepKey="goToEditRulePage"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminAddShippingTypesForFree" extends="AdminOpenSTRRule">
+        <arguments>
+            <argument name="shippingTypesForFree"/>
+        </arguments>
+        <selectOption stepKey="selectShippingTypeForFree" parameterArray= "[{{shippingTypesForFree}}]"
+                      selector="{{AdminSTRSection.ShipShippingTypesFree}}"/>
+        <click selector="{{AdminSTRSection.SaveAndContinueEdit}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="300" stepKey="waitForPageLoad3"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminAddGlobalRatesInSTRRule" extends="AdminOpenSTRRule">
+        <arguments>
+            <argument name="minimalRate"/>
+            <argument name="maximalRate"/>
+            <argument name="withDifferentShippingTypes"/>
+        </arguments>
+        <fillField selector="{{AdminSTRSection.MinimalRate}}" userInput="{{minimalRate}}" stepKey="enterMinimalRate"/>
+        <fillField selector="{{AdminSTRSection.MaximalRate}}" userInput="{{maximalRate}}" stepKey="enterMaximalRate"/>
+        <selectOption selector="{{AdminSTRSection.ProductsDifferentShippingType}}"
+                      userInput="{{withDifferentShippingTypes}}" stepKey="chooseSettingDifferentShippingTypes"/>
+        <click selector="{{AdminSTRSection.SaveAndContinueEdit}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="300" stepKey="waitForPageLoad3"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminAddImageInSTRRule" extends="AdminOpenSTRRule">
+        <scrollTo selector="{{AdminSTRSection.Comment}}" stepKey="scrollToDown"/>
+        <fillField selector="{{AdminSTRSection.Comment}}" userInput="{IMG}" stepKey="enterIMGInComment"/>
+        <attachFile userInput="magento.jpg" selector="{{AdminSTRSection.ImageUpload}}"
+                    stepKey="uploadFile1"/>
+        <click selector="{{AdminSTRSection.SaveAndContinueEdit}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="300" stepKey="waitForPageLoad3"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminEditSTRRuleAddComment" extends="AdminOpenSTRRule">
+        <click selector="{{AdminSTRSection.GeneralTab}}" stepKey="clickOnGeneralTab"/>
+        <fillField selector="{{AdminSTRSection.Comment}}" userInput="{{shippingTableRateData.comment}}" stepKey="enterComment"/>
+        <click selector="{{AdminSTRSection.SaveAndContinueEdit}}" stepKey="clickOnSaveAndContinue"/>
+        <waitForPageLoad time="300" stepKey="waitForPageLoad1"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminCreateRateInSTRRule" extends="AdminOpenSTRRule">
+        <arguments>
+            <argument name="conditionsSTRData"/>
+            <argument name="rateAndDestSTRData"/>
+        </arguments>
+        <click selector="{{AdminSTRSection.TabMethodsAndRates}}" stepKey="clickOnMethodsAndRatesTab"/>
+        <click selector="{{AdminSTRSection.AddNewRate}}" stepKey="AddNewRate"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad3"/>
+        <selectOption selector="{{AdminSTRSection.SelectCountry}}"
+                      userInput="{{rateAndDestSTRData.country}}" stepKey="chooseCountry"/>
+        <selectOption selector="{{AdminSTRSection.SelectState}}"
+                      userInput="{{rateAndDestSTRData.state}}" stepKey="chooseState"/>
+        <fillField selector="{{AdminSTRSection.WeightFrom}}" userInput="{{conditionsSTRData.wightFrom}}" stepKey="enterWeightFrom"/>
+        <fillField selector="{{AdminSTRSection.WeightTo}}" userInput="{{conditionsSTRData.wightTo}}" stepKey="enterWeightTo"/>
+        <fillField selector="{{AdminSTRSection.QtyFrom}}" userInput="{{conditionsSTRData.qtyFrom}}" stepKey="enterQtyFrom"/>
+        <fillField selector="{{AdminSTRSection.QtyTo}}" userInput="{{conditionsSTRData.qtyTo}}" stepKey="enterQtyTo"/>
+        <selectOption selector="{{AdminSTRSection.ShippingType}}"
+                      userInput="{{conditionsSTRData.shippingType}}" stepKey="chooseShippingType"/>
+        <fillField selector="{{AdminSTRSection.PriceFrom}}" userInput="{{conditionsSTRData.priceFrom}}" stepKey="enterPriceFrom"/>
+        <fillField selector="{{AdminSTRSection.PriceTo}}" userInput="{{conditionsSTRData.priceTo}}" stepKey="enterPriceTo"/>
+        <fillField selector="{{AdminSTRSection.NameDelivery}}" userInput="{{rateAndDestSTRData.deliveryName}}" stepKey="enterDeliveryName"/>
+        <fillField selector="{{AdminSTRSection.BaseRate}}" userInput="{{rateAndDestSTRData.baseRate}}" stepKey="enterBaseRate"/>
+        <fillField selector="{{AdminSTRSection.PercentagePerProduct}}" userInput="{{rateAndDestSTRData.percentRateProduct}}" stepKey="enterPercentageRate"/>
+        <fillField selector="{{AdminSTRSection.FixedRatePerProduct}}" userInput="{{rateAndDestSTRData.fixedRateProduct}}" stepKey="enterFixedRateProduct"/>
+        <fillField selector="{{AdminSTRSection.FixedRatePerUnitOfWeight}}" userInput="{{rateAndDestSTRData.fixedRatePerUnit}}" stepKey="enterFixedRateUnit"/>
+        <click selector="{{AdminSTRSection.SaveRate}}" stepKey="SaveRate"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminOpenRateInSTRRule">
+        <arguments>
+            <argument name="shippingTableRateData"/>
+            <argument name="rateAndDestSTRData"/>
+        </arguments>
+        <amOnPage url="{{AdminSTRGridPage.url}}" stepKey="navigateToCartPriceRulePage1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminSTRGridSection.ResetFilter}}" stepKey="resetFilter"/>
+        <fillField selector="{{AdminSTRGridSection.FilterByNameInput}}" userInput="{{shippingTableRateData.name}}" stepKey="FilterByName"/>
+        <click selector="{{AdminSTRGridSection.SearchButton}}" stepKey="doFilter"/>
+        <click selector="{{AdminSTRGridSection.TableRowOne}}" stepKey="goToEditRulePage"/>
+        <click selector="{{AdminSTRSection.TabMethodsAndRates}}" stepKey="clickOnMethodsAndRatesTab"/>
+        <click selector="//table[@id='amstrates_methods_rates_grid_table']//td[contains(string(), '{{rateAndDestSTRData.deliveryName}}')]" stepKey="chooseOpenRateInSTRRule"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminEditRateInSTRRuleAddCity" extends="AdminOpenRateInSTRRule">
+        <arguments>
+            <argument name="rateAndDestSTRData"/>
+        </arguments>
+        <fillField selector="{{AdminSTRSection.City}}" userInput="{{rateAndDestSTRData.city}}" stepKey="enterCity"/>
+        <click selector="{{AdminSTRSection.SaveRate}}" stepKey="SaveRate"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminEditRateInSTRRuleAddZip" extends="AdminOpenRateInSTRRule">
+        <arguments>
+            <argument name="rateAndDestSTRData"/>
+        </arguments>
+        <fillField selector="{{AdminSTRSection.ZipFrom}}" userInput="{{rateAndDestSTRData.zipFrom}}" stepKey="enterZipFrom"/>
+        <fillField selector="{{AdminSTRSection.ZipTo}}" userInput="{{rateAndDestSTRData.zipTo}}" stepKey="enterZipTo"/>
+        <click selector="{{AdminSTRSection.SaveRate}}" stepKey="SaveRate"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminEditRateInSTRRuleAddEstimatedDelivery" extends="AdminOpenRateInSTRRule">
+        <arguments>
+            <argument name="rateAndDestSTRData"/>
+        </arguments>
+        <fillField selector="{{AdminSTRSection.EstimatedDelivery}}" userInput="{{rateAndDestSTRData.estimatedDelivery}}" stepKey="enterEstimatedDelivery"/>
+        <click selector="{{AdminSTRSection.SaveRate}}" stepKey="SaveRate"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminDeleteSTRRule">
+        <arguments>
+            <argument name="ruleNameSTR"/>
+        </arguments>
+        <amOnPage url="{{AdminSTRGridPage.url}}" stepKey="navigateToCartPriceRulePage1"/>
+        <waitForPageLoad stepKey="waitForLoadSTRGridPage"/>
+        <fillField selector="{{AdminSTRGridSection.FilterByNameInput}}" userInput="{{ruleNameSTR.name}}" stepKey="FilterByName"/>
+        <click selector="{{AdminSTRGridSection.SearchButton}}" stepKey="doFilter"/>
+        <click selector="{{AdminSTRGridSection.TableRowOne}}" stepKey="goToEditRulePage"/>
+        <click selector="{{AdminSTRSection.Delete}}" stepKey="clickDeleteButton"/>
+        <click selector="{{AdminSTRSection.ModalAcceptButton}}" stepKey="confirmDelete"/>
+        <conditionalClick stepKey="resetFilter"
+                          selector="{{AdminSTRGridSection.ResetFilter}}"
+                          dependentSelector="{{AdminSTRGridSection.ResetFilter}}"
+                          visible="true"/>
+    </actionGroup>
+
+</actionGroups>

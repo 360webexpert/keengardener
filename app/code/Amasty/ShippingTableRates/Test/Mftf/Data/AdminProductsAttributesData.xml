@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="shippingTypeOptions" type="attributeOptionsSet">
+        <data key="nameOptionOne">light</data>
+        <data key="nameOptionTwo">medium</data>
+        <data key="nameOptionThree">heavy</data>
+    </entity>
+
+    <entity name="attributeCode" type="productAttributesData">
+        <data key="shippingType">am_shipping_type</data>
+    </entity>
+
+</entities>

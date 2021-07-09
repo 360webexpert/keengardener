@@ -1,0 +1,261 @@
+#nav {
+    li.item-wesupply {
+        > a {
+            &:before {
+                content: '';
+                background-image: url("../WeSupply_Toolbox/images/icon-wesupply.svg");
+                background-repeat: no-repeat;
+                background-size: 70px;
+                background-position: center;
+                height: 50px;
+            }
+
+            > span {
+                font-size: 0;
+            }
+        }
+    }
+}
+.entry-edit {
+    border-bottom: 1px solid #cccccc;
+    .section-config {
+        border-bottom: 0 none;
+        .entry-edit-head {
+            a {
+                border-top: 1px solid #cccccc;
+            }
+        }
+        &.wesupply-toolbox-header {
+            .admin__collapsible-block {
+                display: block !important;
+                #row_wesupply_api_module_information_version_compare {
+                    p.old-version {
+                        background-color: #eb5202;
+                        padding: 10px;
+                        color: #ffffff;
+                        a {
+                            color: #000000;
+                            &:hover {
+                                color: #ffffff;
+                            }
+                        }
+                    }
+                }
+                #wesupply_api_module_information-head {
+                    font-size: 1.7rem;
+                    font-weight: 600;
+                    letter-spacing: .025em;
+                    padding-bottom: 0;
+                    color: #303030;
+                    text-decoration: none;
+                }
+                a {
+                    font-weight: normal;
+                    padding-bottom: 0;
+
+                    &:before {
+                        content: '' !important;
+                    }
+                }
+                table {
+                    td.label {
+                        display: none;
+                    }
+
+                    td.value {
+                        width: 100%;
+                    }
+                }
+                .bold {
+                    font-weight: bold;
+                }
+                .red {
+                    color: #ff0000;
+                }
+            }
+        }
+        .copy-text {
+            min-width: 50px;
+            margin-left: 5px;
+            &.disabled {
+                cursor: not-allowed;
+            }
+        }
+        #row_wesupply_api_integration_api_endpoint_info,
+        #row_wesupply_api_integration_wesupply_subdomain_info,
+        #row_wesupply_api_module_information_version_compare {
+            td.use-default {
+                display: none;
+            }
+        }
+        #row_wesupply_api_integration_api_endpoint_info,
+        #row_wesupply_api_integration_wesupply_subdomain_info,
+        #row_wesupply_api_step_5_estimation_default_carrier {
+            .note {
+                display: inline;
+            }
+        }
+        #row_wesupply_api_integration_api_endpoint_info {
+            #wesupply_api_integration_api_endpoint {
+                background-color: #f3f3f3;
+                border: 1px solid #adadad;
+                border-radius: 1px;
+                cursor: not-allowed;
+                display: inline-block;
+                line-height: 1.36;
+                padding: .6rem 1rem .6rem;
+                color: #303030;
+                font-weight: 500;
+                font-size: 14px;
+                max-height: 33px;
+                margin-bottom: 5px;
+                width: 64%;
+            }
+        }
+        #row_wesupply_api_integration_wesupply_subdomain_info {
+            #wesupply_api_integration_wesupply_subdomain {
+                font-size: 14px;
+                width: 100%;
+                display: inline-block;
+                margin-bottom: 5px;
+            }
+        }
+        #row_wesupply_api_step_5_estimation_range_specific {
+            .admin__control-table {
+                th, td {
+                    padding: 1.3rem 1rem 1.3rem 1rem;
+                    vertical-align: top;
+                    input {
+                        padding: 5px;
+                    }
+                    .fake-input,
+                    .fake-checkbox {
+                        border: 1px solid #adadad;
+                        width: 100%;
+                        display: block;
+                    }
+                    .fake-input {
+                        height: 31px;
+                        max-width: 41px !important;
+                    }
+                    .fake-checkbox {
+                        border-radius: 2px;
+                        height: 14px;
+                        left: -4px;
+                        margin: 0 auto;
+                        max-width: 14px;
+                        position: relative;
+                    }
+                    &.shipping-method,
+                    &.hide-estimation {
+                        vertical-align: middle;
+                    }
+                    &.specific-range {
+                        input {
+                            text-align: center;
+                            max-width: 42px;
+                        }
+                    }
+                    &.hide-estimation {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+        #row_wesupply_api_integration_access_key {
+            .value {
+                #wesupply_api_integration_access_key {
+                    background-color: #f3f3f3;
+                    opacity: 1;
+                    width: 68%;
+                }
+                #regenerate_link {
+                    font-size: 12px;
+                    margin-left: 10px;
+                    &.disabled {
+                        cursor: not-allowed;
+                        opacity: 0.5;
+                    }
+                }
+                .note {
+                    .saving_message_span {
+                        font-size: 12px;
+                        color: #ff0000;
+                    }
+                }
+            }
+        }
+        #row_wesupply_api_integration_store_ids {
+            .stores-list {
+                border-bottom: 1px solid #adadad;
+                margin-bottom: 10px;
+                td {
+                    padding: 5px 0 0;
+                    font-size: 12px;
+                }
+                thead td {
+                    border-bottom: 1px solid #adadad;
+                    padding-top: 0;
+                    font-size: inherit;
+                }
+                thead, tbody {
+                    tr:last-child {
+                        td {
+                            padding-bottom: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.sales-order-view {
+    .page-actions-inner {
+        position: relative;
+        .ws-external-links-wrapper {
+            position: absolute;
+            left: 0;
+            z-index: 1;
+            button > span {
+                padding: 0 10px 0 0;
+            }
+            .dropdown-menu {
+                display: none;
+                list-style-type: none;
+                padding: 10px 15px 5px;
+                background: #ffffff;
+                border: 1px solid #adadad;
+                border-top: 0 none;
+                li {
+                    padding: 5px 0;
+                    &:last-child {
+                        padding-bottom: 10px;
+                    }
+                }
+            }
+            &.has-children {
+                button > span:after {
+                    border-color: #000000 transparent transparent transparent;
+                    border-style: solid;
+                    border-width: 0.5rem 0.4rem 0 0.4rem;
+                    content: '';
+                    height: 0;
+                    margin-top: -0.4rem;
+                    position: absolute;
+                    right: 1.25rem;
+                    top: 25px;
+                    transition: all .2s linear;
+                    width: 0;
+                }
+                &.active {
+                    button > span:after {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+        &.moved:before {
+            margin-left: 140px;
+        }
+    }
+}

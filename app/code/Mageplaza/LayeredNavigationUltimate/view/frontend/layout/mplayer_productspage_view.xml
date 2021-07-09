@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="catalog_category_view"/>
+    <update handle="catalog_category_view_type_layered"/>
+    <referenceContainer name="columns.top">
+        <container name="layerultimate.productspage.view.container" htmlTag="div" htmlClass="productspage-view" after="-">
+            <block class="Mageplaza\LayeredNavigationUltimate\Block\ProductsPage\View" name="productspage.description" template="Mageplaza_LayeredNavigationUltimate::layered/description.phtml"/>
+        </container>
+    </referenceContainer>
+    <referenceContainer name="layer.category.products">
+        <block class="Mageplaza\LayeredNavigationUltimate\Block\ProductsPage\View" name="layerultimate.productspage.view" template="layered/products.phtml"/>
+    </referenceContainer>
+    <move element="category.products.list" destination="layerultimate.productspage.view"/>
+    <referenceBlock name="category.products" remove="true"/>
+    <referenceContainer name="category.view.container" remove="true"/>
+</page>

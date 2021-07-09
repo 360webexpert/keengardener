@@ -1,0 +1,374 @@
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="rateSTRCheckShippingTypeWithOneRate" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">15</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">2</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckNameDelivery" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Test Shipping</data>
+        <data key="baseRate">50</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckEstimatedDelivery" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Estimated Delivery</data>
+        <data key="estimatedDelivery">5 days</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">20</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckMultiCurrency" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">MultiCurrency</data>
+        <data key="baseRate">50</data>
+        <data key="percentRateProduct">30</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckDisableForCheckout" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Disable For Checkout</data>
+        <data key="baseRate">50</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckRuleStatus" type="rateAndDestSTRData">
+        <data key="country">Spain</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Status Inactive</data>
+        <data key="baseRate">50</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckWeight" type="rateAndDestSTRData">
+        <data key="country">Spain</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Weight</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">2</data>
+        <data key="fixedRatePerUnit">15</data>
+    </entity>
+
+    <entity name="rateSTRCheckQty" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">United States/California</data>
+        <data key="deliveryName">Qty</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">30</data>
+        <data key="fixedRateProduct">5</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckPrice" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Price</data>
+        <data key="baseRate">25</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">5</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckPostCodesStrings" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Post Codes Strings</data>
+        <data key="zipFrom">AB1</data>
+        <data key="zipTo">AB1</data>
+        <data key="baseRate">70</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckPostCodesNumbers" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Post Codes Numbers</data>
+        <data key="zipFrom">AB1</data>
+        <data key="zipTo">AB15</data>
+        <data key="baseRate">70</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckRulesOnCheckout" type="rateAndDestSTRData">
+        <data key="country">United States</data>
+        <data key="state">United States/Michigan</data>
+        <data key="city">Detroit</data>
+        <data key="zipFrom">48201</data>
+        <data key="zipTo">48225</data>
+        <data key="deliveryName">Rules On Checkout</data>
+        <data key="baseRate">20</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">5</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTwoMethodsFirst" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Two Methods First</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">5</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTwoMethodsSecond" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Two Methods Second</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">10</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRAllowFreeAndShowMethodIfNotApplicable" type="rateAndDestSTRData">
+        <data key="country">Australia</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">50</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckAllRates" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">50</data>
+        <data key="percentRateProduct">20</data>
+        <data key="fixedRateProduct">5</data>
+        <data key="fixedRatePerUnit">5</data>
+    </entity>
+
+    <entity name="rateSTRCheckUnionTypeWithTypesForFreeFirst" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">15</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">2</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckUnionTypeWithTypesForFreeSecond" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Second Rate</data>
+        <data key="baseRate">6</data>
+        <data key="percentRateProduct">10</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTypeForConfigurableAndTypeForAll1" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">15</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">2</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTypeForConfigurableAndTypeForAll2" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Second Rate</data>
+        <data key="baseRate">7</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTypeForConfigurableAndTypeForAll3" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Third Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">10</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTypeMinimalAndMaximalRate1" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">15</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">2</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTypeMinimalAndMaximalRate2" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Second Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">9</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckTypeMinimalAndMaximalRate3" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Third Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">10</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckUseOnlyOneTypeForShipping1" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">7</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckUseOnlyOneTypeForShipping2" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Second Rate</data>
+        <data key="baseRate">21</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckUseOnlyOneTypeForShipping3" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">Third Rate</data>
+        <data key="baseRate">16</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckMaximalRateAndPlaceOrderAsCustomer" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">10</data>
+        <data key="fixedRateProduct">3</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckMinimalRateAndPlaceOrderInAdminArea" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">9</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">4</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRIgnoreAndDontIgnorePriceQtyOfVirtProd" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">15</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRUsePriceAfterDiscount" type="rateAndDestSTRData">
+        <data key="country">United States</data>
+        <data key="state">United States/California</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">20</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRDontUsePriceAfterDiscount" type="rateAndDestSTRData">
+        <data key="country">United States</data>
+        <data key="state">United States/California</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">20</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRUseAndDontUsePriceIncludingTax" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">20</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckMultishipping1" type="rateAndDestSTRData">
+        <data key="country">United States</data>
+        <data key="state">United States/Michigan</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">0</data>
+        <data key="fixedRateProduct">15</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckMultishipping2" type="rateAndDestSTRData">
+        <data key="country">United States</data>
+        <data key="state">United States/Alabama</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="zipFrom">12344</data>
+        <data key="zipTo">12346</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">50</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+    <entity name="rateSTRCheckUsePriceIncludingTaxAndAfterDiscount" type="rateAndDestSTRData">
+        <data key="country">All</data>
+        <data key="state">All</data>
+        <data key="deliveryName">First Rate</data>
+        <data key="baseRate">0</data>
+        <data key="percentRateProduct">50</data>
+        <data key="fixedRateProduct">0</data>
+        <data key="fixedRatePerUnit">0</data>
+    </entity>
+
+</entities>

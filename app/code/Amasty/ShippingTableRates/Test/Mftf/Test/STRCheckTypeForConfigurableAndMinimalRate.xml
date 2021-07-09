@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckTypeForConfigurableAndMinimalRate">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Shipping Type For Configurable Product And Minimal Rate"/>
+            <description value="Check Shipping Type For Configurable Product And Minimal Rate"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-04"/>
+            <group value="ShippingTableRatesShipType"/>
+            <group value="STRCheckTypeForConfigurableAndMinimalRate"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationShippingTypeSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+                <argument name="settingUseOnlyOneShippingType" value="useOnlyOneShippingType.default"/>
+                <argument name="settingShippingTypeForConfigurable" value="shippingTypeForConfigurable.fromParentProduct"/>
+            </actionGroup>
+            <!-- This test run with ShippingTableRate suits. For test need customize shipping type for products:
+                _theMenHoodiesChazKangerooHoodieXSBlack and _theBagImpulseDuffleData - light;
+                _theMenHoodiesChazKangerooHoodie - medium. -->
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckTypeForConfigurableAndMinimalRate"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rates Rule-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTypeForConfigurableAndMinimalRate"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddGlobalRatesInSTRRule" stepKey="AddGlobalRatesInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTypeForConfigurableAndMinimalRate"/>
+            <argument name="minimalRate" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.minimalRate"/>
+            <argument name="maximalRate" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.maximalRate"/>
+            <argument name="withDifferentShippingTypes" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.withDifferentShippingTypes"/>
+        </actionGroup>
+        <!-- Add First Rate In Rule-->
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule1">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTypeForConfigurableAndMinimalRate"/>
+            <argument name="conditionsSTRData" value="_conditionSTRLight"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckTypeMinimalAndMaximalRate1"/>
+        </actionGroup>
+        <!-- Add Second Rate In Rule-->
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule2">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTypeForConfigurableAndMinimalRate"/>
+            <argument name="conditionsSTRData" value="_conditionSTRMedium"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckTypeMinimalAndMaximalRate2"/>
+        </actionGroup>
+        <!-- Add Third Rate In Rule-->
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule3">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTypeForConfigurableAndMinimalRate"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckTypeMinimalAndMaximalRate3"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart1">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagImpulseDuffleData"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddConfigurableProductToCart" stepKey="AddProductToCart2">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theMenHoodiesChazKangerooHoodie"/>
+            <argument name="size" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.sizeFirstMH01"/>
+            <argument name="color" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.colorFirstMH01"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkFirstPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.name"/>
+        </actionGroup>
+
+        <!--Add Third Product to Cart-->
+        <actionGroup ref="AddConfigurableProductToCart" stepKey="AddProductToCart3">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theMenHoodiesChazKangerooHoodie"/>
+            <argument name="size" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.sizeSecondMH01"/>
+            <argument name="color" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.colorSecondMH01"/>
+        </actionGroup>
+
+        <!--Check Second Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkSecondPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.priceSTRTwo"/>
+            <argument name="methodSTRName" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.name"/>
+        </actionGroup>
+
+        <!--Add Fourth Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart4">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theFitnessSpriteFoamRoller"/>
+        </actionGroup>
+
+        <!--Check Third Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkThirdPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.priceSTRThree"/>
+            <argument name="methodSTRName" value="ruleSTRCheckTypeForConfigurableAndMinimalRate.name"/>
+        </actionGroup>
+
+    </test>
+</tests>

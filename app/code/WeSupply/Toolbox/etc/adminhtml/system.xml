@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="wesupply" translate="label" sortOrder="1000" class="wesupply-tab">
+            <label>WeSupply</label>
+        </tab>
+        <section id="wesupply_api" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Configuration</label>
+            <tab>wesupply</tab>
+            <resource>WeSupply_Toolbox::APISettings</resource>
+            <group id="module_information" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>WeSupply Configuration (for Magento 2.3.x)</label>
+                <fieldset_css>wesupply-toolbox-header active</fieldset_css>
+                <field id="version_compare" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>WeSupply\Toolbox\Block\System\Config\VersionCompare</frontend_model>
+                </field>
+            </group>
+            <group id="integration" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>WeSupply Integration</label>
+                <attribute type="expanded">1</attribute>
+                <comment>
+                    <![CDATA[
+                    To connect your WeSupply account, copy and paste the <strong>Access Key</strong> and <strong>API Endpoint</strong> into your WeSupply Dashboard under <strong>Settings -> Providers -> Magento</strong>
+                    ]]>
+                </comment>
+                <field id="wesupply_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable WeSupply</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable / disable WeSupply integration.</comment>
+                </field>
+                <field id="access_key" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="1">
+                    <frontend_model>WeSupply\Toolbox\Block\System\Config\AccessKey</frontend_model>
+                    <label>Access Key</label>
+                    <comment>Copy this generated Access Key into your WeSupply account</comment>
+                    <depends>
+                        <field id="wesupply_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="api_endpoint_info" translate="label" type="note" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API Endpoint</label>
+                    <comment model="WeSupply\Toolbox\Model\ApiInfoComment"></comment>
+                    <depends>
+                        <field id="wesupply_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="store_ids" translate="label" type="note" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>WeSupply\Toolbox\Block\System\Config\StoreIdsList</frontend_model>
+                    <label>IDs of existing stores</label>
+                    <comment><![CDATA[ Use <strong>All</strong> instead of a specific id, to synchronize orders from all Storeviews]]></comment>
+                    <depends>
+                        <field id="wesupply_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="wesupply_subdomain_info" translate="label" type="note" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WeSupply Domain</label>
+                    <comment model="WeSupply\Toolbox\Model\WsDomainComment"></comment>
+                    <depends>
+                        <field id="wesupply_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="wesupply_order_export" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Order Export Rules</label>
+                <attribute type="expanded">0</attribute>
+                <field id="wesupply_order_filter" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Orders To Be Exported/Updated</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\OrderExportFilter</source_model>
+                    <comment>
+                    <![CDATA[
+                    Select which orders will be exported and than updated to WeSupply Platform. <br />
+                    NOTE: downloadable and virtual product types are not exported as they cannot be tracked. <br />
+                    ]]>
+                    </comment>
+                </field>
+                <field id="wesupply_order_filter_countries" translate="label" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Select excluded shipping country(s)</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <comment>Orders which are shipped to selected country(s) are not exported to WeSupply Platform.</comment>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter">exclude_specific</field>
+                    </depends>
+                </field>
+                <field id="wesupply_order_product_attributes" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Attributes To Be Exported</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ProductAttributes</source_model>
+                    <comment>
+                        <![CDATA[
+                        <script type="text/javascript">
+                            require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype', 'domReady!'], function($, alert){
+                                var maxAllowed = 10;
+                                $('#wesupply_api_wesupply_order_export_wesupply_order_product_attributes').on('change', function() {
+                                    if ($(this).val().length > maxAllowed) {
+                                        $('button#save').prop('disabled', true);
+                                        alert({
+                                            title: $.mage.__('Too many attributes selected'),
+                                            content: $.mage.__($(this).val().length + ' attributes were selected and maximum allowed are ' + maxAllowed + '.')
+                                        })
+                                    } else {
+                                        $('button#save').prop('disabled', false);
+                                    }
+                                });
+                            });
+                        </script>
+                        Select product attributes that you would like to use to create return logics in WeSupply
+                    ]]>
+                    </comment>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
+                    </depends>
+                </field>
+                <field id="item_weight_attr" translate="label" type="select"  sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Weight Attribute</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ProductAttributesSelect</source_model>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
+                    </depends>
+                    <comment>Select the attribute that is used to set the product weight.</comment>
+                </field>
+                <field id="item_width_attr" translate="label" type="select"  sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Width Attribute</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ProductAttributesSelect</source_model>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
+                    </depends>
+                    <comment>Select the attribute that is used to set the product width.</comment>
+                </field>
+                <field id="item_height_attr" translate="label" type="select"  sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Height Attribute</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ProductAttributesSelect</source_model>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
+                    </depends>
+                    <comment>Select the attribute that is used to set the product height.</comment>
+                </field>
+                <field id="item_length_attr" translate="label" type="select"  sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Length Attribute</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ProductAttributesSelect</source_model>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
+                    </depends>
+                    <comment>Select the attribute that is used to set the product length.</comment>
+                </field>
+                <field id="wesupply_order_product_attributes_fetch" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Attributes Fetch Priority</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\AttributesFetchPriority</source_model>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[ Choose how the <strong>Product Attributes</strong> will be collected in case of a configurable product. ]]>
+                    </comment>
+                </field>
+                <depends>
+                    <field id="wesupply_api/integration/wesupply_enabled">1</field>
+                </depends>
+            </group>
+            <group id="step_3" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Order and Returns View Settings</label>
+                <attribute type="expanded">0</attribute>
+                <comment>
+                    <![CDATA[
+                     If enabled, your logged in customers will have access to advanced order tracking under WeSupply platform once they click <strong>View Order.</strong>
+                    ]]>
+                </comment>
+                <field id="wesupply_order_view_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <comment>Enable to show customers' orders details on WeSupply platform.</comment>
+                    <label>Enable WeSupply Order Details</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="wesupply_order_view_iframe" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Select Order View Behavior</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ViewOrderBehavior</source_model>
+                    <comment>
+                        <![CDATA[
+                        "<strong>Open in Modal</strong>" is only available if you have configured a <strong>Domain Alias</strong> in your WeSupply account under Settings -> General -> Custom Domain.
+                        ]]>
+                    </comment>
+                    <depends>
+                        <field id="wesupply_order_view_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="enable_delivery_estimations_header_link" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable "Tracking Info" Header Link</label>
+                    <comment>
+                        <![CDATA[
+                        Display "Tracking Info" link in the store header<br/>
+                        Tracking info link will display a page where the customers will be able to view advanced order details based on order number and email address.
+                        ]]>
+                    </comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="wesupply_tracking_info_iframe" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Select Tracking Info Behavior</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\TrackingInfoBehavior</source_model>
+                    <comment>
+                        <![CDATA[
+                        "<strong>Open in Magento</strong>" option is only available if you have configured a <strong>Domain Alias</strong> in your WeSupply account under Settings -> General -> Custom Domain.
+                        ]]>
+                    </comment>
+                    <depends>
+                        <field id="enable_delivery_estimations_header_link">1</field>
+                    </depends>
+                </field>
+                <field id="wesupply_admin_order_enabled" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display WeSupply Order View in Admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[
+                        If set to Yes, a link to the Order View of WeSupply platform will be displayed for each order.<br/>
+                        Go to Magento Admin > Sales > Orders > Order details page and check WeSupply Button.
+                        ]]>
+                    </comment>
+                </field>
+                <field id="wesupply_admin_returns_enabled" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display WeSupply Returns List in Admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[
+                        If set to Yes, a link to the Returns List of WeSupply platform will be displayed for each order (available only for plans that includes the Returns addon).<br/>
+                        Go to Magento Admin > Sales > Orders > Order details page and check WeSupply Button.
+                        ]]>
+                    </comment>
+                </field>
+                <depends>
+                    <field id="wesupply_api/integration/wesupply_enabled">1</field>
+                </depends>
+            </group>
+            <group id="step_4" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Allow users to subscribe to SMS alert notification on Checkout Success page</label>
+                <attribute type="expanded">0</attribute>
+                <comment>
+                    <![CDATA[
+                   If enabled, your customers will have the option to subscribe to SMS order tracking once the purchase is complete.
+                    ]]>
+                </comment>
+                <field id="checkout_page_notification" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable SMS Notification Signup Section</label>
+                    <comment>Display SMS signup section on Success Page. This allows customers to subscribe to receive SMS notifications regarding order and shipping statuses</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="notification_type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Insert SMS Notification Section in</label>
+                    <comment>
+                        <![CDATA[
+                        If the <strong>Widget</strong> option is selected, you can display the SMS notification sign up section on the success page, by inserting the widget in a custom CMS Block.
+                        <br/>
+                        Name of the widget is: <strong>WeSupply Toolbox SMS Notification Widget</strong>
+                        ]]>
+                    </comment>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\NotificationDesignType</source_model>
+                    <depends>
+                        <field id="wesupply_api/step_4/checkout_page_notification">1</field>
+                    </depends>
+                </field>
+                <field id="design_notification" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SMS Notification Signup Section design</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\NotificationDesignMode</source_model>
+                    <comment>Select design version for SMS Notification section</comment>
+                    <depends>
+                        <field id="wesupply_api/step_4/checkout_page_notification">1</field>
+                        <field id="wesupply_api/step_4/notification_type">default</field>
+                    </depends>
+                </field>
+                <field id="design_notification_alingment" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SMS Notification Signup Section alignment</label>
+                    <comment>Select alignment for SMS Notification section</comment>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\NotificationDesignModeAlignment</source_model>
+                    <depends>
+                        <field id="wesupply_api/step_4/checkout_page_notification">1</field>
+                        <field id="wesupply_api/step_4/notification_type">default</field>
+                    </depends>
+                </field>
+                <depends>
+                    <field id="wesupply_api/integration/wesupply_enabled">1</field>
+                </depends>
+            </group>
+            <group id="step_5" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Allow logged in/guest customers to receive estimations for delivery date</label>
+                <attribute type="expanded">0</attribute>
+                <comment>
+                    <![CDATA[
+                   If enabled, your customers will have the possibility to get an estimations on the delivery time based on their IP address location detection,
+                   <br />or by entering a specific zip-code directly on the product page, shopping cart and checkout page.
+                   <br/>
+                   <strong style="color: #ff0000">In order to enable Estimate Delivery Date, make sure this addon is activated under your WeSupply account.</strong>
+                    ]]>
+                </comment>
+                <field id="enable_delivery_estimations" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Delivery Estimations</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="estimation_display_spinner" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display Spinner While Loading</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_product_attributes" translate="label" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Attributes for delivery estimation logic</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ProductAttributes</source_model>
+                    <comment>Select the product attributes which will be used to create delivery estimation logic in WeSupply Platform. To create estimation logic go to Settings -> Estimates -> Estimates Rules under your WeSupply account and use the attribute code from within the parentheses.</comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="add_estimation_range" translate="label" type="select" sortOrder="24" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Add Estimation Range</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set "Yes" to add additional days for delivery estimations. Eg: If you set range with value 2 and shipping vendor estimation is for 28 January, shown estimation will be as follows: 28 January - 30 January.</comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="apply_estimation_range" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Apply Estimation Range To</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\ApplyEstimationRange</source_model>
+                    <comment>
+                        <![CDATA[
+                            Set <strong>All Shipping Methods</strong> to apply <strong>Estimations Range</strong> to all available shipping methods.<br />
+                            Select <strong>Specific Shipping Methods</strong> to set different estimations ranges, custom messages or hide the ETA completely for any available shipping method.
+                        ]]>
+                    </comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                        <field id="wesupply_api/step_5/add_estimation_range">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_range" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Estimations Range</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                    <comment>
+                        <![CDATA[
+                            Insert number of days for delivery estimations, applicable when <strong>All Shipping Methods</strong> is set. Eg: If you set range with value 2 and  shipping vendor estimation is for 28 January, shown estimation will be as follows: 28 January - 30 January.
+                        ]]>
+                    </comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                        <field id="wesupply_api/step_5/add_estimation_range">1</field>
+                        <field id="wesupply_api/step_5/apply_estimation_range">all_shipping_methods</field>
+                    </depends>
+                </field>
+                <field id="estimation_range_specific" translate="label" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Specific Estimates Ranges</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <frontend_model>WeSupply\Toolbox\Block\System\Config\SpecificEstimationRanges</frontend_model>
+                    <comment>
+                        <![CDATA[
+                            If <strong>Range</strong> field is empty or zero ETA will be displayed as a single day as received from the shipper.<br />
+                            If <strong>Range</strong> field is greater than zero ETA will be displayed as a range.<br />
+                            <strong>Additional message</strong> field will be appended to the ETA. Can be left empty for no message.<br />
+                            If <strong>Hide ETA</strong> is checked the ETA will be hidden. However the custom message will be displayed if there is one.
+                        ]]>
+                    </comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                        <field id="wesupply_api/step_5/add_estimation_range">1</field>
+                        <field id="wesupply_api/step_5/apply_estimation_range">specific_shipping_methods</field>
+                    </depends>
+                </field>
+                <field id="estimation_display" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>ETA Display Mode When Multiple Products In Cart</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\EstimationDisplay</source_model>
+                    <comment>
+                        <![CDATA[
+                            If multiple products are in cart, each product might have a different ETA based on Estimates Logic set on your WeSupply account under Settings -> Estimates -> Estimates Rules.<br />
+                            You can choose to display the <strong>Earliest</strong>, <strong>Latest</strong> ETA or display it <strong>As a range</strong> between the Earliest and the Latest ETA from all the products in the cart.<br />
+                            NOTE: <strong>Estimation Ranges</strong> set above will be taken into consideration and added to the final ETA displayed.
+                         ]]>
+                    </comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_format" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Estimations Format</label>
+                    <source_model>WeSupply\Toolbox\Model\Config\Source\EstimationFormat</source_model>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_order_within" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>"Order within" Display</label>
+                    <validate>validate-number</validate>
+                    <comment>Display "Order within" if remaining time is lower than this value (in hours).</comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_default_carrier" translate="label" type="note" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Shipping Vendor</label>
+                    <comment>
+                        <![CDATA[<span style="color: #ff0000;"><b>NOTE</b>: Please make sure you set this up in WeSupply Platform.</span>]]>
+                    </comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <depends>
+                    <field id="wesupply_api/integration/wesupply_enabled">1</field>
+                </depends>
+            </group>
+            <group id="step_6" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Store Locator Settings</label>
+                <field id="store_locator_cms" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Store Locator CMS Page</label>
+                    <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                </field>
+                <field id="store_details_cms" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Store Details CMS Page</label>
+                    <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                </field>
+                <depends>
+                    <field id="wesupply_api/integration/wesupply_enabled">1</field>
+                </depends>
+            </group>
+        </section>
+    </system>
+</config>

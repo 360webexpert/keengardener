@@ -1,0 +1,109 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$helper = $this->helper(\Mageplaza\Shopbybrand\Helper\Data::class);
+$allChars = $block->getAlphabet();
+?>
+<script type="text/javascript">
+    require([
+            'jquery',
+            'Mageplaza_Shopbybrand/js/lib/mixitup.min',
+            'Mageplaza_Shopbybrand/js/quick-view',
+            'Mageplaza_Shopbybrand/js/modal-popup'
+        ],
+        function ($, mixitup, quickview, modalPopup) {
+            window.quickviewUrl = '<?= /** @noEscape */ $helper->getQuickViewUrl() ?>';
+            mixitup('.brand-mix-container');
+
+            $(".brand-options li").on('click', function () {
+                if (!$(this).hasClass('disabled')) {
+                    $(".brand-options li").removeClass("active");
+                    $(this).addClass("active");
+                }
+            });
+
+            $(".category-nav-list li").on('click', function () {
+                if (!$(this).hasClass('disabled')) {
+                    $(".category-nav-list li").removeClass("active");
+                    $(this).addClass("active");
+                }
+            });
+
+            $(".navigation li.mpbrand-top-link").addClass("active");
+        }
+    );
+</script>
+
+<div class="block block-brand-list" style="margin-top: 20px;border-top: solid 1px #dfdfdf; padding-top: 30px">
+    <div class="block-title">
+        <?php if ($helper->getBrandConfig('brand_filter/enabled_alpha_filter')) : ?>
+            <ul class="nav brand-options navbar-nav controls">
+                <li id="mp-first-opt" class="control active">
+                    <a class="filter mp-option-item" data-filter="all"><?= /** @noEscape */ __('All') ?></a>
+                </li>
+                <?php foreach ($allChars as $_char) : ?>
+                    <?php $_numchar["char"] = (is_numeric($_char["char"])) ? 'num' . $_char["char"] : $_char["char"]; ?>
+                    <?php if ($_char['active']) : ?>
+                        <li class="control">
+                            <a class="filter mp-option-item" data-filter="<?= /** @noEscape */ $_numchar['char'] ?>"
+                                <?= /** @noEscape */ isset($_char['label']) ? $_char['label'] : $_char['char'] ?>
+                            </a>
+                        </li>
+                    <?php else : ?>
+                        <li class="disabled">
+                            <a class="disabled mp-option-item">
+                                <?= /** @noEscape */ isset($_char['label']) ? $_char['label'] : $_char['char'] ?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+        <div style="clear: both"></div>
+    </div>
+
+    <div class="block-content brand-mix-container products wrapper grid products-grid">
+        <?= /** @noEscape */ ($helper->getBrandConfig('brandlist_style') == 1)
+            ? $block->getChildHtml('alphabet')
+            : $block->getChildHtml('listing')
+        ?>
+    </div>
+    <div id="quick-view" style="display:none;">
+        <div class="container-fluid">
+            <div class="brand-info-container">
+                <div class="brand_title"></div>
+                <div class="img-content">
+                    <img class="quickview_img">
+                </div>
+                <div class="brand_description"></div>
+            </div>
+            <div class="related-product-container">
+                <div class="related-product-modal-title" style="float: initial;"><?= /** @noEscape */ __('Related Products') ?></div>
+                <div class="related-product-modal-content"></div>
+            </div>
+        </div>
+        <div id="ln_overlay" class="ln_overlay">
+            <div class="loader">
+                <img src="<?= /** @noEscape */ $block->getViewFileUrl('images/loader-1.gif') ?>" alt="Loading...">
+            </div>
+        </div>
+    </div>
+</div>

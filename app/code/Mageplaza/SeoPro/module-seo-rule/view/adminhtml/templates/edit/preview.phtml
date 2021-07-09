@@ -1,0 +1,101 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoRule
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tab\Preview $block */
+?>
+<div>
+    <h1><?php echo __('Preview Template(demo random)') ?> <a class="reload"><?php echo __('Reload') ?></a></h1>
+    <div class="preview_template_content">
+    </div>
+</div>
+<style>
+    .preview_template_content {
+        margin-left: 100px;
+    }
+
+    .preview_template_content .preview_label {
+        font-weight: bold;
+    }
+
+    .preview_template_content .preview_label.color {
+        color: #ba4000;
+        font-size: 17px;
+    }
+
+    .reload:active {
+        font-weight: bold;
+    }
+
+    .preview_template_content .preview_template {
+        margin-left: 30px;
+    }
+</style>
+<script type="text/javascript">
+    require([
+        'jquery'
+    ], function ($) {
+        var metaTitleLabel = '<?php echo __('Meta Title: ') ?>';
+        var metaDescriptionLabel = '<?php echo __('Meta Description: ') ?>';
+        var metaKeywordsLabel = '<?php echo __('Meta Keywords: ') ?>';
+        var metaTitle = $('#rule_meta_title');
+        var metaDescription = $('#rule_meta_description');
+        var metaKeywords = $('#rule_meta_keywords');
+        var areaContent = $('.preview_template_content');
+        if (metaDescription.val() != '' || metaKeywords.val() != '' || metaTitle.val() != '') {
+            preview();
+        }
+
+        $('.reload').click(function () {
+            areaContent.html('');
+            preview();
+        });
+
+        function preview() {
+            $.ajax({
+                url: '<?php echo $block->getPreviewUrl();?>' + '?isAjax=true',
+                type: 'POST',
+                showLoader: true,
+                data: {
+                    form_key: window.FORM_KEY,
+                    metaTitle: metaTitle.val(),
+                    metaDescription: metaDescription.val(),
+                    metaKeywords: metaKeywords.val()
+                },
+                success: function (data) {
+                    if (data) {
+                        var jsonData = _(data).toArray();
+                        jsonData.forEach(function (item, index) {
+                            var content = '';
+                            var prefix = (item['type'] == 'product') ? 'Product: ' : (item['type'] == 'category') ? 'Category: ' : 'Page: ';
+                            content += '<div style="margin-bottom: 20px"><span class="preview_label color">' + prefix + item['name'] + '</span></br>'
+                                + '<div class="preview_template" id="' + item['id'] + '">'
+                                + '<span class="preview_label">' + metaTitleLabel + ' </span>' + item['metaTitle'] + '</br>'
+                                + '<span class="preview_label">' + metaDescriptionLabel + ' </span>' + item['metaDescription'] + '</br>'
+                                + '<span class="preview_label">' + metaKeywordsLabel + ' </span>' + item['metaKeyword'] + '</br>'
+                                + '</div></div>';
+                            areaContent.append(content);
+                        });
+                    }
+                }
+            });
+        }
+    });
+</script>

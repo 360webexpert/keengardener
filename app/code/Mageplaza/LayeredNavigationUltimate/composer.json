@@ -1,0 +1,27 @@
+{
+  "name": "mageplaza/layered-navigation-m2-ultimate",
+  "description": "Magento 2 Layered Navigation Ultimate Extension",
+  "require": {
+    "mageplaza/layered-navigation-m2-pro": "^2.3.7",
+    "mageplaza/magento-2-shop-by-brand": "^2.4.2"
+  },
+  "type": "magento2-module",
+  "version": "2.3.7",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Mageplaza",
+      "email": "support@mageplaza.com",
+      "homepage": "https://www.mageplaza.com",
+      "role": "Technical Support"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Mageplaza\\LayeredNavigationUltimate\\": ""
+    }
+  }
+}

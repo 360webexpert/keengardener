@@ -1,0 +1,62 @@
+"Duplicate case","Duplicate case"
+Entity,Entity
+Field,Field
+"Store View","Store View"
+"Please correct the column format and try again.","Please correct the column format and try again."
+Case,Case
+Count,Count
+"Missing case","Missing case"
+Uri,Uri
+"Duplicate Content","Duplicate Content"
+ID,ID
+View,View
+"Entity Id","Entity Id"
+CSV,CSV
+"Excel XML","Excel XML"
+"Missing Meta Data","Missing Meta Data"
+"Low Word Count","Low Word Count"
+"404 Pages","404 Pages"
+Action,Action
+Resolve,Resolve
+Checklist,Checklist
+"Mageplaza SEO extension is being disabled. Please enable it <a href=""%1"">here</a>","Mageplaza SEO extension is being disabled. Please enable it <a href=""%1"">here</a>"
+"We recommend that you should set up Google Analytics for your site. Click <a href=""%1"">here.</a>","We recommend that you should set up Google Analytics for your site. Click <a href=""%1"">here.</a>"
+"Your robots.txt file disallow Search Engine index your store. Please check yourdomain.com/robots.txt file for more information.","Your robots.txt file disallow Search Engine index your store. Please check yourdomain.com/robots.txt file for more information."
+"Your store has sitemap.xml file","Your store has sitemap.xml file"
+"We recommend that you should add sitemap.xml in Magento directory.","We recommend that you should add sitemap.xml in Magento directory."
+"Congrats! Homepage page title, description is set!","Congrats! Homepage page title, description is set!"
+"You should setup Meta Title, Description for Homepage: <i>Content > Elements > Pages > <a href=""%1"">Homepage</a></i> <br />Homepage page maybe change in <i>Stores > Configuration >General> Web > <a href=""%2"">Default Pages</a></i>","You should setup Meta Title, Description for Homepage: <i>Content > Elements > Pages > <a href=""%1"">Homepage</a></i> <br />Homepage page maybe change in <i>Stores > Configuration >General> Web > <a href=""%2"">Default Pages</a></i>"
+"Great! You declare Sitemap URL in robots.txt file.","Great! You declare Sitemap URL in robots.txt file."
+"We recommend you add Sitemap URL in robots.txt file or add submit sitemap to Google Search Console / Webmaster Tools.","We recommend you add Sitemap URL in robots.txt file or add submit sitemap to Google Search Console / Webmaster Tools."
+"Great! robots.txt file is exist.","Great! robots.txt file is exist."
+"We recommend that you should create robots.txt file.","We recommend that you should create robots.txt file."
+"We updated lifetime statistic.","We updated lifetime statistic."
+"We can't refresh lifetime statistics.","We can't refresh lifetime statistics."
+"Delete issue %1 success","Delete issue %1 success"
+"Resolve issue %1 fails","Resolve issue %1 fails"
+"Your store is listing on Search Engines.","Your store is listing on Search Engines."
+"Your current store is discoureaging with Seach Engines, you should allow it by enabling <a href=""%1"">here</a>","Your current store is discoureaging with Seach Engines, you should allow it by enabling <a href=""%1"">here</a>"
+"Your store is listing on Search Engines. But it's not influence the ranking of the link's target in the search engine's index.","Your store is listing on Search Engines. But it's not influence the ranking of the link's target in the search engine's index."
+"Your store is enabling Magento Rewrite feature.","Your store is enabling Magento Rewrite feature."
+"We recommend using <b>Use Web Server Rewrites</b>. Enable it <a href=""%1"">here</a>","We recommend using <b>Use Web Server Rewrites</b>. Enable it <a href=""%1"">here</a>"
+"Your store has HTML Sitemap.","Your store has HTML Sitemap."
+"We recommend that you enable HTML sitemap, it makes robots index your store pages faster. Enable it <a href=""%1"">here</a>","We recommend that you enable HTML sitemap, it makes robots index your store pages faster. Enable it <a href=""%1"">here</a>"
+"Meta Title","Meta Title"
+"Meta Description","Meta Description"
+"Frontend Identify","Frontend Identify"
+Description,Description
+"Short Description","Short Description"
+Content,Content
+Products,Products
+Categories,Categories
+Pages,Pages
+"-- Please Select --","-- Please Select --"
+"Mageplaza SEO Report","Mageplaza SEO Report"
+"View more","View more"
+"Please click this button to load the initial data for reporting or to reload the data when changing configuration`","Please click this button to load the initial data for reporting or to reload the data when changing configuration`"
+"The SEO report data has been updated successfully.","The SEO report data has been updated successfully."
+"An error occurred. Please try again later.","An error occurred. Please try again later."
+"Dashboard Report","Dashboard Report"
+"Enable Seo Reports","Enable Seo Reports"
+"Show Report on Dashboard","Show Report on Dashboard"
+"Apply duplicated content for","Apply duplicated content for"

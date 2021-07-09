@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
+    <suite name="STRCheckShippingTypeSuite">
+
+        <!-- Suite runs a group. Group name = 'STRCheckShippingTypeSuite' -->
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <!-- Customization Product (Add Shipping Type)-->
+            <actionGroup ref="AdminAddThreeOptionsInProductAttribute" stepKey="settingShippingTypeAttribute">
+                <argument name="attributeCode" value="attributeCode.shippingType"/>
+                <argument name="attributeOptionsSet" value="shippingTypeOptions"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectShippingTypeForProduct" stepKey="AddShippingTypeOneForProduct1">
+                <argument name="products" value="_theBagImpulseDuffleData"/>
+                <argument name="attributeShippingTypeValue" value="shippingTypeOptions.nameOptionOne"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectShippingTypeForProduct" stepKey="AddShippingTypeOneForProduct2">
+                <argument name="products" value="_theBagStriveShoulderPackData"/>
+                <argument name="attributeShippingTypeValue" value="shippingTypeOptions.nameOptionOne"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectShippingTypeForProduct" stepKey="AddShippingTypeOneForProduct3">
+                <argument name="products" value="_theMenHoodiesChazKangerooHoodieXSBlack"/>
+                <argument name="attributeShippingTypeValue" value="shippingTypeOptions.nameOptionOne"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectShippingTypeForProduct" stepKey="AddShippingTypeOneForProduct4">
+                <argument name="products" value="_theWatchClamberData"/>
+                <argument name="attributeShippingTypeValue" value="shippingTypeOptions.nameOptionTwo"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectShippingTypeForProduct" stepKey="AddShippingTypeOneForProduct5">
+                <argument name="products" value="_theBagOvernightDuffle"/>
+                <argument name="attributeShippingTypeValue" value="shippingTypeOptions.nameOptionTwo"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectShippingTypeForProduct" stepKey="AddShippingTypeOneForProduct6">
+                <argument name="products" value="_theMenHoodiesChazKangerooHoodie"/>
+                <argument name="attributeShippingTypeValue" value="shippingTypeOptions.nameOptionTwo"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectShippingTypeForProduct" stepKey="AddShippingTypeOneForProduct7">
+                <argument name="products" value="_theBagWayfarerMessenger"/>
+                <argument name="attributeShippingTypeValue" value="shippingTypeOptions.nameOptionThree"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </before>
+
+        <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <!--Return Default Setting for Product-->
+            <actionGroup ref="AdminReturnDefaultShippingTypeForProduct" stepKey="ReturnDefaultShippingType1">
+                <argument name="products" value="_theBagImpulseDuffleData"/>
+            </actionGroup>
+            <actionGroup ref="AdminReturnDefaultShippingTypeForProduct" stepKey="ReturnDefaultShippingType2">
+                <argument name="products" value="_theBagStriveShoulderPackData"/>
+            </actionGroup>
+            <actionGroup ref="AdminReturnDefaultShippingTypeForProduct" stepKey="ReturnDefaultShippingType3">
+                <argument name="products" value="_theWatchClamberData"/>
+            </actionGroup>
+            <actionGroup ref="AdminReturnDefaultShippingTypeForProduct" stepKey="ReturnDefaultShippingType4">
+                <argument name="products" value="_theBagOvernightDuffle"/>
+            </actionGroup>
+            <actionGroup ref="AdminReturnDefaultShippingTypeForProduct" stepKey="ReturnDefaultShippingType5">
+                <argument name="products" value="_theBagWayfarerMessenger"/>
+            </actionGroup>
+            <actionGroup ref="AdminReturnDefaultShippingTypeForProduct" stepKey="ReturnDefaultShippingType6">
+                <argument name="products" value="_theMenHoodiesChazKangerooHoodieXSBlack"/>
+            </actionGroup>
+            <actionGroup ref="AdminReturnDefaultShippingTypeForProduct" stepKey="ReturnDefaultShippingType7">
+                <argument name="products" value="_theMenHoodiesChazKangerooHoodie"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <include>
+            <group name="ShippingTableRatesShipType"/>
+        </include>
+
+    </suite>
+</suites>

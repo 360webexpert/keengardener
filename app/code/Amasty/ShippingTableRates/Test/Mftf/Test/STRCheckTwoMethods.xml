@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckTwoMethods">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Two Methods"/>
+            <description value="Check Two Methods"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-26"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRCheckTwoMethods"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationTheMainSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRuleFirst">
+                <argument name="ruleNameSTR" value="ruleSTRCheckTwoMethodsFirst"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRuleSecond">
+                <argument name="ruleNameSTR" value="ruleSTRCheckTwoMethodsSecond"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create First Shipping Table Rate-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateFirstShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTwoMethodsFirst"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInFirstRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTwoMethodsFirst"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckTwoMethodsFirst"/>
+        </actionGroup>
+
+        <!--Create Second Shipping Table Rate-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateSecondShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTwoMethodsSecond"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInSecondRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckTwoMethodsSecond"/>
+            <argument name="conditionsSTRData" value="conditionSTRCheckTwoMethodSecond"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckTwoMethodsSecond"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart1">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theWatchClamberData"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkPriceFirstSTR1">
+            <argument name="shippingPrices" value="ruleSTRCheckTwoMethodsFirst.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckTwoMethodsFirst.name"/>
+        </actionGroup>
+        <actionGroup ref="CheckNoSTRInCart" stepKey="checkPriceSecondSTR1">
+            <argument name="methodSTRName" value="ruleSTRCheckTwoMethodsSecond.name"/>
+        </actionGroup>
+
+        <!--Change Qty  Product In Cart To Two-->
+        <actionGroup ref="ChangeQtyProductInCart" stepKey="ChangeQtyWatchClamberToTwo">
+            <argument name="products" value="_theWatchClamberData"/>
+            <argument name="addProductQty" value="_enterQty2"/>
+        </actionGroup>
+
+        <!--Check Second Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkPriceFirstSTR2">
+            <argument name="shippingPrices" value="ruleSTRCheckTwoMethodsFirst.priceSTRTwo"/>
+            <argument name="methodSTRName" value="ruleSTRCheckTwoMethodsFirst.name"/>
+        </actionGroup>
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkPriceSecondSTR2">
+            <argument name="shippingPrices" value="ruleSTRCheckTwoMethodsSecond.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckTwoMethodsSecond.name"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart2">
+            <argument name="addProductQty" value="_enterQty4"/>
+            <argument name="products" value="_theBagOvernightDuffle"/>
+        </actionGroup>
+
+        <!--Check Third Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkPriceFirstSTR3">
+            <argument name="shippingPrices" value="ruleSTRCheckTwoMethodsFirst.priceSTRThree"/>
+            <argument name="methodSTRName" value="ruleSTRCheckTwoMethodsFirst.name"/>
+        </actionGroup>
+        <actionGroup ref="CheckNoSTRInCart" stepKey="checkPriceSecondSTR3">
+            <argument name="methodSTRName" value="ruleSTRCheckTwoMethodsSecond.name"/>
+        </actionGroup>
+
+    </test>
+</tests>

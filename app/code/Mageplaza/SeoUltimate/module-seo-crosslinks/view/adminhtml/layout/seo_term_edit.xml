@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoCrosslinks
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\SeoCrosslinks\Block\Adminhtml\Term\Edit" name="mageplaza_seocrosslinks_term_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Mageplaza\SeoCrosslinks\Block\Adminhtml\Term\Edit\Tabs" name="mageplaza_seocrosslinks_term_tabs">
+                <block class="Mageplaza\SeoCrosslinks\Block\Adminhtml\Term\Edit\Tab\Term" name="mageplaza_seocrosslinks_term_edit_tab_term"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">term</argument>
+                    <argument name="block" xsi:type="string">mageplaza_seocrosslinks_term_edit_tab_term</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

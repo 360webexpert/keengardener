@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
+
+    <page name="AdminSTRConfigurationPage" url="/admin/system_config/edit/section/carriers/" area="admin" module="Amasty_ShippingTableRates">
+        <section name="AdminConfigurationsSTRSection"/>
+    </page>
+
+    <page name="AdminSTRGridPage" url="/amstrates/methods/index/" area="admin" module="Amasty_ShippingTableRates">
+        <section name="AdminSTRGridSection"/>
+    </page>
+
+    <page name="AdminProductAttributesGridPage" url="/catalog/product_attribute/" area="admin" module="Amasty_ShippingTableRates">
+        <section name="AdminProductAttributesGridSection"/>
+    </page>
+
+</pages>

@@ -1,0 +1,87 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$helper = $block->helper();
+$brandCollection = $block->getCollection();
+
+if (count($brandCollection)) : ?>
+    <div class="brand-list-content">
+        <ol class="products list items product-items">
+            <?php foreach ($brandCollection as $brand) : ?>
+                <li class="item product product-item mix <?= /** @noEscape */ $block->getFilterClass($brand) ?> <?= /** @noEscape */ $block->getCatFilterClass($brand->getId()) ?>">
+                    <?php if ($helper->getBrandConfig('display') != \Mageplaza\Shopbybrand\Model\Config\Source\BrandListDisplay::DISPLAY_LABEL) : ?>
+                        <div class="product-item-info" data-container="product-grid" style="width: 240px">
+                            <?php if ($block->showQuickView()) : ?>
+                                <div title="Quick View" class="changelog module-version quicview_popup">
+                                    <a class="fa fa-eye open_model"
+                                       id="<?= /** @noEscape */ $helper->getQuickview($brand) ?>"></a>
+                                </div>
+                            <?php endif; ?>
+                            <a title="<?= /** @noEscape */ $brand->getValue() ?>"
+                               href="<?= /** @noEscape */ $helper->getBrandUrl($brand) ?>"
+                               class="product photo product-item-photo"
+                               tabindex="-1">
+                                <span class="product-image-container" style="width:240px;">
+                                    <span class="product-image-wrapper" style="padding-bottom: 125%;">
+                                        <img class="product-image-photo"
+                                             src="<?= /** @noEscape */ $helper->getBrandImageUrl($brand) ?>" width="165"
+                                             height="165" alt="">
+                                    </span>
+                                </span>
+                            </a>
+                            <div class="product details product-item-details">
+                                <?php if ($helper->getBrandConfig('display') != \Mageplaza\Shopbybrand\Model\Config\Source\BrandListDisplay::DISPLAY_LOGO) : ?>
+                                    <strong class="product name product-item-name" style="text-align: center">
+                                        <a title="<?= /** @noEscape */ $brand->getValue() ?>" class="product-item-link"
+                                           href="<?= /** @noEscape */ $helper->getBrandUrl($brand) ?>">
+                                            <?= /** @noEscape */ $block->showProductQty() ? $brand->getValue() . ' (' . $brand->getProductQuantity() . ')' : $brand->getValue() ?>
+                                        </a>
+                                    </strong>
+                                <?php endif; ?>
+                                <?php if ($block->showDescription()) : ?>
+                                    <div class="product description product-item-description">
+                                        <?= /** @noEscape */ $brand->getShortDescription() ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php else : ?>
+                        <div class="brand-name-type-label-only" data-container="product-grid">
+                            <strong class="product name product-item-name" style="margin: 0;">
+                                <a class="product-item-link" href="<?= /** @noEscape */ $helper->getBrandUrl($brand) ?>" style="float: left; padding-right: 10px;">
+                                    <?= /** @noEscape */ $block->showProductQty() ? $brand->getValue() . ' (' . $brand->getProductQuantity() . ')' : $brand->getValue() ?>
+                                </a>
+                                <?php if ($block->showQuickView()) : ?>
+                                    <div title="Quick View" class="changelog module-version quicview_popup">
+                                        <a class="fa fa-eye open_model"
+                                           id="<?= /** @noEscape */ $helper->getQuickview($brand) ?>"></a>
+                                    </div>
+                                <?php endif; ?>
+                            </strong>
+                        </div>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+<?php else : ?>
+    <?= /** @noEscape */ __('There is no brand available.') ?>
+<?php endif; ?>

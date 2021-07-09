@@ -1,0 +1,47 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Redirects
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+#mageplaza-redirect fieldset {
+    margin-top: 30px;
+    border-bottom: 1px solid #c3c3c3;
+    margin-bottom: 20px;
+}
+
+.seo-redirect-error {
+    display: none;
+    color: red;
+}
+
+#mageplaza-redirect .message-success {
+    margin: 10px 0px;
+    color: #79a22e
+}
+
+#mageplaza-redirect .message-error {
+    margin: 10px 0px;
+    color: red
+}
+
+#mageplaza-redirect .redirect-required-message {
+    color: red
+}
+
+.mageplaza_seo_redirects footer.modal-footer {
+    display: none
+}

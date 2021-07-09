@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="twoCustomerInfo" type="customer">
+        <data key="shippingType">am_shipping_type</data>
+        <data key="email" >AUTOTEST@email.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="country">United States</data>
+        <data key="street">My street</data>
+        <data key="city">Detroit</data>
+        <data key="state">Michigan</data>
+        <data key="postcodeFirst">48200</data>
+        <data key="postcodeSecond">48201</data>
+        <data key="postcodeThird">48215</data>
+        <data key="postcodeFourth">48226</data>
+        <data key="postcodeFifth">48225</data>
+        <data key="telephone">1234567</data>
+    </entity>
+
+</entities>

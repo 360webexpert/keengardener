@@ -1,0 +1,9 @@
+<?php /** @var $block \WeSupply\Toolbox\Block\Estimations\DisplayEta */ ?>
+
+<?php if ($block->getOrderId() && $block->getIsOrderVisible()): ?>
+    <?php if ($deliveryTime = $block->getEstimatedDelivery()) :?>
+        <div class="delivery-estimations">
+            <p><?php echo __('Your Estimated Delivery Date is %1', $deliveryTime) ?></p>
+        </div>
+    <?php endif;?>
+<?php endif; ?>

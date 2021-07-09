@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="mageplaza_abandoned_cart_template_1" label="Email Template 1" file="abandoned_cart_1.html" type="html" module="Mageplaza_AbandonedCart" area="frontend"/>
+    <template id="mageplaza_abandoned_cart_template_2" label="Email Template 2" file="abandoned_cart_2.html" type="html" module="Mageplaza_AbandonedCart" area="frontend"/>
+    <template id="mageplaza_abandoned_cart_template_3" label="Email Template 3" file="abandoned_cart_3.html" type="html" module="Mageplaza_AbandonedCart" area="frontend"/>
+    <template id="mageplaza_abandoned_cart_template_4" label="Email Template 4" file="abandoned_cart_4.html" type="html" module="Mageplaza_AbandonedCart" area="frontend"/>
+    <template id="mageplaza_abandoned_cart_template_5" label="Email Template 5" file="abandoned_cart_5.html" type="html" module="Mageplaza_AbandonedCart" area="frontend"/>
+    <template id="send_again" label="Send Again" file="send_again.html" type="html" module="Mageplaza_AbandonedCart" area="frontend"/>
+</config>

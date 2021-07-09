@@ -1,0 +1,46 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationPro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @type \Mageplaza\LayeredNavigation\Model\Layer\Filter\Attribute $filter */
+$filter = $this->getFilter();
+
+/** @type \Mageplaza\LayeredNavigationPro\Model\Layer\Filter $filterModel */
+$filterModel = $this->getFilterModel();
+?>
+<ol class="items">
+    <?php foreach ($block->getItems() as $item) : ?>
+        <?php $rating = $item->getValue() * 20 ?>
+        <li class="item">
+            <a href="<?= /** @noEscape */ $block->escapeUrl($filterModel->getItemUrl($item)) ?>" class="rating-summary">
+                <span class="rating-result" title="<?= $rating; ?>%">
+                    <span style="width:<?= $rating; ?>%"><span><?= $rating; ?>%</span></span>
+                </span>
+                <span style="vertical-align: middle; font-style: italic"><?= /** @noEscape */ __(' & up ') ?></span>
+                <?php if ($filterModel->isShowCounter($filter)) : ?>
+                    <span class="count" style="vertical-align: middle">
+                        <?= /** @noEscape */ $item->getCount() ?>
+                        <span class="filter-count-label"><?= /** @noEscape */ ($item->getCount() == 1) ? 'item' : 'items'; ?></span>
+                    </span>
+                <?php endif; ?>
+            </a>
+        </li>
+    <?php endforeach ?>
+</ol>

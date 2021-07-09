@@ -1,0 +1,33 @@
+{
+  "name": "mageplaza/module-seo-ultimate",
+  "description": "Magento 2 SEO Ultimate extension",
+  "require": {
+    "mageplaza/module-seo-pro": "^2.2.4",
+    "mageplaza/module-image-optimizer":"*"
+  },
+  "type": "magento2-module",
+  "version": "2.2.4",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Mageplaza",
+      "email": "support@mageplaza.com",
+      "homepage": "https://www.mageplaza.com",
+      "role": "Technical Support"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "module-seo-ultimate/registration.php",
+      "module-seo-analysis/registration.php",
+      "module-seo-crosslinks/registration.php",
+      "module-seo-dashboard/registration.php"
+    ],
+    "psr-4": {
+      "Mageplaza\\SeoUltimate\\": "module-seo-ultimate/",
+      "Mageplaza\\SeoAnalysis\\": "module-seo-analysis/",
+      "Mageplaza\\SeoCrosslinks\\": "module-seo-crosslinks/",
+      "Mageplaza\\SeoDashboard\\": "module-seo-dashboard/"
+    }
+  }
+}

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="CheckPriceSTRInCart">
+        <arguments>
+            <argument name="shippingPrices"/>
+            <argument name="methodSTRName"/>
+        </arguments>
+        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <see selector="//label[contains(string(), '{{methodSTRName}}')]/span/span" userInput="{{shippingPrices}}"
+             stepKey="checkFreeShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckNoSTRInCart">
+        <arguments>
+            <argument name="methodSTRName"/>
+        </arguments>
+        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <dontSeeElement selector="//label[contains(string(), '{{methodSTRName}}')]" stepKey="checkShippingTableRate"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad4"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckNoSTRInCartWithDefaultErrorMessage">
+        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <seeElement selector="{{FrontCartSection.STRDefaultErrorMessage}}" stepKey="checkShippingTableRate"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad4"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckImageWithSTRInCart">
+        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <seeElement selector="{{FrontCartSection.STRImageInComment}}" stepKey="checkImage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad4"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckPriceSTRWithCountryStateZipInCart">
+        <arguments>
+            <argument name="shippingPrices"/>
+            <argument name="methodSTRName"/>
+            <argument name="country"/>
+            <argument name="state"/>
+            <argument name="zip"/>
+        </arguments>
+        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <selectOption selector="{{FrontCartSection.SelectCountryShipping}}"
+                      userInput="{{country}}"
+                      stepKey="selectShippingCountry"/>
+        <selectOption selector="{{FrontCartSection.SelectStateShipping}}"
+                      userInput="{{state}}"
+                      stepKey="selectShippingState"/>
+        <fillField selector="{{FrontCartSection.ZipShipping}}" userInput="{{zip}}" stepKey="enterZip"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad1"/>
+        <waitForElementNotVisible selector="{{FrontCartSection.CartTotalLoader}}" stepKey="waitWhenNotVisibleLoaderTotals"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <wait time="1" stepKey="waitForLoadShipping1"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad3"/>
+        <wait time="1" stepKey="waitForLoadShipping2"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad4"/>
+        <see selector="//label[contains(string(), '{{methodSTRName}}')]/span/span" userInput="{{shippingPrices}}"
+             stepKey="checkFreeShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckNoPriceSTRWithCountryStateZipInCart">
+        <arguments>
+            <argument name="methodSTRName"/>
+            <argument name="country"/>
+            <argument name="state"/>
+            <argument name="zip"/>
+        </arguments>
+        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <selectOption selector="{{FrontCartSection.SelectCountryShipping}}"
+                      userInput="{{country}}"
+                      stepKey="selectShippingCountry"/>
+        <selectOption selector="{{FrontCartSection.SelectStateShipping}}"
+                      userInput="{{state}}"
+                      stepKey="selectShippingState"/>
+        <fillField selector="{{FrontCartSection.ZipShipping}}" userInput="{{zip}}" stepKey="enterZip"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad1"/>
+        <waitForElementNotVisible selector="{{FrontCartSection.CartTotalLoader}}" stepKey="waitWhenNotVisibleLoaderTotals"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <wait time="1" stepKey="waitForLoadShipping"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad3"/>
+        <dontSee selector="//label[contains(string(), '{{methodSTRName}}')]" stepKey="checkFreeShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckCommentSTRInCart">
+        <arguments>
+            <argument name="commentSTR"/>
+        </arguments>
+        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <seeElement selector="//label[contains(@data-bind, 'amstartes_comment')][contains(text(), '{{commentSTR}}')]"
+                    stepKey="checkComment"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+    </actionGroup>
+
+
+    <actionGroup name="AddCustomerInfoOnCheckoutShippingPage">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="postcode"/>
+        </arguments>
+        <amOnPage url="{{CheckoutShippingPage.url}}" stepKey="navigateToCheckout"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <fillField selector="{{CheckoutShippingAddressSection.Email}}" userInput="{{customer.email}}"
+                   stepKey="enterEmail"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>
+        <fillField selector="{{CheckoutShippingAddressSection.FirstName}}"
+                   userInput="{{customer.firstname}}" stepKey="enterFirstName"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad3"/>
+        <fillField selector="{{CheckoutShippingAddressSection.LastName}}" userInput="{{customer.lastname}}"
+                   stepKey="enterLastName"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad4"/>
+        <fillField selector="{{CheckoutShippingAddressSection.Street}}"
+                   userInput="{{customer.street}}" stepKey="enterStreet"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad5"/>
+        <fillField selector="{{CheckoutShippingAddressSection.City}}" userInput="{{customer.city}}"
+                   stepKey="enterCity"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad6"/>
+        <selectOption selector="{{CheckoutShippingAddressSection.SelectForRegion}}"
+                      userInput="{{customer.state}}"
+                      stepKey="selectRegion"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad7"/>
+        <fillField selector="{{CheckoutShippingAddressSection.Postcode}}"
+                   userInput="{{postcode}}" stepKey="enterPostcode"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad8"/>
+        <selectOption selector="{{CheckoutShippingAddressSection.SelectForCountry}}"
+                      userInput="{{customer.country}}"
+                      stepKey="selectShippingCountry"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad9"/>
+        <fillField selector="{{CheckoutShippingAddressSection.Telephone}}"
+                   userInput="{{customer.telephone}}" stepKey="enterTelephone"/>
+        <waitForPageLoad time="300" stepKey="waitForPageLoad10"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckPriceSTROnCheckoutAsGuest" extends="AddCustomerInfoOnCheckoutShippingPage">
+        <arguments>
+            <argument name="shippingPrices"/>
+            <argument name="shippingMethods"/>
+        </arguments>
+        <scrollTo selector="{{CheckoutShippingAddressSection.Next}}" stepKey="ScrollToDownPage"/>
+        <see selector="//input[contains(@value, '{{shippingMethods.shippingMethodsNameOnCheckout}}')]/parent::td/following-sibling::td/span/span[@class='price']"
+                    userInput="{{shippingPrices}}"  stepKey="checkShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckNoPriceSTROnCheckoutAsGuest" extends="AddCustomerInfoOnCheckoutShippingPage">
+        <arguments>
+            <argument name="shippingMethods"/>
+        </arguments>
+        <scrollTo selector="{{CheckoutShippingAddressSection.Next}}" stepKey="ScrollToDownPage"/>
+        <dontSeeElement selector="//input[contains(@value, '{{shippingMethods.shippingMethodsNameOnCheckout}}')]"
+                        stepKey="checkNoShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+    </actionGroup>
+
+
+    <actionGroup name="CreateOrderAsGuestWithChoiceOfShipping" extends="AddCustomerInfoOnCheckoutShippingPage">
+        <arguments>
+            <argument name="shippingMethods"/>
+        </arguments>
+        <click selector="//input[contains(@value, '{{shippingMethods.shippingMethodsNameOnCheckout}}')]"
+               stepKey="selectFirstShippingMethod"/>
+        <waitForPageLoad time="500" stepKey="waitForPageLoad11"/>
+        <click selector="{{CheckoutShippingAddressSection.Next}}" stepKey="clickNext"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad12"/>
+        <click selector="{{CheckoutPaymentAddressSection.PlaceOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad13"/>
+        <seeElement selector="{{SuccessPageSection.SuccessMessage}}" stepKey="assertSuccessPage"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad14"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckPriceShippingOnCheckoutAsCustomer">
+        <arguments>
+            <argument name="shippingPrices"/>
+            <argument name="shippingMethods"/>
+        </arguments>
+        <amOnPage url="{{CheckoutShippingPage.url}}" stepKey="navigateToCheckoutShippingPage"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <waitForElementNotVisible selector="{{FrontCartSection.CartTotalLoader}}" stepKey="waitWhenNotVisibleLoaderTotals"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad3"/>
+        <wait time="3" stepKey="waitForLoadShipping"/>
+        <scrollTo selector="{{CheckoutShippingAddressSection.Next}}" stepKey="ScrollToDownPage"/>
+        <see selector="//input[contains(@value, '{{shippingMethods}}')]/parent::td/following-sibling::td/span/span[@class='price']"
+             userInput="{{shippingPrices}}" stepKey="checkFreeShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+    </actionGroup>
+
+
+    <actionGroup name="CheckPriceShippingOnCheckoutAsCustomerAndSTRImage" extends="CheckPriceShippingOnCheckoutAsCustomer">
+        <seeElement selector="{{CheckoutShippingAddressSection.STRImageInComment}}" stepKey="checkFreeShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+    </actionGroup>
+
+</actionGroups>

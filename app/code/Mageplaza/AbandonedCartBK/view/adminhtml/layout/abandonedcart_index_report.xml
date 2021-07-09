@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\AbandonedCart\Block\Adminhtml\Report\Toolbar" name="mageplaza_abandonedcart_report_toolbar" template="Mageplaza_AbandonedCart::report/toolbar.phtml"/>
+            <block class="Mageplaza\AbandonedCart\Block\Adminhtml\Logs" name="mageplaza_abandonedcart_log_grid">
+                <block class="Magento\Backend\Block\Widget\Grid" name="mageplaza_abandonedcart_grid.grid" as="grid">
+                    <arguments>
+                        <argument name="id" xsi:type="string">id</argument>
+                        <argument name="dataSource" xsi:type="object">Mageplaza\AbandonedCart\Model\ResourceModel\Logs\Collection</argument>
+                        <argument name="default_sort" xsi:type="string">id</argument>
+                        <argument name="default_dir" xsi:type="string">ASC</argument>
+                        <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="mageplaza_abandonedcart_grid.grid.columnSet" as="grid.columnSet">
+                        <arguments>
+                            <argument name="rowUrl" xsi:type="array">
+                                <item name="path" xsi:type="string">0</item>
+                            </argument>
+                        </arguments>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="id">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">ID</argument>
+                                <argument name="index" xsi:type="string">id</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                                <argument name="column_css_class" xsi:type="string">col-id</argument>
+                                <argument name="header_css_class" xsi:type="string">col-id</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="subject">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Subject</argument>
+                                <argument name="index" xsi:type="string">subject</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer_email">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Recipient</argument>
+                                <argument name="index" xsi:type="string">customer_email</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="coupon_code">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Coupon</argument>
+                                <argument name="index" xsi:type="string">coupon_code</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="sequent_number">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Sequent number</argument>
+                                <argument name="index" xsi:type="string">sequent_number</argument>
+                                <argument name="type" xsi:type="string">text</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="updated_at">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Sent Date</argument>
+                                <argument name="index" xsi:type="string">updated_at</argument>
+                                <argument name="type" xsi:type="string">datetime</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="status">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Status</argument>
+                                <argument name="index" xsi:type="string">status</argument>
+                                <argument name="type" xsi:type="string">options</argument>
+                                <argument name="getter" xsi:type="string">getStatus</argument>
+                                <argument name="renderer" xsi:type="string">Mageplaza\AbandonedCart\Block\Adminhtml\Grid\Column\Renderer\Status</argument>
+                                <argument name="options" xsi:type="array">
+                                    <item name="enabled" xsi:type="array">
+                                        <item name="value" xsi:type="string">1</item>
+                                        <item name="label" xsi:type="string" translate="true">Sent</item>
+                                    </item>
+                                    <item name="recover" xsi:type="array">
+                                        <item name="value" xsi:type="string">2</item>
+                                        <item name="label" xsi:type="string" translate="true">Recover</item>
+                                    </item>
+                                    <item name="disabled" xsi:type="array">
+                                        <item name="value" xsi:type="string">0</item>
+                                        <item name="label" xsi:type="string" translate="true">Error</item>
+                                    </item>
+                                </argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                            <arguments>
+                                <argument name="header" xsi:type="string" translate="true">Action</argument>
+                                <argument name="sortable" xsi:type="string">0</argument>
+                                <argument name="filter" xsi:type="string">0</argument>
+                                <argument name="renderer" xsi:type="string">Mageplaza\AbandonedCart\Block\Adminhtml\Grid\Column\Renderer\Action</argument>
+                            </arguments>
+                        </block>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="_conditionSTR" type="conditionsSTRData">
+        <data key="wightFrom">0</data>
+        <data key="wightTo">999999</data>
+        <data key="qtyFrom">0</data>
+        <data key="qtyTo">999999</data>
+        <data key="shippingType">All</data>
+        <data key="PriceFrom">0</data>
+        <data key="PriceTo">999999</data>
+    </entity>
+
+    <entity name="_conditionSTRLight" type="conditionsSTRData">
+        <data key="wightFrom">0</data>
+        <data key="wightTo">999999</data>
+        <data key="qtyFrom">0</data>
+        <data key="qtyTo">999999</data>
+        <data key="shippingType">light</data>
+        <data key="PriceFrom">0</data>
+        <data key="PriceTo">999999</data>
+    </entity>
+
+    <entity name="_conditionSTRMedium" type="conditionsSTRData">
+        <data key="wightFrom">0</data>
+        <data key="wightTo">999999</data>
+        <data key="qtyFrom">0</data>
+        <data key="qtyTo">999999</data>
+        <data key="shippingType">medium</data>
+        <data key="PriceFrom">0</data>
+        <data key="PriceTo">999999</data>
+    </entity>
+
+    <entity name="conditionSTRCheckWeight" type="conditionsSTRData">
+        <data key="wightFrom">3</data>
+        <data key="wightTo">5</data>
+        <data key="qtyFrom">0</data>
+        <data key="qtyTo">999999</data>
+        <data key="shippingType">All</data>
+        <data key="PriceFrom">0</data>
+        <data key="PriceTo">999999</data>
+    </entity>
+
+    <entity name="conditionSTRCheckQty" type="conditionsSTRData">
+        <data key="wightFrom">0</data>
+        <data key="wightTo">999999</data>
+        <data key="qtyFrom">3</data>
+        <data key="qtyTo">7</data>
+        <data key="shippingType">All</data>
+        <data key="PriceFrom">0</data>
+        <data key="PriceTo">999999</data>
+    </entity>
+
+    <entity name="conditionSTRCheckPrice" type="conditionsSTRData">
+        <data key="wightFrom">0</data>
+        <data key="wightTo">999999</data>
+        <data key="qtyFrom">0</data>
+        <data key="qtyTo">999999</data>
+        <data key="shippingType">All</data>
+        <data key="PriceFrom">90</data>
+        <data key="PriceTo">200</data>
+    </entity>
+
+    <entity name="conditionSTRCheckTwoMethodSecond" type="conditionsSTRData">
+        <data key="wightFrom">0</data>
+        <data key="wightTo">999999</data>
+        <data key="qtyFrom">2</data>
+        <data key="qtyTo">5</data>
+        <data key="shippingType">All</data>
+        <data key="PriceFrom">0</data>
+        <data key="PriceTo">999999</data>
+    </entity>
+
+</entities>

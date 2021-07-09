@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+
+    <section name="AdminProductSection">
+        <!--Attributes-->
+        <element name="AttributeShippingType" type="block" selector="//select[@name='product[am_shipping_type]']"/>
+        <element name="NoAttributeShippingType" type="button" selector="//select[@name='product[am_shipping_type]']/option"/>
+    </section>
+
+</sections>

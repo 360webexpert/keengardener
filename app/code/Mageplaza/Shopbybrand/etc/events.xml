@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="seo_friendly_url_get_rewrite_path">
+        <observer name="set_rewrite_path" instance="Mageplaza\Shopbybrand\Observer\CheckRewritePath"/>
+    </event>
+    <event name="layout_generate_blocks_after">
+        <observer name="set_noindex_pagination" instance="Mageplaza\Shopbybrand\Observer\NoindexPagination"/>
+    </event>
+    <event name="mp_seo_product_structured_data">
+        <observer name="seo_structured_data" instance="Mageplaza\Shopbybrand\Observer\AddBrandProductStructuredData"/>
+    </event>
+</config>

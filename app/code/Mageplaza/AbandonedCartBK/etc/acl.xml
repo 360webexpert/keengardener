@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Mageplaza_AbandonedCart::configuration" title="Mageplaza Abandoned Cart Email Module" sortOrder="1"/>
+                        </resource>
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::marketing">
+                    <resource id="Mageplaza_AbandonedCart::abandonedcart" title="Mageplaza Abandoned Cart Email" sortOrder="10">
+                        <resource id="Mageplaza_AbandonedCart::log" title="Log" sortOrder="10"/>
+                        <resource id="Mageplaza_AbandonedCart::recovery_report" title="Report" sortOrder="20"/>
+                        <resource id="Mageplaza_AbandonedCart::checkout_report" title="Checkout Report" sortOrder="30"/>
+                        <resource id="Mageplaza_AbandonedCart::product_report" title="Product Report" sortOrder="40"/>
+                        <resource id="Mageplaza_AbandonedCart::shopping_behavior" title="Shopping Behavior" sortOrder="50"/>
+                        <resource id="Mageplaza_AbandonedCart::cart_board" title="Cart Board" sortOrder="60"/>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_CommonTests
+ */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="_theBagStriveShoulderPackData" type="products">
+        <data key="urlkey">strive-shoulder-pack</data>
+        <data key="productName">Strive Shoulder Pack</data>
+        <data key="productSKU">24-MB04</data>
+    </entity>
+
+    <entity name="_theBagImpulseDuffleData" type="products">
+        <data key="urlkey">impulse-duffle</data>
+        <data key="productName">Impulse Duffle</data>
+        <data key="productSKU">24-UB02</data>
+    </entity>
+
+    <entity name="_theWatchClamberData" type="products">
+        <data key="urlkey">clamber-watch</data>
+        <data key="productName">Clamber Watch</data>
+        <data key="productSKU">24-WG03</data>
+    </entity>
+
+    <entity name="_theBagWayfarerMessenger" type="products">
+        <data key="urlkey">wayfarer-messenger-bag</data>
+        <data key="productName">Wayfarer Messenger Bag</data>
+        <data key="productSKU">24-MB05</data>
+    </entity>
+
+    <entity name="_theBagOvernightDuffle" type="products">
+        <data key="urlkey">overnight-duffle</data>
+        <data key="productName">Overnight Duffle</data>
+        <data key="productSKU">24-WB07</data>
+    </entity>
+
+    <entity name="_theBagJoustDuffleBag" type="products">
+        <data key="urlkey">joust-duffle-bag</data>
+        <data key="productName">Joust Duffle Bag</data>
+        <data key="productSKU">24-MB01</data>
+    </entity>
+
+    <entity name="_theFitnessSpriteFoamRoller" type="products">
+        <data key="urlkey">sprite-foam-roller</data>
+        <data key="productName">Sprite Foam Roller</data>
+        <data key="productSKU">24-WG088</data>
+    </entity>
+
+    <entity name="_theFitnessHarmonyLumaflex" type="products">
+        <data key="urlkey">harmony-lumaflex-trade-strength-band-kit</data>
+        <data key="productName">Harmony Lumaflex</data>
+        <data key="productSKU">24-UG03</data>
+    </entity>
+
+    <entity name="_theFitnessSpriteFoamYogaBrick" type="products">
+        <data key="urlkey">sprite-foam-yoga-brick</data>
+        <data key="productName">Sprite Foam Yoga Brick</data>
+        <data key="productSKU">24-WG084</data>
+    </entity>
+
+    <entity name="_theMenTankArgusAllWeatherTank" type="products">
+        <data key="urlkey">argus-all-weather-tank</data>
+        <data key="productName">Argus All-Weather Tank</data>
+        <data key="productSKU">MT07</data>
+    </entity>
+
+    <entity name="_theMenHoodiesHeroHoodie" type="products">
+        <data key="urlkey">hero-hoodie</data>
+        <data key="productName">Hero Hoodie</data>
+        <data key="productSKU">MH07</data>
+    </entity>
+
+    <entity name="_theBagFusionBackpack" type="products">
+        <data key="urlkey">fusion-backpack</data>
+        <data key="productName">Fusion Backpack</data>
+        <data key="productSKU">24-MB02</data>
+    </entity>
+
+    <entity name="_theBagDrivenBackpack" type="products">
+        <data key="urlkey">driven-backpack</data>
+        <data key="productName">Driven Backpack</data>
+        <data key="productSKU">24-WB03</data>
+    </entity>
+
+    <entity name="_theVideoYogaAdventure" type="products">
+        <data key="urlkey">yoga-adventure</data>
+        <data key="productName">Yoga Adventure</data>
+        <data key="productSKU">240-LV06</data>
+    </entity>
+
+    <entity name="_theVideoLifeLongFitness" type="products">
+        <data key="urlkey">lifelong-fitness-iv</data>
+        <data key="productName">LifeLong Fitness IV</data>
+        <data key="productSKU">240-LV05</data>
+    </entity>
+
+    <entity name="_theSpriteYogaCompanionKit" type="products">
+        <data key="urlkey">sprite-yoga-companion-kit</data>
+        <data key="productName">Sprite Yoga Companion Kit</data>
+        <data key="productSKU">24-WG080</data>
+    </entity>
+
+    <entity name="_theMenHoodiesChazKangerooHoodie" type="products">
+        <data key="urlkey">chaz-kangeroo-hoodie</data>
+        <data key="productName">Chaz Kangeroo Hoodie</data>
+        <data key="productSKU">MH01</data>
+    </entity>
+
+    <entity name="_theMenHoodiesTetonPulloverHoodie" type="products">
+        <data key="urlkey">teton-pullover-hoodie</data>
+        <data key="productName">Teton Pullover Hoodie</data>
+        <data key="productSKU">MH02</data>
+    </entity>
+
+    <entity name="_theMenHoodiesChazKangerooHoodieXSBlack" type="products">
+        <data key="urlkey">chaz-kangeroo-hoodie</data>
+        <data key="productName">Chaz Kangeroo Hoodie-XS-Black</data>
+        <data key="productSKU">MH01-XS-Black</data>
+    </entity>
+
+</entities>

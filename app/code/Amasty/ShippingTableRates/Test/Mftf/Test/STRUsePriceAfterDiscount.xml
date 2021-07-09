@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRUsePriceAfterDiscount">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Use Price After Discount"/>
+            <description value="Check Use Price After Discount"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-14"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRUsePriceAfterDiscount"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <!-- Customization Configuration-->
+            <actionGroup ref="AdminConfigurationUsePriceSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+                <argument name="settingUsePriceAfterDiscount" value="usePriceAfterDiscount.yes"/>
+                <argument name="settingUsePriceIncludingTax" value="usePriceIncludingTax.default"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules and Return Default Setting -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
+                <argument name="ruleName" value="{{ruleSTRDefaultCartPriceRuleDiscount10.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRUsePriceAfterDiscount"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Default Cart Price Rule-->
+        <actionGroup ref="AdminCreateCartPriceRuleActionGroup" stepKey="CreateCartPriceRule">
+            <argument name="ruleName" value="ruleSTRDefaultCartPriceRuleDiscount10"/>
+        </actionGroup>
+
+        <!--Create Shipping Table Rate Rule with One Rate-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRUsePriceAfterDiscount"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule">
+            <argument name="shippingTableRateData" value="ruleSTRUsePriceAfterDiscount"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRUsePriceAfterDiscount"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddFirstProductToCart">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagWayfarerMessenger"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddSecondProductToCart">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagOvernightDuffle"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRWithCountryStateZipInCart" stepKey="checkPriceSTRForUS1">
+            <argument name="shippingPrices" value="ruleSTRUsePriceAfterDiscount.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRUsePriceAfterDiscount.name"/>
+            <argument name="country" value="ruleSTRUsePriceAfterDiscount.country"/>
+            <argument name="state" value="ruleSTRUsePriceAfterDiscount.state"/>
+            <argument name="zip" value="ruleSTRUsePriceAfterDiscount.zip"/>
+        </actionGroup>
+
+        <!--Change Qty First Product To Two-->
+        <actionGroup ref="ChangeQtyProductInCart" stepKey="ChangeQtyFirstProductToTwo">
+            <argument name="addProductQty" value="_enterQty2"/>
+            <argument name="products" value="_theBagWayfarerMessenger"/>
+        </actionGroup>
+
+        <!--Check Second Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRWithCountryStateZipInCart" stepKey="checkPriceSTRForUS2">
+            <argument name="shippingPrices" value="ruleSTRUsePriceAfterDiscount.priceSTRTwo"/>
+            <argument name="methodSTRName" value="ruleSTRUsePriceAfterDiscount.name"/>
+            <argument name="country" value="ruleSTRUsePriceAfterDiscount.country"/>
+            <argument name="state" value="ruleSTRUsePriceAfterDiscount.state"/>
+            <argument name="zip" value="ruleSTRUsePriceAfterDiscount.zip"/>
+        </actionGroup>
+
+        <!--Change Qty Second Product To Two-->
+        <actionGroup ref="ChangeQtyProductInCart" stepKey="ChangeQtySecondProductToTwo">
+            <argument name="addProductQty" value="_enterQty2"/>
+            <argument name="products" value="_theBagOvernightDuffle"/>
+        </actionGroup>
+
+        <!--Check Third Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRWithCountryStateZipInCart" stepKey="checkPriceSTRForUS3">
+            <argument name="shippingPrices" value="ruleSTRUsePriceAfterDiscount.priceSTRThree"/>
+            <argument name="methodSTRName" value="ruleSTRUsePriceAfterDiscount.name"/>
+            <argument name="country" value="ruleSTRUsePriceAfterDiscount.country"/>
+            <argument name="state" value="ruleSTRUsePriceAfterDiscount.state"/>
+            <argument name="zip" value="ruleSTRUsePriceAfterDiscount.zip"/>
+        </actionGroup>
+
+    </test>
+</tests>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckRuleStatus">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Inactive Status"/>
+            <description value="Check Inactive Status"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-30"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRCheckRuleStatus"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationTheMainSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckRuleStatus"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rates-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckRuleStatus"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckRuleStatus"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckRuleStatus"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart1">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theFitnessHarmonyLumaflex"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart2">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagImpulseDuffleData"/>
+        </actionGroup>
+
+        <!--Check No Shipping Table Rate-->
+        <actionGroup ref="CheckNoSTRInCart" stepKey="checkNoSTR">
+            <argument name="methodSTRName" value="ruleSTRCheckRuleStatus.name"/>
+        </actionGroup>
+
+        <!--Check No Shipping Table Rate-->
+        <actionGroup ref="CheckNoPriceSTRWithCountryStateZipInCart" stepKey="checkNoSTR2">
+            <argument name="methodSTRName" value="ruleSTRCheckRuleStatus.name"/>
+            <argument name="country" value="ruleSTRCheckRuleStatus.countryFirst"/>
+            <argument name="state" value="ruleSTRCheckRuleStatus.stateFirst"/>
+            <argument name="zip" value="ruleSTRCheckRuleStatus.zipFirst"/>
+        </actionGroup>
+
+    </test>
+</tests>

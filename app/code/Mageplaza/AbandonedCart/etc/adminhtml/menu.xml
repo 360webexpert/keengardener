@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Mageplaza_AbandonedCart::abandonedcart" title="Abandoned Cart Email" module="Mageplaza_AbandonedCart" sortOrder="55" resource="Mageplaza_AbandonedCart::abandonedcart" parent="Magento_Backend::marketing"/>
+        <add id="Mageplaza_AbandonedCart::recovery_report" title="Overall Report" module="Mageplaza_AbandonedCart" sortOrder="20" parent="Mageplaza_AbandonedCart::abandonedcart" action="abandonedcart/index/report" resource="Mageplaza_AbandonedCart::recovery_report"/>
+        <add id="Mageplaza_AbandonedCart::checkout_report" title="Checkout Abandonment Report" module="Mageplaza_AbandonedCart" sortOrder="30" parent="Mageplaza_AbandonedCart::abandonedcart" action="abandonedcart/index/checkoutreport" resource="Mageplaza_AbandonedCart::checkout_report"/>
+        <add id="Mageplaza_AbandonedCart::product_report" title="Abandoned Product Report" module="Mageplaza_AbandonedCart" sortOrder="40" parent="Mageplaza_AbandonedCart::abandonedcart" action="abandonedcart/index/productreport" resource="Mageplaza_AbandonedCart::product_report"/>
+        <add id="Mageplaza_AbandonedCart::shopping_behavior" title="Shopping Behavior Analysis" module="Mageplaza_AbandonedCart" sortOrder="50" parent="Mageplaza_AbandonedCart::abandonedcart" action="abandonedcart/index/shoppingbehavior" resource="Mageplaza_AbandonedCart::product_report"/>
+        <add id="Mageplaza_AbandonedCart::cart_board" title="Cart Board" module="Mageplaza_AbandonedCart" sortOrder="60" parent="Mageplaza_AbandonedCart::abandonedcart" action="abandonedcart/index/cartboard" resource="Mageplaza_AbandonedCart::cart_board"/>
+    </menu>
+</config>

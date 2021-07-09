@@ -1,0 +1,106 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$addressFields = $block->addressFields();
+$moreFields    = $block->moreFields();
+$block         = $block->popupBlock();
+
+?>
+
+<div class="emails-carts-block">
+    <div class="container col-mp mp-6 mp-sm-6 ">
+        <div class="emails-block detail">
+            <div class="email-summary">
+                <span class="number"></span>
+                <span class="percent"></span>
+            </div>
+            <div class="name"> <?= /* @noEscape */ __('Emails') ?> </div>
+        </div>
+    </div>
+    <div class="container col-mp mp-6 mp-sm-6 ">
+        <div class="carts-block detail">
+            <div class="cart-summary"></div>
+            <div class="name"><?= /* @noEscape */ __('Carts') ?></div>
+        </div>
+    </div>
+</div>
+<?php foreach ($block as $blockKey => $blockValue): ?>
+    <div class="chart-container-all">
+        <div class="title-optional">
+            <div class="title"><?=/* @noEscape */ $blockValue[0] ?></div>
+            <div class="optional">
+                <a href="#" class="<?= /* @noEscape */ $blockKey ?>-fields"><?= /* @noEscape */ __('Hide optional fields') ?></a>
+            </div>
+        </div>
+        <div class="chart-container">
+            <div class="col-md-offset-3 col-md-6 mpcss">
+                <?php foreach ($blockValue[1] as $key => $name): ?>
+                    <h3 class="progress-title <?= /* @noEscape */ $blockKey.'-'.$key ?>"><?= /* @noEscape */ $name ?>
+                        <span></span>
+                    </h3>
+                    <div class="progress <?= /* @noEscape */ $blockKey.'-'.$key ?>">
+                        <div class="progress-bar progress-bar-striped active <?= /* @noEscape */ $blockKey.'-'.$key ?>">
+                            <div class="progress-value <?= /* @noEscape */ $blockKey.'-'.$key ?>"></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+    <script data-role="mp_show_popup-tmpl-<?= /* @noEscape */ $blockKey ?>" type="text/x-magento-template">
+        <div id="popup-fields" class="mp-popup-fields">
+            <?php foreach ($blockValue[1] as $key => $name): ?>
+                <div class="field col-mp mp-6 mp-xs-12">
+                    <input type="checkbox" id="<?=  /* @noEscape */ $blockKey ?>-<?= /* @noEscape */ $key ?>" checked>
+                    <label for="<?=  /* @noEscape */ $blockKey ?>-<?= /* @noEscape */ $key ?>">
+                        <?= /* @noEscape */ $name ?>
+                    </label>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </script>
+<?php endforeach; ?>
+<div class="loading-mask">
+    <div class="spinner">
+        <span ></span>
+        <span ></span>
+        <span ></span>
+        <span ></span>
+        <span ></span>
+        <span ></span>
+        <span ></span>
+        <span ></span>
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "behavior": {
+                        "component": "Mageplaza_AbandonedCart/js/behavior_chart"
+                    }
+                }
+            }
+        }
+    }
+</script>

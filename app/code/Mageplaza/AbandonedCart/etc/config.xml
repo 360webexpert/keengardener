@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <abandonedcart>
+            <general>
+                <enabled>0</enabled>
+            </general>
+            <analytics>
+                <enabled>0</enabled>
+            </analytics>
+            <coupon>
+                <valid>48</valid>
+                <length>12</length>
+                <dash>3</dash>
+            </coupon>
+            <report>
+                <time_measure>30</time_measure>
+                <date_range>7</date_range>
+            </report>
+        </abandonedcart>
+    </default>
+</config>

@@ -1,0 +1,35 @@
+    <?php
+    $product = $block->getProduct();
+    ?>
+	<?php $brochureInfo = $product->getData('c2c_c2c_brochure_download'); ?>
+	<?php $instructionManual = $product->getData('c2c_instruction_manual'); ?>
+	<?php $specSheet = $product->getData('c2c_spec_sheet'); ?>
+	<?php $deliveryInfo = $product->getData('c2c_c2c_delivery_info'); ?>
+	<?php $warrantyLink = $product->getData('c2c_warranty_link'); ?>
+	<?php if (!empty($brochureInfo) || !empty($instructionManual) || !empty($deliveryInfo) || !empty($warrantyLink) || !empty($specSheet)): ?>
+	<dt class="tab"><span>Documents</span></dt>
+	<dd class="tab-container">
+		<div class="tab-content">
+			<?php if (!empty($brochureInfo)): ?>
+				<a target="_blank" href="<?php echo $brochureInfo ?>"><img src="<?php echo $this->getSkinUrl('images/pdf.jpg'); ?>" style="float:left"></a> <a target="_blank" href="<?php echo $brochureInfo; ?>"><strong>Brochure Download</strong></a> - to view the document in your browser or right click the link and select save as to save a copy of the brochure to your computer. Please note some documents are quite large files so may take a while to download.
+				<div style="clear:both;"></div>
+			<?php endif; ?>	
+			<?php if (!empty($instructionManual)): ?>
+				<a target="_blank" href="<?php echo $instructionManual; ?>"><img src="<?php echo $this->getSkinUrl('images/pdf.jpg'); ?>" style="float:left"></a> <a target="_blank" href="<?php echo $instructionManual; ?>"><strong>Manual Download</strong></a> - to view the documents in your browser or right click the link and select save as to save a copy of the brochure to your computer. Please note some documents are quite large files so may take a while to download.
+				<div style="clear:both;"></div>
+			<?php endif; ?>	
+			<?php if (!empty($deliveryInfo)): ?>
+				<a target="_blank" href="<?php echo $deliveryInfo; ?>"><img src="<?php echo $this->getSkinUrl('images/pdf.jpg'); ?>" style="float:left"></a> <a target="_blank" href="<?php echo $deliveryInfo; ?>"><strong>Delivery Information</strong></a> - to view the document in your browser or right click the link and select save as to save a copy of the brochure to your computer. Please note some documents are quite large files so may take a while to download.
+				<div style="clear:both;"></div>
+			<?php endif; ?>	
+			<?php if (!empty($specSheet)): ?>
+				<a target="_blank" href="<?php echo $specSheet; ?>"><img src="<?php echo $this->getSkinUrl('images/pdf.jpg'); ?>" style="float:left"></a> <a target="_blank" href="<?php echo $specSheet; ?>"><strong>Specification Sheet</strong></a> - to view the document in your browser or right click the link and select save as to save a copy of the brochure to your computer. Please note some documents are quite large files so may take a while to download.
+				<div style="clear:both;"></div>
+			<?php endif; ?>	
+			<?php if (!empty($warrantyLink)): ?>
+				<a target="_blank" href="<?php echo $warrantyLink; ?>"><img src="<?php echo $this->getSkinUrl('images/pdf.jpg'); ?>" style="float:left"></a> <a target="_blank" href="<?php echo $warrantyLink; ?>"><strong>Warranty Information</strong></a> - to view the document in your browser or right click the link and select save as to save a copy of the brochure to your computer. Please note some documents are quite large files so may take a while to download.
+				<div style="clear:both;"></div>
+			<?php endif; ?>	
+		</div>
+	</dd>
+	<?php endif ?>

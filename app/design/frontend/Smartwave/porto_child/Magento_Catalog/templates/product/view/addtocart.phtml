@@ -1,0 +1,621 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php $dailydealhelper=$this->helper('Smartwave\Dailydeals\Helper\Data'); ?>
+<?php /*get price*/
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
+	$StockState = $objectManager->get('\Magento\CatalogInventory\Api\StockStateInterface');
+	$price = $product->getPrice();
+	$direct = $product->getCustomAttribute('c2c_direct_despatch')->getValue();
+	$oosdeltime = $_product->getResource()->getAttribute('c2c_direct_oos_delivery_time')->getFrontend()->getValue($_product);
+	$weight = $_product->getWeight(); 
+?>
+<?php if ($_product->isSaleable()): ?>
+<div class="box-tocart">
+    <?php if($block->getRequest()->getParam('dailydealproduct') || $dailydealhelper->isDealProduct($_product->getId())) : ?>
+       <?php $productSku=$_product->getSku(); ?>
+    <input type="text" id="todate" value="<?php echo $dailydealhelper->getDailydealToDate($productSku); ?>" style="display:none;" >
+    <input type="text" style="display: none;" id="fromdate" value="<?php echo $dailydealhelper->getDailydealFromDate($productSku); ?>">
+    <p id="countdown"></p>
+    <div class="sw-dailydeal-wrapper">
+      <div class="sw-dailydeal">
+        <?php if($block->getRequest()->getParam('dailydealproduct')) :?>
+            <p id="expired"></p> 
+        <?php endif; ?>
+        <div class="countdowncontainer" style="display:none;">
+            <span class="dailydeal-label">
+                <?php echo __('Offer Ends In:'); ?>
+            </span>
+            <span class="number-wrapper">
+                <div class="line"></div>
+                <span class="number day"><p id="countdown_days"></p></span>
+                <div class="caption"><?php echo __('Days'); ?></div>
+            </span>
+
+            <span class="number-wrapper">
+                <div class="line"></div>
+                <span class="number hour"><p id="countdown_hours"></p></span>
+                <div class="caption"><?php echo __('Hours'); ?></div>
+            </span>
+
+            <span class="number-wrapper">
+                <div class="line"></div>
+                <span class="number min"><p id="countdown_minutes"></p></span>
+                <div class="caption"><?php echo __('Minutes'); ?></div>
+            </span>
+
+            <span class="number-wrapper">
+                <div class="line"></div>
+                <span class="number sec"><p id="countdown_seconds"></p></span>
+                <div class="caption"><?php echo __('Seconds'); ?></div>
+            </span>
+        </div>
+      </div>
+    </div>
+    <?php endif; ?>
+	<!-- Default Magento Cart Functionality -->
+    <!--<div class="fieldset">
+        <?php //if ($block->shouldRenderQuantity()): ?>
+        <div class="field qty">
+            <label class="label" for="qty"><span><?php /* @escapeNotVerified */ //echo __('Qty') ?>:</span></label>
+            <div class="control">
+                <input type="number"
+                       name="qty"
+                       id="qty"
+                       maxlength="12"
+                       value="<?php /* @escapeNotVerified */ //echo $block->getProductDefaultQty() * 1 ?>"
+                       title="<?php /* @escapeNotVerified */ //echo __('Qty') ?>" class="input-text qty"
+                       data-validate="<?php //echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       />
+                <div class="qty-changer">
+                    <a href="javascript:void(0)" class="qty-inc"><i class="porto-icon-up-dir"></i></a>
+                    <a href="javascript:void(0)" class="qty-dec"><i class="porto-icon-down-dir"></i></a>
+                </div>
+            </div>
+        </div>
+        <?php //endif; ?>
+        <div class="actions">
+            <button type="submit"
+                    title="<?php /* @escapeNotVerified */ //echo $buttonTitle ?>"
+                    class="action primary tocart"
+                    id="product-addtocart-button">
+                <span><?php /* @escapeNotVerified */ //echo $buttonTitle ?></span>
+            </button>
+            <?php //echo $block->getChildHtml('', true) ?>
+        </div>
+		<script>
+		  window.KlarnaOnsiteService = window.KlarnaOnsiteService || [];
+		  window.KlarnaOnsiteService.push({ eventName: 'refresh-placements' });
+		</script>
+    </div>
+	<!-- Default Magento Cart Functionality -->
+</div>
+<?php endif; ?>
+
+<!-- TESTING -->
+								<?php $obj = \Magento\Framework\App\ObjectManager::getInstance();  
+										$stockRegistry = $obj->get('Magento\CatalogInventory\Api\StockRegistryInterface');
+										$stockitem = $stockRegistry->getStockItem($_product->getId(),$_product->getStore()->getWebsiteId());
+										$oosallow = $_product->getData('c2c_oos_allow_order');
+										$oosdeltime = $_product->getResource()->getAttribute('c2c_direct_oos_delivery_time')->getFrontend()->getValue($_product);
+										$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+										$StockState = $objectManager->get('\Magento\CatalogInventory\Api\StockStateInterface');
+										$qty = $StockState->getStockQty($_product->getId());
+										$backorder = $stockitem->getBackorders();	
+								?>
+								<?php if ($_product->isSaleable()): ?>	
+									<?php if ($_product->getTypeId() != 'configurable'): ?>
+									<!-- Simple Product -->
+										<?php if ( $qty < 1 ): ?>
+										<!--oos stuff-->
+											<?php if ( $backorder != 0 ): ?>
+												<!--oos but can order display add to cart-->
+												<div class="box-tocart">
+												    <div class="fieldset">
+														<?php if ($block->shouldRenderQuantity()): ?>
+														<div class="field qty">
+															<label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?>:</span></label>
+															<div class="control">
+																<input type="number"
+																	   name="qty"
+																	   id="qty"
+																	   maxlength="12"
+																	   value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
+																	   title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
+																	   data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+																	   />
+																<div class="qty-changer">
+																	<a href="javascript:void(0)" class="qty-inc"><i class="porto-icon-up-dir"></i></a>
+																	<a href="javascript:void(0)" class="qty-dec"><i class="porto-icon-down-dir"></i></a>
+																</div>
+															</div>
+														</div>
+														<?php endif; ?>
+														<div class="actions">
+															<button type="submit"
+																	title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+																	class="action primary tocart"
+																	id="product-addtocart-button">
+																<span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+															</button>
+															<?php echo $block->getChildHtml('', true) ?>
+														</div>
+													</div>
+												</div>
+											<?php else : ?>
+												<!-- oos and cant order display  oos button -->
+												<div class="stock unavailable"><span class="stock_button"><?php echo __('OUT OF STOCK') ?></span></div>
+											<?php endif; ?>
+										<?php else : ?>
+											<!-- QTY > 0 -->
+											<div class="box-tocart">
+											   <div class="fieldset">
+													<?php if ($block->shouldRenderQuantity()): ?>
+													<div class="field qty">
+														<label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?>:</span></label>
+														<div class="control">
+															<input type="number"
+																   name="qty"
+																   id="qty"
+																   maxlength="12"
+																   value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
+																   title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
+																   data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+																   />
+															<div class="qty-changer">
+																<a href="javascript:void(0)" class="qty-inc"><i class="porto-icon-up-dir"></i></a>
+																<a href="javascript:void(0)" class="qty-dec"><i class="porto-icon-down-dir"></i></a>
+															</div>
+														</div>
+													</div>
+													<?php endif; ?>
+													<div class="actions">
+														<button type="submit"
+																title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+																class="action primary tocart"
+																id="product-addtocart-button">
+															<span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+														</button>
+														<?php echo $block->getChildHtml('', true) ?>
+													</div>
+												</div>
+											</div>
+										<?php endif; ?>
+									<?php else: ?> <!--if configurable product thats available to order -->
+										<div class="box-tocart">
+										    <div class="fieldset">
+												<?php if ($block->shouldRenderQuantity()): ?>
+												<div class="field qty">
+													<label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?>:</span></label>
+													<div class="control">
+														<input type="number"
+															   name="qty"
+															   id="qty"
+															   maxlength="12"
+															   value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
+															   title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
+															   data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+															   />
+														<div class="qty-changer">
+															<a href="javascript:void(0)" class="qty-inc"><i class="porto-icon-up-dir"></i></a>
+															<a href="javascript:void(0)" class="qty-dec"><i class="porto-icon-down-dir"></i></a>
+														</div>
+													</div>
+												</div>
+												<?php endif; ?>
+												<div class="actions">
+													<button type="submit"
+															title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
+															class="action primary tocart"
+															id="product-addtocart-button">
+														<span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+													</button>
+													<?php echo $block->getChildHtml('', true) ?>
+												</div>
+											</div>
+										</div>
+									<?php endif; ?>
+									<!-- End Simple Product -->
+								<?php else: ?>
+									<?php if ($_product->getIsSalable()): ?>
+									<?php else: ?> <!-- if configurable product without stock available -->
+										<div class="stock unavailable"><span class="stock_button"><?php echo __('OUT OF STOCK') ?></span></div>
+									<?php endif; ?>
+								<?php endif; ?>
+								<!-- KG add to Cart Functionality -->
+								<!--Klarna-->
+								<script>
+									window.KlarnaOnsiteService = window.KlarnaOnsiteService || [];
+									window.KlarnaOnsiteService.push({ eventName: 'refresh-placements' });
+								</script>
+								<!-- Klarna Placements -->
+								<?php
+									$finalPrice = $_product->getFinalPrice();
+									$klarnaPrice = $finalPrice * 100;
+								?>
+								<!-- Placement v2 -->
+								<?php if($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) : ?>
+								<klarna-placement
+									data-key="credit-promotion-badge"
+									data-locale="en-GB"
+									data-purchase-amount="<?php echo $klarnaPrice; ?>"
+								></klarna-placement>
+								<!-- end Placement -->
+								<?php endif; ?>
+								<?php if($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) : ?>
+									<!-- Placement v2 -->
+									<p>&nbsp;</p>
+									<klarna-placement
+										data-key="top-strip-promotion-auto-size"
+										data-locale="en-GB"
+									></klarna-placement>
+									<!-- end Placement -->			
+								<?php endif; ?>
+
+			<div id="header-mpdal" style="display:none;">
+				<div class="videoWrapper">
+					<div style="float:left;width:50px;"><a name="direct"></a><i class="porto-icon-location" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:8px;"><strong>Delivered direct from our suppliers.</strong></div>
+					<p>When this logo is dsplayed on the product page this means the product is shipped directly to the delivery address you enter in the checkout from our suppliers using our suppliers chosen carriers, this can be for a number reasons such as the item may be large and require special delivery planning or to increase product availability for our customers. Your details are provided to our suppliers so the item can be shipped. For any delivery requests please ensure you enter these into the delivery instructions field when checking out and we will always pass these onto our supplier. With the large variety of delivery options that our various suppliers use we cannot guarantee that all delivery requests can be accommodated but they will always be passed on and where possible to do so accommodated. Items are usually delivered in the estimated timeframe stated online but can sometimes fall outside of this due to circumstances outside of our control. You will receive a despatch confirmation from us when your order has been raised and lodged with our suppliers. If you require further details on delivery processes or an update please do get in touch.</p>
+					<div style="float:left;width:50px;margin-top:25px;"><a name="pre-order"></a><i class="porto-icon-calendar" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Available for Pre-order.</strong></div>
+					<p>When an item is available for pre-order this means the item is currently out of stock in our warehouse or has not yet been released which means it is not possible to despatch your order immediately, an item showing as available for pre-order is either already on order with our suppliers or an order will be raised right away with them upon us receiving a pre-order. We provide an estimate on the product page for when deliveries to your delivery address usually occur after placing your order for this item - this is an estimated delivery time based on our experience with the supplier for this product, it is not a guarantee and delivery can sometimes fall outside of the estimate time provided due to circumstances outside of our control, of course at any point up until your order has been despatched you can cancel your pre-order. Payment is taken at the time of placing your pre-order.</p>
+					<div style="float:left;width:50px;margin-top:25px;"><a name="in-stock"></a><i class="porto-icon-check" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>In stock now ready for fast despatch.</strong></div>
+					<p>This means the item is in stock in our warehouse and available for despatch right away. We endeavour to despatch the same day that you place your order for all in stock online orders placed before 2pm that day. It is unfortunately not possible to guarantee this as during busy periods or in the event of failure with third party couriers it is sometimes not possible to fulfil a same day despatch however you can rest assured we shall be doing our utmost to aim for this and the majority of our orders meet this and you will receive despatch confirmation when your order has left our warehouse and be kept fully up to date by our couriers - if you are in any doubt please get in touch with us by phone. Orders placed after 2pm will always be despatched the following working day. Due to courier collections all goods are despatched on weekdays only and deliveries will be sent using your chosen carrier and service selected in the checkout.</p>
+					<div style="float:left;width:50px;margin-top:25px;"><a name="variable-days"></a><i class="porto-icon-check" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Usually delivered in X working days/weeks.</strong></div>
+					<p>This item is either a pre-order item or delivered direct from our supplier. This is an estimated delivery time to you based on our experience of the supplier delivering this direct or into our warehouse for a pre-order, it is not a guarantee and delivery can sometimes fall outside of the estimate time provided due to circumstances outside of our control.</p>
+					<div style="float:left;width:50px;margin-top:25px;"><a name="1-3days"></a><i class="porto-icon-check" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Usually delivered in 1 - 3 working days.</strong></div>
+					<p>This item is in stock and will usually be despatched the same day if ordered before 2pm where possible, you will be offered a choice of Royal Mail 48 Tracked delivery or DPD next service and the delivery time from despatch will vary depending on the delivery service you select. Royal Mail aim to deliver within 2 - 3 working days for their 48 tracked service and deliveries are carried out Monday - Saturday. DPD aim to deliver the following working day after despatch with their DPD next service and deliveries are carried out Monday - Friday and require a signature. Due to the nature of relying on third party carrier services we are unable to guarantee delivery times or that the courier will meet their aim. We will provide confirmation of despatch and your details will be supplied to your chosen courier to facilitate the delivery and supply updates on delivery. Please ensure a valid e-mail address is provided.</p>
+					<div style="float:left;width:50px;margin-top:25px;"><a name="1day"></a><i class="porto-icon-check" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Usually delivered in 1 working day.</strong></div>
+					<p>This item is in stock and will usually be despatched the same day if ordered before 2pm where possible, the item is too large to send cost effectively with Royal Mail so DPD will be used as the chosen courier for this item. DPD aim to deliver the following working day after despatch with their DPD next day service and deliveries are carried out Monday - Friday and require a signature. Due to the nature of relying on third party carrier services we are unable to guarantee delivery times or that the courier will meet their aim. We will provide confirmation of despatch and your details will be supplied to your chosen courier to facilitate the delivery and supply updates on delivery. Please ensure a valid e-mail address is provided.</p>
+					<div style="float:left;width:50px;margin-top:25px;"><a name="1-5days"></a><i class="porto-icon-check" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Usually delivered in 1 - 5 working days.</strong></div>
+					<p>This item is large, heavy or both and needs to be sent via a pallet courier, this is to ensure the item arrives with you safely and is not damaged in transit. Pallet deliveries are delivered in large vehicles on a kerb-side drop basis and the driver will have a pallet truck and due to the value of the goods a signature is required - we advise two people to be present at the time of delivery to be able to lift items from the kerb side to your house. It is your responsibility to inform us if your delivery address has restrictions which would prohibit the driver to deliver such as "no parking" or "on a red route" etc. as if we are not informed you can be charged a redelivery fee or be responsible for paying any fines incurred to the driver to facilitate your delivery. If you have agreed a delivery date and you are not available to take your delivery, then you can be responsible to pay a re-delivery fee. Pallets are non-returnable however some drivers will be happy to take this back although are not required to do so. In the checkout you will be able to select your preferred Pallet service.</p>
+					<p><u>Next day</u> - orders before 2pm we endeavour to despatch the same day and upon despatch you will receive despatch confirmation by e-mail. Your order will then go out for delivery the following working day Monday - Friday between 8am - 5pm and we request the driver calls you an hour before delivery on the contact number provided on your order.</p>
+					<p><u>Dedicated Day</u> - orders before 2pm we endeavour to despatch the same day and upon despatch you will receive despatch confirmation by e-mail. Your order will then go out for delivery on a working day which you must supply in the delivery instructions field when checking out. Delivery will be between 8am - 5pm on your chosen day and we request the driver calls you an hour before delivery on the contact number provided on your order.</p>
+					<p><u>Booked In</u> - orders before 2pm we endeavour to despatch the same day and upon despatch you will receive despatch confirmation by e-mail. The pallet will arrive at your local depot in 2 - 4 days and your local depot will attempt to make contact with you upon arrival on the phone number supplied on your order to arrange delivery - please ensure the contact number provided is valid and accurate so delays do not occur and be aware the call from the local depot may come from an unrecognised number, failure to answer this can lead to delays in delivery.</p>
+					<p><u>Saturday</u> - orders before 2pm we endeavour to despatch the same day and upon despatch you will receive despatch confirmation by e-mail. The pallet will then be delivered the first Saturday after it has been despatched between 8am - 1pm and will require a signature. We request the driver calls you an hour before delivery on the contact number provided on your order. </p>
+					<div style="float:left;width:50px;margin-top:26px;"><a name="secure"></a><i class="porto-icon-credit-card" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Safe &amp; Secure online payments.</strong></div>
+					<p>All of our pages where information is sent to us from our customers is encrypted to provide you with a safe and secure online shopping experience, our website has passed stringent tests by multiple third parties that are experts in security and the prevention of fraudulent use and phishing.</p>
+					<p>Our security certificate verifies that your connection is encrypted using a high-grade encryption (Camellia-256, 256 bit keys) this means that on our secure pages - the page you are viewing is encrypted before being transmitted over the internet. Encryption makes it very difficult for unauthorised people to view information travelling between computers.It is therefore very unlikely that anyone can read the page you are on as it travels across a network.</p>
+					<p><u>Sagepay</u></p>
+					<p>When you buy from us, our secure server encrypts all of your personal information. We use SagePay an industry leader in secure internet transactions. All transaction information passed to the SagePay Payment System is encrypted using 256-bit SSL certificates.</p>
+					<p>You can be completely secure in the knowledge that nothing passed to SagePay can be examined or decrypted including transaction information and/or cardholder data by any third parties, staff within our company or by SagePay.</p>
+					<p><u>Paypal</u></p>
+					<p>PayPal automatically encrypts your confidential information in transit from your computer to ours using the Secure Sockets Layer protocol (SSL) with an encryption key length of 128-bits (the highest level commercially available). Before you even register or log in to the PayPal site, our server checks that you're using an approved browser - one that uses SSL 3.0 or higher.</p>
+					<p>Once your information reaches the PayPal site, it resides on a server that is heavily guarded both physically and electronically. PayPal servers sit behind an electronic firewall and are not directly connected to the internet, so your private information is available only to authorized computers.</p>
+					<p>For more info visit <a href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Help/general/TopQuestion6-outside">https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Help/general/TopQuestion6-outside</a></p>
+					<p><u>PCI Compliance</u></p>
+					<p>PCI site certification verifies merchant credit card handling processes and tests merchant Internet systems to determine if we comply with the Payment Card Industry (PCI) Data Security Standards. As a certified PCI compliant company and website we provide an independently verified safe and secure card payment system online and offline. PCI compliance is required for all merchants who accept credit cards, so before you shop anywhere else make sure that they are PCI compliant; we are!</p>
+					<div style="float:left;width:50px;margin-top:25px;"><a name="lowest-price"></a><i class="porto-icon-pound" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Seen a product cheaper? Get in touch.</strong></div>
+					<p>We are confident that we offer the best possible prices on all of our products online, and back this up with our Lowest Price Policy. If you find one of our competitors selling a product which we sell at a lower price than our selling price then we will endeavour to match or beat their price!</p>
+					<p>To qualify for our Lowest Price Policy all we ask is that the following criteria is met:</p>
+						<ul>
+							<li>The product on our competitors site is identical to the product that we are selling</li>
+							<li>The product is in stock and available to order for home delivery on the competitors website</li>
+							<li>Competitors delivery costs and terms are taken into account with our Lowest Price Promise offers</li>
+							<li>Lowest Price Policy is only available against comparable offers - auction style website listings and wholesalers are not comparable</li>
+							<li>Our Lowest Price Policy cannot be applied to an order after an order has been made</li>
+							<li>We reserve the right not to ammend our website prices or match or beat the price</li>
+							<li>Lowest Price Policy cannot be used in conjunction with any voucher codes or cashback sites or finance options</li>
+						</ul>
+					<p>To obtain a Lowest Price Policy offer simply <a href="https://www.keengardener.co.uk/contact/">contact us by email</a> stating the product and where you have found the item cheaper as well as the website address.</p>
+					<div style="float:left;width:50px;margin-top:27px;"><a name="advice"></a><i class="porto-icon-online-support" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Expert advice 9 - 5pm Monday - Friday.</strong></div>
+					<p>Our customer service team are to help by e-mail, phone or live chat. The department is open Monday - Friday 9am - 5pm. We aim to respond to email and offline chat messages within 1 working day and our phone lines are open for product questions, order updates or to solve an issue if something has not gone quite right.</p>
+					<p>Our customer service team are to help by e-mail, phone or live chat. The department is open Monday - Friday 9am - 5pm. We aim to respond to email and offline chat messages within 1 working day and our phone lines are open for product questions, order updates or to solve an issue if something has not gone quite right.</p>
+					<div style="float:left;width:50px;margin-top:26px;"><a name="finance"></a><i class="porto-icon-sliders" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Spread the cost of your purchase.</strong></div>
+					<p>Keengardener Ltd is pleased to offer finance payment options.</p>
+					<!-- Placement v2 -->
+					<klarna-placement
+					  data-key="info-page"
+					  data-locale="en-GB"
+					></klarna-placement>
+					<!-- end Placement -->
+					<div style="float:left;width:50px;margin-top:27px;"><a name="delivery-terms"></a><i class="porto-icon-shipping" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div style="margin-top:28px;"><strong>Free delivery on orders over &pound;75.</strong></div>
+					<p>We offer free mainland UK delivery on orders over £75.00 however you should aware of some exclusions due to surcharges on certain remote locations, we believe the fairest way to implement this is to subsidise the cost of delivery on these orders to remote locations by the same rate as what we offer free delivery to customers not in these locations. The delivery matrix below outlines our delivery charges and exclusions and further information including international delivery can be found on our <a title="Keen Gardener Delivery" href="https://www.keengardener.co.uk/delivery/">delivery page</a>.</p>
+					<table style="width: 736px; height: 277px;"><colgroup><col> <col> <col span="2"> <col></colgroup>
+						<tbody>
+						<tr>
+						<td>&nbsp;</td>
+						<td><span style="text-decoration: underline;"><strong>0g - 1.5kg</strong></span></td>
+						<td><span style="text-decoration: underline;"><strong>1.5kg - 29.99kg</strong></span></td>
+						<td><span style="text-decoration: underline;"><strong>Over 30kg</strong></span></td>
+						</tr>
+						<tr>
+						<td style="text-align: left;"><strong>Mainland UK &lt;£75.00 Order Value</strong></td>
+						<td><strong>£3.99</strong></td>
+						<td><strong>£5.95</strong></td>
+						<td><strong>£24.95</strong></td>
+						</tr>
+						<tr>
+						<td style="text-align: left;"><strong>Mainland UK &gt;£75.00 Order Value</strong></td>
+						<td><strong>FREE</strong></td>
+						<td><strong>FREE</strong></td>
+						<td><strong>FREE</strong></td>
+						</tr>
+						<tr>
+						<td style="text-align: left;"><strong>Highlands, Islands &amp; Remote Locations**</strong></td>
+						<td><strong>£3.99</strong></td>
+						<td><strong>£9.99</strong></td>
+						<td><strong>£34.95*</strong></td>
+						</tr>
+						<tr>
+						<td style="text-align: left;"><strong>Channel Islands***</strong></td>
+						<td><strong>£3.99</strong></td>
+						<td><strong>£9.99</strong></td>
+						<td><strong>£99.95*</strong></td>
+						</tr>
+						<tr>
+						<td style="text-align: left;"><strong>Northern Ireland, Isle of Man, Isles of Scilly****<br></strong></td>
+						<td><strong>£3.99</strong></td>
+						<td><strong>£16.99</strong></td>
+						<td><strong>£59.95*</strong></td>
+						</tr>
+						<tr>
+						<td style="text-align: left;"><strong>Republic of Ireland</strong></td>
+						<td><strong>£11.99</strong></td>
+						<td><strong>£16.99</strong></td>
+						<td><strong>£60*</strong></td>
+						</tr>
+						</tbody>
+					</table>
+					<p>** Scottish Highlands, Islands &amp; Remote include the following Post Codes: IV, HS, KA27-28, KW, PA20-49, PA60-78, PH17- 26, PH30-44, PH49-50, PO31-41, ZE.<br>*** Channel Islands include the following postcodes JE, GY<br>**** Northern Ireland, Isle of Man, Isles of Scilly include the following Post Codes:&nbsp; BT, IM, TR21-25</p>
+				</div>
+			</div>
+			<script>
+				require(
+					[
+						'jquery',
+						'Magento_Ui/js/modal/modal'
+					],
+					function(
+						$,
+						modal
+					) {
+						var options = {
+							type: 'popup',
+							responsive: true,
+							innerScroll: true,
+							title: '',
+							buttons: [{
+								text: $.mage.__('Close'),
+								class: '',
+								click: function () {
+									this.closeModal();
+								}
+							}]
+						};
+
+						var popup = modal(options, $('#header-mpdal'));
+						$(".click-header").on('click',function(){ 
+							$("#header-mpdal").modal("openModal");
+						});
+
+					}
+				);
+			</script>
+		<?php if ( $backorder == 0 && $qty < 1 ): ?>
+		<?php else : ?>
+			<div style="margin-top:15px;clear:both;border-top: solid 1px #ebebeb;">
+				<?php if ( $qty < 1 ): ?>
+					<?php if ( $backorder != 0 && $direct == 1 ): ?>
+						<!--position1-->
+						<div class="product_info_block1">
+							<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-location" style="font-size:35px;color:#9ec11a;"></i></div>
+							<div class="product_info_text">Delivered direct from our suppliers.<br /><a href="#direct" class="click-header">What does this mean?</a></div>
+						</div>
+					<?php elseif ( $backorder != 0 && $direct == 0 ): ?>
+						<!--position1-->
+						<div class="product_info_block1">
+							<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-calendar" style="font-size:35px;color:#9ec11a;"></i></div>
+							<div class="product_info_text">Available for Pre-order.<br /><a href="#pre-order" class="click-header">What does this mean?</a></div>
+						</div>					
+					<?php endif; ?>
+				<?php else : ?>
+					<!--position1-->
+					<div class="product_info_block1">
+						<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-check" style="font-size:35px;color:#9ec11a;"></i></div>
+						<div class="product_info_text">In stock now ready for fast despatch.<br /><a href="#in-stock" class="click-header">What does this mean?</a></div>
+					</div>
+				<?php endif; ?>
+				<!--position2-->
+				<div class="product_info_block2">
+					<div class="product_info_icon" style="margin-top:6px;"><i class="porto-icon-truck" style="font-size:35px;color:#9ec11a;"></i></div>
+					<?php if ( $qty < 1 ): ?>
+						<div class="product_info_text">Usually delivered in <?php echo $oosdeltime; ?>.<br /><a href="#variable-days" class="click-header">What does this mean?</a></div>
+					<?php else : ?>
+						<?php if ( $weight < 2.000001 ): ?>
+							<div class="product_info_text">Usually delivered in 1 - 3 working days.<br /><a href="#1-3days" class="click-header">Select delivery speed in checkout.</a></div>
+						<?php elseif ( $weight > 2.00 && $weight < 30.00 ) : ?>
+							<div class="product_info_text">Usually delivered in 1 working day.<br /><a href="#1day" class="click-header">From day of despatch.</a></div>
+						<?php else : ?>
+							<div class="product_info_text">Usually delivered in 1 - 5 working days.<br /><a href="#1-5days" class="click-header">Select pallet delivery speed in checkout.</a></div>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+				<!--position3-->
+				<div class="product_info_block3">
+					<div class="product_info_icon" style="margin-top:7px;"><i class="porto-icon-online-support" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div class="product_info_text">Expert advice 9 - 5pm Monday - Friday.<br /><a href="#advice" class="click-header">More details</a></div>
+				</div>			
+			</div>
+			<div style="clear:both;border-top: solid 1px #ebebeb;">
+				<!--position4-->
+				<div class="product_info_block4">
+					<div class="product_info_icon" style="margin-top:7px;"><i class="porto-icon-shipping" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div class="product_info_text">Free delivery on orders over &pound;75.<br /><a href="#delivery-terms" class="click-header">Terms apply</a></div>
+				</div>	
+				<!--position5-->			
+				<div class="product_info_block5">
+					<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-pound" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div class="product_info_text">Seen a product cheaper? Get in touch.<br /><a href="#lowest-price" class="click-header">Terms apply</a></div>
+				</div>
+				<?php if ( $price > 499.99 ): ?>
+					<!--position6-->
+					<div class="product_info_block6">
+						<div class="product_info_icon" style="margin-top:6px;"><i class="porto-icon-sliders" style="font-size:35px;color:#9ec11a;"></i></div>
+						<div class="product_info_text">Spread the cost of your purchase.<br /><a href="#finance" class="click-header">More details</a></div>
+					</div>
+				<?php else : ?>
+					<!--position6-->
+					<div class="product_info_block6">
+						<div class="product_info_icon" style="margin-top:6px;"><i class="porto-icon-credit-card" style="font-size:35px;color:#9ec11a;"></i></div>
+						<div class="product_info_text">Safe and Secure online payments.<br /><a href="#secure" class="click-header">More details</a></div>
+					</div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
+<!-- TESTING -->
+
+
+
+
+<!-- Yotpo's Rich Snippets START --> <!--remove comments-->
+<?php 
+    $rs_helper = $this->helper('Yotpo\Yotpo\Helper\RichSnippets');
+    $array = $rs_helper->getRichSnippet($this);
+?>
+
+<?php if (isset($array["reviews_count"]) && $array["reviews_count"] != 0 ): ?>
+	<script type="application/ld+json">
+		{
+		"@context": "http:\/\/schema.org\/",
+		"@type": "Product",
+		"aggregateRating": {
+		"ratingValue": "<?php echo $array["average_score"]; ?>",
+		"reviewCount": "<?php echo $array["reviews_count"]; ?>"
+	},
+	"name": "<?php echo $_product->getName();?>"}
+	</script>
+<?php endif; ?>
+<!-- Yotpo's Rich Snippets END -->
+<?php if ($block->isRedirectToCartEnabled()) : ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/product/view/validation": {
+                "radioCheckboxClosest": ".nested"
+            }
+        }
+    }
+</script>
+<?php else : ?>
+<script>
+    require([
+        'jquery',
+        'mage/mage',
+        'Magento_Catalog/product/view/validation',
+        'Magento_Catalog/js/catalog-add-to-cart'
+    ], function ($) {
+        'use strict';
+
+        $('#product_addtocart_form').mage('validation', {
+            radioCheckboxClosest: '.nested',
+            submitHandler: function (form) {
+                var widget = $(form).catalogAddToCart({
+                    bindSubmit: false
+                });
+
+                widget.catalogAddToCart('submitForm', $(form));
+
+                return false;
+            }
+        });
+    });
+</script>
+<?php endif; ?>
+<script type="text/javascript">
+require([
+    'jquery'        
+], function ($) {
+// Timer for LEFT time for Dailydeal product
+    var _second = 1000;
+    var _minute = _second * 60;
+    var _hour = _minute * 60;
+    var _day = _hour * 24;
+    var timer;
+
+    function showRemaining(currentdate) {
+      var cid='countdown';
+      var startdateid='fromdate';
+      var id='todate';
+      var daysid='countdown_days';
+      var hoursid='countdown_hours';
+      var minutesid='countdown_minutes';
+      var secondsid='countdown_seconds';
+
+      var enddate = new Date($('#'+id).val());
+      var dealstartdate=new Date($('#'+startdateid).val());
+
+      // Get Current Date from magentodatetime
+      var currentdate=new Date(currentdate);
+
+      //Get Difference between Two dates
+      var distance = enddate - currentdate;
+
+      if (distance < 0) {
+        $('#expired').html("<div class='offermessage' >EXPIRED!</div>");
+      } else if(dealstartdate > currentdate) {
+        $('.countdowncontainer').hide();
+        var msg="<div class='offermessage' > Coming Soon..<br>Deal Start at:<br>"+$('#'+startdateid).val()+"</div>";
+        $('#expired').html(msg);
+      } else {
+        var days = Math.floor(distance / _day);
+        var hours = Math.floor((distance % _day) / _hour);
+        var minutes = Math.floor((distance % _hour) / _minute);
+        var seconds = Math.floor((distance % _minute) / _second);
+        if(hours < 10)
+            hours = "0" + hours;
+        if(minutes < 10)
+            minutes = "0" + minutes;
+        if(seconds < 10)
+            seconds = "0" + seconds;
+        $('.countdowncontainer').show();
+        $('#'+daysid).html(days);
+        $('#'+hoursid).html(hours);
+        $('#'+minutesid).html(minutes);
+        $('#'+secondsid).html(seconds);
+      }
+    }
+
+    //Set date as magentodatetime 
+    var date = new Date('<?php echo $dailydealhelper->getcurrentDate() ?>');
+
+    var day   = date.getDate();
+    var month = date.getMonth();
+    var year  = date.getFullYear();
+    var hours = date.getHours();
+    var minutes = "0" + date.getMinutes();
+    var seconds = "0" + date.getSeconds();
+
+    var fulldate = year+'-'+(month+1)+'-'+day+' '+hours + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2);
+
+    // Set Interval
+    timer = setInterval(function() 
+    {
+        date.setSeconds(date.getSeconds() + 1);
+        var month=date.getMonth();
+        var currentdatetime=date.getFullYear()+"-"+(month+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+        showRemaining(currentdatetime);
+    }, 1000);
+});
+</script>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\ProductsPage\Edit" name="mplayer_productspage_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\ProductsPage\Edit\Tabs" name="mplayer_productspage_edit_tabs">
+                <block class="Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\ProductsPage\Edit\Tab\Page" name="mplayer_edit_tab_page"/>
+                <block class="Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\ProductsPage\Edit\Tab\DefaultAttribute" name="mplayer_edit_tab_default_attribute"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">page_section</argument>
+                    <argument name="block" xsi:type="string">mplayer_edit_tab_page</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">default_attribute</argument>
+                    <argument name="block" xsi:type="string">mplayer_edit_tab_default_attribute</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

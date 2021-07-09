@@ -1,0 +1,32 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\NavigationType;
+
+$lnType = $this->helper(\Mageplaza\LayeredNavigationUltimate\Helper\Data::class)->getConfigGeneral('show_ln_type');
+if ($lnType != NavigationType::VERTICAL) : ?>
+    <div id="layered-horizontal-container">
+        <?= $this->getLayout()->getBlock('layer.catalog.leftnav')->toHtml() ?>
+    </div>
+<?php endif; ?>
+<?php if ($lnType == NavigationType::HORIZONTAL) : ?>
+    <?php $this->getLayout()->unsetElement('layer.catalog.leftnav') ?>
+<?php endif; ?>

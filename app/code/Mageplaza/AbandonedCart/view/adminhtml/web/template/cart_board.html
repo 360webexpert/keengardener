@@ -1,0 +1,147 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<div class="cart-columns">
+    <div class="real-time-column col-mp mp-3">
+        <div class="column-name" data-bind="i18n: 'Real-time'"></div>
+        <!-- ko foreach: {data: getRealtimeData(), as: 'realtimeData'} -->
+        <div class="cart-block">
+            <div class="cart-header">
+                <!-- ko if: realtimeData.customerName -->
+                <div class="customer-name" data-bind="text: realtimeData.customerName"></div>
+                <!-- /ko -->
+                <!-- ko ifnot: realtimeData.customerName -->
+                <div class="customer-name" data-bind="i18n: 'Guest'"></div>
+                <!-- /ko -->
+
+                <div class="cart-grand-total" data-bind="text: realtimeData.total "></div>
+            </div>
+            <div class="cart-container">
+                <div class="email-time">
+                    <div class="email" data-bind="text: realtimeData.customerEmail"></div>
+                    <div class="time" data-bind="text: realtimeData.differenceTime"></div>
+                </div>
+                <div class="product">
+                    <!-- ko foreach: {data: realtimeData.productImages, as: 'image'} -->
+                    <div class="product-image col-mp mp-4">
+                        <img class="product-image-photo"
+                             data-bind="attr:{src: image, alt:'Product Image'}">
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <div class="abandoned-column col-mp mp-3">
+        <div class="column-name" data-bind="i18n: 'Abandoned'"></div>
+        <!-- ko foreach: {data: getAbandonedData(), as: 'abandonedData'} -->
+        <div class="cart-block">
+            <div class="cart-header">
+                <!-- ko if: abandonedData.customerName -->
+                <div class="customer-name" data-bind="text: abandonedData.customerName"></div>
+                <!-- /ko -->
+                <!-- ko ifnot: abandonedData.customerName -->
+                <div class="customer-name" data-bind="i18n: 'Guest'"></div>
+                <!-- /ko -->
+
+                <div class="cart-grand-total" data-bind="text: abandonedData.total "></div>
+            </div>
+            <div class="cart-container">
+                <div class="email-time">
+                    <div class="email" data-bind="text: abandonedData.customerEmail"></div>
+                    <div class="time" data-bind="text: abandonedData.differenceTime"></div>
+                </div>
+                <div class="product">
+                    <!-- ko foreach: {data: abandonedData.productImages, as: 'image'} -->
+                    <div class="product-image col-mp mp-4">
+                        <img class="product-image-photo"
+                             data-bind="attr:{src: image,alt:'Product Image'}">
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <div class="recoverable-column col-mp mp-3">
+        <div class="column-name" data-bind="i18n: 'Recoverable'"></div>
+        <!-- ko foreach: {data: getRecoverableData(), as: 'recoverableData'} -->
+        <div class="cart-block">
+            <div class="cart-header">
+                <!-- ko if: recoverableData.customerName -->
+                <div class="customer-name" data-bind="text: recoverableData.customerName"></div>
+                <!-- /ko -->
+                <!-- ko ifnot: recoverableData.customerName -->
+                <div class="customer-name" data-bind="i18n: 'Guest'"></div>
+                <!-- /ko -->
+
+                <div class="cart-grand-total" data-bind="text: recoverableData.total "></div>
+            </div>
+            <div class="cart-container">
+                <div class="email-time">
+                    <div class="email" data-bind="text: recoverableData.customerEmail"></div>
+                    <div class="time" data-bind="text: recoverableData.differenceTime"></div>
+                </div>
+                <div class="product">
+                    <!-- ko foreach: {data: recoverableData.productImages, as: 'image'} -->
+                    <div class="product-image col-mp mp-4">
+                        <img class="product-image-photo"
+                             data-bind="attr:{src: image,alt:'Product Image'}">
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <div class="converted-column col-mp mp-3">
+        <div class="column-name" data-bind="i18n: 'Converted'"></div>
+        <!-- ko foreach: {data: getConvertedData(), as: 'convertedData'} -->
+        <div class="cart-block">
+            <div class="cart-header">
+                <!-- ko if: convertedData.customerName -->
+                <div class="customer-name" data-bind="text: convertedData.customerName"></div>
+                <!-- /ko -->
+                <!-- ko ifnot: convertedData.customerName -->
+                <div class="customer-name" data-bind="i18n: 'Guest'"></div>
+                <!-- /ko -->
+
+                <div class="cart-grand-total" data-bind="text: convertedData.total "></div>
+            </div>
+            <div class="cart-container">
+                <div class="email-time">
+                    <div class="email" data-bind="text: convertedData.customerEmail"></div>
+                    <div class="time" data-bind="text: convertedData.differenceTime"></div>
+                </div>
+                <div class="product">
+                    <!-- ko foreach: {data: convertedData.productImages, as: 'image'} -->
+                    <div class="product-image col-mp mp-4">
+                        <img class="product-image-photo"
+                             data-bind="attr:{src: image,alt:'Product Image'}">
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+</div>

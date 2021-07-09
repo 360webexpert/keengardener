@@ -1,0 +1,238 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+.emails-carts-block {
+    width: 100%;
+    height: 80px;
+}
+
+.container .detail {
+    width: 50%;
+}
+
+.container .emails-block {
+    color: white;
+    text-align: center;
+    float: right;
+    padding-right: 10%;
+}
+
+.container .carts-block {
+    color: white;
+    text-align: center;
+    padding-left: 10%;
+    float: left;
+}
+
+.carts-block .name {
+    background-color: #c8ced3;
+}
+
+.emails-block .email-summary, .emails-block .name {
+    background-color: #4dbd74;
+}
+
+.email-summary .number {
+    font-size: xx-large;
+}
+
+.email-summary {
+    height: 50px;
+}
+
+.carts-block .cart-summary {
+    height: 50px;
+    vertical-align: middle;
+    line-height: 50px;
+    background-color: #73818f;
+    font-size: 2em;
+}
+
+.chart-container-all {
+    width: 60%;
+    margin: 20px auto;
+}
+
+.chart-container {
+    width: 100%;
+    padding-right: 13px;
+}
+
+.title-optional .title {
+    padding-left: 10px;
+    height: 40px;
+    vertical-align: middle;
+    line-height: 40px;
+    font-size: 1.8em;
+    width: 60%;
+    float: left;
+}
+
+.title-optional .optional {
+    float: right;
+    height: 40px;
+    width: 40%;
+    text-align: right;
+    line-height: 40px;
+    padding-right: 10px;
+}
+
+.title-optional {
+    height: 40px;
+    background-color: #0099e6;
+    color: white;
+}
+
+.mp-fields-select-popup {
+    width: 40%;
+    margin: 0 auto;
+}
+
+.action.apply {
+    background: #1979c3;
+    border: 1px solid #1979c3;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    padding: 7px 15px;
+    font-size: 1.4rem;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+.mp_menu .period {
+    display: none;
+}
+
+.optional .shipping-fields, .optional .billing-fields, .optional .more-fields {
+    color: white;
+}
+
+.loading-mask {
+    background: rgba(255, 255, 255, 0.5);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 399;
+}
+
+.loading-mask .spinner {
+    font-size: 4rem;
+    left: 50%;
+    margin-left: -2rem;
+    margin-top: -2rem;
+    position: absolute;
+    top: 50%;
+}
+
+.progress-title span {
+    margin-left: 5px;
+    font-size: 0.8em;
+}
+
+.progress-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 2px;
+    margin: 0 0 15px;
+}
+
+.chart-container .mpcss .progress {
+    height: 26px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 40px;
+    overflow: visible;
+    position: relative;
+}
+
+.progress .progress-bar {
+    box-shadow: none;
+    border-radius: 0;
+    position: relative;
+    -webkit-animation: 2s linear 0s normal none infinite running progress-bar-stripes, animate-positive 1s;
+    animation: 2s linear 0s normal none infinite running progress-bar-stripes, animate-positive 1s;
+}
+
+.progress-bar .progress-value {
+    width: 50px;
+    height: 100%;
+    background: #000;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    position: absolute;
+    line-height: 27px;
+    top: 0;
+    left: 0;
+}
+
+.progress:after,
+.progress .progress-bar:after,
+.progress .progress-value:after {
+    content: "";
+    border-left: 13px solid rgba(0, 0, 0, 0.1);
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+    position: absolute;
+    top: 0;
+    right: -13px;
+}
+
+.progress.red .progress-bar:after {
+    border-left-color: #d9534f;
+}
+
+.progress .progress-value:after {
+    border-left: 13px solid #000;
+}
+
+.progress.blue .progress-bar:after {
+    border-left-color: #5bc0de;
+}
+
+.progress.yellow .progress-bar:after {
+    border-left-color: #f0ad4e;
+}
+
+.progress.green .progress-bar:after {
+    border-left-color: #5cb85c;
+}
+
+@-webkit-keyframes animate-positive {
+    0% {
+        width: 0;
+    }
+}
+
+@keyframes animate-positive {
+
+    0% {
+        width: 0;
+    }
+}
+

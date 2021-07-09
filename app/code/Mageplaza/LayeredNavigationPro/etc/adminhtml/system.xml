@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationPro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="layered_navigation">
+            <group id="general">
+                <field id="allow_multiple" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Multi-filter</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set Yes to allow to choose multi-filter at once</comment>
+                </field>
+                <field id="scroll_top" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Scroll to top after filtering</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set Yes to auto-scroll to top of the page after filtering</comment>
+                </field>
+                <field id="search_enable" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable quick lookup options</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set Yes to display the search box to filter the options for choosing</comment>
+                </field>
+                <field id="show_zero" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display the out-of-stock option</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set Yes to show all attributes and options even that a product currently is out-of-stock in status</comment>
+                </field>
+                <field id="show_counter" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display Product Count</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set Yes to display the total number of products in the attributes and options</comment>
+                </field>
+                <field id="is_expand" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Expand by default</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If yes, the attributes group will be expanded by default.</comment>
+                </field>
+                <field id="apply_filter" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Add Apply Filter button</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Set Yes to require commit before filtering and set No to auto-load result right after clicking on the checkbox</comment>
+                </field>
+            </group>
+            <group id="filter" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Additional Filters</label>
+                <group id="state" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product State Filter</label>
+                    <field id="label" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Group label</label>
+                    </field>
+                    <!--<field id="position" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">-->
+                    <!--<label>Position</label>-->
+                    <!--<comment>Position of attribute in layered navigation block.</comment>-->
+                    <!--</field>-->
+                    <field id="is_expand" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Expand by default</label>
+                        <source_model>Mageplaza\LayeredNavigationPro\Model\Config\Source\Expand</source_model>
+                        <comment>If yes, this group will be expanded by default.</comment>
+                    </field>
+                    <field id="new_enable" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Product New Filter</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="new_label" translate="label" type="text" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Product New label</label>
+                        <depends>
+                            <field id="new_enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="onsales_enable" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable On Sales Filter</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="onsales_label" translate="label" type="text" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>On Sales label</label>
+                        <depends>
+                            <field id="onsales_enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="stock_enable" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Stock Filter</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>You have to enable 'Display out of stock product' first (Stores > Configuration > Catalog > Inventory > Stock Options > Display Out of Stock Products).</comment>
+                    </field>
+                    <field id="stock_label" translate="label" type="text" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Stock label</label>
+                        <depends>
+                            <field id="stock_enable">1</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="rating" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Rating Filter</label>
+                    <field id="rating_enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable Rating Filter</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="label" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Group label</label>
+                        <depends>
+                            <field id="rating_enable">1</field>
+                        </depends>
+                    </field>
+                    <!--<field id="position" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">-->
+                    <!--<label>Position</label>-->
+                    <!--<comment>Position of attribute in layered navigation block.</comment>-->
+                    <!--<depends>-->
+                    <!--<field id="rating_enable">1</field>-->
+                    <!--</depends>-->
+                    <!--</field>-->
+                    <field id="is_expand" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Expand by default</label>
+                        <source_model>Mageplaza\LayeredNavigationPro\Model\Config\Source\Expand</source_model>
+                        <depends>
+                            <field id="rating_enable">1</field>
+                        </depends>
+                        <comment>If yes, this group will be expanded by default.</comment>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

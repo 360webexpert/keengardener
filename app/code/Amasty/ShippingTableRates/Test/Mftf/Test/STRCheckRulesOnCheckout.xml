@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckRulesOnCheckout">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Rules On Checkout"/>
+            <description value="Check Rules On Checkout"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-25"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRCheckRulesOnCheckout"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationTheMainSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckRulesOnCheckout"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rates-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckRulesOnCheckout"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckRulesOnCheckout"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckRulesOnCheckout"/>
+        </actionGroup>
+        <actionGroup ref="AdminEditRateInSTRRuleAddCity" stepKey="AddCity">
+            <argument name="shippingTableRateData" value="ruleSTRCheckRulesOnCheckout"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckRulesOnCheckout"/>
+        </actionGroup>
+        <actionGroup ref="AdminEditRateInSTRRuleAddZip" stepKey="AddZipCodes">
+            <argument name="shippingTableRateData" value="ruleSTRCheckRulesOnCheckout"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckRulesOnCheckout"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart1">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagImpulseDuffleData"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart2">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theWatchClamberData"/>
+        </actionGroup>
+
+        <!--Check No Shipping Table Rate-->
+        <actionGroup ref="CheckNoPriceSTROnCheckoutAsGuest" stepKey="PriceSTROnCheckout">
+            <argument name="customer" value="twoCustomerInfo"/>
+            <argument name="postcode" value="twoCustomerInfo.postcodeFirst"/>
+            <argument name="shippingMethods" value="ShippingTableRates"/>
+        </actionGroup>
+
+        <!--Check First Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTROnCheckoutAsGuest" stepKey="PriceSTROnCheckout2">
+            <argument name="shippingPrices" value="ruleSTRCheckRulesOnCheckout.priceSTROne"/>
+            <argument name="shippingMethods" value="ShippingTableRates"/>
+            <argument name="customer" value="twoCustomerInfo"/>
+            <argument name="postcode" value="twoCustomerInfo.postcodeSecond"/>
+        </actionGroup>
+
+        <!--Check Second Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTROnCheckoutAsGuest" stepKey="PriceSTROnCheckout3">
+            <argument name="shippingPrices" value="ruleSTRCheckRulesOnCheckout.priceSTROne"/>
+            <argument name="shippingMethods" value="ShippingTableRates"/>
+            <argument name="customer" value="twoCustomerInfo"/>
+            <argument name="postcode" value="twoCustomerInfo.postcodeThird"/>
+        </actionGroup>
+
+        <!--Check No Shipping Table Rate-->
+        <actionGroup ref="CheckNoPriceSTROnCheckoutAsGuest" stepKey="PriceSTROnCheckout4">
+            <argument name="shippingMethods" value="ShippingTableRates"/>
+            <argument name="customer" value="twoCustomerInfo"/>
+            <argument name="postcode" value="twoCustomerInfo.postcodeFourth"/>
+        </actionGroup>
+
+        <!--Check Third Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTROnCheckoutAsGuest" stepKey="PriceSTROnCheckout5">
+            <argument name="shippingPrices" value="ruleSTRCheckRulesOnCheckout.priceSTROne"/>
+            <argument name="shippingMethods" value="ShippingTableRates"/>
+            <argument name="customer" value="twoCustomerInfo"/>
+            <argument name="postcode" value="twoCustomerInfo.postcodeFifth"/>
+        </actionGroup>
+
+        <!--Create Order-->
+        <actionGroup ref="CreateOrderAsGuestWithChoiceOfShipping" stepKey="CreateOrder">
+            <argument name="customer" value="twoCustomerInfo"/>
+            <argument name="postcode" value="twoCustomerInfo.postcodeFifth"/>
+            <argument name="shippingMethods" value="ShippingTableRates"/>
+        </actionGroup>
+
+    </test>
+</tests>

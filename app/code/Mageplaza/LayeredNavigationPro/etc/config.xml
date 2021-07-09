@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationPro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <layered_navigation>
+            <general>
+                <allow_multiple>1</allow_multiple>
+                <scroll_top>0</scroll_top>
+                <search_enable>0</search_enable>
+                <show_zero>0</show_zero>
+                <show_counter>1</show_counter>
+                <expand>0</expand>
+                <apply_filter>0</apply_filter>
+            </general>
+            <filter>
+                <state>
+                    <label>Product State</label>
+                    <position>20</position>
+                    <expand>2</expand>
+                    <new_enable>0</new_enable>
+                    <new_label>New</new_label>
+                    <onsales_enable>0</onsales_enable>
+                    <onsales_label>On Sales</onsales_label>
+                    <stock_enable>0</stock_enable>
+                    <stock_label>In Stock</stock_label>
+                </state>
+                <rating>
+                    <rating_enable>0</rating_enable>
+                    <label>Rating</label>
+                    <position>30</position>
+                    <expand>2</expand>
+                </rating>
+            </filter>
+        </layered_navigation>
+    </default>
+</config>

@@ -1,0 +1,22 @@
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+
+    <section name="AdminProductAttributesGridSection">
+        <element name="AddNewAttribute" type="button" selector="//button[@id='add']"/>
+        <element name="SearchAttributeCodeField" type="input" selector="//input[@name='attribute_code']"/>
+        <element name="SearchButton" type="button" selector="//button[@data-action='grid-filter-apply']"/>
+    </section>
+
+    <section name="ProductAttributeSection">
+        <element name="DefaultLabel" type="input" selector="//input[@id='attribute_label']"/>
+        <element name="AddOptions" type="button" selector="//button[@id='add_new_option_button']"/>
+        <element name="FieldNameOptionOne" type="input"
+                 selector="//table[@data-index='attribute_options_select']//input[@data-role][@value='1']/parent::td/following-sibling::td//input[contains(@name,'[0]')]"/>
+        <element name="FieldNameOptionTwo" type="input"
+                 selector="//table[@data-index='attribute_options_select']//input[@data-role][@value='2']/parent::td/following-sibling::td//input[contains(@name,'[0]')]"/>
+        <element name="FieldNameOptionThree" type="input"
+                 selector="//table[@data-index='attribute_options_select']//input[@data-role][@value='3']/parent::td/following-sibling::td//input[contains(@name,'[0]')]"/>
+        <element name="Save" type="button" selector="//button[@id='save']"/>
+    </section>
+
+</sections>

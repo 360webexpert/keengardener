@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+
+    <section name="AdminSTRGridSection">
+        <element name="AddNewRuleButton" type="button" selector="//button[@id='add']" timeout="30"/>
+        <!-- Choose MassAction-->
+        <element name="MassActionSelect" type="button" selector="//select[@id='amstrates_methods_grid_massaction-mass-select']"/>
+        <element name="MassActionSelectAll" type="select" selector="//select[@id='amstrates_methods_grid_massaction-mass-select']//option[@value='selectAll']"/>
+        <element name="MassActionUnselectAll" type="select" selector="//select[@id='amstrates_methods_grid_massaction-mass-select']//option[@value='unselectAll']"/>
+        <element name="EmptyGridSTR" type="block" selector="//table[@id='amstrates_methods_grid_table']//tr[@class='data-grid-tr-no-data even']"/>
+        <!-- Select Options For Actions-->
+        <element name="ActionsDelete" type="select" selector="//select[@id='amstrates_methods_grid_massaction-select']//option[@value='delete']"/>
+        <element name="ActionsMassEnable" type="select" selector="//select[@id='amstrates_methods_grid_massaction-select']//option[@value='massEnable']"/>
+        <element name="ActionsMassDisable" type="select" selector="//select[@id='amstrates_methods_grid_massaction-select']//option[@value='massDisable']"/>
+        <element name="Submit" type="button" selector="//button[@title='Submit']" timeout="30"/>
+        <element name="ConfirmAction" type="button" selector="//button[@class='action-primary action-accept']"/>
+        <element name="FilterByNameInput" type="input" selector="//input[@name='name']"/>
+        <element name="SearchButton" type="button" selector="//button[@data-action='grid-filter-apply']" timeout="30"/>
+        <element name="ResetFilter" type="button" selector="//button[@data-action='grid-filter-reset']" timeout="30"/>
+        <element name="TableRowOne" type="text" selector="tr[data-role='row']:nth-of-type(1)" timeout="30"/>
+
+    </section>
+
+    <section name="AdminSTRSection">
+        <!--General-->
+        <element name="GeneralTab" type="button" selector="//a[@id='amstrates_methods_edit_tabs_main_section']"/>
+        <element name="Name" type="input" selector="//input[@id='amstrates_name']"/>
+        <element name="ShipShippingTypesFree" type="select" selector="//select[@id='amstrates_free_types']"/>
+        <element name="Comment" type="input" selector="//textarea[@id='amstrates_comment']"/>
+        <element name="ImageUpload" type="button" selector="//input[@id='amstrates_comment_img']"/>
+        <element name="Status" type="select" selector="//select[@id='amstrates_is_active']"/>
+        <!--Rates-->
+        <element name="MinimalRate" type="input" selector="//input[@id='amstrates_min_rate']"/>
+        <element name="MaximalRate" type="input" selector="//input[@id='amstrates_max_rate']"/>
+        <element name="ProductsDifferentShippingType" type="select" selector="//select[@id='amstrates_select_rate']"/>
+        <!--Tab Methods and Rates-->
+        <element name="TabMethodsAndRates" type="button" selector="//a[@id='amstrates_methods_edit_tabs_rates_section']"/>
+        <element name="AddNewRate" type="button" selector="//button[@id='add_new']"/>
+        <!--Create Rates-->
+        <element name="SelectCountry" type="select" selector="//select[@id='country']"/>
+        <element name="SelectState" type="select" selector="//select[@id='state']"/>
+        <element name="City" type="input" selector="//input[@id='city']"/>
+        <element name="ZipFrom" type="input" selector="//input[@id='zip_from']"/>
+        <element name="ZipTo" type="input" selector="//input[@id='zip_to']"/>
+        <element name="WeightFrom" type="input" selector="//input[@id='weight_from']"/>
+        <element name="WeightTo" type="input" selector="//input[@id='weight_to']"/>
+        <element name="QtyFrom" type="input" selector="//input[@id='qty_from']"/>
+        <element name="QtyTo" type="input" selector="//input[@id='qty_to']"/>
+        <element name="ShippingType" type="select" selector="//select[@id='shipping_type']"/>
+        <element name="PriceFrom" type="input" selector="//input[@id='price_from']"/>
+        <element name="PriceTo" type="input" selector="//input[@id='price_to']"/>
+        <element name="EstimatedDelivery" type="input" selector="//input[@id='time_delivery']"/>
+        <element name="NameDelivery" type="input" selector="//input[@id='name_delivery']"/>
+        <element name="BaseRate" type="input" selector="//input[@id='cost_base']"/>
+        <element name="PercentagePerProduct" type="input" selector="//input[@id='cost_percent']"/>
+        <element name="FixedRatePerProduct" type="input" selector="//input[@id='cost_product']"/>
+        <element name="FixedRatePerUnitOfWeight" type="input" selector="//input[@id='cost_weight']"/>
+        <element name="SaveRate" type="button" selector="//button[@id='my_save']"/>
+        <!--Other-->
+        <element name="SaveAndContinueEdit" type="button" selector="//button[@id='save_and_continue_edit']"/>
+        <element name="Delete" type="button" selector="//button[@id='delete']" timeout="10"/>
+        <element name="ModalAcceptButton" type="button" selector="button.action-accept" timeout="30"/>
+    </section>
+
+</sections>

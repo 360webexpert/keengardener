@@ -1,0 +1,73 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<!--@subject {{trans "Do you need any help for your cart?"}} @-->
+<!--@vars {
+"var coupon_code|raw":"Coupon Code",
+"var checkout_url":"Checkout Url",
+"var url_suffix":"Checkout Url Suffix"
+} @-->
+<!--@styles
+.btn-primary {
+    margin: 10px auto;
+}
+.btn-primary td a {
+    background-color: #348eda;
+    border: solid 1px #348eda;
+    border-radius: 25px;
+    border-width: 10px 20px;
+    display: inline-block;
+    color: #ffffff !important;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 2;
+    text-decoration: none;
+}
+ @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p>{{trans "Have a nice day %name! I noticed that you have added several of great items but haven’t complete the
+    checkout yet? So I want to make sure if below is your forgotten wishlist" name=$customer_name |raw}}</p>
+
+{{layout handle="ace_email_quote_items" quoteId=$quoteId area="frontend"}}
+
+<table class="btn-primary" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td>
+            {{trans '<a href="%checkout_url">Your cart here</a>' checkout_url=$checkout_url |raw}}
+        </td>
+    </tr>
+</table>
+
+<p>
+    {{depend coupon_code}}
+    {{trans "How about receiving the coupon <b>%couponCode</b> discount to enlighten your day with us?"
+    couponCode=$coupon_code |raw}}<br>
+    {{/depend}}
+    {{depend to_date}}
+    {{trans "It’ll be available to %to" to=$to_date}}
+    {{/depend}}
+</p>
+<p>{{trans "Thanks for thinking about %store_name‘s offers again. We hope to see your response soon."
+    store_name=$store.getFrontendName()}}</p>
+
+{{template config_path="design/email/footer_template"}}

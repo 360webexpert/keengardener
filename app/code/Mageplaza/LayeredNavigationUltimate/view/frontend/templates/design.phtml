@@ -1,0 +1,178 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var $block \Magento\Framework\View\Element\Template */
+
+/** @var \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper */
+$helper = $this->helper('Mageplaza\LayeredNavigationUltimate\Helper\Data');
+if ($helper->enableIonRangeSlider()) : ?>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="<?= /** @noEscape */ $block->getViewFileUrl('Mageplaza_Core/css/ion.rangeSlider.css') ?>">
+    <link rel="stylesheet" type="text/css" media="all"
+          href="<?= /** @noEscape */ $block->getViewFileUrl($helper->getSliderSkinFile()) ?>">
+<?php endif; ?>
+
+<style type="text/css">
+    <?= /** @noEscape */ $helper->getDesignConfig('custom_css'); ?>
+
+    <?php switch ($helper->getDesignConfig('slider_type')) :
+        case 1: // style flat ui for rating slider
+            ?>
+    #ln_slider_rating .ui-slider-range {
+        background: #ed5565;
+        width: 10px;
+        position: absolute;
+    }
+
+    #ln_slider_rating a.ui-slider-handle {
+        height: 2px;
+        width: 8px;
+        background: #ed5565;
+        cursor: pointer !important;
+    }
+
+            <?php
+                  break;
+        case 3: // style html 5 for rating slider
+            ?>
+    #ln_slider_rating .ui-slider-range {
+        background: linear-gradient(to top, rgba(66, 139, 202, 1) 0%, rgba(127, 195, 232, 1) 100%);
+        width: 12px;
+        position: absolute;
+    }
+
+    #ln_slider_rating a.ui-slider-handle {
+        height: 19px;
+        width: 8px;
+        -webkit-border-radius: 20px;
+        border-radius: 20px;
+        background: #f98b25;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(220, 220, 220, 1) 20%, rgba(255, 255, 255, 1) 100%);
+        border: 1px solid #AAA;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        cursor: pointer !important;
+    }
+
+    .rating-slider-items {
+        position: relative;
+        top: -7px;
+    }
+
+            <?php
+                  break;
+        case 4:// style modern for rating slider
+            ?>
+    #ln_slider_rating .ui-slider-range {
+        background: #20b426;
+        position: absolute;
+        width: 5px;
+    }
+
+    #ln_slider_rating a.ui-slider-handle {
+        background: #fff;
+        border: 1px solid #999;
+        width: 1px;
+        height: 11px;
+        cursor: pointer !important;
+    }
+
+    .rating-slider-items {
+        position: relative;
+        top: -5px;
+    }
+
+            <?php
+                  break;
+        case 5: // style nice white for rating slider
+            ?>
+    #ln_slider_rating .ui-slider-range {
+        background: #fff;
+        border-left: 1px solid #c2c2c2;
+        border-right: 1px solid #c2c2c2;
+        width: 6px;
+        position: absolute;
+    }
+
+    #ln_slider_rating a.ui-slider-handle {
+        background: #fff;
+        border: 1px solid #999;
+        width: 4px;
+        height: 15px;
+        cursor: pointer !important;
+    }
+
+    .rating-slider-items {
+        position: relative;
+        top: -7px;
+    }
+
+            <?php
+                  break;
+        case 6: // style simple dark for rating slider
+            ?>
+    #ln_slider_rating .ui-slider-range {
+        width: 4px;
+        background: #f98b25;
+        border-right: 1px solid #036267;
+        border-left: 1px solid #036267;
+        position: absolute;
+    }
+
+    #ln_slider_rating a.ui-slider-handle {
+        -webkit-border-radius: 0;
+        border-radius: 0;
+        height: 7px;
+        width: 4px;
+        background: rgba(23, 140, 158, 0.98);
+        cursor: pointer !important;
+    }
+
+    .rating-slider-items {
+        position: relative;
+        top: -3px;
+    }
+
+            <?php
+                  break;
+        default: // default style
+            ?>
+    #ln_slider_rating .ui-slider-range {
+        background: #ddd;
+        width: 11px;
+        position: absolute;
+    }
+
+    #ln_slider_rating a.ui-slider-handle {
+        width: 8px;
+        cursor: pointer !important;
+    }
+
+    #ln_slider_rating a.ui-slider-handle:hover {
+        background: #f98b25 !important;
+    }
+
+    .rating-slider-items {
+        position: relative;
+        top: -4px;
+    }
+
+    <?php endswitch; ?>
+</style>

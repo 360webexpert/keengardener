@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Search
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="mpsearch" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Search</label>
+            <tab>mageplaza</tab>
+            <resource>Mageplaza_Search::configuration</resource>
+            <group id="general" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="max_query_results" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Maximum Number of Search Results</label>
+                    <validate>required-entry validate-digits validate-greater-than-zero</validate>
+                    <comment>By Default, it shows 10 search results</comment>
+                </field>
+                <field id="max_letter_numbers" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Limit number of characters in description section</label>
+                    <validate>validate-greater-than-zero required-entry validate-digits</validate>
+                    <comment>Limit the length of short description</comment>
+                </field>
+                <field id="display" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Information Display</label>
+                    <source_model>Mageplaza\Search\Model\Config\Source\Display</source_model>
+                </field>
+                <field id="reindex_search" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Reindex Search database</label>
+                    <source_model>Mageplaza\Search\Model\Config\Source\Reindex</source_model>
+                    <comment><![CDATA[<strong>After product save</strong> option is good choice for store has less than 3,000 products.
+                   If your store has more than 3,000 SKUs, you should switch to Cron job, it runs daily at 0AM your server time.]]></comment>
+                </field>
+                <field id="btn_reindex" translate="button_label" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <button_label>Reindex Search Data</button_label>
+                    <button_url>mpsearch/search/generate</button_url>
+                    <frontend_model>Mageplaza\Search\Block\Adminhtml\System\Config\Button</frontend_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                        <field id="reindex_search">manual</field>
+                    </depends>
+                </field>
+                <group id="category" translate="label" showInDefault="1" sortOrder="100" showInWebsite="1" showInStore="1">
+                    <label>Search by category configuration</label>
+                    <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enable Search By Category</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="max_depth" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Maximal Depth</label>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                        <validate>validate-greater-than-zero required-entry validate-digits</validate>
+                    </field>
+                </group>
+                <group id="search_by" translate="label" showInDefault="1" sortOrder="100" showInWebsite="1" showInStore="1">
+                    <label>Search Suggestion</label>
+                    <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enable Search Suggestion</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="sort_by" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sort by</label>
+                        <source_model>Mageplaza\Search\Model\Config\Source\Search</source_model>
+                        <depends>
+                            <field id="enable">1</field>
+                        </depends>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,67 @@
+Terms,Terms
+"Create New Term","Create New Term"
+"Save Term","Save Term"
+"Save and Continue Edit","Save and Continue Edit"
+"Delete Term","Delete Term"
+"Edit Term '%1'","Edit Term '%1'"
+"New Term","New Term"
+"Term Information","Term Information"
+Keyword,Keyword
+"It will find this keyword and replace by Internal link.","It will find this keyword and replace by Internal link."
+Enable,Enable
+"Link Alt/Title","Link Alt/Title"
+"<p>Short description for this keyword. This will insert into title attribute. We suggest you add Keywords that you want to rank.</p><b>E.g:</b> Buy iPhone in New York","<p>Short description for this keyword. This will insert into title attribute. We suggest you add Keywords that you want to rank.</p><b>E.g:</b> Buy iPhone in New York"
+"Link Target","Link Target"
+"Target's attribute of Internal link. If you want to open new tab,<i> should choose: _blank.</i>","Target's attribute of Internal link. If you want to open new tab,<i> should choose: _blank.</i>"
+"Link to","Link to"
+"Custom URL","Custom URL"
+"Product SKU","Product SKU"
+"Category ID","Category ID"
+"Store View","Store View"
+"Apply For","Apply For"
+"Entities which term will apply for.","Entities which term will apply for."
+"Limit Number Of Links Per Page","Limit Number Of Links Per Page"
+"Limit the number of replacement keyword per page.","Limit the number of replacement keyword per page."
+Direction,Direction
+"Specific direction which Mageplaza SEO will find and replace the keyword. Suggest use Random or Top.","Specific direction which Mageplaza SEO will find and replace the keyword. Suggest use Random or Top."
+Rel,Rel
+"The rel's atrribute of Internal link. Default value: default.","The rel's atrribute of Internal link. Default value: default."
+Priority,Priority
+"The priority of this keyword. 0 is highest.","The priority of this keyword. 0 is highest."
+Term,Term
+"The Term has been deleted.","The Term has been deleted."
+"Term to delete was not found.","Term to delete was not found."
+"This Term no longer exists.","This Term no longer exists."
+"'Edit term: #' .","'Edit term: #' ."
+"Mageplaza SEO extension is being disabled, so Terms will be not applied. Please enable it  <a href=""%1"">here</a>","Mageplaza SEO extension is being disabled, so Terms will be not applied. Please enable it  <a href=""%1"">here</a>"
+"Please correct the data sent.","Please correct the data sent."
+"Something went wrong while saving the Term.","Something went wrong while saving the Term."
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"The Term has been saved.","The Term has been saved."
+"Product Description","Product Description"
+"Category Description","Category Description"
+"Page Content","Page Content"
+"Top Down","Top Down"
+"Bottom Up","Bottom Up"
+Random,Random
+"_blank (New tab)","_blank (New tab)"
+"_self (current tab)","_self (current tab)"
+"_top (full body of the window)","_top (full body of the window)"
+Default,Default
+Nofolow,Nofolow
+"Product Short Description","Product Short Description"
+"CMS Page Content","CMS Page Content"
+Category,Category
+"Can't apply seo cross links","Can't apply seo cross links"
+Edit,Edit
+Delete,Delete
+"Delete ""%1""","Delete ""%1"""
+"Are you sure you wan't to delete the Term ""%1""?","Are you sure you wan't to delete the Term ""%1""?"
+"Cross Links","Cross Links"
+"Enable/disable Mageplaza SEO Crosslinks.","Enable/disable Mageplaza SEO Crosslinks."
+"Add New Term","Add New Term"
+"Delete Terms","Delete Terms"
+"Are you sure you wan't to delete selected Terms?","Are you sure you wan't to delete selected Terms?"
+ID,ID
+Reference,Reference
+Modified,Modified

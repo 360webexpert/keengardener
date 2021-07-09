@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckAllRates">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Shipping Table Rate Rule with All Rates"/>
+            <description value="Check Shipping Table Rate Rule with All Rates"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-21"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRCheckAllRates"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <!-- Customization Configuration-->
+            <actionGroup ref="AdminConfigurationTheMainSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules and Return Default Setting -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckAllRates"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rate Rule with One Rate-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckAllRates"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckAllRates"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckAllRates"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddConfigurableProductToCart" stepKey="AddFirstProductToCart">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theMenHoodiesTetonPulloverHoodie"/>
+            <argument name="size" value="ruleSTRCheckAllRates.sizeMH02"/>
+            <argument name="color" value="ruleSTRCheckAllRates.colorMH02"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkFirstPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckAllRates.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckAllRates.name"/>
+        </actionGroup>
+
+        <!--Change Qty First Product To Two-->
+        <actionGroup ref="ChangeQtyConfigurableProductInCart" stepKey="ChangeQtyFirstProductToTwo">
+            <argument name="addProductQty" value="_enterQty2"/>
+            <argument name="products" value="_theMenHoodiesTetonPulloverHoodie"/>
+            <argument name="productCustomSKU" value="ruleSTRCheckAllRates.customSkuMH02"/>
+        </actionGroup>
+
+        <!--Check Second Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkSecondPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckAllRates.priceSTRTwo"/>
+            <argument name="methodSTRName" value="ruleSTRCheckAllRates.name"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddSecondProductToCart">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagImpulseDuffleData"/>
+        </actionGroup>
+
+        <!--Check Third Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkThirdPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckAllRates.priceSTRThree"/>
+            <argument name="methodSTRName" value="ruleSTRCheckAllRates.name"/>
+        </actionGroup>
+
+    </test>
+</tests>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckMultiCurrency">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check MultiCurrency"/>
+            <description value="Check MultiCurrency"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-28"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRCheckMultiCurrency"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationTheMainSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+            </actionGroup>
+            <actionGroup ref="ChooseCurrencyInConfigurations" stepKey="settingMultiCurrency">
+                <argument name="currenciesConfigurations" value="_CurrencySetOne"/>
+            </actionGroup>
+            <actionGroup ref="InputRateUSDAndEUR" stepKey="inputRate">
+                <argument name="cartRule" value="ruleSTRCheckMultiCurrency.rateUSDAndEUR"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckMultiCurrency"/>
+            </actionGroup>
+            <actionGroup ref="ChooseDefaultCurrencyInConfigurations" stepKey="returnDefaultSettingCurrency"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rate-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckMultiCurrency"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckMultiCurrency"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckMultiCurrency"/>
+        </actionGroup>
+
+        <!-- Choose euro currency-->
+        <actionGroup ref="ChooseCurrency" stepKey="ChooseCurrencyEuro">
+            <argument name="currencies" value="_Euro"/>
+        </actionGroup>
+
+        <!--Add product to cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagStriveShoulderPackData"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkFirstPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckMultiCurrency.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckMultiCurrency.name"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddSecondProductToCart">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagImpulseDuffleData"/>
+        </actionGroup>
+
+        <!--Check Second Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkSecondPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckMultiCurrency.priceSTRTwo"/>
+            <argument name="methodSTRName" value="ruleSTRCheckMultiCurrency.name"/>
+        </actionGroup>
+
+        <!--Change Qty First Product In Cart To Three-->
+        <actionGroup ref="ChangeQtyProductInCart" stepKey="ChangeQtyFirstProductToThree">
+            <argument name="products" value="_theBagStriveShoulderPackData"/>
+            <argument name="addProductQty" value="_enterQty3"/>
+        </actionGroup>
+
+        <!--Check Third Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkThirdPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckMultiCurrency.priceSTRThree"/>
+            <argument name="methodSTRName" value="ruleSTRCheckMultiCurrency.name"/>
+        </actionGroup>
+
+    </test>
+</tests>

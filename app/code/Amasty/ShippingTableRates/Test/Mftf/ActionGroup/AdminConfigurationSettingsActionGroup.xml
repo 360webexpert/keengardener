@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <!-- Action Group For Configuration Shipping Table Rates-->
+    <actionGroup name="AdminDefaultSettingSTR">
+        <amOnPage url="{{AdminSTRConfigurationPage.url}}" stepKey="navigateToSTRConfiguration"/>
+        <conditionalClick stepKey="openSTRTab"
+                          selector="{{AdminConfigurationsSTRSection.STRTab}}"
+                          dependentSelector="{{AdminConfigurationsSTRSection.STRTabOpen}}"
+                          visible="false"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.EnabledForCheckout}}"
+                      userInput="0" stepKey="DisableSTR"/>
+        <fillField selector="{{AdminConfigurationsSTRSection.Title}}"
+                   userInput="Shipping Table Rates" stepKey="enterDefaultTitle"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ShipToApplicableCountries}}"
+                      userInput="0" stepKey="selectAllCountries"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.AllowFreeShippingPromotions}}"
+                      userInput="0" stepKey="NoAllowFreeShipPromo"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.IgnorePriceAndQuantityOfVirtualProducts}}"
+                      userInput="1" stepKey="selectIgnoreVirtualProducts"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ComparePostCodesAs}}"
+                      userInput="1" stepKey="selectNumbersComparePostCodes"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.UsePriceAfterDiscount}}"
+                      userInput="0" stepKey="NoUsePriceAfterDisc"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.UsePriceIncludingTax}}"
+                      userInput="0" stepKey="NoUsePriceIncludeTax"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.UseOnlyOneShippingType}}"
+                      userInput="0" stepKey="NoUseOnlyOneShippingPrice"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ShowMethodIfNotApplicable}}"
+                      userInput="0" stepKey="NoShowMethodIfNotApplicable"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ShippingTypeForConfigurable}}"
+                      userInput="0" stepKey="FromAssociatedProducts"/>
+        <click selector="{{AdminConfigurationsSTRSection.Save}}" stepKey="saveDefaultSettings"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminConfigurationTheMainSettingsSTR">
+        <arguments>
+            <argument name="settingEnableForCheckout"/>
+            <argument name="settingAllowFreeShipping"/>
+            <argument name="settingShowMethodIfNotApplicable"/>
+        </arguments>
+        <amOnPage url="{{AdminSTRConfigurationPage.url}}" stepKey="navigateToSTRConfiguration"/>
+        <conditionalClick stepKey="openSTRTab"
+                          selector="{{AdminConfigurationsSTRSection.STRTab}}"
+                          dependentSelector="{{AdminConfigurationsSTRSection.STRTabOpen}}"
+                          visible="false"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.EnabledForCheckout}}"
+                      userInput="{{settingEnableForCheckout}}" stepKey="ConfigurationEnabled"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.AllowFreeShippingPromotions}}"
+                      userInput="{{settingAllowFreeShipping}}" stepKey="ConfigurationFreeShipPromo"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ShowMethodIfNotApplicable}}"
+                      userInput="{{settingShowMethodIfNotApplicable}}" stepKey="ConfigurationShowMethod"/>
+        <click selector="{{AdminConfigurationsSTRSection.Save}}" stepKey="saveSettings"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminConfigurationCountriesSettingsSTR" extends="AdminConfigurationTheMainSettingsSTR">
+        <arguments>
+            <argument name="countries"/>
+        </arguments>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ShipToApplicableCountries}}"
+                      userInput="1" stepKey="ConfigurationCountries"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ShipToSpecificCountries}}"
+                      parameterArray="[{{countries}}]" stepKey="enterCountries"/>
+        <click selector="{{AdminConfigurationsSTRSection.Save}}" stepKey="saveSettingsWithCountries"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminConfigurationUsePriceSettingsSTR" extends="AdminConfigurationTheMainSettingsSTR">
+        <arguments>
+            <argument name="settingUsePriceAfterDiscount"/>
+            <argument name="settingUsePriceIncludingTax"/>
+        </arguments>
+        <selectOption selector="{{AdminConfigurationsSTRSection.UsePriceAfterDiscount}}"
+                      userInput="{{settingUsePriceAfterDiscount}}" stepKey="ConfigUsePriceDiscount"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.UsePriceIncludingTax}}"
+                      userInput="{{settingUsePriceIncludingTax}}" stepKey="ConfigUsePriceTax"/>
+        <click selector="{{AdminConfigurationsSTRSection.Save}}" stepKey="saveSettingsWithUsePrice"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminConfigurationShippingTypeSettingsSTR" extends="AdminConfigurationTheMainSettingsSTR">
+        <arguments>
+            <argument name="settingUseOnlyOneShippingType"/>
+            <argument name="settingShippingTypeForConfigurable"/>
+        </arguments>
+        <selectOption selector="{{AdminConfigurationsSTRSection.UseOnlyOneShippingType}}"
+                      userInput="{{settingUseOnlyOneShippingType}}" stepKey="ConfigOnlyOneShippingType"/>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ShippingTypeForConfigurable}}"
+                      userInput="{{settingShippingTypeForConfigurable}}" stepKey="ConfigShippingTypeForConfigurable"/>
+        <click selector="{{AdminConfigurationsSTRSection.Save}}" stepKey="saveSettingsWithShippingType"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminConfigurationVirtualProductSettingSTR" extends="AdminConfigurationTheMainSettingsSTR">
+        <arguments>
+            <argument name="settingIgnoreVirtualProducts"/>
+        </arguments>
+        <selectOption selector="{{AdminConfigurationsSTRSection.IgnorePriceAndQuantityOfVirtualProducts}}"
+                      userInput="{{settingIgnoreVirtualProducts}}" stepKey="selectIgnoreVirtualProducts"/>
+        <click selector="{{AdminConfigurationsSTRSection.Save}}" stepKey="saveSettingsWithVirtualProducts"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminConfigurationPostCodeSettingSTR" extends="AdminConfigurationTheMainSettingsSTR">
+        <arguments>
+            <argument name="settingComparePostCodes"/>
+        </arguments>
+        <selectOption selector="{{AdminConfigurationsSTRSection.ComparePostCodesAs}}"
+                      userInput="{{settingComparePostCodes}}" stepKey="selectNumbersComparePostCodes"/>
+        <click selector="{{AdminConfigurationsSTRSection.Save}}" stepKey="saveSettingsWithComparePostCode"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+</actionGroups>

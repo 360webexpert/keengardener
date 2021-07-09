@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <wesupply_api>
+            <integration>
+                <wesupply_domain>labs.wesupply.xyz</wesupply_domain>
+                <wesupply_domain_default>labs.wesupply.xyz</wesupply_domain_default>
+                <wesupply_is_alias>0</wesupply_is_alias>
+                <wesupply_protocol>https</wesupply_protocol>
+                <wesupply_enabled>0</wesupply_enabled>
+                <wesupply_subdomain>install</wesupply_subdomain>
+            </integration>
+            <wesupply_order_export>
+                <wesupply_order_filter>allow_all</wesupply_order_filter>
+                <wesupply_order_product_attributes_fetch>itself_parent</wesupply_order_product_attributes_fetch>
+            </wesupply_order_export>
+            <step_3>
+                <wesupply_order_view_enabled>1</wesupply_order_view_enabled>
+                <enable_delivery_estimations_header_link>1</enable_delivery_estimations_header_link>
+                <wesupply_order_view_iframe>1</wesupply_order_view_iframe>
+                <wesupply_tracking_info_iframe>1</wesupply_tracking_info_iframe>
+                <wesupply_admin_order_enabled>1</wesupply_admin_order_enabled>
+                <wesupply_admin_returns_enabled>1</wesupply_admin_returns_enabled>
+            </step_3>
+            <step_4>
+                <checkout_page_notification>0</checkout_page_notification>
+                <notification_type>default</notification_type>
+                <design_notification_alingment>left</design_notification_alingment>
+            </step_4>
+            <step_5>
+                <estimation_display_spinner>1</estimation_display_spinner>
+                <estimation_format>d F</estimation_format>
+                <add_estimation_range>1</add_estimation_range>
+                <apply_estimation_range>all_shipping_methods</apply_estimation_range>
+                <estimation_range>0</estimation_range>
+                <estimation_display>earliest</estimation_display>
+                <estimation_order_within>24</estimation_order_within>
+            </step_5>
+            <step_6>
+                <store_locator_cms>wesupply-store-locator</store_locator_cms>
+                <store_details_cms>wesupply-store-details</store_details_cms>
+            </step_6>
+        </wesupply_api>
+    </default>
+</config>

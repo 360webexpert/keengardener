@@ -1,0 +1,75 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoDashboard
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Smtp\Block\Adminhtml\System\Config\Button $block */
+?>
+<div class="actions actions-reindex-data">
+    <button class="actions-reindex-data primary" type="button" id="<?php echo $block->getHtmlId() ?>">
+        <span><?php echo $block->escapeHtml($block->getButtonLabel()) ?></span>
+    </button>
+    <p class="note">
+        <span><?php echo __('Please click this button to load the initial data for reporting or to reload the data when changing configuration`') ?></span>
+    </p>
+    <div id="report-reindex-message" class="messages" style="margin-top: 10px; display: none">
+        <div class="message message-success"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        "mage/translate",
+        "jquery/ui"
+    ], function ($, alert, $t) {
+        "use strict";
+
+        var resultMessage = $('#report-reindex-message');
+
+        $('#<?php echo $block->getHtmlId() ?>').click(function (e) {
+            e.preventDefault();
+
+            resultMessage.hide();
+
+            $.ajax({
+                url: '<?php echo $block->getButtonUrl() ?>',
+                data: {
+                    isAjax: true
+                },
+                dataType: 'json',
+                showLoader: true,
+                success: function (result) {
+                    var messageEl = resultMessage.find('.message');
+                    if (result.success) {
+                        messageEl.removeClass('message-error')
+                            .addClass('message-success')
+                            .text($t('The SEO report data has been updated successfully.'));
+                    } else {
+                        messageEl.removeClass('message-success')
+                            .addClass('message-error')
+                            .text($t('An error occurred. Please try again later.'));
+                    }
+
+                    resultMessage.show();
+                }
+            });
+        });
+    });
+</script>

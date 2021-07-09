@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ */
+?>
+
+<?php if ($_description = $block->getPageDescription()): ?>
+    <div class="productspage-description">
+        <?= /* @escapeNotVerified */
+        $block->getPageDescription() ?>
+    </div>
+<?php endif; ?>

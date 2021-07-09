@@ -1,0 +1,33 @@
+button_label,button_label
+"Generate search data successfully.","Generate search data successfully."
+"Cannot generate data for store %1 and customer group %2, %3","Cannot generate data for store %1 and customer group %2, %3"
+"All Categories","All Categories"
+"-- Please select --","-- Please select --"
+Price,Price
+Image,Image
+"Short Description","Short Description"
+"Cron job","Cron job"
+"After Product Save","After Product Save"
+"Manually (used reindex button bellow)","Manually (used reindex button bellow)"
+"New Products","New Products"
+"Most Viewed Products","Most Viewed Products"
+Bestsellers,Bestsellers
+Auto,Auto
+Custom,Custom
+"Price ","Price "
+Search,Search
+General,General
+Enable,Enable
+"Maximum Number of Search Results","Maximum Number of Search Results"
+"By Default, it shows 10 search results","By Default, it shows 10 search results"
+"Limit number of characters in description section","Limit number of characters in description section"
+"Limit the length of short description","Limit the length of short description"
+"Information Display","Information Display"
+"Reindex Search database","Reindex Search database"
+"Reindex Search Data","Reindex Search Data"
+"Search by category configuration","Search by category configuration"
+"Enable Search By Category","Enable Search By Category"
+"Maximal Depth","Maximal Depth"
+"Search Suggestion","Search Suggestion"
+"Enable Search Suggestion","Enable Search Suggestion"
+"Sort by","Sort by"

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Shopbybrand::css/style.css"/>
+        <css src="Mageplaza_Core::css/grid-mageplaza.css"/>
+    </head>
+    <body>
+        <referenceBlock name="top.links">
+            <block class="Mageplaza\Shopbybrand\Block\Link\Top" name="brand-list-link" before="authorization-link"/>
+        </referenceBlock>
+        <referenceBlock name="footer_links">
+            <block class="Mageplaza\Shopbybrand\Block\Link\Footer" name="brand-footer-link"/>
+        </referenceBlock>
+        <referenceContainer name="sidebar.main">
+            <block class="Magento\Framework\View\Element\Template" name="sidebar.container" template="Mageplaza_Shopbybrand::sidebar.phtml" ifconfig="shopbybrand/general/enabled">
+                <block class="Mageplaza\Shopbybrand\Block\Sidebar\Featured" name="sidebar.featuredbrand" ifconfig="shopbybrand/sidebar/feature/enable"/>
+                <block class="Mageplaza\Shopbybrand\Block\Sidebar\BrandCategory" name="sidebar.category.brand" ifconfig="shopbybrand/sidebar/category_brand/enable"/>
+                <block class="Mageplaza\Shopbybrand\Block\Sidebar\BrandList" name="sidebar.brand" ifconfig="shopbybrand/sidebar/brand_thumbnail/enable"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

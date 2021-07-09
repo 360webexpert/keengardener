@@ -1,0 +1,48 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoAnalysis
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+  -->
+<div id="mp-preview">
+    <h3 class="mp_preview_heading" data-bind="text:seoAnalysis.preview_heading"></h3>
+    <div class="mp_preview_title mp_shorten">
+        <div id="mp_render_title_container">
+            <span data-bind="text:metaTitle()"></span>
+        </div>
+    </div>
+    <div class="mp_preview_url mp_shorten" id="mp_url_container" data-bind="style:{fontStyle: 'normal'}">
+        <span data-bind="text:productUrl()"></span>
+    </div>
+    <div class="mp_product-reviews-summary">
+        <div class="control-value admin__field-value field-summary-rating">
+            <div class="rating-box">
+                <div class="rating" data-bind="style:{width: seoAnalysis.rating_icon}"></div>
+            </div>
+            <div class="mp_snippet">
+                <span class="mp_rating" data-bind="text: seoAnalysis.rating "></span>
+                <span class="mp_reviews" data-bind="text: '- ' + seoAnalysis.review"></span>
+                <span class="mp_price" data-bind="text: '- ' + seoAnalysis.price"></span>
+                <span class="mp_stock" data-bind="text: '- ' + seoAnalysis.salable"></span>
+            </div>
+        </div>
+    </div>
+    <div class="mp_preview_meta">
+        <span id="mp_preview_meta" data-bind="text:metaDescription()"></span>
+    </div>
+</div>

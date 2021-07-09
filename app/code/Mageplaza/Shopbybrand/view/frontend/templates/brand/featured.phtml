@@ -1,0 +1,59 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$timeId = time();
+$featureBrands = $block->getFeaturedBrand();
+$helper = $block->helper();
+?>
+<?= /** @noEscape */ $block->includeCssLib() ?>
+<?php if ($helper->enableFeature() && sizeof($featureBrands)) : ?>
+    <div class="block-brand-feature widget">
+        <div class="block-title" style="text-align: center;">
+            <strong id="block-feature-brand-heading" role="heading"
+                    aria-level="2"><?= /** @noEscape */ $block->getFeatureTitle() ?></strong>
+        </div>
+        <div class="block-content">
+            <?php if ($block->getStyleDisplayFeature() == 0 && sizeof($featureBrands) > 1) : ?>
+            <div class="owl-carousel owl-theme brand-carousel" id="feature-brand-carousel-<?= $timeId ?>"
+                 data-mage-init='{"brandSlider": {}}'>
+            <?php endif; ?>
+                <?php foreach ($featureBrands as $brand) : ?>
+                    <?php if ($block->getStyleDisplayFeature() == 0) : ?>
+                <div class="relate-content item">
+                    <?php else : ?>
+                    <div class="relate-content item mp-2 mp-sm-4 mp-xs-6 col-mp" style="float: left; padding: 5px 0;">
+                    <?php endif; ?>
+                        <a href="<?= /** @noEscape */ $block->helper()->getBrandUrl($brand) ?>">
+                            <img class="img-responsive brand-image"
+                                 src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>">
+                            <?php if ($block->showLabel() == 1) : ?>
+                                <span><?= /** @noEscape */ $brand->getValue() ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+<div style="clear: both"></div>
+

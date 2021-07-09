@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="ruleSTRCheckShippingTypeWithOneRate" type="shippingTableRateData">
+        <data key="name">Check Shipping Type With One Rate</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$17.00</data>
+        <data key="priceSTRTwo">$19.00</data>
+    </entity>
+
+    <entity name="ruleSTRCheckNameDelivery" type="shippingTableRateData">
+        <data key="name">{name}</data>
+        <data key="status">1</data>
+        <data key="comment">Table Rate</data>
+        <data key="priceSTROne">$50.00</data>
+        <data key="priceSTRTwo">$50.00</data>
+        <data key="countryFirst">United States</data>
+        <data key="stateFirst">California</data>
+        <data key="zipFirst">12345</data>
+        <data key="countryTwo">Spain</data>
+        <data key="stateTwo">Alava</data>
+        <data key="zipTwo">12345</data>
+    </entity>
+
+    <entity name="ruleSTRCheckEstimatedDelivery" type="shippingTableRateData">
+        <data key="name">{day}</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$9.00</data>
+        <data key="priceSTRTwo">$19.80</data>
+        <data key="countryFirst">Germany</data>
+        <data key="stateFirst">Berlin</data>
+        <data key="zipFirst">12345</data>
+        <data key="countryTwo">Spain</data>
+        <data key="stateTwo">Alava</data>
+        <data key="zipTwo">12345</data>
+    </entity>
+
+    <entity name="ruleSTRCheckDisableForCheckout" type="shippingTableRateData">
+        <data key="name">Check Disable For Checkout</data>
+        <data key="status">1</data>
+    </entity>
+
+    <entity name="ruleSTRCheckRuleStatus" type="shippingTableRateData">
+        <data key="name">Check Inactive Status</data>
+        <data key="status">0</data>
+        <data key="countryFirst">Spain</data>
+        <data key="stateFirst">Alava</data>
+        <data key="zipFirst">12345</data>
+    </entity>
+
+    <entity name="ruleSTRCheckMultiCurrency" type="shippingTableRateData">
+        <data key="name">Check MultiCurrency</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">€47.68</data>
+        <data key="priceSTRTwo">€65.44</data>
+        <data key="priceSTRThree">€80.80</data>
+        <data key="rateUSDAndEUR">0.8</data>
+    </entity>
+
+    <entity name="ruleSTRCheckWeight" type="shippingTableRateData">
+        <data key="name">Check Setting Weight</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$51.00</data>
+        <data key="priceSTRTwo">$53.00</data>
+        <data key="priceSTRThree">$87.00</data>
+        <data key="countryFirst">Spain</data>
+        <data key="stateFirst">Alava</data>
+        <data key="zipFirst">12345</data>
+        <data key="sizeMH01">XS</data>
+        <data key="colorMH01">Black</data>
+        <data key="sizeMT07">XS</data>
+        <data key="colorMT07">Gray</data>
+        <data key="customSkuMH01">MH01-XS-Black</data>
+        <data key="customSkuMT07">MT07-XS-Gray</data>
+    </entity>
+
+    <entity name="ruleSTRCheckQty" type="shippingTableRateData">
+        <data key="name">Check Setting Qty</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$55.50</data>
+        <data key="priceSTRTwo">$67.10</data>
+        <data key="priceSTRThree">$101.90</data>
+        <data key="sizeMT07">XS</data>
+        <data key="colorMT07">Gray</data>
+        <data key="customSkuMT07">MT07-XS-Gray</data>
+        <data key="countryFirst">United States</data>
+        <data key="stateFirst">California</data>
+        <data key="stateSecond">Michigan</data>
+        <data key="zipFirst">12345</data>
+    </entity>
+
+    <entity name="ruleSTRCheckPrice" type="shippingTableRateData">
+        <data key="name">Check Setting Price</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$35.00</data>
+        <data key="priceSTRTwo">$40.00</data>
+    </entity>
+
+    <entity name="ruleSTRCheckPostCodesStrings" type="shippingTableRateData">
+        <data key="name">Check Compare Post Codes As Strings</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$70.00</data>
+        <data key="countryFirst">United States</data>
+        <data key="stateFirst">Michigan</data>
+        <data key="zipFirst">AB1</data>
+        <data key="zipSecond">1</data>
+    </entity>
+
+    <entity name="ruleSTRCheckPostCodesNumbers" type="shippingTableRateData">
+        <data key="name">Check Compare Post Codes As Numbers</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$70.00</data>
+        <data key="priceSTRTwo">$70.00</data>
+        <data key="countryFirst">United States</data>
+        <data key="stateFirst">Michigan</data>
+        <data key="zipFirst">AB1</data>
+        <data key="zipSecond">10</data>
+        <data key="zipThird">AB16</data>
+    </entity>
+
+    <entity name="ruleSTRCheckRulesOnCheckout" type="shippingTableRateData">
+        <data key="name">Check Rules On Checkout</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$30.00</data>
+    </entity>
+
+    <entity name="ruleSTRCheckTwoMethodsFirst" type="shippingTableRateData">
+        <data key="name">Check Two Methods First</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$5.00</data>
+        <data key="priceSTRTwo">$10.00</data>
+        <data key="priceSTRThree">$30.00</data>
+    </entity>
+
+    <entity name="ruleSTRCheckTwoMethodsSecond" type="shippingTableRateData">
+        <data key="name">Check Two Methods Second</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$20.00</data>
+    </entity>
+
+    <entity name="ruleSTRDefaultCartPriceRule" type="shippingTableRateData">
+        <data key="name">Default Rule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Fixed amount discount for whole cart</data>
+        <data key="discountAmount">30</data>
+    </entity>
+
+    <entity name="ruleSTRDefaultCartPriceRuleDiscount10" type="shippingTableRateData">
+        <data key="name">Default Rule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Fixed amount discount for whole cart</data>
+        <data key="discountAmount">10</data>
+    </entity>
+
+    <entity name="ruleSTRAllowFreeAndShowMethodIfNotApplicable" type="shippingTableRateData">
+        <data key="name">Check Allow Free Shipping And Show Method</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$0.00</data>
+        <data key="country">Australia</data>
+        <data key="state">Tasmania</data>
+        <data key="zip">12345</data>
+    </entity>
+
+    <entity name="ruleSTRCheckAllRates" type="shippingTableRateData">
+        <data key="name">Check Shipping Table Rate Rule with All Rates</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$74.00</data>
+        <data key="priceSTRTwo">$98.00</data>
+        <data key="priceSTRThree">$117.80</data>
+        <data key="sizeMH02">XS</data> <!-- 172 -->
+        <data key="colorMH02">Black</data>
+        <data key="customSkuMH02">MH02-XS-Black</data>
+    </entity>
+
+    <entity name="ruleSTRCheckUnionTypeWithTypesForFree" type="shippingTableRateData">
+        <data key="name">Check Union Shipping Type And Shipping Types for Free</data>
+        <data key="status">1</data>
+        <data key="shipTypeForFree">'heavy'</data>
+        <data key="priceSTROne">$28.40</data>
+        <data key="priceSTRTwo">$30.40</data>
+        <data key="priceSTRThree">$34.90</data>
+        <data key="priceSTRFour">$34.90</data>
+    </entity>
+
+    <entity name="ruleSTRCheckTypeForConfigurableAndTypeForAll" type="shippingTableRateData">
+        <data key="name">Check Type For Configurable And Type For All</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$22.20</data>
+        <data key="priceSTRTwo">$24.20</data>
+        <data key="priceSTRThree">$26.10</data>
+        <data key="sizeFirstMH01">S</data>
+        <data key="colorFirstMH01">Gray</data>
+        <data key="sizeSecondMH01">XS</data>
+        <data key="colorSecondMH01">Black</data>
+    </entity>
+
+    <entity name="ruleSTRCheckTypeForConfigurableAndMinimalRate" type="shippingTableRateData">
+        <data key="name">Check Type For Configurable Product And Minimal Rate</data>
+        <data key="status">1</data>
+        <data key="minimalRate">0</data>
+        <data key="maximalRate">0</data>
+        <data key="withDifferentShippingTypes">Select minimal rate</data>
+        <data key="priceSTROne">$9.00</data>
+        <data key="priceSTRTwo">$17.00</data>
+        <data key="priceSTRThree">$1.90</data>
+        <data key="sizeFirstMH01">XS</data>
+        <data key="colorFirstMH01">Black</data>
+        <data key="sizeSecondMH01">S</data>
+        <data key="colorSecondMH01">Gray</data>
+    </entity>
+
+    <entity name="ruleSTRCheckShippingTypeWithMaximalRate" type="shippingTableRateData">
+        <data key="name">Check Shipping Type With Maximal Rate</data>
+        <data key="status">1</data>
+        <data key="minimalRate">0</data>
+        <data key="maximalRate">0</data>
+        <data key="withDifferentShippingTypes">Select maximal rate</data>
+        <data key="priceSTROne">$3.40</data>
+        <data key="priceSTRTwo">$17.00</data>
+        <data key="priceSTRThree">$18.00</data>
+        <data key="priceSTRFour">$20.40</data>
+    </entity>
+
+    <entity name="ruleSTRCheckUseOnlyOneTypeForShipping" type="shippingTableRateData">
+        <data key="name">Check Use Only One Shipping Type For Shipping Method</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$21.00</data>
+        <data key="priceSTRTwo">$7.00</data>
+        <data key="priceSTRThree">$16.00</data>
+    </entity>
+
+    <entity name="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer" type="shippingTableRateData">
+        <data key="name">Check Maximal Rate And Price Shipping In Customer Account</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$13.70</data>
+        <data key="priceSTRTwo">$19.90</data>
+        <data key="priceSTRThree">$20.00</data>
+        <data key="minimalRate">0</data>
+        <data key="maximalRate">20</data>
+        <data key="withDifferentShippingTypes">Sum up rates</data>
+    </entity>
+
+    <entity name="ruleSTRCheckMinimalRateAndPlaceOrderInAdminArea" type="shippingTableRateData">
+        <data key="name">Check Minimal Rate And Price Shipping In Admin Area</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$20.00</data>
+        <data key="priceSTRTwo">$20.00</data>
+        <data key="priceSTRThree">$21.00</data>
+        <data key="priceSTRFour">$25.00</data>
+        <data key="minimalRate">20</data>
+        <data key="maximalRate">0</data>
+        <data key="shippingMethodName">Shipping Table Rates - Check Minimal Rate And Price Shipping In Admin Area</data>
+        <data key="withDifferentShippingTypes">Sum up rates</data>
+    </entity>
+
+    <entity name="ruleSTRDontIgnorePriceAndQtyOfVirtualProducts" type="shippingTableRateData">
+        <data key="name">Check Dont Ignore Price And Qty Of Virtual Products</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$15.00</data>
+        <data key="priceSTRTwo">$30.00</data>
+        <data key="priceSTRThree">$45.00</data>
+        <data key="priceSTRFour">$60.00</data>
+    </entity>
+
+    <entity name="ruleSTRUsePriceAfterDiscount" type="shippingTableRateData">
+        <data key="name">Check Use Price After Discount</data>
+        <data key="status">1</data>
+        <data key="country">United States</data>
+        <data key="state">California</data>
+        <data key="zip">12345</data>
+        <data key="priceSTROne">$16.00</data>
+        <data key="priceSTRTwo">$25.00</data>
+        <data key="priceSTRThree">$34.00</data>
+    </entity>
+
+    <entity name="ruleSTRDontUsePriceAfterDiscount" type="shippingTableRateData">
+        <data key="name">Check Dont Use Price After Discount</data>
+        <data key="status">1</data>
+        <data key="country">United States</data>
+        <data key="state">California</data>
+        <data key="zip">12345</data>
+        <data key="priceSTROne">$18.00</data>
+        <data key="priceSTRTwo">$27.00</data>
+        <data key="priceSTRThree">$36.00</data>
+    </entity>
+
+    <entity name="ruleSTRUsePriceIncludingTax" type="shippingTableRateData">
+        <data key="name">Check Use Price Including Tax</data>
+        <data key="status">1</data>
+        <data key="country">United States</data>
+        <data key="state">Michigan</data>
+        <data key="zip">12345</data>
+        <data key="priceSTROne">$27.71</data>
+        <data key="priceSTRTwo">$39.41</data>
+    </entity>
+
+    <entity name="ruleSTRDontUsePriceIncludingTax" type="shippingTableRateData">
+        <data key="name">Check Dont Use Price Including Tax</data>
+        <data key="status">1</data>
+        <data key="country">United States</data>
+        <data key="state">Michigan</data>
+        <data key="zip">12345</data>
+        <data key="priceSTROne">$25.60</data>
+        <data key="priceSTRTwo">$36.40</data>
+    </entity>
+
+    <entity name="ruleSTRCheckUsePriceIncludingTaxAndAfterDiscount" type="shippingTableRateData">
+        <data key="name">Check Union Use Price Including Tax And After Discount</data>
+        <data key="status">1</data>
+        <data key="country">United States</data>
+        <data key="state1">Michigan</data>
+        <data key="state2">California</data>
+        <data key="zip">12345</data>
+        <data key="priceSTROne">$59.00</data>
+        <data key="priceSTRTwo">$64.28</data>
+        <data key="priceSTRThree">$76.19</data>
+        <data key="priceSTRFour">$70.00</data>
+    </entity>
+
+    <entity name="ruleSTRIgnorePriceQtyOfVirtualAndAddImage" type="shippingTableRateData">
+        <data key="name">Check Ignore Price And Qty Of Virtual Products And Add Image</data>
+        <data key="status">1</data>
+        <data key="shippingMethod">amstrates_amstrates</data>
+        <data key="priceSTROne">$15.00</data>
+        <data key="priceSTRTwo">$15.00</data>
+        <data key="priceSTRThree">$30.00</data>
+        <data key="priceSTRFour">$30.00</data>
+    </entity>
+
+    <entity name="ruleSTRCheckMultishipping1" type="shippingTableRateData">
+        <data key="name">Check Multishipping First Rule</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$15.00</data>
+        <data key="shippingMethod">amstrates_amstrates</data>
+        <data key="shippingMethodName">Shipping Table Rates - Check Multishipping First Rule</data>
+    </entity>
+
+    <entity name="ruleSTRCheckMultishipping2" type="shippingTableRateData">
+        <data key="name">Check Multishipping Second Rule</data>
+        <data key="status">1</data>
+        <data key="priceSTROne">$27.00</data>
+        <data key="shippingMethod">amstrates_amstrates</data>
+        <data key="billingMethod">p_method_checkmo</data>
+        <data key="address">Veronica Costello, My street, London, Alabama 12345, United States</data>
+        <data key="shippingMethodName">Shipping Table Rates - Check Multishipping Second Rule</data>
+    </entity>
+
+</entities>

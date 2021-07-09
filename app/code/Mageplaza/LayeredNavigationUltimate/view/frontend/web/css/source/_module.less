@@ -1,0 +1,111 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUtimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+  #layered-horizontal-container {
+    display: block;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 30px;
+
+    .filter-options-item {
+      display: inline-block;
+      border-bottom: none;
+    }
+
+    .filter-options-content {
+      display: none;
+      position: absolute;
+      z-index: 99;
+      background: #fff;
+      border: 1px solid #ccc;
+      min-width: 150px;
+    }
+
+    #ln_button_submit {
+      display: inline-block;
+      position: relative;
+      top: -5px;
+    }
+
+    ol.items {
+      min-width: 100px;
+    }
+
+    .filter .block-subtitle.filter-subtitle {
+      display: none
+    }
+
+    .filter-current {
+      display: inline-block;
+
+      .item {
+        display: inline-block;
+        margin-right: 25px !important;
+      }
+    }
+
+    .filter-actions {
+      display: inline-block;
+    }
+  }
+
+}
+
+/* style rating slider */
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+  #ln_slider_container_rating {
+    padding-left: 15px;
+  }
+}
+
+.rating-slider-container {
+  padding-left: 20px;
+
+  #ln_slider_rating {
+    display: inline-block;
+    height: 130px;
+    width: 10px;
+    margin-right: 10px;
+    background: #ddd;
+
+    .ui-slider-range {
+      background-color: #aaa !important;
+    }
+  }
+
+  .rating-slider-items {
+    display: inline-block;
+    width: calc(100% - 30px) !important;
+  }
+
+  span.rating-star-off::before {
+    color: #c7c7c7 !important;
+  }
+
+  a.lnultimate-rating-slider:hover {
+    background: #fff !important;
+  }
+
+  .rating-summary .rating-result:before {
+    content: '' !important;
+  }
+}
+
+/* end style rating slider */

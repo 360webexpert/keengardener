@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Redirects
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="catalog_product_delete_before">
+        <observer name="SeoRedirectsCatalogProductDeleteBefore" instance="Mageplaza\Redirects\Observer\SeoRedirectsCatalogProductDeleteBefore"/>
+    </event>
+    <event name="catalog_product_delete_commit_after">
+        <observer name="SeoRedirectsCatalogProductDeleteAfter" instance="Mageplaza\Redirects\Observer\SeoRedirectsCatalogProductDeleteAfter"/>
+    </event>
+    <event name="catalog_category_delete_commit_after">
+        <observer name="SeoRedirectsCatalogCategoryDeleteAfter" instance="Mageplaza\Redirects\Observer\SeoRedirectsCatalogCategoryDeleteAfter"/>
+    </event>
+    <event name="cms_page_delete_commit_after">
+        <observer name="SeoRedirectsCmsPageDeleteAfter" instance="Mageplaza\Redirects\Observer\SeoRedirectsCmsPageDeleteAfter"/>
+    </event>
+</config>

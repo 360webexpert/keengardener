@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoRule
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     http://mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="left">
+            <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tabs" name="seo_rule_edit_tabs">
+                <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tab\General" name="mageplaza_seorule_rule_edit_tab_general"/>
+                <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tab\Conditions\Product" as="conditions"/>
+                <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tab\Conditions\Category" as="category"/>
+                <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tab\Conditions\Layer" as="layered_navigation"/>
+                <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tab\Action" name="mageplaza_seorule_rule_edit_tab_action"/>
+                <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit\Tab\Preview" name="mageplaza_seorule_rule_edit_tab_preview" template="Mageplaza_SeoRule::edit/preview.phtml"/>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Mageplaza\SeoRule\Block\Adminhtml\Rule\Edit" name="seo_rule_edit"/>
+        </referenceContainer>
+    </body>
+</page>

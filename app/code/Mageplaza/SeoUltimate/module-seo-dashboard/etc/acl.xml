@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoDashboard
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::marketing">
+                    <resource id="Mageplaza_Seo::seo">
+                        <resource id="Mageplaza_SeoDashboard::checklist" title="Mageplaza Checklist" sortOrder="10"/>
+                    </resource>
+                </resource>
+                <resource id="Magento_Reports::report">
+                    <resource id="Mageplaza_SeoDashboard::reports" title="Mageplaza SEO Reports" sortOrder="40">
+                        <resource id="Mageplaza_SeoDashboard::duplicate_report" title="Duplicate Content Report" sortOrder="11"/>
+                        <resource id="Mageplaza_SeoDashboard::missing_report" title="Missing Content Report" sortOrder="12"/>
+                        <resource id="Mageplaza_SeoDashboard::low_count_report" title="Low Word Count Report" sortOrder="13"/>
+                        <resource id="Mageplaza_SeoDashboard::noroute_report" title="404 not found issues" sortOrder="14"/>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

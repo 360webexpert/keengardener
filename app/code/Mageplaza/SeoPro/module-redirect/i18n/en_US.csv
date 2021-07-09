@@ -1,0 +1,21 @@
+"A total of %1 record(s) have been deleted. Do you want to redirect this URL to a new one?","A total of %1 record(s) have been deleted. Do you want to redirect this URL to a new one?"
+"Old URL","Old URL"
+"New Request","New Request"
+"Redirect Type","Redirect Type"
+Description,Description
+Redirect,Redirect
+"action-primary seo-redirect","action-primary seo-redirect"
+Store,Store
+Cancel,Cancel
+"Can't redirect. Please try again!","Can't redirect. Please try again!"
+"Cancel success!","Cancel success!"
+"Do not use two or more consecutive slashes in the request path.","Do not use two or more consecutive slashes in the request path."
+"Anchor symbol (#) is not supported in request path.","Anchor symbol (#) is not supported in request path."
+"Redirect success!","Redirect success!"
+"Can't redirect. %1","Can't redirect. %1"
+"SEO Redirects","SEO Redirects"
+"This is a required field","This is a required field"
+Redirects,Redirects
+"Enable Redirects","Enable Redirects"
+"Better 404 page","Better 404 page"
+"Automatic redirect to home page.","Automatic redirect to home page."

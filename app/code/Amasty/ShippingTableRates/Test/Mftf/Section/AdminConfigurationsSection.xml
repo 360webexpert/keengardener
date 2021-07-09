@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+
+    <section name="AdminConfigurationsSTRSection">
+        <element name="EnabledForCheckout" type="select" selector="//select[@id='carriers_amstrates_active']"/>
+        <element name="Title" type="input" selector="//input[@id='carriers_amstrates_title']"/>
+        <element name="ShipToApplicableCountries" type="select" selector="//select[@id='carriers_amstrates_sallowspecific']"/>
+        <element name="ShipToSpecificCountries" type="select" selector="//select[@id='carriers_amstrates_specificcountry']"/>
+        <element name="DisplayedErrorMessage" type="input" selector="//textarea[@id='carriers_amstrates_specificerrmsg']"/>
+        <element name="AllowFreeShippingPromotions" type="select" selector="//select[@id='carriers_amstrates_allow_promo']"/>
+        <element name="IgnorePriceAndQuantityOfVirtualProducts" type="select" selector="//select[@id='carriers_amstrates_ignore_virtual']"/>
+        <element name="ComparePostCodesAs" type="select" selector="//select[@id='carriers_amstrates_numeric_zip']"/>
+        <element name="UsePriceAfterDiscount" type="select" selector="//select[@id='carriers_amstrates_after_discount']"/>
+        <element name="UsePriceIncludingTax" type="select" selector="//select[@id='carriers_amstrates_including_tax']"/>
+        <element name="SortOrder" type="input" selector="//input[@id='carriers_amstrates_sort_order']"/>
+        <element name="UseOnlyOneShippingType" type="select" selector="//select[@id='carriers_amstrates_dont_split']"/>
+        <element name="ShowMethodIfNotApplicable" type="select" selector="//select[@id='carriers_amstrates_showmethod']"/>
+        <element name="ShippingTypeForConfigurable" type="select" selector="//select[@id='carriers_amstrates_configurable_child']"/>
+        <element name="ShippingTypeForBundle" type="select" selector="//select[@id='carriers_amstrates_bundle_child']"/>
+        <element name="VolumeWeight" type="select" selector="//select[@id='carriers_amstrates_volumetric_weight']"/>
+        <element name="VolumetricWeightAttribute" type="select" selector="//select[@id='carriers_amstrates_volumetric_weight_attribute']"/>
+        <!--Common selectors-->
+        <element name="STRTab" type="button" selector="//a[@id='carriers_amstrates-head']"/>
+        <element name="STRTabOpen" type="block" selector="//a[@id='carriers_amstrates-head'][@class='open']"/>
+        <element name="Save" type="button" selector="//div[@class='page-actions-buttons']/button[@id='save']"/>
+    </section>
+
+</sections>

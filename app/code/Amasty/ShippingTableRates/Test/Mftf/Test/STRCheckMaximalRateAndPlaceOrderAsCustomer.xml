@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckMaximalRateAndPlaceOrderAsCustomer">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Maximal Rate And Price Shipping In Customer Account"/>
+            <description value="Check Maximal Rate And Price Shipping In Customer Account"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-07"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRCheckMaximalRateAndPlaceOrderAsCustomer"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationTheMainSettingsSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductFromTheCartIfTestWithLoginFailed" stepKey="DeleteProductIfTestFailed1">
+                <argument name="products" value="_theBagWayfarerMessenger"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductFromTheCartIfTestWithLoginFailed" stepKey="DeleteProductIfTestFailed2">
+                <argument name="products" value="_theBagStriveShoulderPackData"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rates-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddGlobalRatesInSTRRule" stepKey="AddGlobalRatesInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer"/>
+            <argument name="minimalRate" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.minimalRate"/>
+            <argument name="maximalRate" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.maximalRate"/>
+            <argument name="withDifferentShippingTypes" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.withDifferentShippingTypes"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckMaximalRateAndPlaceOrderAsCustomer"/>
+        </actionGroup>
+
+        <!--Login -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="LogIn">
+            <argument name="Customer" value="CustomerLogIn"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart1">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagWayfarerMessenger"/>
+        </actionGroup>
+
+        <!--Add Second Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart2">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagStriveShoulderPackData"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkFirstPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.name"/>
+        </actionGroup>
+
+        <!--Change Qty Second Product on the Cart-->
+        <actionGroup ref="ChangeQtyProductInCart" stepKey="ChangeQtyProductInCart1">
+            <argument name="addProductQty" value="_enterQty2"/>
+            <argument name="products" value="_theBagStriveShoulderPackData"/>
+        </actionGroup>
+
+        <!--Check Second Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkSecondPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.priceSTRTwo"/>
+            <argument name="methodSTRName" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.name"/>
+        </actionGroup>
+
+        <!--Change Qty First Product on the Cart-->
+        <actionGroup ref="ChangeQtyProductInCart" stepKey="ChangeQtyProductInCart2">
+            <argument name="addProductQty" value="_enterQty2"/>
+            <argument name="products" value="_theBagWayfarerMessenger"/>
+        </actionGroup>
+
+        <!--Check Third Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRInCart" stepKey="checkThirdPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.priceSTRThree"/>
+            <argument name="methodSTRName" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.name"/>
+        </actionGroup>
+
+        <!--Create Order And Check Result-->
+        <actionGroup ref="AmastyCreateOrderAsCustomerOnCheckoutShippingPage" stepKey="CreateOrder">
+            <argument name="shippingMethodsOnCheckout" value="ShippingTableRates"/>
+            <!-- Will Check-->
+        </actionGroup>
+        <actionGroup ref="AmastyCreateOrderAndCheckShippingInAccount" stepKey="CheckOrder">
+            <argument name="shippingPriceInCustomerAccount" value="ruleSTRCheckMaximalRateAndPlaceOrderAsCustomer.priceSTRThree"/>
+        </actionGroup>
+
+    </test>
+</tests>

@@ -1,0 +1,96 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+.admin__menu #menu-magento-backend-marketing .item-abandonedcart.parent.level-1 > strong:before {
+  content: '\e900';
+  font-family: 'Mageplaza Icons';
+  font-size: 1.5rem;
+  margin-right: .8rem;
+}
+
+.admin__control-table#abandonedcart_general_email td.col-actions {
+  min-width: 55px;
+
+  button.action-send-test {
+    margin-right: .8rem;
+
+    &:before {
+      content: '\e607';
+    }
+  }
+}
+
+#mp_ace_report_chart_div {
+  height: 500px;
+}
+
+#mp_ace_report_date_from, #mp_ace_report_date_to {
+  height: 30px;
+  width: 125px;
+  padding: 10px;
+}
+
+.report_toolbar {
+  display: inline-block;
+
+  section {
+    float: left;
+    margin-right: 15px;
+  }
+
+  .mp_ace_report_date {
+    padding: 2px;
+  }
+
+  .mp_ace_report_dimension {
+    display: flex;
+
+    div.active {
+      background: #fffbbb;
+      border-color: #878787;
+    }
+
+    div:not(.active), div:not(.active) label {
+      cursor: pointer;
+    }
+  }
+}
+
+#mp_ace_report_day, #mp_ace_report_month {
+  display: none;
+}
+
+.mp_ace_report_day, .mp_ace_report_month {
+  border: 1px solid #adadad;
+  border-radius: 2px;
+  padding: 6px;
+  width: 70px;
+  text-align: center;
+
+  &:hover {
+    background-color: #dbdbdb;
+  }
+}
+
+span.mp_ace_sent_status {
+  background: #fff0a5 none repeat scroll 0 0;
+  border-color: #fea02d;
+  color: #fea02d;
+}

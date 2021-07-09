@@ -1,0 +1,50 @@
+<?php /**
+       * Mageplaza
+       *
+       * NOTICE OF LICENSE
+       *
+       * This source file is subject to the Mageplaza.com license that is
+       * available through the world-wide-web at this URL:
+       * https://www.mageplaza.com/LICENSE.txt
+       *
+       * DISCLAIMER
+       *
+       * Do not edit or add to this file if you wish to upgrade this extension to newer
+       * version in the future.
+       *
+       * @category    Mageplaza
+       * @package     Mageplaza_LayeredNavigationUltimate
+       * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+       * @license     https://www.mageplaza.com/LICENSE.txt
+       */
+
+/** @type \Mageplaza\LayeredNavigation\Model\Layer\Filter\Attribute $filter */
+$filter = $this->getFilter();
+$attributeCode = $filter->getRequestVar();
+$items = $block->getRatingItems($filter->getItems());
+
+if (sizeof($items)) : ?>
+    <ol class="items rating-slider-container">
+        <li class="item">
+            <div id="ln_slider_container_<?= /** @noEscape */ $attributeCode ?>">
+                <div id="ln_slider_<?= /** @noEscape */ $attributeCode ?>" class="ln_slider_rating"></div>
+                <ol class="items rating-slider-items">
+                    <?php foreach ($items as $item) : ?>
+                        <?php $rating = $item * 20 ?>
+                        <li class="item">
+                            <a class="rating-summary lnultimate-rating-slider">
+                            <span class="rating-result" title="<?= $rating; ?>%">
+                                <span class="ln_rating_stars" data-count-star="<?= /** @noEscape */ $item ?>"
+                                      style="width:<?= $rating ?>%">
+                                    <span><?= $rating ?>%</span>
+                                </span>
+                            </span>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                </ol>
+            </div>
+        </li>
+    </ol>
+<?php endif; ?>
+

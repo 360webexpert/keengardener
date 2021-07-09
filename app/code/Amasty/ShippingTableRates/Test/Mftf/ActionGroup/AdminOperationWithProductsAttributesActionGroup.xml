@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AdminOpenProductAttribute">
+        <arguments>
+            <argument name="attributeCode"/>
+        </arguments>
+        <amOnPage url="{{AdminProductAttributesGridPage.url}}" stepKey="navigateToProductsAttributesGrid"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <fillField selector="{{AdminProductAttributesGridSection.SearchAttributeCodeField}}"
+                   userInput="{{attributeCode}}" stepKey="enterAttributeCode"/>
+        <click selector="{{AdminProductAttributesGridSection.SearchButton}}" stepKey="SearchAttribute"/>
+        <click selector="//table[@id='attributeGrid_table']//td[contains(text(), '{{attributeCode}}')]" stepKey="clickToSearchingAttribute"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminAddThreeOptionsInProductAttribute" extends="AdminOpenProductAttribute">
+        <arguments>
+            <argument name="attributeOptionsSet"/>
+        </arguments>
+        <conditionalClick stepKey="AddFirstOption"
+                          selector="{{ProductAttributeSection.AddOptions}}"
+                          dependentSelector="{{ProductAttributeSection.FieldNameOptionThree}}"
+                          visible="false"/>
+        <conditionalClick stepKey="AddSecondOption"
+                          selector="{{ProductAttributeSection.AddOptions}}"
+                          dependentSelector="{{ProductAttributeSection.FieldNameOptionThree}}"
+                          visible="false"/>
+        <conditionalClick stepKey="AddThirdOption"
+                          selector="{{ProductAttributeSection.AddOptions}}"
+                          dependentSelector="{{ProductAttributeSection.FieldNameOptionThree}}"
+                          visible="false"/>
+        <fillField selector="{{ProductAttributeSection.FieldNameOptionOne}}"
+                   userInput="{{attributeOptionsSet.nameOptionOne}}" stepKey="enterNameFirstOption"/>
+        <fillField selector="{{ProductAttributeSection.FieldNameOptionTwo}}"
+                   userInput="{{attributeOptionsSet.nameOptionTwo}}" stepKey="enterNameSecondOption"/>
+        <fillField selector="{{ProductAttributeSection.FieldNameOptionThree}}"
+                   userInput="{{attributeOptionsSet.nameOptionThree}}" stepKey="enterNameThirdOption"/>
+        <click selector="{{ProductAttributeSection.Save}}" stepKey="saveChanges"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+    </actionGroup>
+
+</actionGroups>

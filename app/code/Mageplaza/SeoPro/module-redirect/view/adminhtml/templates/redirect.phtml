@@ -1,0 +1,36 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Redirects
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+if ($block->setTypeProcess()) : ?>
+    <div id="mageplaza-redirect" style="display: none">
+        <input type="hidden" id="type_process" name="type_process" value="<?php echo $block->getTypeProcess() ?>"/>
+        <?php echo $block->getChildHtml() ?>
+        <script type="text/x-magento-init">
+        {
+            "#mageplaza-redirect": {
+                "Mageplaza_Redirects/js/view/redirect":{
+                    "url": "<?php echo $block->getAjaxUrl() ?>"
+                }
+            }
+        }
+        </script>
+    </div>
+<?php endif; ?>

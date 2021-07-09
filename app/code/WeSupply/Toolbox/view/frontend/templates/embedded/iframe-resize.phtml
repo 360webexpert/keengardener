@@ -1,0 +1,40 @@
+<script>
+    require(['jquery', 'iframeResizer' ],
+        function ($) {
+            $(function () {
+                var iframe = $('iframe.embedded-iframe');
+                if (iframe.length) {
+                    iframe.on('load', function(){
+                        var headerHeight = $('header').outerHeight(),
+                            windowHeight = $(window).innerHeight(),
+                            availableHeight =  windowHeight - headerHeight - 70,
+                            isOldIE = (navigator.userAgent.indexOf("MSIE") !== -1);
+
+                        iFrameResize({
+                            log: false,
+                            minHeight: availableHeight,
+                            resizeFrom: 'parent',
+                            scrolling: true,
+                            inPageLinks: true,
+                            autoResize: true,
+                            heightCalculationMethod: isOldIE ? 'max' : 'bodyScroll',
+                            onInit: function(iframe) {
+                                iframe.style.height = availableHeight + 'px';
+                            },
+                            onResized: function(messageData) {
+                                setTimeout(function() {
+                                    messageData.iframe.style.visibility = 'visible';
+                                }, 300);
+                            },
+                            onMessage: function(messageData) {
+                                if (history.pushState && messageData.message.hasOwnProperty('trackNo')) {
+                                    var newUrl = window.location.protocol + '//' + window.location.host + window.location.pathname.replace(/\/$/, '') + '/' + messageData.message.trackNo;
+                                    window.history.pushState({path:newUrl}, '', newUrl);
+                                }
+                            }
+                        }, '.embedded-iframe');
+                    });
+                }
+            });
+        });
+</script>

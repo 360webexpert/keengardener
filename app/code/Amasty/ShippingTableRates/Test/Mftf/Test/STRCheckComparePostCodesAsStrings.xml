@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="STRCheckComparePostCodesAsStrings">
+        <annotations>
+            <features value="Shipping Table Rate Rule Creation"/>
+            <stories value="Create a Shipping Table Rate Rule via the Admin"/>
+            <title value="Check Compare Post Codes As Strings"/>
+            <description value="Check Compare Post Codes As Strings"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="STR-MFTF-19"/>
+            <group value="Amasty"/>
+            <group value="ShippingTableRates"/>
+            <group value="Rule"/>
+            <group value="Shipping"/>
+            <group value="STRCheckComparePostCodesAsStrings"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminConfigurationPostCodeSettingSTR" stepKey="ConfigurationSettingBeforeTest">
+                <argument name="settingEnableForCheckout" value="enabledForCheckoutSTR.yes"/>
+                <argument name="settingAllowFreeShipping" value="allowFreeShippingPromoSTR.default"/>
+                <argument name="settingShowMethodIfNotApplicable" value="showMethodIfNotApplicableSTR.default"/>
+                <argument name="settingComparePostCodes" value="comparePostCodes.strings"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete Rules -->
+            <actionGroup ref="AdminDefaultSettingSTR" stepKey="ReturnDefaultSettingAfterTest"/>
+            <actionGroup ref="AdminDeleteSTRRule" stepKey="deleteCreatedTableRatesRule">
+                <argument name="ruleNameSTR" value="ruleSTRCheckPostCodesStrings"/>
+            </actionGroup>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create Shipping Table Rates-->
+        <actionGroup ref="AdminCreateSTRRule" stepKey="CreateShippingTableRateRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckPostCodesStrings"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateRateInSTRRule" stepKey="CreateRateInRule">
+            <argument name="shippingTableRateData" value="ruleSTRCheckPostCodesStrings"/>
+            <argument name="conditionsSTRData" value="_conditionSTR"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckPostCodesStrings"/>
+        </actionGroup>
+        <actionGroup ref="AdminEditRateInSTRRuleAddZip" stepKey="AddZipCodes">
+            <argument name="shippingTableRateData" value="ruleSTRCheckPostCodesStrings"/>
+            <argument name="rateAndDestSTRData" value="rateSTRCheckPostCodesStrings"/>
+        </actionGroup>
+
+        <!--Add First Product to Cart-->
+        <actionGroup ref="AddProductToCart" stepKey="AddProductToCart1">
+            <argument name="addProductQty" value="_enterQty1"/>
+            <argument name="products" value="_theBagWayfarerMessenger"/>
+        </actionGroup>
+
+        <!--Check No Shipping Table Rate-->
+        <actionGroup ref="CheckNoSTRInCart" stepKey="checkNoPriceSTR">
+            <argument name="methodSTRName" value="ruleSTRCheckPostCodesStrings.name"/>
+        </actionGroup>
+
+        <!--Check First Price Shipping Table Rate-->
+        <actionGroup ref="CheckPriceSTRWithCountryStateZipInCart" stepKey="checkFirstPriceSTR">
+            <argument name="shippingPrices" value="ruleSTRCheckPostCodesStrings.priceSTROne"/>
+            <argument name="methodSTRName" value="ruleSTRCheckPostCodesStrings.name"/>
+            <argument name="country" value="ruleSTRCheckPostCodesStrings.countryFirst"/>
+            <argument name="state" value="ruleSTRCheckPostCodesStrings.stateFirst"/>
+            <argument name="zip" value="ruleSTRCheckPostCodesStrings.zipFirst"/>
+        </actionGroup>
+
+        <!--Check No Shipping Table Rate-->
+        <actionGroup ref="CheckNoPriceSTRWithCountryStateZipInCart" stepKey="checkNoSTR2">
+            <argument name="methodSTRName" value="ruleSTRCheckPostCodesStrings.name"/>
+            <argument name="country" value="ruleSTRCheckPostCodesStrings.countryFirst"/>
+            <argument name="state" value="ruleSTRCheckPostCodesStrings.stateFirst"/>
+            <argument name="zip" value="ruleSTRCheckPostCodesStrings.zipSecond"/>
+        </actionGroup>
+
+    </test>
+</tests>

@@ -1,0 +1,192 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$attributes = $block->getAllAttributes();
+
+$pageId = $this->getRequest()->getParam('page_id');
+$page = $block->getPageById($pageId);
+
+if (!empty($attributes)) : ?>
+    <div id="mpln-table-default-attributes" data-index="attribute_options_select_container">
+        <table class="admin__control-table" data-index="attribute_options_select">
+            <thead>
+            <tr id="attribute-options-table">
+                <th class="col-attributes"><?= /** @noEscape */ __('Attributes') ?></th>
+                <th class="col-options"><?= /** @noEscape */ __('Options') ?></th>
+                <th class="col-delete">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody data-role="options-container" id="default-table-content">
+            <?php if ($page && $page->getId() && $page->getDefaultAttributes()) : ?>
+                <?php
+                $defaultAttributes = \Mageplaza\LayeredNavigationUltimate\Helper\Data::jsonDecode($page->getDefaultAttributes());
+                foreach ($defaultAttributes as $key => $value) :
+                    $attCode = explode('=', $value)[0];
+                    $options = $block->getAttributeOptions($attCode);
+                    ?>
+                    <tr class="attribute-options-row default-row-<?= /** @noEscape */ $key + 1 ?>">
+                        <td>
+                            <select class="select-default default-attributes" name="attributes[]">
+                                <option value="">-- Please select attribute --</option>
+                                <?php foreach ($attributes as $index => $item) : ?>
+                                    <option value="<?= /** @noEscape */ $index ?>" <?= /** @noEscape */ ($attCode != $index) ?: 'selected' ?>><?= /** @noEscape */ $item ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="select-default default-options" name="default_attributes[]">
+                                <?php if (!empty($options)) : ?>
+                                    <?php foreach ($options as $option => $label) : ?>
+                                        <option value="<?= /** @noEscape */ $option ?>" <?= /** @noEscape */ ($option != $value) ?: 'selected' ?>><?= /** @noEscape */ $label ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="delete-attribute-row" data-row-number="<?= /** @noEscape */ $key + 1 ?>">
+                                <span>Delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="5" class="col-actions-add">
+                    <button id="add_new_option_button" data-action="add_new_row"
+                            title="<?= /** @noEscape */ __('Add Attribute'); ?>"
+                            type="button" class="action- scalable add">
+                        <span><?= /** @noEscape */ __('Add Attribute'); ?></span>
+                    </button>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <script>
+        require(['jquery'], function ($) {
+            var defaultTable = $('#mpln-table-default-attributes'),
+                tableContent = defaultTable.find('#default-table-content'), defaultRowClass = 'default-row-';
+
+            addDefaultAttribute();
+            selectAttribute();
+
+            // add default attributes
+            function addDefaultAttribute() {
+                var countSelect = 0,
+                    countRow = tableContent.find('.attribute-options-row');
+                //set count row number
+                if (countRow.length) {
+                    countSelect = countRow.length;
+                }
+
+                var addBtn = defaultTable.find('#add_new_option_button');
+                if (addBtn.length) {
+                    addBtn.click(function () {
+                        if (tableContent.length) {
+                            countSelect++;
+                            createDefaultAttributesRow(countSelect);
+                        }
+                    });
+                }
+            }
+
+            // create default row
+            function createDefaultAttributesRow(count) {
+                var listAttributes = '<select class="select-default default-attributes" name="attributes[]"> <option value="" ><?= /** @noEscape */ __('-- Please select attribute --'); ?></option><?php foreach ($attributes as $key => $value) :
+                    ?><option value="<?= /** @noEscape */ $key ?>"><?= /** @noEscape */ $value; ?></option><?php
+                                                                                                                               endforeach; ?></select>';
+                var attributeOptions = '<select class="select-default default-options" name="default_attributes[]" required><option></option></select> ';
+                var row = '<tr class="attribute-options-row ' + defaultRowClass + count + '"> <td> ' + listAttributes + ' </td> <td> ' + attributeOptions + ' </td> <td> <button class="delete-attribute-row" data-row-number=' + count + '><span><?= /** @noEscape */ __('Delete') ?></span></button> </td> </tr>';
+
+                tableContent.append(row);
+            }
+
+            //select default attributes
+            function selectAttribute() {
+                $(document).on('change', 'select.default-attributes', function () {
+                    var sel = $(this);
+                    var attributeCode = sel.val();
+
+                    if (attributeCode.trim().length) {
+                        getAttributeOptions(attributeCode, sel);
+                        return;
+                    }
+
+                    showSelectedAttributeOptions(sel);
+                });
+            }
+
+            // get attribute options by ajax
+            function getAttributeOptions(code, element) {
+                $.ajax({
+                    type: 'POST',
+                    url: window.location.href,
+                    data: {attributeCode: code},
+                    success: function (response) {
+                        showSelectedAttributeOptions(element, response);
+                    },
+                    error: function () {
+                        location.reload();
+                    }
+                });
+            }
+
+            // show selected attribute options
+            function showSelectedAttributeOptions(select, options) {
+                var optionEl = select.parent().parent().find('select.default-options');
+                optionEl.empty();
+
+                if (typeof options !== 'undefined' && optionEl.length) {
+                    var textOptions = '';
+                    for (var key in options) {
+                        if (options.hasOwnProperty(key)) {
+                            textOptions += '<option value="' + key + '">' + options[key] + '</option>';
+                        }
+                    }
+                    optionEl.append(textOptions);
+                }
+            }
+
+            // delete default attribute row
+            function deleteRow() {
+                $(document).on('click', 'button.delete-attribute-row', function () {
+                    var del = $(this),
+                        rows = tableContent.find('tr.attribute-options-row'), rowNum = del.attr('data-row-number');
+
+                    rows.each(function () {
+                        if ($(this).hasClass(defaultRowClass + rowNum)) {
+                            $(this).remove();
+                        }
+                    })
+                });
+            }
+
+            deleteRow();
+        });
+    </script>
+    <style>
+        #mpln-table-default-attributes select.select-default {
+            width: 100%;
+        }
+    </style>
+<?php endif; ?>

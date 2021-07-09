@@ -1,0 +1,73 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @type \Mageplaza\LayeredNavigation\Model\Layer\Filter\Attribute $filter */
+$filter = $this->getFilter();
+
+/** @type \Mageplaza\LayeredNavigationPro\Model\Layer\Filter $filterModel */
+$filterModel = $this->getFilterModel();
+
+$attributeCode = $filter->getRequestVar();
+?>
+<ol class="items">
+    <li class="item">
+        <div id="ln_slider_container_<?= /** @noEscape */ $attributeCode ?>">
+            <?php if ($filterModel->getFilterType(
+                $filter,
+                \Mageplaza\LayeredNavigationPro\Helper\Data::FILTER_TYPE_SLIDER
+            )) : ?>
+                <input type="text" id="ln_slider_<?= /** @noEscape */ $attributeCode ?>" value=""
+                       name="ln_slider_<?= /** @noEscape */ $attributeCode ?>"/>
+            <?php elseif ($filterModel->getFilterType(
+                $filter,
+                \Mageplaza\LayeredNavigationPro\Helper\Data::FILTER_TYPE_SLIDERRANGE
+            )) : ?>
+                <input type="text" id="ln_slider_<?= /** @noEscape */ $attributeCode ?>" value=""
+                       name="ln_slider_<?= /** @noEscape */ $attributeCode ?>"/>
+                <div id="ln_slider_range_<?= /** @noEscape */ $attributeCode ?>" class="ln_slider_range">
+                    <input id="ln_slider_from_<?= /** @noEscape */ $attributeCode ?>"
+                           class="ln_slider_input_from ln_slider_range_input ln_slider_range_input_from" type="text"
+                           value="0">
+                    <input id="ln_slider_to_<?= /** @noEscape */ $attributeCode ?>"
+                           class="ln_slider_input_to ln_slider_range_input ln_slider_range_input_to" type="text"
+                           value="0">
+                    <div style="clear: both"></div>
+                </div>
+            <?php else : ?>
+                <div id="ln_slider_range_<?= /** @noEscape */ $attributeCode ?>">
+                    <div class="ln_slider_from">
+                        <label for="ln_slider_from_<?= /** @noEscape */ $attributeCode ?>"><?= /** @noEscape */ __('From') ?></label>
+                        <input id="ln_slider_from_<?= /** @noEscape */ $attributeCode ?>"
+                               class="ln_slider_input_from ln_slider_range_input ln_slider_range_input_from" type="text"
+                               value="0">
+                    </div>
+                    <div class="ln_slider_to">
+                        <label for="ln_slider_to_<?= /** @noEscape */ $attributeCode ?>"><?= /** @noEscape */ __('To') ?></label>
+                        <input id="ln_slider_to_<?= /** @noEscape */ $attributeCode ?>"
+                               class="ln_slider_input_to ln_slider_range_input ln_slider_range_input_to" type="text"
+                               value="0">
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </li>
+</ol>

@@ -1,0 +1,69 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+
+.chart-container-all .chart-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.chart-container-all .chart-name {
+    width: 80%;
+    margin: 0 auto;
+    font-size: 30px;
+}
+.mp-select-block.chart-toggle {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.abandoned-menu-select-chart {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.mp-select-block.chart-toggle {
+    color:white;
+    text-align: center;
+    height: 60px;
+    padding: 20px;
+}
+
+.abandoned-menu-select-chart .select-block{
+    margin-bottom:5px;
+}
+
+.mp-select-block:hover {
+    cursor: pointer;
+}
+
+.chart-container-all {
+    display: none;
+}
+
+.product-chart{
+    margin:0 auto;
+    width:80%;
+}
+
+.product-chart .chart-name{
+    font-size:30px;
+}

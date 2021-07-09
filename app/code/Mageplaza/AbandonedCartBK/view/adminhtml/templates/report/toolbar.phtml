@@ -1,0 +1,77 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<div class="report_toolbar">
+    <section class="mp_ace_report_dimension">
+        <div class="mp_ace_report_day active">
+            <label for="mp_ace_report_day">
+                <span><?= /* @noEscape */ __('Day') ?></span>
+            </label>
+            <input type="radio" name="mp_ace_report_dimension" id="mp_ace_report_day" checked="checked" value="day"/>
+        </div>
+        <div class="mp_ace_report_month">
+            <label for="mp_ace_report_month">
+                <span><?=/* @noEscape */ __('Month')?></span>
+            </label>
+            <input type="radio" name="mp_ace_report_dimension" id="mp_ace_report_month" value="month"/>
+        </div>
+    </section>
+    <section class="mp_ace_report_date">
+        <div class="field overview required" data-role="filter-form" id="mp-ace-report-date_range">
+            <span class="field-row">
+                <label for="mp_ace_report_date_from">
+                    <span><?=/* @noEscape */ __('From') ?>:</span>
+                </label>
+                <input class="input-text required-entry"
+                       type="text"
+                       id="mp_ace_report_date_from"
+                       name="mp_ace_report_from"
+                       value="<?=  /* @noEscape */ $block->getFromDefault() ?>"
+                       readonly/>
+                <span id="date_from_advice"></span>
+            </span>
+            <span class="field-row">
+                <label for="mp_ace_report_date_to">
+                    <span><?= /* @noEscape */ __('To') ?>:</span>
+                </label>
+                <input class="input-text required-entry"
+                       type="text"
+                       id="mp_ace_report_date_to"
+                       name="mp_ace_report_to"
+                       value="<?=/* @noEscape */ $block->getToDefault() ?>"
+                       readonly/>
+            </span>
+        </div>
+    </section>
+    <section>
+        <button class="btn primary" id="mp-ace-report-apply"><?= /* @noEscape */ __('Apply') ?></button>
+    </section>
+</div>
+<div class="mp-abandonedcart-report-content"
+     data-mage-init='{"Mageplaza_AbandonedCart/js/ajax":
+      {"ajaxUrl": "<?= /* @noEscape */$block->getAjaxUrl() ?>"},"https://www.gstatic.com/charts/loader.js":{}}'></div>
+
+<style type="text/css">
+    .field-row {
+        display: inline-block;
+    }
+</style>

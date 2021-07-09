@@ -1,0 +1,58 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationPro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @type \Mageplaza\LayeredNavigation\Model\Layer\Filter\Attribute $filter */
+$filter = $block->getFilter();
+
+/** @type \Mageplaza\LayeredNavigationPro\Model\Layer\Filter $filterModel */
+$filterModel = $block->getFilterModel();
+
+$searchEnable = $block->isSearchEnable();
+$attCode = $filter->getRequestVar();
+?>
+<?php if ($searchEnable) : ?>
+    <input type="text" class="layer-search-box" code="<?= /** @noEscape */ $attCode ?>" placeholder="<?= /** @noEscape */ __('Search') ?>"/>
+<?php endif; ?>
+<ol class="items ln-items-<?= /** @noEscape */ $attCode ?> <?= /** @noEscape */ $searchEnable ? 'layer-search-list layer-search-list-' . $attCode : '' ?>">
+    <?php foreach ($block->getItems() as $item) : ?>
+        <li class="item" <?= /** @noEscape */ $searchEnable ? "data-search-term=\"" . strtolower($item->getLabel()) . "\"" : ''; ?>>
+            <?php if ($item->getCount() > 0) : ?>
+                <input type="<?= /** @noEscape */ $filterModel->isMultiple($filter) ? 'checkbox' : 'radio' ?>" <?= /** @noEscape */ $filterModel->isSelected($item) ? 'checked="checked"' : '' ?>
+                       class="layer-input-filter" name="filter_<?= /** @noEscape */ $attCode ?>">
+                <a href="<?= /** @noEscape */ $block->escapeUrl($filterModel->getItemUrl($item)) ?>">
+                    <?= /** @noEscape */ $item->getLabel() ?>
+                    <?php if ($filterModel->isShowCounter($filter)) : ?>
+                        <span class="count"><?= /** @noEscape */ $item->getCount() ?><span
+                                    class="filter-count-label"><?= /** @noEscape */ ($item->getCount() == 1) ? 'item' : 'items'; ?></span></span>
+                    <?php endif; ?>
+                </a>
+            <?php elseif ($filterModel->isShowZero($filter)) : ?>
+                <input type="<?= /** @noEscape */ $filterModel->isMultiple($filter) ? 'checkbox' : 'radio' ?>" disabled="disabled"
+                       class="layer-input-filter" name="filter_<?= /** @noEscape */ $attCode ?>"/>
+                <?= /** @noEscape */ $item->getLabel() ?>
+                <?php if ($filterModel->isShowCounter($filter)) : ?>
+                    <span class="count"><?= /** @noEscape */ $item->getCount() ?><span
+                                class="filter-count-label"><?= /** @noEscape */ ($item->getCount() == 1) ? 'item' : 'items'; ?></span></span>
+                <?php endif; ?>
+            <?php endif; ?>
+        </li>
+    <?php endforeach ?>
+</ol>

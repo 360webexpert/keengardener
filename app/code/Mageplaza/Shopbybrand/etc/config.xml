@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <shopbybrand>
+            <general>
+                <enabled>1</enabled>
+                <route>brand</route>
+                <link_title>Brands</link_title>
+                <show_position>1,2</show_position>
+                <show_dropdown>0</show_dropdown>
+                <show_logo>1</show_logo>
+            </general>
+            <sidebar>
+                <feature>
+                    <enable>1</enable>
+                    <title>Featured Brands</title>
+                    <show_title>1</show_title>
+                </feature>
+                <brand_thumbnail>
+                    <enable>1</enable>
+                    <title>Brand List</title>
+                    <limit_brands>7</limit_brands>
+                </brand_thumbnail>
+                <category_brand>
+                    <enable>1</enable>
+                    <title>Brand Category</title>
+                    <limit_categories>7</limit_categories>
+                    <show_brand_qty>1</show_brand_qty>
+                </category_brand>
+            </sidebar>
+            <brandpage>
+                <name>Brands</name>
+                <brandlist_style>0</brandlist_style>
+                <display>1</display>
+                <show_brandname>1</show_brandname>
+                <color>#0ed08e</color>
+                <show_description>0</show_description>
+                <show_product_qty>0</show_product_qty>
+                <show_quick_view>0</show_quick_view>
+                <brand_filter>
+                    <enabled_cat_filter>0</enabled_cat_filter>
+                    <enabled_alpha_filter>1</enabled_alpha_filter>
+                    <alpha_bet>A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z</alpha_bet>
+                    <encode_key>UTF-8</encode_key>
+                </brand_filter>
+                <search>
+                    <enable>1</enable>
+                    <min_search_chars>1</min_search_chars>
+                    <max_query_results>10</max_query_results>
+                    <visible_images>1</visible_images>
+                </search>
+                <feature>
+                    <enable>1</enable>
+                    <title>Featured Brands</title>
+                    <style>0</style>
+                    <display>0</display>
+                </feature>
+                <related_products>
+                    <enabled>1</enabled>
+                    <title>Products from the same brand</title>
+                    <limit_product>5</limit_product>
+                </related_products>
+            </brandpage>
+            <brandview>
+                <show_image>0</show_image>
+                <show_description>0</show_description>
+                <show_block>0</show_block>
+            </brandview>
+            <brand_seo>
+                <seo_pages>0</seo_pages>
+            </brand_seo>
+        </shopbybrand>
+    </default>
+</config>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AdminSelectShippingTypeForProduct" extends="AdminFindAndOpenProduct">
+        <arguments>
+            <argument name="attributeShippingTypeValue"/>
+        </arguments>
+        <selectOption selector="{{AdminProductSection.AttributeShippingType}}"
+                      userInput="{{attributeShippingTypeValue}}" stepKey="chooseAttributeValue"/>
+        <click selector="{{AdminProductSection.Save}}" stepKey="SaveProductWithShippingType"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad6"/>
+    </actionGroup>
+
+    <actionGroup name="AdminReturnDefaultShippingTypeForProduct" extends="AdminFindAndOpenProduct">
+        <click selector="{{AdminProductSection.NoAttributeShippingType}}" stepKey="chooseNoShippingType"/>
+        <click selector="{{AdminProductSection.Save}}" stepKey="SaveProductWitDefaultType"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad6"/>
+    </actionGroup>
+
+</actionGroups>

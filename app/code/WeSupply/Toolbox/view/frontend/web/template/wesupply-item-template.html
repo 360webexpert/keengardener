@@ -1,0 +1,73 @@
+<!-- Initialize collapsible binding -->
+<tbody collapsible="as: '$collapsible_' + method.method_code">
+<tr class="row">
+    <td class="col col-method">
+        <input type="radio"
+               class="radio"
+               click="element.selectShippingMethod"
+               ifnot="method.error_message"
+               ko-checked="element.isSelected"
+               ko-value="method.carrier_code + '_' + method.method_code"
+               attr="'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code,
+                        'checked': element.rates().length == 1 || element.isSelected" />
+        <!-- ko if:  method.extension_attributes -->
+            <input type="hidden" attr="'id': 'selected_delivery_timestamp_' + method.method_code + '_' + method.carrier_code" ko-value="method.extension_attributes.delivery_timestamp"/>
+        <!-- /ko -->
+    </td>
+    <td class="col col-price">
+        <each args="element.getRegion('price')" render="" />
+    </td>
+    <td class="col col-method"
+        attr="'id': 'label_method_' + method.method_code + '_' + method.carrier_code"
+        text="method.method_title" />
+    <td class="col col-carrier"
+        attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code"
+        text="method.carrier_title" />
+
+    <!-- ko if:  method.extension_attributes -->
+        <td class="col col-eta eta-desktop">
+            <!-- ko if:  method.extension_attributes.delivery_time -->
+                <span class="eta-date" data-bind="text: method.extension_attributes.delivery_time"></span>
+            <!-- /ko -->
+        </td>
+        <td class="col-eta eta-desktop">
+            <!-- ko if:  method.extension_attributes.delivery_message -->
+                <span class="eta-message" data-bind="text: method.extension_attributes.delivery_message"></span>
+            <!-- /ko -->
+        </td>
+    <!-- /ko -->
+</tr>
+<!-- ko if:  method.extension_attributes -->
+    <!-- ko if:  method.extension_attributes.delivery_time -->
+        <tr class="row row-eta">
+            <td class="col col-method">&nbsp;</td>
+            <td class="col col-eta eta-date" colspan="3">
+                <span data-bind="text: method.extension_attributes.delivery_time"></span>
+            </td>
+        </tr>
+    <!-- /ko -->
+    <!-- ko if:  method.extension_attributes.delivery_message -->
+        <tr class="row row-eta">
+            <td class="col col-method">&nbsp;</td>
+            <td class="col col-eta eta-message" colspan="3">
+                <span data-bind="text: method.extension_attributes.delivery_message"></span>
+            </td>
+        </tr>
+    <!-- /ko -->
+<!-- /ko -->
+
+<!-- Row for shipping method description -->
+<tr class="row" visible="$context['$collapsible_' + method.method_code].opened">
+    <td class="col" colspan="6" i18n="'Some description.'"/>
+</tr>
+<tr class="row row-error" if="method.error_message">
+    <td class="col col-error" colspan="6">
+        <div role="alert" class="message error">
+            <div text="method.error_message"></div>
+        </div>
+        <span class="no-display">
+            <input type="radio" attr="'value' : method.method_code, 'id': 's_method_' + method.method_code" />
+        </span>
+    </td>
+</tr>
+</tbody>

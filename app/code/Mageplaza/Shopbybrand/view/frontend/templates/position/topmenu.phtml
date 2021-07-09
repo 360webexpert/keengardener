@@ -1,0 +1,68 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$helper = $this->helper(\Mageplaza\Shopbybrand\Helper\Data::class);
+$brands = $block->getCollection();
+$count = 0;
+?>
+<?php if ($helper->canShowBrandLink(\Mageplaza\Shopbybrand\Model\Config\Source\BrandPosition::CATEGORY)) : ?>
+    <li class="level0 nav-8 last level-top parent ui-menu-item mpbrand-top-link" role="presentation">
+        <a href="<?= /** @noEscape */ $helper->getBrandUrl() ?>" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+            <span><?= /** @noEscape */ $helper->getBrandTitle() ?></span>
+        </a>
+        <?php if ($helper->getModuleConfig('general/show_dropdown')) : ?>
+            <?php if ($brands->getData()) : ?>
+                <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu"
+                    aria-expanded="false" style="display: none; top: 47px; left: -0.15625px;padding: 10px 0"
+                    aria-hidden="true">
+                    <div class="ui-menu-item" role="presentation">
+                        <?php foreach ($brands as $brand) : ?>
+                            <li class="level1 nav-8-<?= /** @noEscape */ $count ?> ui-menu-item" role="presentation">
+                                <img class="img-responsive brand-topmenu-image"
+                                     src="<?= /** @noEscape */ $brand->getImage() ? $block->resizeImage($brand, 80)
+                                         : $block->helper()->getBrandImageUrl($brand) ?>"/>
+                                <a href="<?= /** @noEscape */ $helper->getBrandUrl($brand) ?>"
+                                   id="ui-brand-id-<?= /** @noEscape */ $brand->getId() ?>" class="ui-corner-all" tabindex="-1"
+                                   role="menuitem">
+                                    <span style="padding-left: 10px"><?= /** @noEscape */ $brand->getValue() ?></span>
+                                </a>
+                            </li>
+                            <?php
+                            $count++;
+                            if ($count == 10) {
+                                break;
+                            }
+                        endforeach; ?>
+                    </div>
+                    <li class="level1 nav-8-<?= /** @noEscape */ $count + 1 ?> ui-menu-item"
+                        style="border-top:solid 1px #dfdfdf; margin: 0 5px; " role="presentation">
+                        <a href="<?= /** @noEscape */ $helper->getBrandUrl() ?>" id="ui-all-brand" class="ui-corner-all"
+                           tabindex="-1" role="menuitem">
+                            <span style="padding-left: 10px;"><?= /** @noEscape */ __('View All') ?></span>
+                        </a>
+                    </li>
+                </ul>
+            <?php endif; ?>
+        <?php endif; ?>
+    </li>
+<?php endif; ?>
+
+

@@ -1,0 +1,56 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoRule
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$categoryIds = implode(',', $block->getCategoryIds());
+?>
+<fieldset class="fieldset admin__fieldset">
+    <legend class="admin__legend legend">
+        <span><?php echo __('Conditions (don\'t add conditions if rule is applied to all category)') ?></span></legend>
+
+    <div class="admin__field field">
+        <label class="label admin__field-label"><span></span></label>
+        <div class="admin__field-control control">
+            <input type="hidden" name="rule[category_conditions]" id="seo_rule_form_category"
+                   value="<?php echo $categoryIds; ?>"/>
+            <div class="admin__field">
+                <?php echo $block->getCategoryTree(); ?>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        seo_rule_form = {
+            updateElement: {
+                value: "",
+                linkedValue: ""
+            }
+        };
+        Object.defineProperty(seo_rule_form.updateElement, "value", {
+            get: function () {
+                return seo_rule_form.updateElement.linkedValue
+            },
+            set: function (value) {
+                seo_rule_form.updateElement.linkedValue = value;
+                jQuery("#seo_rule_form_category").val(value)
+            }
+        });
+    </script>
+</fieldset>

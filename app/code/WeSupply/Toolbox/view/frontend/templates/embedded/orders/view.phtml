@@ -1,0 +1,16 @@
+<?php
+    /** @var $this \WeSupply\Toolbox\Block\Orders */
+?>
+<div class="loading-container">
+    <p><?php echo __('Loading order(s). Please wait.') ?></p>
+    <div class="loading-image"></div>
+</div>
+<div id="ordersview-container" class="embedded-iframe-container"></div>
+<script>
+    require(['jquery', 'loadIframe' ],
+        function ($, loadIframe) {
+            $(function () {
+                loadIframe.load('<?php echo $this->getIframeUrl(); ?>');
+            });
+        });
+</script>

@@ -1,0 +1,186 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_AbandonedCart
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+// @codingStandardsIgnoreFile
+
+$_htmlId = $block->getHtmlId() ? $block->getHtmlId() : '_' . uniqid('',false);
+$storeId = $block->getRequest()->getParam('store');
+?>
+
+<div class="design_theme_ua_regexp" id="grid<?= $_htmlId ?>">
+    <div class="admin__control-table-wrapper">
+        <table class="admin__control-table" id="<?= $block->getElement()->getId() ?>">
+            <thead>
+            <tr>
+                <?php foreach ($block->getColumns() as $columnName => $column): ?>
+                    <th><?= $column['label'] ?></th>
+                <?php endforeach; ?>
+                <th class="col-actions"><?= __('Action') ?></th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <td colspan="<?= count($block->getColumns()) + 1 ?>" class="col-actions-add">
+                    <button id="addToEndBtn<?= $_htmlId ?>" class="action-add" title="<?= __('Add') ?>" type="button">
+                        <span><?= $block->getAddButtonLabel() ?></span>
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+            <tbody id="addRow<?= $_htmlId ?>"></tbody>
+        </table>
+    </div>
+    <?php
+    echo '<input type="hidden" name="' . $this->getElement()->getName() . '[__empty]" value=""/>';
+    ?>
+
+
+    <script>
+        require([
+            'mage/template',
+            'jquery',
+            'Magento_Ui/js/modal/alert',
+            'mage/validation',
+            'prototype'
+        ], function (mageTemplate, $j, alert) {
+            // create row creator
+            window.arrayRow<?= $_htmlId ?> = {
+
+                // define row prototypeJS template
+                template: mageTemplate(
+                    '<tr id="<%- _id %>">'
+                    <?php foreach ($block->getColumns() as $columnName => $column): ?>
+                    + '<td>'
+                    + '<?= $block->renderCellTemplate($columnName) ?>'
+                    + '<\/td>'
+                    <?php endforeach; ?>
+                    + '<td class="col-actions">'
+                    + '<button onclick="arrayRow<?= $_htmlId ?>.send(\'<%- _id %>\')" class="action-delete action-send-test" type="button" title="<?= __('Send Test Email') ?>"><span><?= __('Test Now') ?></span></button>'
+                    + '<button onclick="arrayRow<?= $_htmlId ?>.del(\'<%- _id %>\')" class="action-delete" type="button"><span><?= __('Delete') ?><\/span><\/button><\/td>'
+                    + '<\/tr>'
+                ),
+
+                add: function (rowData, insertAfterId) {
+                    // generate default template data
+                    var templateValues;
+
+                    // Prepare template values
+                    if (rowData) {
+                        templateValues = rowData;
+                    } else {
+                        var d          = new Date();
+                        templateValues = {
+                        <?php foreach ($block->getColumns() as $columnName => $column): ?>
+                        <?= $columnName ?>:
+                        '',
+                            'option_extra_attrs'
+                    :
+                        {
+                        }
+                    ,
+                        <?php endforeach; ?>
+                        _id: '_' + d.getTime() + '_' + d.getMilliseconds()
+                    }
+                        ;
+                    }
+
+                    // Insert new row after specified row or at the bottom
+                    if (insertAfterId) {
+                        Element.insert($(insertAfterId), {after: this.template(templateValues)});
+                    } else {
+                        Element.insert($('addRow<?= $_htmlId ?>'), {bottom: this.template(templateValues)});
+                    }
+
+                    // Fill controls with data
+                    if (rowData) {
+                        var rowInputElementNames = Object.keys(rowData.column_values);
+                        for (var i = 0; i < rowInputElementNames.length; i++){
+                            if ($(rowInputElementNames[i])) {
+                                $(rowInputElementNames[i]).setValue(rowData.column_values[rowInputElementNames[i]]);
+                            }
+                        }
+                    }
+
+                    // Add event for {addAfterBtn} button
+                    <?php if ($block->isAddAfter()): ?>
+                    Event.observe('addAfterBtn' + templateValues._id, 'click', this.add.bind(this, false, templateValues._id));
+                    <?php endif; ?>
+                },
+
+                del: function (rowId) {
+                    $(rowId).remove();
+                },
+
+                send: function (rowId) {
+                    var emailEl = $j('#abandonedcart_general_test_email');
+                    emailEl.addClass('required-entry');
+                    if (!emailEl.valid()) {
+                        emailEl.removeClass('required-entry');
+                        return;
+                    }
+                    emailEl.removeClass('required-entry');
+
+                    $j.ajax({
+                        url: '<?php echo $block->getUrl('abandonedcart/index/test', ['_current' => true]) ?>',
+                        data: {
+                            'sender': $j('#' + $(rowId).childNodes[1].children[0].id).val(),
+                            'template': $j('#' + $(rowId).childNodes[2].children[0].id).val(),
+                            'coupon': $j('#' + $(rowId).childNodes[3].children[0].id).val(),
+                            'test_email': emailEl.val()
+                        },
+                        type: 'POST',
+                        showLoader: true,
+                        success: function (result) {
+                            var message = result.content ? result.content : result;
+                            if (!result.status) {
+                                message += "<br/><br/>" + "<?php echo __('<strong>Note:</strong> Only abandoned cart from <strong>Guest Users</strong> can be sent test email.') ?>";
+                            }
+
+                            alert({
+                                title: result.status ? 'Email Sent Successfully' : 'An Error Occurred',
+                                content: message
+                            });
+                        }
+                    });
+                },
+                validateEmail: function (email) {
+                    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return re.test(email);
+                }
+            };
+
+            // bind add action to "Add" button in last row
+            Event.observe('addToEndBtn<?= $_htmlId ?>', 'click', arrayRow<?= $_htmlId ?>.add.bind(arrayRow<?= $_htmlId ?>, false, false));
+
+            // add existing rows
+            <?php
+            foreach ($block->getArrayRows() as $_rowId => $_row) {
+                echo "arrayRow{$_htmlId}.add(" . $_row->toJson() . ");\n";
+            }
+            ?>
+
+            // Toggle the grid availability, if element is disabled (depending on scope)
+            <?php if ($block->getElement()->getDisabled()):?>
+            toggleValueElements({checked: true}, $('grid<?= $_htmlId ?>').parentNode);
+            <?php endif;?>
+        });
+    </script>
+</div>

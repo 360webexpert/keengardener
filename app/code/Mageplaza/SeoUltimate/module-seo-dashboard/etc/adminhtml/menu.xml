@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_SeoDashboard
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Mageplaza_SeoDashboard::checklist" title="Checklist" module="Mageplaza_SeoDashboard" sortOrder="60" action="seo/checklist" resource="Mageplaza_SeoDashboard::checklist" parent="Mageplaza_Seo::seo"/>
+        <add id="Mageplaza_SeoDashboard::reports" title="Mageplaza SEO Reports" module="Mageplaza_SeoDashboard" sortOrder="100" parent="Magento_Reports::report" resource="Mageplaza_SeoDashboard::reports" dependsOnConfig="seo/dashboard/enable"/>
+        <add id="Mageplaza_SeoDashboard::duplicate_report" title="Duplicate issues" module="Mageplaza_SeoDashboard" sortOrder="11" action="seo/duplicate" resource="Mageplaza_SeoDashboard::duplicate_report" parent="Mageplaza_SeoDashboard::reports"/>
+        <add id="Mageplaza_SeoDashboard::missing_report" title="Missing meta data issues" module="Mageplaza_SeoDashboard" sortOrder="12" action="seo/missing" resource="Mageplaza_SeoDashboard::missing_report" parent="Mageplaza_SeoDashboard::reports"/>
+        <add id='Mageplaza_SeoDashboard::low_count_report' title="Low word count " module="Mageplaza_SeoDashboard" sortOrder="13" action="seo/low" resource="Mageplaza_SeoDashboard::low_count_report" parent="Mageplaza_SeoDashboard::reports"/>
+        <add id="Mageplaza_SeoDashboard::noroute_report" title="404 not found issues" module="Mageplaza_SeoDashboard" sortOrder="14" action="seo/noroute" resource="Mageplaza_SeoDashboard::noroute_report" parent="Mageplaza_SeoDashboard::reports"/>
+    </menu>
+</config>

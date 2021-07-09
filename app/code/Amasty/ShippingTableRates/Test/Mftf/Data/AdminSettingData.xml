@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="enabledForCheckoutSTR" type="adminSettingSTR">
+        <data key="yes">1</data>
+        <data key="no">0</data>
+        <data key="default">0</data>
+    </entity>
+
+    <entity name="allowFreeShippingPromoSTR" type="adminSettingSTR">
+        <data key="yes">1</data>
+        <data key="no">0</data>
+        <data key="default">0</data>
+    </entity>
+
+    <entity name="showMethodIfNotApplicableSTR" type="adminSettingSTR">
+        <data key="yes">1</data>
+        <data key="no">0</data>
+        <data key="default">0</data>
+    </entity>
+
+    <entity name="usePriceAfterDiscount" type="adminSettingSTR">
+        <data key="yes">1</data>
+        <data key="no">0</data>
+        <data key="default">0</data>
+    </entity>
+
+    <entity name="usePriceIncludingTax" type="adminSettingSTR">
+        <data key="yes">1</data>
+        <data key="no">0</data>
+        <data key="default">0</data>
+    </entity>
+
+    <entity name="useOnlyOneShippingType" type="adminSettingSTR">
+        <data key="yes">1</data>
+        <data key="no">0</data>
+        <data key="default">0</data>
+    </entity>
+
+    <entity name="shippingTypeForConfigurable" type="adminSettingSTR">
+        <data key="fromParentProduct">1</data>
+        <data key="fromAssociatedProducts">0</data>
+        <data key="default">0</data>
+    </entity>
+
+    <entity name="ignoreVirtualProducts" type="adminSettingSTR">
+        <data key="yes">1</data>
+        <data key="no">0</data>
+        <data key="default">1</data>
+    </entity>
+
+    <entity name="comparePostCodes" type="adminSettingSTR">
+        <data key="numbers">1</data>
+        <data key="strings">0</data>
+        <data key="default">1</data>
+    </entity>
+
+    <entity name="shipToSpecificCountries" type="adminSettingSTR">
+        <data key="specificCountries">Germany,Spain</data>
+    </entity>
+
+</entities>

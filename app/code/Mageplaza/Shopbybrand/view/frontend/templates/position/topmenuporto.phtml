@@ -1,0 +1,59 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$helper = $this->helper(\Mageplaza\Shopbybrand\Helper\Data::class);
+$brands = $block->getCollection();
+$count = 0;
+
+if ($helper->canShowBrandLink(\Mageplaza\Shopbybrand\Model\Config\Source\BrandPosition::CATEGORY)) : ?>
+    <?php if ($brands->getData()) : ?>
+        <li class="ui-menu-item level0 fullwidth parent" role="presentation">
+            <a href="<?= /** @noEscape */ $helper->getBrandUrl() ?>" class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+                <span><?= /** @noEscape */ $helper->getBrandTitle() ?></span>
+            </a>
+            <div class="level0 submenu">
+                <div class="container">
+                    <div class="row">
+                        <ul class="subchildmenu col-sm-12 mega-columns columns4">
+                            <?php foreach ($brands as $brand) : ?>
+                                <li class="ui-menu-item level1">
+                                    <a href="<?= /** @noEscape */ $helper->getBrandUrl($brand) ?>"
+                                       id="ui-brand-id-<?= /** @noEscape */ $brand->getId() ?>"
+                                       class="ui-corner-all mageplaza-brands-topmenu" tabindex="-1" role="menuitem">
+                                        <span style="padding-left: 10px"><?= /** @noEscape */ $brand->getValue() ?></span>
+                                    </a>
+                                </li>
+                                <?php $count++;
+                                if ($count == 10) {
+                                    break;
+                                } ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+    <?php endif; ?>
+<?php endif; ?>
+
+
+
+

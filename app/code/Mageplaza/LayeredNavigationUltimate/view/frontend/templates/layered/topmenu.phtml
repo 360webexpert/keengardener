@@ -1,0 +1,38 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper */
+$helper = $this->helper('Mageplaza\LayeredNavigationUltimate\Helper\Data');
+$pages = $helper->getProductsPageCollection();
+foreach ($pages as $page) :
+    if ($helper->canShowProductPageLink(
+        $page,
+        \Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition::CATEGORY
+    )) : ?>
+        <li class="level0 nav-6 last level-top ui-menu-item" role="presentation">
+            <a href="<?= /** @noEscape */ $helper->getProductPageUrl($page) ?>"
+               class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem"
+               title="<?= /** @noEscape */ $page->getPageTitle() ?>">
+                <span><?= /** @noEscape */ $page->getPageTitle() ?></span>
+            </a>
+        </li>
+    <?php endif; ?>
+<?php endforeach; ?>

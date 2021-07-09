@@ -1,0 +1,353 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="shopbybrand" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Shop by brand</label>
+            <tab>mageplaza</tab>
+            <resource>Mageplaza_Shopbybrand::configuration</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to enable Shop By Brand.<br>The extension is fully compatible with <a href="https://goo.gl/Z1QtsG" target="_blank">Layered Navigation</a>]]></comment>
+                </field>
+                <field id="attribute" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand Attribute</label>
+                    <source_model>Mageplaza\Shopbybrand\Model\Config\Source\ProductAttribute</source_model>
+                    <validate>required-entry</validate>
+                    <comment><![CDATA[Select an <b>attribute</b> to show brands.<br>Otherwise, create yourself a new <a href="https://www.mageplaza.com/kb/how-to-create-product-attribute-magento-2.html" target="_blank">attribute</a>.]]></comment>
+                </field>
+                <field id="route" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand route</label>
+                    <comment><![CDATA[Custom brand page URL. Default: <strong>brand</strong>]]></comment>
+                </field>
+                <field id="link_title" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand Link Title</label>
+                    <comment><![CDATA[Enter the title of brand link. Default: 'Brands']]></comment>
+                </field>
+                <field id="show_position" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Link In</label>
+                    <source_model>Mageplaza\Shopbybrand\Model\Config\Source\BrandPosition</source_model>
+                </field>
+                <field id="show_logo" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show brand logos in product page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to display brand logos in the product page, <a href="https://goo.gl/1eS5r8">learn more</a>]]></comment>
+                </field>
+                <field id="show_dropdown" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show brands in drop-down category menu</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to allow brand names to show up in the drop-down category menu]]></comment>
+                </field>
+            </group>
+            <group id="sidebar" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sidebar</label>
+                <group id="feature" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Featured Brand Settings</label>
+                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Featured Brands</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to enable displaying the featured brands block in the sidebar]]></comment>
+                    </field>
+                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <depends>
+                            <field id="shopbybrand/sidebar/feature/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Enter the title of the featured brand name block. Default: Featured Brand]]></comment>
+                    </field>
+                    <field id="show_title" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Title</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="shopbybrand/sidebar/feature/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Select <b>Yes</b> to show featured brand title]]></comment>
+                    </field>
+                </group>
+                <group id="brand_thumbnail" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand List Thumbnail</label>
+                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Brand Thumbnail</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to enable displaying the <b>Brand List Thumbnail</b> block in the sidebar]]></comment>
+                    </field>
+                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <depends>
+                            <field id="shopbybrand/sidebar/brand_thumbnail/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Enter the block's name.Default: Brand List]]></comment>
+                    </field>
+                    <field id="limit_brands" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInStore="1" showInWebsite="1">
+                        <label>Brand's quantity limit</label>
+                        <depends>
+                            <field id="shopbybrand/sidebar/brand_thumbnail/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Enter the maximum number of brand names displayed in the <b>Brand List Thumbnail</b> block.]]></comment>
+                    </field>
+                </group>
+                <group id="category_brand" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Category Brand</label>
+                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Category Brand</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to enable displaying the <b>Category Brand</b> block in the sidebar]]></comment>
+                    </field>
+                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <depends>
+                            <field id="shopbybrand/sidebar/category_brand/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Enter the name of the <b>Category Brand</b> block. Default: Brand Category.]]></comment>
+                    </field>
+                    <field id="limit_categories" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInStore="1" showInWebsite="1">
+                        <label>Category's quantity limit</label>
+                        <depends>
+                            <field id="shopbybrand/sidebar/category_brand/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Enter the maximum number of categories in the block]]></comment>
+                    </field>
+                    <field id="show_brand_qty" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Brand Category Quantity</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <depends>
+                            <field id="shopbybrand/sidebar/category_brand/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Select <b>Yes</b> to show the number of brand categories.]]></comment>
+                    </field>
+                </group>
+            </group>
+            <group id="brandpage" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>All Brands Page Settings</label>
+                <field id="name" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand list name</label>
+                    <comment><![CDATA[This name will be displayed on Brand Page title, Breadcrumbs]]></comment>
+                </field>
+                <field id="brandlist_style" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Style of Brand List Page</label>
+                    <source_model>Mageplaza\Shopbybrand\Model\Config\Source\BrandListStyle</source_model>
+                    <comment><![CDATA[Select <b>List View</b> to have brands shown as a list or <b>Alphabet Style</b> to have them appear in the alphabet order.<br>Recommended: <b>Alphabet Style</b>]]></comment>
+                </field>
+                <field id="display" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display Option</label>
+                    <source_model>Mageplaza\Shopbybrand\Model\Config\Source\BrandListDisplay</source_model>
+                    <comment><![CDATA[Select things to show with brands.<br>Default: <b>Logo and Label</b>]]></comment>
+                </field>
+                <field id="show_brandname" translate="label comment" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Name on Product Listing Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[It will show Brand name in Product listing page such as: Category, <a href="https://goo.gl/Z1QtsG" target="_blank">Layered Navigation</a>, Catalog Search results]]>
+                    </comment>
+                </field>
+                <field id="color" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Style Color</label>
+                    <validate>jscolor {hash:true,refine:false}</validate>
+                    <comment><![CDATA[The main color of Brand Page.]]></comment>
+                </field>
+                <field id="show_description" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Description</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to show description of each brand in brand list. Default: NO]]></comment>
+                </field>
+                <field id="show_product_qty" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Product Quantity</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="shopbybrand/brandpage/display" separator=",">1,2</field>
+                    </depends>
+                    <comment><![CDATA[Select <b>Yes</b> to show product quantity of each brand list. Default: NO]]></comment>
+                </field>
+                <field id="show_quick_view" translate="label comment" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Quick View Popup</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to quick view popup of each brand. Default: NO]]></comment>
+                </field>
+                <field id="custom_css" translate="label comment" sortOrder="60" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom CSS</label>
+                    <comment><![CDATA[Example: .step-title{background-color: #1979c3;}]]></comment>
+                </field>
+                <group id="brand_filter" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand Filter Function</label>
+                    <field id="enabled_cat_filter" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Brand Categories Filter</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to enable Brand Category filter. Default: NO]]></comment>
+                    </field>
+                    <field id="enabled_alpha_filter" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Brand AlphaBet Filter</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to enable Brand Alphabet filter]]></comment>
+                    </field>
+                    <field id="alpha_bet" translate="label" sortOrder="20" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Brand Alphabet</label>
+                        <comment><![CDATA[Enter the alphabet used for Brand Filter.<br>Default Alphabet: A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z .<a href="https://www.mageplaza.com/magento-2-shop-by-brand/alphabet.html" target="_blank">Learn more</a>]]></comment>
+                        <depends>
+                            <field id="shopbybrand/brandpage/brand_filter/enabled_alpha_filter">1</field>
+                        </depends>
+                    </field>
+                    <field id="encode_key" translate="label comment" sortOrder="30" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Character Set</label>
+                        <comment><![CDATA[Default: UTF-8. Encode key for specific language (leave blank for default value). E.g: UTF-8, ISO-8859-1]]></comment>
+                        <depends>
+                            <field id="shopbybrand/brandpage/brand_filter/enabled_alpha_filter">1</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="search" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand Search Settings</label>
+                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Search Block</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to show Search Block.]]></comment>
+                    </field>
+                    <field id="min_search_chars" translate="label comment" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1">
+                        <label>Min chars</label>
+                        <comment><![CDATA[Enter the minimum number of characters used to search brand names. Default: 1.]]></comment>
+                        <validate>validate-digits</validate>
+                        <depends>
+                            <field id="shopbybrand/brandpage/search/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="max_query_results" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Number of Search Result</label>
+                        <validate>validate-digits</validate>
+                        <comment><![CDATA[Enter the maximum number of searched results. Leave 0 or empty to set no limit.<br>Default: 10.]]></comment>
+                        <depends>
+                            <field id="shopbybrand/brandpage/search/enable">1</field>
+                        </depends>
+                    </field>
+                    <field id="visible_images" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Thumbnail Image</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <validate>validate-digits</validate>
+                        <comment><![CDATA[Select <b>Yes</b> to show brand thumbnails in the search result list.]]></comment>
+                        <depends>
+                            <field id="shopbybrand/brandpage/search/enable">1</field>
+                        </depends>
+                    </field>
+                </group>
+                <group id="feature" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Featured Brand Settings</label>
+                    <field id="enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Featured Brands</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to enable the feature.]]></comment>
+                    </field>
+                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <depends>
+                            <field id="shopbybrand/brandpage/feature/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Enter the title of the block. Default: Featured Brand.]]></comment>
+                    </field>
+                    <field id="style" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Display Featured Brands Style</label>
+                        <source_model>Mageplaza\Shopbybrand\Model\Config\Source\FeatureStyle</source_model>
+                        <depends>
+                            <field id="shopbybrand/brandpage/feature/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Select display style for featured brands.<br>*You must have at least <b>2</b> featured brands are required to be shown in a <b>slider</b>]]></comment>
+                    </field>
+                    <field id="display" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Display Information</label>
+                        <source_model>Mageplaza\Shopbybrand\Model\Config\Source\FeatureDisplay</source_model>
+                        <depends>
+                            <field id="shopbybrand/brandpage/feature/enable">1</field>
+                        </depends>
+                        <comment><![CDATA[Select information displayed with featured brands.]]></comment>
+                    </field>
+                    <field id="custom_position" translate="label" type="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Embedded Code</label>
+                        <depends>
+                            <field id="shopbybrand/brandpage/feature/enable">1</field>
+                        </depends>
+                        <frontend_model>Mageplaza\Shopbybrand\Block\Adminhtml\System\FeatureDisplay</frontend_model>
+                    </field>
+                </group>
+                <group id="related_products" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Brand Related Products</label>
+                    <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Show Related Products</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment><![CDATA[Select <b>Yes</b> to enable this feature.]]></comment>
+                    </field>
+                    <field id="title" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <depends>
+                            <field id="shopbybrand/brandpage/related_products/enabled">1</field>
+                        </depends>
+                        <comment><![CDATA[Name the related product block. Default: Products from the same brand.]]></comment>
+                    </field>
+                    <field id="limit_product" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Limit</label>
+                        <depends>
+                            <field id="shopbybrand/brandpage/related_products/enabled">1</field>
+                        </depends>
+                        <comment><![CDATA[Enter the maximum number of related products displayed in the block.]]></comment>
+                    </field>
+                </group>
+            </group>
+            <group id="brandview" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Brand Information</label>
+                <field id="default_image" translate="label comment" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Image</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">mageplaza/brand</upload_dir>
+                    <base_url type="media" scope_info="1">mageplaza/brand</base_url>
+                    <comment><![CDATA[Upload image for brand. If no file is chosen, the default image will be used (ipg,jpeg,gif,png)]]></comment>
+                </field>
+                <field id="default_block" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Block</label>
+                    <source_model>Mageplaza\Shopbybrand\Model\Config\Source\StaticBlock</source_model>
+                    <comment><![CDATA[Select a CMS Static Block to have it displayed in the Brand Page.]]></comment>
+                </field>
+                <field id="show_image" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Image On Brand Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to display brand image in the Brand Page.]]></comment>
+                </field>
+                <field id="show_description" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Description On Brand Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to display description of brand in the Brand Page.]]></comment>
+                </field>
+                <field id="show_block" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Brand Static Block On Brand Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <b>Yes</b> to have the CMS Static Block chosen above displayed in Brand Page.]]></comment>
+                </field>
+            </group>
+            <group id="brand_seo" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Seo</label>
+                <field id="seo_pages" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Add Noindex to Pagination Pages</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

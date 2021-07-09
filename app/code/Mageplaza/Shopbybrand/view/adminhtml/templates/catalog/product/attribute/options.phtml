@@ -1,0 +1,241 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$stores = $block->getStoresSortedBySortOrder();
+if ($block->isBrandAttribute()) : ?>
+    <script id="row-template" type="text/x-magento-template">
+        <tr>
+            <td class="col-draggable">
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
+                    <div data-role="draggable-handle" class="draggable-handle"
+                         title="<?= /** @noEscape */ $block->escapeHtml(__('Sort Option')) ?>"></div>
+                <?php endif; ?>
+                <input
+                        data-role="order"
+                        type="hidden"
+                        name="option[order][<%- data.id %>]"
+                        value="<%- data.sort_order %>"
+                    <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) : ?>
+                        disabled="disabled"
+                    <?php endif; ?>/>
+            </td>
+            <td class="col-default control-table-actions-cell">
+                <input
+                        class="input-radio"
+                        type="<%- data.intype %>"
+                        name="default[]"
+                        value="<%- data.id %>"
+                <%- data.checked %><?php if ($block->getReadOnly()) :
+                    ?>disabled="disabled"<?php
+                                   endif; ?>/>
+            </td>
+            <?php foreach ($stores as $_store) : ?>
+                <td class="col-<%- data.id %>">
+                    <input
+                            name="option[value][<%- data.id %>][<?= /** @noEscape */ (int) $_store->getId() ?>]"
+                            value="<%- data.store<?= /** @noEscape */ (int) $_store->getId() ?> %>"
+                            class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :
+                                ?> required-option required<?php
+                                             endif; ?>"
+                            type="text"
+                        <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) : ?>
+                            disabled="disabled"
+                        <?php endif; ?>/>
+                </td>
+            <?php endforeach; ?>
+            <td id="delete_button_container_<%- data.id %>" class="col-delete">
+                <input type="hidden" class="delete-flag" name="option[delete][<%- data.id %>]" value=""/>
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
+                    <button id="setting_button_<%- data.id %>"
+                            title="<?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?>"
+                            type="button"
+                            class="action- scalable setting setting-option brand_setting_<%- data.id %>"
+                            onclick="window.openBrandModal('<%- data.id %>');">
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?></span>
+                    </button>
+                    <button id="delete_button_<%- data.id %>"
+                            title="<?= /** @noEscape */ $block->escapeHtml(__('Delete')) ?>"
+                            type="button"
+                            class="action- scalable delete delete-option">
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Delete')) ?></span>
+                    </button>
+                    <label name="option[value]-id-[<%- data.id %>][<?= /** @noEscape */ (int) $_store->getId() ?>]"
+                           class="input-label<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) : ?>
+                                required-opti<?php endif; ?>"
+                           type="label"> ID : <%- data.id %> | <%- data.is_feature %> </label>
+                <?php endif; ?>
+            </td>
+        </tr>
+    </script>
+    <script id="swatch-text-row-template" type="text/x-magento-template">
+        <tr>
+            <td class="col-draggable">
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
+                    <div data-role="draggable-handle" class="draggable-handle"
+                         title="<?= /** @noEscape */ $block->escapeHtml(__('Sort Option')); ?>"></div>
+                <?php endif; ?>
+                <input
+                        data-role="order"
+                        type="hidden"
+                        name="optiontext[order][<%- data.id %>]"
+                        value="<%- data.sort_order %>"
+                    <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) : ?>
+                        disabled="disabled"
+                    <?php endif; ?>/>
+            </td>
+            <td class="col-default">
+                <input
+                        class="input-radio"
+                        type="<%- data.intype %>"
+                        name="defaulttext[]"
+                        value="<%- data.id %>"
+                <%- data.checked %><?php if ($block->getReadOnly()) :
+                    ?>disabled="disabled"<?php
+                                   endif; ?>/>
+            </td>
+            <?php foreach ($stores as $_store) : ?>
+                <?php if ($_store->getId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID) : ?>
+                    <td class="col-swatch col-<%- data.id %>">
+                        <input
+                                class="input-text swatch-text-field-<?= /** @noEscape */ (int) $_store->getId() ?>"
+                                name="swatchtext[value][<%- data.id %>][<?= /** @noEscape */ (int) $_store->getId() ?>]"
+                                type="text" value="<%- data.swatch<?= /** @noEscape */ (int) $_store->getId() ?> %>"/>
+                    </td>
+                <?php endif; ?>
+                <td class="swatch-col-<%- data.id %>">
+                    <input
+                            name="optiontext[value][<%- data.id %>][<?= /** @noEscape */ (int) $_store->getId() ?>]"
+                            value="<%- data.store<?= /** @noEscape */ (int) $_store->getId() ?> %>"
+                            class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) : ?>
+                            required-option r<?php endif; ?>"
+                            type="text"
+                        <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) : ?>
+                            disabled="disabled"
+                        <?php endif; ?>/>
+                </td>
+            <?php endforeach; ?>
+            <td id="delete_button_swatch_container_<%- data.id %>" class="col-delete">
+                <input type="hidden" class="delete-flag" name="optiontext[delete][<%- data.id %>]" value=""/>
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
+                    <button title="<?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?>" type="button"
+                            class="action- scalable delete setting-option brand_setting_<%- data.id %>"
+                            onclick="window.openBrandModal('<%- data.id %>');">
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?></span>
+                    </button>
+                    <button title="<?= /** @noEscape */ $block->escapeHtml(__('Delete')) ?>" type="button"
+                            class="action- scalable delete delete-option">
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Delete')) ?></span>
+                    </button>
+                    <label name="option[value]-id-[<%- data.id %>][<?= /** @noEscape */ (int) $_store->getId() ?>]"
+                            class="input-label<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) : ?>
+                                required-optio<?php endif; ?>"
+                            type="label"
+                    > ID : <%- data.id %> <%- data.is_feature %> </label>
+                <?php endif; ?>
+            </td>
+        </tr>
+    </script>
+    <script id="swatch-visual-row-template" type="text/x-magento-template">
+        <tr>
+            <td class="col-draggable">
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
+                    <div data-role="draggable-handle"
+                            class="draggable-handle"
+                            title="<?= /** @noEscape */ $block->escapeHtml(__('Sort Option')) ?>">
+                    </div>
+                <?php endif; ?>
+                <input data-role="order"
+                        type="hidden"
+                        name="optionvisual[order][<%- data.id %>]"
+                        value="<%- data.sort_order %>"
+                    <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) : ?>
+                        disabled="disabled"
+                    <?php endif; ?>/>
+            </td>
+            <td class="col-default">
+                <input class="input-radio" type="<%- data.intype %>"
+                       name="defaultvisual[]" value="<%- data.id %>"
+                <%- data.checked %><?php if ($block->getReadOnly()) :
+                    ?>disabled="disabled"<?php
+                                   endif; ?>/>
+            </td>
+            <td class="swatches-visual-col col-default <%- data.empty_class %>">
+                <?php //@todo add logic getting swatch value from db */ ?>
+                <input id="swatch_visual_value_<%- data.id %>" type="hidden"
+                       name="swatchvisual[value][<%- data.id %>]" value="<%- data.defaultswatch0 %>"/>
+                <div class="swatch_window" id="swatch_window_option_<%- data.id %>" style="<%- data.swatch0 %>"></div>
+                <div class="swatch_sub-menu_container" id="swatch_container_option_<%- data.id %>">
+                    <div class="swatch_row position-relative">
+                        <div class="swatch_row_name colorpicker_handler">
+                            <p><?= /** @noEscape */ $block->escapeHtml(__('Choose a color')) ?></p>
+                        </div>
+                    </div>
+                    <div class="swatch_row">
+                        <div class="swatch_row_name btn_choose_file_upload"
+                             id="swatch_choose_file_option_<%- data.id %>">
+                            <p><?= /** @noEscape */ $block->escapeHtml(__('Upload a file')) ?></p>
+                        </div>
+                    </div>
+                    <div class="swatch_row">
+                        <div class="swatch_row_name btn_remove_swatch">
+                            <p><?= /** @noEscape */ $block->escapeHtml(__('Clear')) ?></p>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <?php foreach ($stores as $_store) : ?>
+                <td class="swatch-col-<%- data.id %>">
+                    <input
+                            name="optionvisual[value][<%- data.id %>][<?= /** @noEscape */ (int) $_store->getId() ?>]"
+                            value="<%- data.store<?= /** @noEscape */ (int) $_store->getId() ?> %>"
+                            class="input-text
+                            <?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) : ?>
+                                required-option required-unique
+                            <?php endif; ?>"
+                            type="text"
+                        <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) : ?>
+                            disabled="disabled"
+                        <?php endif; ?>/>
+                </td>
+            <?php endforeach; ?>
+            <td id="delete_button_swatch_container_<%- data.id %>" class="col-delete">
+                <input type="hidden" class="delete-flag" name="optionvisual[delete][<%- data.id %>]" value=""/>
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
+                    <button title="<?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?>" type="button"
+                            class="action- scalable delete setting-option brand_setting_<%- data.id %>"
+                            onclick="window.openBrandModal('<%- data.id %>');">
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?></span>
+                    </button>
+                    <button title="<?= /** @noEscape */ $block->escapeHtml(__('Delete')) ?>" type="button"
+                            class="action- scalable delete delete-option">
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Delete')) ?></span>
+                    </button>
+                    <label
+                            name="option[value]-id-[<%- data.id %>][<?= /** @noEscape */ (int) $_store->getId() ?>]"
+                            class="input-label<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) : ?>
+                                required-optio<?php endif; ?>"
+                            type="label"
+                    > ID : <%- data.id %> <%- data.is_feature %> </label>
+                <?php endif; ?>
+            </td>
+        </tr>
+    </script>
+<?php endif; ?>
