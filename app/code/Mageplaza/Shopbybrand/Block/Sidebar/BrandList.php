@@ -56,15 +56,23 @@ class BrandList extends Brand
     }
 
     /**
-     * @return int|mixed
+     * @inheritDoc
      */
-    public function getLimit()
+    public function getCollection($type = null, $option = null)
     {
+        $collection = parent::getCollection($type, $option);
+        $brands = [];
         $limit = $this->helper->getModuleConfig('sidebar/brand_thumbnail/limit_brands') ?: self::LIMIT;
-        $collectionSize = count($this->getCollection());
-        $result = ($limit < $collectionSize) ? $limit : (string) $collectionSize;
+        foreach ($collection as $brand) {
+            if (!$this->helper->isShowBrandsWithoutProducts() && $this->getProductQuantity($brand->getOptionId())) {
+                $brands[] = $brand;
+            }
+            if (count($brands) >= $limit) {
+                break;
+            }
+        }
 
-        return $this->toString($result);
+        return $brands;
     }
 
     /**

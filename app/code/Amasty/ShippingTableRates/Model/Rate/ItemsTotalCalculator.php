@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -25,6 +25,7 @@ class ItemsTotalCalculator
     private $itemsTotals = [
         'not_free_price' => 0,
         'not_free_weight' => 0,
+        'not_free_volumetric' => 0,
         'qty' => 0,
         'not_free_qty' => 0,
         'discount_amount' => 0,
@@ -71,7 +72,7 @@ class ItemsTotalCalculator
                     continue;
                 }
             } else {
-                if (!$this->itemValidator->isSippingTypeValid($item, $shippingType)) {
+                if (!$this->itemValidator->isShippingTypeValid($item, $shippingType)) {
                     continue;
                 }
 
@@ -108,8 +109,8 @@ class ItemsTotalCalculator
         }
 
         if ($request->getFreeShipping() && $this->configProvider->isPromoAllowed()) {
-            $this->itemsTotals['not_free_price'] =
-            $this->itemsTotals['not_free_weight'] = $this->itemsTotals['not_free_qty'] = 0;
+            $this->itemsTotals['not_free_weight'] = $this->itemsTotals['not_free_volumetric'] =
+            $this->itemsTotals['not_free_price'] = $this->itemsTotals['not_free_qty'] = 0;
         }
 
         foreach ($this->itemsTotals as &$value) {
@@ -125,6 +126,7 @@ class ItemsTotalCalculator
         $this->itemsTotals = [
             'not_free_price' => 0,
             'not_free_weight' => 0,
+            'not_free_volumetric' => 0,
             'qty' => 0,
             'not_free_qty' => 0,
             'discount_amount' => 0,
@@ -141,7 +143,7 @@ class ItemsTotalCalculator
     {
         $flagOfPersist = false;
         foreach ($item->getChildren() as $child) {
-            if (!$this->itemValidator->isSippingTypeValid($child, $shippingType)) {
+            if (!$this->itemValidator->isShippingTypeValid($child, $shippingType)) {
                 continue;
             }
 
@@ -178,14 +180,16 @@ class ItemsTotalCalculator
     public function addBundleItemTotal($item, $shippingType)
     {
         $includingTax = $this->configProvider->isIncludingTax();
-        $qty = $price = $weight = 0;
+        $qty = $price = $weight = $volumetricWeight = 0;
         foreach ($item->getChildren() as $child) {
-            if (!$this->itemValidator->isSippingTypeValid($child, $shippingType)) {
+            if (!$this->itemValidator->isShippingTypeValid($child, $shippingType)) {
                 continue;
             }
             $itemQty = $child->getQty() * $item->getQty();
             $qty += $itemQty;
-            $weight += $this->itemValidator->getItemWeight($child) * $itemQty;
+            $weightData = $this->itemValidator->getItemWeight($child);
+            $volumetricWeight += ($weightData['volumetric'] ?? 0) * $itemQty;
+            $weight += ($weightData['weight'] ?? 0) * $itemQty;
             $price += $this->itemValidator->getItemBasePrice($child) * $itemQty;
         }
 
@@ -209,6 +213,7 @@ class ItemsTotalCalculator
         $this->itemsTotals['not_free_qty'] += $notFreeQty;
         $this->itemsTotals['not_free_price'] += $price;
         $this->itemsTotals['not_free_weight'] += $weight;
+        $this->itemsTotals['not_free_volumetric'] += $volumetricWeight;
     }
 
     /**
@@ -217,8 +222,10 @@ class ItemsTotalCalculator
     public function addItemTotal($item)
     {
         $notFreeQty = $this->itemValidator->getNotFreeQty($item);
+        $weightData = $this->itemValidator->getItemWeight($item);
         $this->itemsTotals['not_free_price'] += $this->itemValidator->getItemBasePrice($item) * $notFreeQty;
-        $this->itemsTotals['not_free_weight'] += $this->itemValidator->getItemWeight($item) * $notFreeQty;
+        $this->itemsTotals['not_free_weight'] += ($weightData['weight'] ?? 0) * $notFreeQty;
+        $this->itemsTotals['not_free_volumetric'] += ($weightData['volumetric'] ?? 0) * $notFreeQty;
         $this->itemsTotals['qty'] += $item->getQty();
         $this->itemsTotals['not_free_qty'] += $notFreeQty;
         $this->itemsTotals['discount_amount'] += $item->getBaseDiscountAmount();

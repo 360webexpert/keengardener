@@ -1,12 +1,17 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
 
 namespace Amasty\ShippingTableRates\Helper;
+
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCollectionFactory;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\Escaper;
 
 /**
  * @deprecated should be moved to separated classes
@@ -14,82 +19,137 @@ namespace Amasty\ShippingTableRates\Helper;
  */
 class Data
 {
-    protected $_objectManager;
-    protected $_eavConfig;
     /**
-     * @var \Magento\Framework\Escaper
+     * @var EavConfig
+     */
+    protected $eavConfig;
+
+    /**
+     * @var array
+     */
+    private $countries = [];
+
+    /**
+     * @var array
+     */
+    private $states = [];
+
+    /**
+     * @var array
+     */
+    private $types = [];
+
+    /**
+     * @var Escaper
      */
     private $escaper;
 
+    /**
+     * @var CountryCollectionFactory
+     */
+    private $countryCollectionFactory;
+
+    /**
+     * @var RegionCollectionFactory
+     */
+    private $regionCollectionFactory;
+
     public function __construct(
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Escaper $escaper
+        EavConfig $eavConfig,
+        Escaper $escaper,
+        CountryCollectionFactory $countryCollectionFactory,
+        RegionCollectionFactory $regionCollectionFactory
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_eavConfig = $eavConfig;
+        $this->eavConfig = $eavConfig;
         $this->escaper = $escaper;
+        $this->countryCollectionFactory = $countryCollectionFactory;
+        $this->regionCollectionFactory = $regionCollectionFactory;
     }
 
-    public function getStatuses()
+    /**
+     * @return array
+     */
+    public function getCountries()
     {
-        return [
-            '0' => __('Inactive'),
-            '1' => __('Active'),
-        ];
-    }
-
-    public function getCountries($needHash = false)
-    {
-        /**
-         * @var \Magento\Directory\Model\Country $countriesModel
-         */
-        $countriesModel = $this->_objectManager->get(\Magento\Directory\Model\Country::class);
-        $countries = $countriesModel->getCollection()->toOptionArray();
+        $countries = $this->countryCollectionFactory->create()->toOptionArray();
         unset($countries[0]);
-
-        if ($needHash) {
-            $countries = $this->_toHash($countries);
-        }
 
         return $countries;
     }
 
-    public function getStates($needHash = false)
+    /**
+     * @return array
+     */
+    public function getCountriesHash(): array
     {
-        /**
-         * @var \Magento\Directory\Model\Region $stateModel
-         */
-        $regionModel = $this->_objectManager->get(\Magento\Directory\Model\Region::class);
-        $regions = $regionModel->getCollection()->toOptionArray();
-        $regions = $this->_addCountriesToStates($regions);
-
-        if ($needHash) {
-            $regions = $this->_toHash($regions);
+        if ($this->countries) {
+            return $this->countries;
         }
 
-        return $regions;
+        $this->countries = $this->toHash($this->getCountries());
+
+        return $this->countries;
     }
 
-    public function getTypes($needHash = false)
+    /**
+     * @return array
+     */
+    public function getStates()
     {
-        $options = [];
+        $states = $this->regionCollectionFactory->create()->toOptionArray();
+        $states = $this->addCountriesToStates($states);
 
-        $attribute = $this->_eavConfig->getAttribute('catalog_product', 'am_shipping_type');
+        return $states;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStatesHash()
+    {
+        if ($this->states) {
+            return $this->states;
+        }
+
+        $this->states = $this->toHash($this->getStates());
+
+        return $this->states;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypes()
+    {
+        $types = [];
+
+        $attribute = $this->eavConfig->getAttribute('catalog_product', 'am_shipping_type');
         if ($attribute->usesSource()) {
-            $options = $attribute->getSource()->getAllOptions(false);
+            /** @var \Magento\Eav\Model\Entity\Attribute\Source\Table $source */
+            $source = $attribute->getSource();
+            $types = $source->getAllOptions(false);
         }
 
-        if ($needHash) {
-            $options = $this->_toHash($options, false);
+        return $types;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypesHash()
+    {
+        if ($this->types) {
+            return $this->types;
         }
 
-        return $options;
+        $this->types = $this->toHash($this->getTypes(), false);
+
+        return $this->types;
     }
 
     /**
      * @param $zip
-     * @return array('area', 'district')
+     * @return array('area' => 'AZ', 'district' => '123')
      */
     public function getDataFromZip($zip)
     {
@@ -112,9 +172,13 @@ class Data
         return $dataZip;
     }
 
-    protected function _addCountriesToStates($regions)
+    /**
+     * @param array $regions
+     * @return array
+     */
+    public function addCountriesToStates($regions)
     {
-        $hashCountry = $this->getCountries(true);
+        $hashCountry = $this->getCountriesHash();
         foreach ($regions as $key => $region) {
             if (isset($region['country_id'])) {
                 $regions[$key]['label'] = $hashCountry[$region['country_id']] . "/" . $region['label'];
@@ -124,7 +188,12 @@ class Data
         return $regions;
     }
 
-    protected function _toHash($options, $needSort = true)
+    /**
+     * @param array $options
+     * @param bool $needSort
+     * @return array
+     */
+    protected function toHash($options, $needSort = true)
     {
         $hash = [];
         foreach ($options as $option) {
@@ -140,6 +209,10 @@ class Data
         return $options;
     }
 
+    /**
+     * @param $string
+     * @return array|string
+     */
     public function escapeHtml($string)
     {
         return $this->escaper->escapeHtml($string, ['b', 'i', 'u', 's']);

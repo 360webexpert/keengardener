@@ -48,17 +48,15 @@ class AddBrandProductStructuredData implements ObserverInterface
 
     /**
      * @param Observer $observer
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(Observer $observer)
     {
         $objectStructuredData = $observer->getData('structured_data');
         $productStructuredData = $objectStructuredData->getMpdata();
-
-        if ($brand_product = $this->_dataHelper->getProductBrand()) {
+        $brandText = $this->_dataHelper->getBrandTextFromProduct();
+        if ($brandText) {
             $productStructuredData['brand']['@type'] = 'Thing';
-            $productStructuredData['brand']['name'] = $brand_product->getValue();
+            $productStructuredData['brand']['name'] = $brandText;
             $objectStructuredData->setMpdata($productStructuredData);
         }
     }

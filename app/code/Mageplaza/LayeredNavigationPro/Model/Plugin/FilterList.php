@@ -21,6 +21,12 @@
 
 namespace Mageplaza\LayeredNavigationPro\Model\Plugin;
 
+use Closure;
+use Magento\Catalog\Model\Layer;
+use Magento\Framework\ObjectManagerInterface;
+use Mageplaza\LayeredNavigation\Model\Layer\Filter\Category;
+use Mageplaza\LayeredNavigationPro\Helper\Data;
+
 /**
  * Class FilterList
  * @package Mageplaza\LayeredNavigationPro\Model\Plugin
@@ -30,10 +36,10 @@ class FilterList
     const RATING_FILTER = 'layer_rating';
     const STATE_FILTER  = 'layer_state';
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /** @var ObjectManagerInterface */
     protected $objectManager;
 
-    /** @var \Mageplaza\LayeredNavigationPro\Helper\Data */
+    /** @var Data */
     protected $helper;
 
     /** @var  array Custom filter */
@@ -48,49 +54,49 @@ class FilterList
     /**
      * FilterList constructor.
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $helper
+     * @param ObjectManagerInterface $objectManager
+     * @param Data $helper
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Mageplaza\LayeredNavigationPro\Helper\Data $helper
+        ObjectManagerInterface $objectManager,
+        Data $helper
     ) {
         $this->objectManager = $objectManager;
-        $this->helper = $helper;
+        $this->helper        = $helper;
     }
 
     /**
-     * @param \Magento\Catalog\Model\Layer\FilterList $subject
-     * @param \Closure $proceed
-     * @param \Magento\Catalog\Model\Layer $layer
+     * @param Layer\FilterList $subject
+     * @param Closure $proceed
+     * @param Layer $layer
      *
      * @return $this|array
      */
     public function aroundGetFilters(
-        \Magento\Catalog\Model\Layer\FilterList $subject,
-        \Closure $proceed,
-        \Magento\Catalog\Model\Layer $layer
+        Layer\FilterList $subject,
+        Closure $proceed,
+        Layer $layer
     ) {
-        $filter = $proceed($layer);
+        $filters = $proceed($layer);
 
         if (!$this->helper->isEnabled()) {
-            return $filter;
+            return $filters;
         }
 
+        $stateConfig  = $this->helper->getFilterConfig('state');
+        $ratingConfig = $this->helper->getFilterConfig('rating');
         if (!$this->customFilter) {
             $customFilter = [];
 
-            $stateConfig = $this->helper->getFilterConfig('state');
             if ($stateConfig['new_enable'] || $stateConfig['onsales_enable'] || $stateConfig['stock_enable']) {
-                $customFilter[] = $this->objectManager->create(
+                $customFilter['state'] = $this->objectManager->create(
                     $this->filterTypes[self::STATE_FILTER],
                     ['data' => ['position' => $stateConfig['position']], 'layer' => $layer]
                 );
             }
 
-            $ratingConfig = $this->helper->getFilterConfig('rating');
             if (isset($ratingConfig['rating_enable']) && $ratingConfig['rating_enable']) {
-                $customFilter[] = $this->objectManager->create(
+                $customFilter['rating'] = $this->objectManager->create(
                     $this->filterTypes[self::RATING_FILTER],
                     ['data' => ['position' => $ratingConfig['position']], 'layer' => $layer]
                 );
@@ -99,25 +105,31 @@ class FilterList
             $this->customFilter = $customFilter;
         }
 
-        if (sizeof($this->customFilter)) {
-            $filter = array_merge($filter, $this->customFilter);
+        if (!empty($this->customFilter)) {
+            $filters = $this->sortFilterByPosition(array_merge($filters, $this->customFilter));
         }
 
-        return $filter;
+        return $filters;
     }
 
     /**
-     * @param $a
-     * @param $b
+     * @param $filters
      *
-     * @return int
+     * @return array
      */
-    protected function sortFilter($a, $b)
+    protected function sortFilterByPosition($filters)
     {
-        $aPosition = $this->getPosition($a);
-        $bPosition = $this->getPosition($b);
+        if (is_array($filters)) {
+            usort($filters, function ($filterA, $filterB) {
+                if ($this->getPosition($filterA) === $this->getPosition($filterB)) {
+                    return $filterA->getName() < $filterB->getName() ? -1 : 1;
+                }
 
-        return ($aPosition >= $bPosition) ? 1 : -1;
+                return ($this->getPosition($filterA) < $this->getPosition($filterB)) ? -1 : 1;
+            });
+        }
+
+        return $filters;
     }
 
     /**
@@ -127,8 +139,12 @@ class FilterList
      */
     private function getPosition($object)
     {
+        if ($object instanceof Category) {
+            return -2;
+        }
+
         $attribute = $object->hasAttributeModel() ? $object->getAttributeModel() : null;
-        $position = $object->hasPosition() ? $object->getPosition() : ($attribute ? $attribute->getPosition() : 0);
+        $position  = $object->hasPosition() ? $object->getPosition() : ($attribute ? $attribute->getPosition() : 0);
 
         return $position;
     }

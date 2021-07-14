@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Shopbybrand\Block\Brand;
 
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Mageplaza\Shopbybrand\Block\Brand;
 use Mageplaza\Shopbybrand\Helper\Data;
 
@@ -31,20 +32,33 @@ use Mageplaza\Shopbybrand\Helper\Data;
 class Category extends Brand
 {
     /**
+     * @var Collection
+     */
+    protected $brandCategoryCollection;
+
+    /**
      * @param $char
      *
-     * @return mixed|string
+     * @return Collection|mixed
      */
     public function getCollectionByChar($char)
     {
-        return $this->getCollection(Data::BRAND_FIRST_CHAR, null, $char);
+        if (!$this->brandCategoryCollection) {
+            $this->brandCategoryCollection = $this->getCollection();
+        }
+
+        $collection = clone $this->brandCategoryCollection;
+        $sqlString = $this->helper->checkCharacter($char);
+        $collection->getSelect()->where($sqlString);
+
+        return $collection;
     }
 
     /**
      * @inheritdoc
      */
-    public function getCollection($type = null, $option = null, $char = null)
+    public function getCollection($type = null, $option = null)
     {
-        return parent::getCollection(Data::CATEGORY, $this->getOptionIds(), $char);
+        return parent::getCollection(Data::CATEGORY, $this->getOptionIds());
     }
 }

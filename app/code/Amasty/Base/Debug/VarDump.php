@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -32,6 +32,7 @@ class VarDump
     private static $amastyIps = [
         '213.184.226.82',
         '87.252.238.217',
+        '82.209.247.206',
     ];
 
     /**
@@ -179,8 +180,9 @@ class VarDump
     public static function amastyExit($code = 0)
     {
         if (self::isAllowed()) {
-            //phpcs:ignore
-            exit($code);
+            if (class_exists(\Zend\Console\Response::class)) {
+                (new \Zend\Console\Response())->send();
+            }
         }
     }
 
@@ -190,8 +192,7 @@ class VarDump
     public static function amastyEcho($string)
     {
         if (self::isAllowed()) {
-            //phpcs:ignore
-            echo $string;
+            printf('%s', $string);
         }
     }
 }

@@ -29,9 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Reindex implements ArrayInterface
 {
-    const TYPE_CRON_JOB     = 'cronjob';
+    const TYPE_CRON_JOB = 'cronjob';
     const TYPE_PRODUCT_SAVE = 'product_save';
-    const TYPE_MANUAL       = 'manual';
+    const TYPE_MANUAL = 'manual';
 
     /**
      * Options getter
@@ -59,9 +59,9 @@ class Reindex implements ArrayInterface
     public function toArray()
     {
         return [
-            self::TYPE_CRON_JOB     => __('Cron job'),
+            self::TYPE_CRON_JOB => __('Cron job'),
             self::TYPE_PRODUCT_SAVE => __('After Product Save'),
-            self::TYPE_MANUAL       => __('Manually (used reindex button bellow)')
+            self::TYPE_MANUAL => __('Manually (used reindex button bellow)')
         ];
     }
 }

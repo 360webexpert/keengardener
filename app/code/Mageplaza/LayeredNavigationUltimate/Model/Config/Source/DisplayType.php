@@ -29,10 +29,10 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class DisplayType implements ArrayInterface
 {
-    const TYPE_NORMAL  = '0';
-    const TYPE_HIDDEN  = '1';
+    const TYPE_NORMAL = '0';
+    const TYPE_HIDDEN = '1';
     const TYPE_DEFAULT = '2';
-    const TYPE_SCROLL  = '3';
+    const TYPE_SCROLL = '3';
 
     /**
      * @return array

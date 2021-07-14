@@ -2,11 +2,11 @@
   "name": "mageplaza/layered-navigation-m2-pro",
   "description": "Layered navigation Pro M2",
   "require": {
-    "mageplaza/layered-navigation-m2": "^2.3.7",
-    "mageplaza/module-seo-url": "^2.2.0"
+    "mageplaza/layered-navigation-m2": "^4.1.0",
+    "mageplaza/module-seo-url": "^4.0.0"
   },
   "type": "magento2-module",
-  "version": "2.3.7",
+  "version": "4.1.1",
   "license": "proprietary",
   "authors": [
     {

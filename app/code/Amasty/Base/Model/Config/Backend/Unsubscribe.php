@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -13,7 +13,7 @@ use Amasty\Base\Model\Source\NotificationType;
 class Unsubscribe extends \Magento\Framework\App\Config\Value implements
     \Magento\Framework\App\Config\Data\ProcessorInterface
 {
-    const PATH_TO_FEED_IMAGES = 'https://notification.amasty.com/';
+    const PATH_TO_FEED_IMAGES = 'https://amasty.com/frontend/base/default/images/amasty/notifeed/';
 
     /**
      * @var \Amasty\Base\Model\AdminNotification\Messages
@@ -61,7 +61,7 @@ class Unsubscribe extends \Magento\Framework\App\Config\Value implements
             $changes = array_diff($changes, [NotificationType::UNSUBSCRIBE_ALL]);
         }
 
-        if (!empty($changes)) {
+        if (!empty(array_filter($changes))) {
             foreach ($changes as $change) {
                 $message = $this->generateMessage($change);
                 $this->messageManager->addMessage($message);

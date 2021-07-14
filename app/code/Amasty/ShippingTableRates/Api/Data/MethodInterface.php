@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -24,6 +24,7 @@ interface MethodInterface
     const MAX_RATE = 'max_rate';
     const FREE_TYPES = 'free_types';
     const COMMENT_IMG = 'comment_img';
+    const WEIGHT_TYPE = 'weight_type';
     /**#@-*/
 
     /**
@@ -157,4 +158,16 @@ interface MethodInterface
      * @return \Amasty\ShippingTableRates\Api\Data\MethodInterface
      */
     public function setCommentImg($commentImg);
+
+    /**
+     * @return int
+     */
+    public function getWeightType();
+
+    /**
+     * @param int $weightType
+     *
+     * @return \Amasty\ShippingTableRates\Api\Data\MethodInterface
+     */
+    public function setWeightType($weightType);
 }

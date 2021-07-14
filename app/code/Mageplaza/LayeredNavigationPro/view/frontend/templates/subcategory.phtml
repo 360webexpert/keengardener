@@ -1,0 +1,66 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationPro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\LayeredNavigationPro\Block\SubCategory $block */
+$categories = $block->getCurrentChildCategories();
+$_count = is_array($categories) ? count($categories) : $categories->getSize();
+if ($_count) : ?>
+    <div class="mplayer-subcategory carousel-container">
+        <div class="mplayer-subcategory-container">
+            <?php $iterator = 1; ?>
+            <div id="mplayer-subcategory-list-items"
+                 class="owl-carousel owl-theme">
+                    <?php /** @var \Magento\Catalog\Model\Category $_category */ ?>
+                    <?php foreach ($categories as $_category) : ?>
+                        <?php if ($_category->getIsActive()) : ?>
+                            <div class="mplayer-category-item">
+                                <a href="<?= $block->escapeUrl($_category->getUrl()) ?>" class="mplayer-item-slider">
+                                    <div class="mplayer-category-item-label">
+                                        <?php if ($block->isShowImage() && $categoryImg = $block->getCategoryImage($_category)) : ?>
+                                            <?= /* @noEscape */ $categoryImg ?>
+                                        <?php endif; ?>
+                                        <div class="mplayer-category-name">
+                                            <?= $block->escapeHtml($_category->getName()) ?>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach ?>
+            </div>
+        </div>
+    </div>
+        <?php $config = $block->getSubCategoryConfig() ?>
+    <script>
+        require(['jquery', 'mageplaza/core/owl.carousel'], function ($) {
+            $('#mplayer-subcategory-list-items').owlCarousel({
+                items: <?= /* @noEscape */ $config['responsive'] ?>,
+                loop: true,
+                margin:10,
+                autoHeight:false,
+                autoplay: <?= /* @noEscape */ $config['auto_play'] ?>,
+                autoplayHoverPause:true,
+                dots: false,
+                nav: false
+            });
+        });
+    </script>
+<?php endif; ?>

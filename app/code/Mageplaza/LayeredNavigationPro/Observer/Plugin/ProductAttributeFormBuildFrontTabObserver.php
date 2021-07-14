@@ -21,34 +21,38 @@
 
 namespace Mageplaza\LayeredNavigationPro\Observer\Plugin;
 
+use Closure;
+use Magento\Framework\Event\Observer;
+use Mageplaza\LayeredNavigation\Helper\Data;
+
 /**
  * Class ProductAttributeFormBuildFrontTabObserver
  * @package Mageplaza\LayeredNavigationPro\Observer\Plugin
  */
 class ProductAttributeFormBuildFrontTabObserver
 {
-    /** @var \Mageplaza\LayeredNavigation\Helper\Data */
+    /** @var Data */
     protected $helper;
 
     /**
-     * @param \Mageplaza\LayeredNavigation\Helper\Data $helper
+     * @param Data $helper
      */
-    public function __construct(\Mageplaza\LayeredNavigation\Helper\Data $helper)
+    public function __construct(Data $helper)
     {
         $this->helper = $helper;
     }
 
     /**
      * @param \Magento\LayeredNavigation\Observer\Edit\Tab\Front\ProductAttributeFormBuildFrontTabObserver $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Closure $proceed
+     * @param Observer $observer
      *
      * @return $this|mixed
      */
     public function aroundExecute(
         \Magento\LayeredNavigation\Observer\Edit\Tab\Front\ProductAttributeFormBuildFrontTabObserver $subject,
-        \Closure $proceed,
-        \Magento\Framework\Event\Observer $observer
+        Closure $proceed,
+        Observer $observer
     ) {
         if ($this->helper->isEnabled()) {
             return $this;

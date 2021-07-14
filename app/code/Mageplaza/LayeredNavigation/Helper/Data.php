@@ -21,8 +21,12 @@
 
 namespace Mageplaza\LayeredNavigation\Helper;
 
+use Magento\Catalog\Model\Layer\Filter\FilterInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
 use Mageplaza\LayeredNavigation\Model\Layer\Filter;
 
 /**
@@ -31,8 +35,14 @@ use Mageplaza\LayeredNavigation\Model\Layer\Filter;
  */
 class Data extends \Mageplaza\AjaxLayer\Helper\Data
 {
-    const FILTER_TYPE_SLIDER = 'slider';
-    const FILTER_TYPE_LIST   = 'list';
+    const ATTR_PREFIX                = 'attr_';
+    const FIELD_RENDER_CATEGORY_TREE = 'render_category_tree';
+    const CATEGORY_TREE_DEPTH        = 'category_tree_depth';
+    const CATEGORIES_LEVEL           = 'categories_level';
+    const EXPAND_SUBCATEGORIES       = 'expand_subcategories';
+    const FILTER_TYPE_SLIDER         = 'slider';
+    const FILTER_TYPE_LIST           = 'list';
+    const FILTER_TYPE_TREE           = 'tree';
 
     /** @var Filter */
     protected $filterModel;
@@ -44,9 +54,13 @@ class Data extends \Mageplaza\AjaxLayer\Helper\Data
      */
     public function getLayerConfiguration($filters)
     {
-        $filterParams = $this->_getRequest()->getParams();
-        foreach ($filterParams as $key => $param) {
-            $filterParams[$key] = htmlspecialchars($param);
+        $params       = $this->_getRequest()->getParams();
+        $filterParams = [];
+        foreach ($params as $key => $param) {
+            if ($key === 'amp;dimbaar') {
+                continue;
+            }
+            $filterParams[htmlentities($key)] = htmlentities($param);
         }
 
         $config = new DataObject([
@@ -74,10 +88,50 @@ class Data extends \Mageplaza\AjaxLayer\Helper\Data
     }
 
     /**
-     * @return \Magento\Framework\ObjectManagerInterface
+     * @return ObjectManagerInterface
      */
     public function getObjectManager()
     {
         return $this->objectManager;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCategoryTreeFields()
+    {
+        return [
+            self::FIELD_RENDER_CATEGORY_TREE,
+            self::CATEGORY_TREE_DEPTH,
+            self::CATEGORIES_LEVEL,
+            self::EXPAND_SUBCATEGORIES
+        ];
+    }
+
+    /**
+     * @param FilterInterface $filter
+     * @param null $storeId
+     *
+     * @return string
+     */
+    public function getTooltipContent($filter, $storeId = null)
+    {
+        try {
+            $store  = $this->storeManager->getStore($storeId);
+            $labels = $filter->getAttributeModel()->getData('tooltip_content');
+            if (isset($labels[$store->getId()])) {
+                if (empty($labels[$store->getId()])) {
+                    return $labels[Store::DEFAULT_STORE_ID];
+                }
+
+                return $labels[$store->getId()];
+            }
+
+            return '';
+        } catch (LocalizedException $e) {
+            $this->_logger->error($e);
+
+            return '';
+        }
     }
 }

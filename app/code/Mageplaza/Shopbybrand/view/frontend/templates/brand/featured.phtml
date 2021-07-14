@@ -20,31 +20,37 @@
  */
 
 $timeId = time();
+/** @var \Mageplaza\Shopbybrand\Block\Brand\Featured $block */
 $featureBrands = $block->getFeaturedBrand();
-$helper = $block->helper();
+$style = $block->getStyleDisplayFeature();
 ?>
-<?= /** @noEscape */ $block->includeCssLib() ?>
-<?php if ($helper->enableFeature() && sizeof($featureBrands)) : ?>
+<?php if (!empty($featureBrands)) : ?>
+    <?= /** @noEscape */ $block->includeCssLib() ?>
     <div class="block-brand-feature widget">
         <div class="block-title" style="text-align: center;">
             <strong id="block-feature-brand-heading" role="heading"
                     aria-level="2"><?= /** @noEscape */ $block->getFeatureTitle() ?></strong>
         </div>
         <div class="block-content">
-            <?php if ($block->getStyleDisplayFeature() == 0 && sizeof($featureBrands) > 1) : ?>
-            <div class="owl-carousel owl-theme brand-carousel" id="feature-brand-carousel-<?= $timeId ?>"
+            <?php if (!empty($featureBrands) &&
+            $style === \Mageplaza\Shopbybrand\Model\Config\Source\FeatureStyle::DISPLAY_SLIDER) : ?>
+            <div class="owl-carousel owl-theme brand-carousel"
+                 id="feature-brand-carousel-<?= /** @noEscape */ $timeId ?>"
                  data-mage-init='{"brandSlider": {}}'>
             <?php endif; ?>
                 <?php foreach ($featureBrands as $brand) : ?>
-                    <?php if ($block->getStyleDisplayFeature() == 0) : ?>
+                    <?php if ($style === \Mageplaza\Shopbybrand\Model\Config\Source\FeatureStyle::DISPLAY_SLIDER) : ?>
                 <div class="relate-content item">
                     <?php else : ?>
                     <div class="relate-content item mp-2 mp-sm-4 mp-xs-6 col-mp" style="float: left; padding: 5px 0;">
                     <?php endif; ?>
                         <a href="<?= /** @noEscape */ $block->helper()->getBrandUrl($brand) ?>">
                             <img class="img-responsive brand-image"
-                                 src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>">
-                            <?php if ($block->showLabel() == 1) : ?>
+                                 src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>"
+                                 width="<?= /** @noEscape */ $block->getLogoWidth() ?>"
+                                 height="<?= /** @noEscape */ $block->getLogoHeight() ?>"
+                                 alt="<?= /** @noEscape */ $brand->getValue() ?>">
+                            <?php if ($block->showLabel()) : ?>
                                 <span><?= /** @noEscape */ $brand->getValue() ?></span>
                             <?php endif; ?>
                         </a>

@@ -1,0 +1,72 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     ${MODULENAME}
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\LayeredNavigation\Model\Layer\Filter\CategoryItem $filterItems */
+/** @var \Mageplaza\LayeredNavigation\Block\Navigation\FilterRenderer\Category $block */
+$filter = $block->getFilter();
+$filterPathItems = $filterItems->getItems($block->getPath());
+$filterModel     = $block->getFilterModel();
+?>
+    <?php foreach ($filterPathItems as $filterItem) : ?>
+        <?php
+        $hasChild = $filterItems->hasChildrenData($filterItem->getValue());
+        $isExpandByClick = $block->isExpandByClick($filterItem);
+        $isSelected = $filterModel->isSelected($filterItem);
+        ?>
+    <li class="item">
+        <?php if ($isExpandByClick) : ?>
+            <span class="icon-expand <?= /** @noEscape */ $isSelected ? 'active' : '' ?>"></span>
+        <?php endif; ?>
+        <?php if ($filterItem->getCount() > 0) : ?>
+            <input type="<?= /** @noEscape */ $filterModel->isMultiple($filter) ? 'checkbox' : 'radio' ?>"
+                <?= /** @noEscape */ $filterModel->isMultiple($filter) ? '' : 'name="' . $filter->getRequestVar() . '"' ?>
+                <?= /** @noEscape */ $isSelected ? 'checked="checked"' : '' ?> />
+            <a href="<?= /** @noEscape */ $block->escapeUrl($filterModel->getItemUrl($filterItem)) ?>">
+                <?= /** @noEscape */ $filterItem->getLabel() ?>
+                <?php if ($filterModel->isShowCounter($filter)) : ?>
+                    <span class="count"><?= /** @noEscape */ $filterItem->getCount() ?>
+                            <span class="filter-count-label">
+                                <?= /** @noEscape */ ($filterItem->getCount() === 1) ? 'item' : 'items' ?>
+                            </span>
+                        </span>
+                <?php endif; ?>
+            </a>
+        <?php else : ?>
+            <input type="<?= /** @noEscape */ $filterModel->isMultiple($filter) ? 'checkbox' : 'radio' ?>"
+                   disabled="disabled"/>
+            <span>
+                <?= /** @noEscape */ $filterItem->getLabel() ?>
+                <?php if ($filterModel->isShowCounter($filter)) : ?>
+                    <span class="count"><?= /** @noEscape */ $filterItem->getCount() ?>
+                            <span class="filter-count-label">
+                                <?= /** @noEscape */ ($filterItem->getCount() === 1) ? 'item' : 'items' ?>
+                            </span>
+                        </span>
+                <?php endif; ?>
+            </span>
+        <?php endif; ?>
+        <?php if ($hasChild) : ?>
+            <ol class="category-items items level-<?= /* @noEscape */  $block->getLevel() ?>" <?= !$isSelected && $isExpandByClick ? 'style="display: none"' : '' ?> >
+                <?= /* @noEscape */ $block->renderChildrenItems($filterItem->getValue()) ?>
+            </ol>
+        <?php endif; ?>
+    </li>
+    <?php endforeach; ?>

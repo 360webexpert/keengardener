@@ -1,54 +1,55 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
 
 namespace Amasty\Base\Observer;
 
+use Amasty\Base\Model\Feed\NewsProcessor;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Psr\Log\LoggerInterface;
 
 class PreDispatchAdminActionController implements ObserverInterface
 {
     /**
-     * @var \Amasty\Base\Model\FeedFactory
-     */
-    private $feedFactory;
-
-    /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     private $backendSession;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
+    /**
+     * @var NewsProcessor
+     */
+    private $newsProcessor;
+
     public function __construct(
-        \Amasty\Base\Model\FeedFactory $feedFactory,
-        \Magento\Backend\Model\Auth\Session $backendAuthSession,
-        \Psr\Log\LoggerInterface $logger
+        NewsProcessor $newsProcessor,
+        Session $backendAuthSession,
+        LoggerInterface $logger
     ) {
-        $this->feedFactory = $feedFactory;
         $this->backendSession = $backendAuthSession;
         $this->logger = $logger;
+        $this->newsProcessor = $newsProcessor;
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if ($this->backendSession->isLoggedIn()) {
             try {
-                /** @var \Amasty\Base\Model\Feed $feedModel */
-                $feedModel = $this->feedFactory->create();
-
-                $feedModel->checkUpdate();
-                $feedModel->removeExpiredItems();
+                $this->newsProcessor->checkUpdate();
+                $this->newsProcessor->removeExpiredItems();
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
             }

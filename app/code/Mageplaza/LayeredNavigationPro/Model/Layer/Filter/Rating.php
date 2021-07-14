@@ -21,7 +21,16 @@
 
 namespace Mageplaza\LayeredNavigationPro\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection;
+use Mageplaza\LayeredNavigationPro\Helper\Data;
 
 /**
  * Class Rating
@@ -29,43 +38,43 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
  */
 class Rating extends AbstractFilter
 {
-    /** @var \Mageplaza\LayeredNavigationPro\Helper\Data */
+    /** @var Data */
     protected $_moduleHelper;
 
     /**
      * Rating constructor.
      *
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $layer
-     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $moduleHelper
+     * @param ItemFactory $filterItemFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Layer $layer
+     * @param DataBuilder $itemDataBuilder
+     * @param Data $moduleHelper
      * @param array $data
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function __construct(
-        \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $layer,
-        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
-        \Mageplaza\LayeredNavigationPro\Helper\Data $moduleHelper,
+        ItemFactory $filterItemFactory,
+        StoreManagerInterface $storeManager,
+        Layer $layer,
+        DataBuilder $itemDataBuilder,
+        Data $moduleHelper,
         array $data = []
     ) {
         parent::__construct($filterItemFactory, $storeManager, $layer, $itemDataBuilder, $data);
 
         $this->_moduleHelper = $moduleHelper;
-        $this->_requestVar = \Mageplaza\LayeredNavigationPro\Helper\Data::FILTER_TYPE_RATING;
-        $this->setData('filter_type', \Mageplaza\LayeredNavigationPro\Helper\Data::FILTER_TYPE_RATING);
+        $this->_requestVar = Data::FILTER_TYPE_RATING;
+        $this->setData('filter_type', Data::FILTER_TYPE_RATING);
         $this->setData('multiple_mode', false);
     }
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      *
      * @return $this
      */
-    public function apply(\Magento\Framework\App\RequestInterface $request)
+    public function apply(RequestInterface $request)
     {
         $productCollection = $this->getLayer()->getProductCollection();
         $productCollection->getSelect()
@@ -95,7 +104,7 @@ class Rating extends AbstractFilter
     /**
      * @param int $optionId
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     protected function getOptionText($optionId)
     {
@@ -109,7 +118,7 @@ class Rating extends AbstractFilter
     /**
      * Get filter name
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getName()
     {
@@ -125,17 +134,19 @@ class Rating extends AbstractFilter
     {
         $ratingStep = [80, 60, 40, 20];
 
-        /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
 
         foreach ($ratingStep as $step) {
             $productCollectionClone = clone $productCollection;
             $productCollectionClone->getSelect()->where('rt.rating_summary >= ' . $step);
-            $this->itemDataBuilder->addItemData(
-                $step / 20 . ' Star',
-                $step / 20,
-                $productCollectionClone->resetTotalRecords()->getSize()
-            );
+            if ($productCollectionClone->resetTotalRecords()->getSize()) {
+                $this->itemDataBuilder->addItemData(
+                    $step / 20 . ' Star',
+                    $step / 20,
+                    $productCollectionClone->resetTotalRecords()->getSize()
+                );
+            }
         }
 
         return $this->itemDataBuilder->build();

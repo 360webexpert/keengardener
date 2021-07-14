@@ -47,7 +47,7 @@ class Brand extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Brands'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
         $field = $fieldset->addField('brands', 'text', [
             'label' => __('Brands'),

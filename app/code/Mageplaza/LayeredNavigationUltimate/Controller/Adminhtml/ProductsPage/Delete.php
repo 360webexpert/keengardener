@@ -21,6 +21,7 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Controller\Adminhtml\ProductsPage;
 
+use Exception;
 use Magento\Backend\App\Action;
 
 /**
@@ -43,7 +44,7 @@ class Delete extends Action
             } else {
                 $this->messageManager->addErrorMessage(__('Cannot find page to delete.'));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 

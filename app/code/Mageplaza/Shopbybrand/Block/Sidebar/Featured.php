@@ -21,7 +21,7 @@
 
 namespace Mageplaza\Shopbybrand\Block\Sidebar;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Mageplaza\Shopbybrand\Block\Brand;
 
 /**
@@ -76,13 +76,16 @@ class Featured extends Brand
     }
 
     /**
-     * @return array
-     * @throws LocalizedException
+     * @return Collection|mixed
      */
     public function getFeaturedBrand()
     {
         $featureBrands = [];
-        $collection = $this->_brandFactory->create()->getBrandCollection();
+        if (!$this->helper->getModuleConfig('sidebar/feature/enable')) {
+            return $featureBrands;
+        }
+
+        $collection = $this->getCollection('char');
         foreach ($collection as $brand) {
             if ($brand->getIsFeatured()) {
                 $featureBrands[] = $brand;

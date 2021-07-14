@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="amasty_table_method" resource="default" engine="innodb" comment="amasty_table_method">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" comment="Is Active"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
+        <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
+        <column xsi:type="varchar" name="stores" nullable="false" length="255" comment="Stores"/>
+        <column xsi:type="varchar" name="cust_groups" nullable="false" length="255" comment="Customer Groups"/>
+        <column xsi:type="smallint" name="select_rate" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Select Rate"/>
+        <column xsi:type="decimal" name="min_rate" scale="2" precision="12" unsigned="true" nullable="false" default="0"
+                comment="Min Rate"/>
+        <column xsi:type="decimal" name="max_rate" scale="2" precision="12" unsigned="true" nullable="false" default="0"
+                comment="Max Rate"/>
+        <column xsi:type="varchar" name="free_types" nullable="false" length="255" default="" comment="Free Types"/>
+        <column xsi:type="varchar" name="comment_img" nullable="true" length="255" comment="Comment Image"/>
+        <column xsi:type="smallint" name="weight_type" nullable="false" default="3" comment="Weight Type For Calculation"/>
+        <column xsi:type="smallint" name="sort_order" nullable="false" unsigned="true" comment="Sort Order"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="amasty_table_rate" resource="default" engine="innodb" comment="amasty_table_rate">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="method_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Method ID"/>
+        <column xsi:type="varchar" name="country" nullable="false" length="4" comment="Country"/>
+        <column xsi:type="int" name="state" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+                comment="State"/>
+        <column xsi:type="varchar" name="zip_from" nullable="false" length="10" comment="ZIP From"/>
+        <column xsi:type="varchar" name="zip_to" nullable="false" length="10" comment="ZIP To"/>
+        <column xsi:type="decimal" name="price_from" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Price From"/>
+        <column xsi:type="decimal" name="price_to" scale="2" precision="12" unsigned="true" nullable="false" default="0"
+                comment="Price to"/>
+        <column xsi:type="decimal" name="weight_from" scale="4" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Weight From"/>
+        <column xsi:type="decimal" name="weight_to" scale="4" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Weight to"/>
+        <column xsi:type="decimal" name="qty_from" unsigned="true" nullable="false" default="0"
+                onCreate="migrateDataFrom(qty_from)" scale="2" precision="12"/>
+        <column xsi:type="decimal" name="qty_to" unsigned="true" nullable="false" default="0"
+                onCreate="migrateDataFrom(qty_to)" scale="2" precision="12"/>
+        <column xsi:type="int" name="shipping_type" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Shipping Type"/>
+        <column xsi:type="decimal" name="cost_base" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Base"/>
+        <column xsi:type="decimal" name="cost_percent" scale="2" precision="5" unsigned="true" nullable="false"
+                default="0" comment="Cost Percent"/>
+        <column xsi:type="decimal" name="cost_product" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Product"/>
+        <column xsi:type="decimal" name="cost_weight" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Weight"/>
+        <column xsi:type="decimal" name="start_weight" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Weight From"/>
+        <column xsi:type="varchar" name="time_delivery" nullable="true" length="255" comment="Time Delivery"/>
+        <column xsi:type="int" name="num_zip_from" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Num Zip To"/>
+        <column xsi:type="int" name="num_zip_to" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Num Zip  To"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="255" default="" comment="City"
+                onCreate="migrateDataFrom(city)"/>
+        <column xsi:type="varchar" name="name_delivery" nullable="true" length="255" comment="Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="AMASTY_TABLE_RATE_METHOD_ID_AMASTY_TABLE_METHOD_ID"
+                    table="amasty_table_rate" column="method_id" referenceTable="amasty_table_method"
+                    referenceColumn="id" onDelete="CASCADE"/>
+        <index referenceId="IDX_AMASTY_TABLE_RATE_METHOD_ID" indexType="btree">
+            <column name="method_id"/>
+        </index>
+        <index referenceId="AMASTY_TABLE_RATE_COUNTRY_STATE_CITY_SHPP_TYPE">
+            <column name="country"/>
+            <column name="state"/>
+            <column name="city"/>
+            <column name="shipping_type"/>
+        </index>
+        <index referenceId="AMASTY_TABLE_RATE_PRICE_FROM_PRICE_TO" indexType="btree">
+            <column name="price_from"/>
+            <column name="price_to"/>
+        </index>
+        <index referenceId="AMASTY_TABLE_RATE_WEIGHT_FROM_WEIGHT_TO" indexType="btree">
+            <column name="weight_from"/>
+            <column name="weight_to"/>
+        </index>
+        <index referenceId="AMASTY_TABLE_RATE_QTY_FROM_QTY_TO" indexType="btree">
+            <column name="qty_from"/>
+            <column name="qty_to"/>
+        </index>
+        <index referenceId="AMASTY_TABLE_RATE_NUM_ZIP_FROM_NUM_ZIP_TO" indexType="btree">
+            <column name="num_zip_from"/>
+            <column name="num_zip_to"/>
+        </index>
+    </table>
+    <table name="amasty_method_label" resource="default" engine="innodb" comment="amasty_method_label">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="method_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Method Id"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store Entity Id"/>
+        <column xsi:type="varchar" name="label" nullable="true" length="255" comment="Label"/>
+        <column xsi:type="varchar" name="comment" nullable="true" length="255" comment="Comment"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="AMASTY_METHOD_LABEL_STORE_ID_STORE_STORE_ID"
+                    table="amasty_method_label" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="AMASTY_METHOD_LABEL_METHOD_ID_AMASTY_TABLE_METHOD_ID"
+                    table="amasty_method_label" column="method_id" referenceTable="amasty_table_method"
+                    referenceColumn="id" onDelete="CASCADE"/>
+    </table>
+    <table name="amasty_table_rate_replica" resource="default" engine="innodb" comment="amasty_table_rate_replica">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="method_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Method ID"/>
+        <column xsi:type="varchar" name="country" nullable="false" length="4" comment="Country"/>
+        <column xsi:type="int" name="state" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+                comment="State"/>
+        <column xsi:type="varchar" name="zip_from" nullable="false" length="10" comment="ZIP From"/>
+        <column xsi:type="varchar" name="zip_to" nullable="false" length="10" comment="ZIP To"/>
+        <column xsi:type="decimal" name="price_from" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Price From"/>
+        <column xsi:type="decimal" name="price_to" scale="2" precision="12" unsigned="true" nullable="false" default="0"
+                comment="Price to"/>
+        <column xsi:type="decimal" name="weight_from" scale="4" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Weight From"/>
+        <column xsi:type="decimal" name="weight_to" scale="4" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Weight to"/>
+        <column xsi:type="decimal" name="qty_from" scale="2" precision="12" unsigned="true" nullable="false" default="0"
+                comment="QTY From"/>
+        <column xsi:type="decimal" name="qty_to" scale="2" precision="12" unsigned="true" nullable="false" default="0"
+                comment="QTY To"/>
+        <column xsi:type="int" name="shipping_type" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Shipping Type"/>
+        <column xsi:type="decimal" name="cost_base" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Base"/>
+        <column xsi:type="decimal" name="cost_percent" scale="2" precision="5" unsigned="true" nullable="false"
+                default="0" comment="Cost Percent"/>
+        <column xsi:type="decimal" name="cost_product" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Product"/>
+        <column xsi:type="decimal" name="cost_weight" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Weight"/>
+        <column xsi:type="decimal" name="start_weight" scale="2" precision="12" unsigned="true" nullable="false"
+                default="0" comment="Cost Weight From"/>
+        <column xsi:type="varchar" name="time_delivery" nullable="true" length="255" comment="Time Delivery"/>
+        <column xsi:type="int" name="num_zip_from" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Num Zip To"/>
+        <column xsi:type="int" name="num_zip_to" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Num Zip  To"/>
+        <column xsi:type="varchar" name="city" nullable="false" length="255" default="" comment="City"/>
+        <column xsi:type="varchar" name="name_delivery" nullable="true" length="255" comment="Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+</schema>

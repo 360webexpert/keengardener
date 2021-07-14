@@ -1,21 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-// @codingStandardsIgnoreFile
-
-/**
- * Category view template
+ * Mageplaza
  *
- * @var $block \Magento\Catalog\Block\Category\View
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationUltimate
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
 
-<?php if ($_description = $block->getPageDescription()): ?>
-    <div class="productspage-description">
-        <?= /* @escapeNotVerified */
-        $block->getPageDescription() ?>
+<?php /** @var \Mageplaza\LayeredNavigationUltimate\Block\ProductsPage\View $block */
+if ($_description = $block->getPageDescription()) : ?>
+    <div class="category-description">
+        <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?>
     </div>
 <?php endif; ?>

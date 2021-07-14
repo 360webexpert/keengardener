@@ -32,4 +32,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\UrlRewrite\Model\StoreSwitcher\RewriteUrl">
+        <plugin name="change_brand_url_after_switch_store_view" type="Mageplaza\Shopbybrand\Plugin\Model\StoreSwitcher\RewriteUrl"/>
+    </type>
+    <type name="Magento\Framework\View\Page\Config">
+        <plugin name="change_brand_canonical" type="Mageplaza\Shopbybrand\Plugin\Block\View"/>
+    </type>
 </config>

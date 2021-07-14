@@ -21,14 +21,14 @@
 
 namespace Mageplaza\Shopbybrand\Helper;
 
+use Exception;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Filter\TranslitUrl;
@@ -40,9 +40,11 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Helper\Media;
 use Magento\Swatches\Model\Swatch;
 use Mageplaza\Core\Helper\AbstractData;
+use Mageplaza\Shopbybrand\Model\Brand;
 use Mageplaza\Shopbybrand\Model\BrandFactory;
 use Mageplaza\Shopbybrand\Model\Category;
 use Mageplaza\Shopbybrand\Model\CategoryFactory;
+use Mageplaza\Shopbybrand\Model\ResourceModel\Category\Collection as BrandCategoryCollection;
 
 /**
  * Class Data
@@ -56,7 +58,7 @@ class Data extends AbstractData
      */
     const IMAGE_SIZE = '135x135';
     /**
-     * General configuaration path
+     * General configuration path
      */
     const GENERAL_CONFIGURATION = 'shopbybrand/general';
     /**
@@ -128,6 +130,13 @@ class Data extends AbstractData
      */
     protected $_attribute;
 
+    protected $brandCollectionCache;
+
+    /**
+     * @var FilterProvider
+     */
+    protected $filterProvider;
+
     /**
      * Data constructor.
      *
@@ -140,6 +149,7 @@ class Data extends AbstractData
      * @param BrandFactory $brandFactory
      * @param Registry $registry
      * @param Attribute $attribute
+     * @param FilterProvider $filterProvider
      */
     public function __construct(
         Context $context,
@@ -150,7 +160,8 @@ class Data extends AbstractData
         CategoryFactory $categoryFactory,
         BrandFactory $brandFactory,
         Registry $registry,
-        Attribute $attribute
+        Attribute $attribute,
+        FilterProvider $filterProvider
     ) {
         $this->_filter = $filter;
         $this->translitUrl = $translitUrl;
@@ -158,6 +169,7 @@ class Data extends AbstractData
         $this->_brandFactory = $brandFactory;
         $this->registry = $registry;
         $this->_attribute = $attribute;
+        $this->filterProvider = $filterProvider;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -172,9 +184,19 @@ class Data extends AbstractData
         if (!$this->isEnabled()) {
             return false;
         }
-        $positionConfig = explode(',', $this->getGeneralConfig('show_position'));
+        $positionConfig = explode(',', $this->getConfigGeneral('show_position'));
 
         return in_array($position, $positionConfig, true);
+    }
+
+    /**
+     * @param null $store
+     *
+     * @return bool
+     */
+    public function isShowBrandsWithoutProducts($store = null)
+    {
+        return $this->getBrandConfig('show_brands_without_products', $store);
     }
 
     /**
@@ -192,7 +214,7 @@ class Data extends AbstractData
     }
 
     /**
-     * @param $brand
+     * @param Brand $brand
      *
      * @return string
      */
@@ -219,7 +241,7 @@ class Data extends AbstractData
     }
 
     /**
-     * @param $brand
+     * @param Brand $brand
      *
      * @return string
      */
@@ -237,7 +259,7 @@ class Data extends AbstractData
                 ->getDefaultPlaceholderUrl('small_image');
         }
 
-        return $this->_urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]) . $image;
+        return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $image;
     }
 
     /**
@@ -247,13 +269,13 @@ class Data extends AbstractData
      */
     public function getBrandTitle()
     {
-        return $this->getGeneralConfig('link_title') ?: __('Brands');
+        return $this->getConfigGeneral('link_title') ?: __('Brands');
     }
 
     /**
      * Retrieve Brand description
      *
-     * @param $brand
+     * @param Brand $brand
      * @param bool|false $short
      *
      * @return mixed
@@ -261,23 +283,16 @@ class Data extends AbstractData
     public function getBrandDescription($brand, $short = false)
     {
         if ($short) {
-            return $brand->getShortDescription() ?: '';
+            $content = $brand->getShortDescription() ?: '';
+        } else {
+            $content = $brand->getDescription() ?: '';
         }
 
-        return $brand->getDescription() ?: '';
-    }
-
-    /**
-     * @param string $code
-     * @param null $store
-     *
-     * @return mixed
-     */
-    public function getGeneralConfig($code = '', $store = null)
-    {
-        $code = $code ? self::GENERAL_CONFIGURATION . '/' . $code : self::GENERAL_CONFIGURATION;
-
-        return $this->getConfigValue($code, $store);
+        try {
+            return $this->filterProvider->getBlockFilter()->filter($content);
+        } catch (Exception $e) {
+            return '';
+        }
     }
 
     /**
@@ -289,20 +304,18 @@ class Data extends AbstractData
      */
     public function getAttributeCode($store = null)
     {
-        return $this->getGeneralConfig('attribute', $store);
+        return $this->getConfigGeneral('attribute', $store);
     }
 
     /**
      * Retrieve route name for brand.
      * If empty, default 'brands' will be used
      *
-     * @param null $store
-     *
      * @return string
      */
-    public function getRoute($store = null)
+    public function getRoute()
     {
-        $route = $this->getGeneralConfig('route', $store) ?: self::DEFAULT_ROUTE;
+        $route = $this->getConfigGeneral('route', $this->getStoreId()) ?: self::DEFAULT_ROUTE;
 
         return $this->formatUrlKey($route);
     }
@@ -447,7 +460,7 @@ class Data extends AbstractData
      */
     public function generateUrlKey($name, $count)
     {
-        $name = $this->strReplace($name);
+        $name = $this->removeUnicode($name);
         $text = $this->translitUrl->filter($name);
         if ($count == 0) {
             $count = '';
@@ -466,16 +479,16 @@ class Data extends AbstractData
      *
      * @return mixed|string
      */
-    public function strReplace($str)
+    public function removeUnicode($str)
     {
-        $str = trim(mb_strtolower($str));
-        $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
-        $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
-        $str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
-        $str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
-        $str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
-        $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
-        $str = preg_replace('/(đ)/', 'd', $str);
+        $str = mb_strtolower(trim($str));
+        $str = preg_replace('/([àáạảãâầấậẩẫăằắặẳẵ])/u', 'a', $str);
+        $str = preg_replace('/([èéẹẻẽêềếệểễ])/u', 'e', $str);
+        $str = preg_replace('/([ìíịỉĩ])/u', 'i', $str);
+        $str = preg_replace('/([òóọỏõôồốộổỗơờớợởỡ])/u', 'o', $str);
+        $str = preg_replace('/([ùúụủũưừứựửữ])/u', 'u', $str);
+        $str = preg_replace('/([ỳýỵỷỹ])/u', 'y', $str);
+        $str = preg_replace('/(đ)/u', 'd', $str);
 
         return $str;
     }
@@ -493,6 +506,20 @@ class Data extends AbstractData
         $key = ($cat === null) ? '' : '/' . $this->processKey($cat);
 
         return $baseUrl . $brandRoute . '/' . self::CATEGORY . $key . $this->getUrlSuffix();
+    }
+
+    /**
+     * @return int
+     */
+    public function getStoreId()
+    {
+        try {
+            $storeId = $this->storeManager->getStore()->getId();
+        } catch (NoSuchEntityException $e) {
+            $storeId = 0;
+        }
+
+        return $storeId;
     }
 
     /**
@@ -516,16 +543,17 @@ class Data extends AbstractData
             }
         }
 
-        return ($routePath[0] == $brandRoute);
+        return ($routePath[0] === $brandRoute);
     }
 
     /**
      * @param $urlKey
      *
-     * @return Category|null
+     * @return mixed|null
      */
     public function getCategoryByUrlKey($urlKey)
     {
+        /** @var Category $cat */
         $cat = $this->categoryFactory->create()->load($urlKey, 'url_key');
         if ($cat) {
             return $cat->getId();
@@ -537,13 +565,13 @@ class Data extends AbstractData
     /**
      * @param null $type
      * @param null $ids
-     * @param null $char
+     * @param null $storeId
      *
-     * @return Collection
-     * @throws LocalizedException
+     * @return Attribute\Option\Collection
      */
-    public function getBrandList($type = null, $ids = null, $char = null)
+    public function getBrandList($type = null, $ids = null, $storeId = null)
     {
+        /** @var Brand $brands */
         $brands = $this->_brandFactory->create();
         switch ($type) {
             //Get Brand List by Category
@@ -552,19 +580,35 @@ class Data extends AbstractData
                 break;
             //Get Brand List Filtered by Brand First Char
             case self::BRAND_FIRST_CHAR:
-                $sqlCond = $this->checkCharacter($char);
-                $list = $brands->getBrandCollection(
-                    null,
-                    !empty($ids) ? ['main_table.option_id' => ['in' => $ids]] : [],
-                    $sqlCond
-                );
+                $list = $brands->getBrandCollection($storeId);
                 break;
             default:
                 //Get Brand List
-                $list = $brands->getBrandCollection();
+                if (!$this->brandCollectionCache) {
+                    $this->brandCollectionCache = $brands->getBrandCollection($storeId);
+                }
+                $list = $this->brandCollectionCache;
         }
 
         return $list;
+    }
+
+    /**
+     * If $key is empty, checks whether there's any data in the object
+     *
+     * Otherwise checks if the specified attribute is set.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasData($key = '')
+    {
+        if (empty($key) || !is_string($key)) {
+            return !empty($this->_data);
+        }
+
+        return array_key_exists($key, $this->_data);
     }
 
     /**
@@ -619,12 +663,17 @@ class Data extends AbstractData
     }
 
     /**
-     * @return mixed
+     * @return BrandCategoryCollection
      */
     public function getCategoryList()
     {
         $collection = $this->categoryFactory->create()
-            ->getCollection()->addFieldToFilter('status', '1');
+            ->getCollection()
+            ->addFieldToFilter('status', '1')
+            ->addFieldToFilter(['store_ids', 'store_ids'], [
+                ['finset' => $this->getStoreId()],
+                ['finset' => 0]
+            ]);
 
         return $collection;
     }
@@ -697,16 +746,38 @@ class Data extends AbstractData
     }
 
     /**
-     * @return mixed|null
-     * @throws LocalizedException
+     * @param Product $product
+     *
+     * @return array|string|null
      */
-    public function getProductBrand()
+    public function getBrandTextFromProduct(Product $product = null)
     {
-        if ($optionId = $this->getCurrentProduct()->getData($this->getAttributeCode())) {
-            return $this->_brandFactory->create()->loadByOption($optionId);
+        $currentProduct = $product ?: $this->getCurrentProduct();
+        if (!$currentProduct) {
+            return null;
         }
 
-        return null;
+        $attCode = $this->getAttributeCode();
+
+        return $currentProduct->getAttributeText($attCode);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getBrandObject()
+    {
+        $currentProduct = $this->getCurrentProduct();
+        if (!$currentProduct) {
+            return null;
+        }
+
+        $optionId = $currentProduct->getData($this->getAttributeCode());
+        if (!$optionId) {
+            return null;
+        }
+
+        return $this->_brandFactory->create()->loadByOption($optionId);
     }
 
     /**
@@ -738,7 +809,7 @@ class Data extends AbstractData
      *
      * @return array|null
      */
-    public function converUppercase($array)
+    public function convertUppercase($array)
     {
         $input = array_flip($array);
         $input = array_change_key_case($input, CASE_UPPER);

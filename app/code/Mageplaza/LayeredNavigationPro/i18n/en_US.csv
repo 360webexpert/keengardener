@@ -10,10 +10,13 @@ Position,Position
 "Position in ProductsPage Navigation","Position in ProductsPage Navigation"
 "Position of attribute in layered navigation block.","Position of attribute in layered navigation block."
 "Use Config Settings","Use Config Settings"
-"Allow Multiple Filter","Allow Multiple Filter"
+"Allow Multiple Filters","Allow Multiple Filters"
 "Display Style","Display Style"
 "Enable Option Search","Enable Option Search"
 "Expand by default","Expand by default"
+"Show Tooltip","Show Tooltip"
+"Tooltip Thumbnail","Tooltip Thumbnail"
+"Tooltip Content","Tooltip Content"
 Slider,Slider
 "Slider and range","Slider and range"
 Range,Range
@@ -22,6 +25,8 @@ Dropdown,Dropdown
 Rating,Rating
 Swatch,Swatch
 "Swatch and text","Swatch and text"
+Label,Label
+"Image and Label","Image and Label"
 Yes,Yes
 "Use Default Config","Use Default Config"
 "%1 and above","%1 and above"
@@ -43,6 +48,7 @@ To,To
 "Additional Filters","Additional Filters"
 "Product State Filter","Product State Filter"
 "Group label","Group label"
+"The position of the attribute in the layered navigation block.","The position of the attribute in the layered navigation block."
 "Enable Product New Filter","Enable Product New Filter"
 "Product New label","Product New label"
 "Enable On Sales Filter","Enable On Sales Filter"
@@ -51,3 +57,10 @@ To,To
 "Stock label","Stock label"
 "Rating Filter","Rating Filter"
 "Enable Rating Filter","Enable Rating Filter"
+"If yes, this group will be expanded by default.","If yes, this group will be expanded by default."
+"SubCategory Slider","SubCategory Slider"
+"Enable SubCategory Slider","Enable SubCategory Slider"
+"Display Type","Display Type"
+"Apply for Categories","Apply for Categories"
+"Auto Play","Auto Play"
+"Items per Slider","Items per Slider"

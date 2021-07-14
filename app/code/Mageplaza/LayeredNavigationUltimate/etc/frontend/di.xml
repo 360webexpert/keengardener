@@ -33,6 +33,6 @@
         </arguments>
     </type>
     <type name="Smartwave\Megamenu\Block\Topmenu">
-        <plugin name="blog-porto-theme-topmenu" type="Mageplaza\LayeredNavigationUltimate\Plugin\PortoTopmenu"/>
+        <plugin name="mplayer-porto-theme-topmenu" type="Mageplaza\LayeredNavigationUltimate\Plugin\PortoTopmenu"/>
     </type>
 </config>

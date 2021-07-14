@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -9,15 +9,18 @@
 namespace Amasty\ShippingTableRates\Controller\Adminhtml\Methods;
 
 use Amasty\Base\Model\Serializer;
+use Amasty\ShippingTableRates\Controller\Adminhtml\Methods;
 use Amasty\ShippingTableRates\Model\LabelFactory;
+use Amasty\ShippingTableRates\Model\MethodFactory;
 use Amasty\ShippingTableRates\Model\ResourceModel\Label;
 use Amasty\ShippingTableRates\Model\ResourceModel\Label\CollectionFactory as LabelCollectionFactory;
+use Amasty\ShippingTableRates\Model\ResourceModel\Rate;
 use Magento\Backend\App\Action\Context;
 
 /**
  * Save Shipping Method Action
  */
-class Save extends \Amasty\ShippingTableRates\Controller\Adminhtml\Methods
+class Save extends Methods
 {
     /**
      * @var LabelFactory
@@ -37,24 +40,14 @@ class Save extends \Amasty\ShippingTableRates\Controller\Adminhtml\Methods
     private $resourceLabel;
 
     /**
-     * @var \Amasty\ShippingTableRates\Model\MethodFactory
+     * @var MethodFactory
      */
     private $methodFactory;
 
     /**
-     * @var \Amasty\ShippingTableRates\Model\ResourceModel\Rate
+     * @var Rate
      */
     private $rateResource;
-
-    /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
-     */
-    private $uploaderFactory;
-
-    /**
-     * @var \Amasty\ShippingTableRates\Model\Rate\Import\RateImportService
-     */
-    private $rateImport;
 
     public function __construct(
         Context $context,
@@ -62,10 +55,8 @@ class Save extends \Amasty\ShippingTableRates\Controller\Adminhtml\Methods
         LabelCollectionFactory $collectionFactory,
         Label $resourceLabel,
         Serializer $serializerBase,
-        \Amasty\ShippingTableRates\Model\MethodFactory $methodFactory,
-        \Amasty\ShippingTableRates\Model\ResourceModel\Rate $rateResource,
-        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
-        \Amasty\ShippingTableRates\Model\Rate\Import\RateImportService $rateImport
+        MethodFactory $methodFactory,
+        Rate $rateResource
     ) {
         parent::__construct($context);
         $this->labelFactory = $labelFactory;
@@ -74,8 +65,6 @@ class Save extends \Amasty\ShippingTableRates\Controller\Adminhtml\Methods
         $this->resourceLabel = $resourceLabel;
         $this->methodFactory = $methodFactory;
         $this->rateResource = $rateResource;
-        $this->uploaderFactory = $uploaderFactory;
-        $this->rateImport = $rateImport;
     }
 
     public function execute()
@@ -108,34 +97,11 @@ class Save extends \Amasty\ShippingTableRates\Controller\Adminhtml\Methods
             }
 
             try {
-                $noFile = false;
                 $this->prepareForSave($modelMethod);
                 $modelMethod->save();
                 $this->prepareForSaveLabels($data, $modelMethod->getId());
                 if ($modelMethod->getData('import_clear')) {
                     $this->rateResource->deleteBy($modelMethod->getId());
-                }
-
-                try {
-                    /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
-                    $uploader = $this->uploaderFactory->create(['fileId' => 'import_file']);
-                } catch (\Exception $e) {
-                    $noFile = true;
-                }
-
-                // import files
-                if (!$noFile) {
-                    $uploader->setAllowedExtensions('csv');
-                    $fileData = $uploader->validateFile();
-
-                    $fileName = $fileData['tmp_name'];
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
-                    ini_set('auto_detect_line_endings', 1);
-
-                    $errors = $this->rateImport->import($modelMethod->getId(), $fileName);
-                    foreach ($errors as $err) {
-                        $this->messageManager->addErrorMessage($err);
-                    }
                 }
 
                 $msg = __('Shipping rates have been successfully saved');

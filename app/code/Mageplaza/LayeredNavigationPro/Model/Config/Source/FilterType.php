@@ -31,12 +31,12 @@ use Mageplaza\LayeredNavigationPro\Helper\Data as LayerHelper;
 class FilterType implements ArrayInterface
 {
     /**
-     * @type \Mageplaza\LayeredNavigationPro\Helper\Data
+     * @type LayerHelper
      */
     protected $helper;
 
     /**
-     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $helper
+     * @param LayerHelper $helper
      */
     public function __construct(LayerHelper $helper)
     {

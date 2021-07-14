@@ -55,10 +55,10 @@ class Filter extends FilterModel
         }
 
         $config->addData([
-            'infiniteScroll' => (bool) $this->helper->getConfigGeneral('infinite_scroll'),
-            'ionRange'       => (bool) $this->helper->enableIonRangeSlider(),
-            'displayType'    => $displayType,
-            'ratingSlider'   => $ratingSlider
+            'infiniteScroll' => (bool)$this->helper->getConfigGeneral('infinite_scroll'),
+            'ionRange' => (bool)$this->helper->enableIonRangeSlider(),
+            'displayType' => $displayType,
+            'ratingSlider' => $ratingSlider
         ]);
 
         return $this;
@@ -78,24 +78,24 @@ class Filter extends FilterModel
             $displayType = $attribute->getData(LayerHelper::FIELD_DISPLAY_TYPE);
             if ($displayType == DisplayType::TYPE_SCROLL) {
                 return [
-                    'type'  => 'scroll',
+                    'type' => 'scroll',
                     'value' => $this->getDisplayValue(LayerHelper::FIELD_DISPLAY_HEIGHT, $attribute)
                 ];
             } elseif ($displayType == DisplayType::TYPE_HIDDEN) {
                 return [
-                    'type'  => 'hidden',
+                    'type' => 'hidden',
                     'value' => $this->getDisplayValue(LayerHelper::FIELD_DISPLAY_SIZE, $attribute)
                 ];
             } elseif ($displayType == DisplayType::TYPE_DEFAULT) {
                 $displayType = $this->helper->getConfigGeneral(LayerHelper::FIELD_DISPLAY_TYPE);
                 if ($displayType == DisplayType::TYPE_SCROLL) {
                     return [
-                        'type'  => 'scroll',
+                        'type' => 'scroll',
                         'value' => $this->getDisplayValue(LayerHelper::FIELD_DISPLAY_HEIGHT)
                     ];
                 } elseif ($displayType == DisplayType::TYPE_HIDDEN) {
                     return [
-                        'type'  => 'hidden',
+                        'type' => 'hidden',
                         'value' => $this->getDisplayValue(LayerHelper::FIELD_DISPLAY_SIZE)
                     ];
                 }
@@ -104,12 +104,12 @@ class Filter extends FilterModel
             $displayType = $this->helper->getConfigGeneral(LayerHelper::FIELD_DISPLAY_TYPE);
             if ($displayType == DisplayType::TYPE_SCROLL) {
                 return [
-                    'type'  => 'scroll',
+                    'type' => 'scroll',
                     'value' => $this->getDisplayValue(LayerHelper::FIELD_DISPLAY_HEIGHT)
                 ];
             } elseif ($displayType == DisplayType::TYPE_HIDDEN) {
                 return [
-                    'type'  => 'hidden',
+                    'type' => 'hidden',
                     'value' => $this->getDisplayValue(LayerHelper::FIELD_DISPLAY_SIZE)
                 ];
             }

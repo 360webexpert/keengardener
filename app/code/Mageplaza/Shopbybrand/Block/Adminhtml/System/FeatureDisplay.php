@@ -47,7 +47,7 @@ class FeatureDisplay extends Field
         $html .= '<pre style="background-color: #f5f5dc"><code>' . $this->_escaper->escapeHtml('<?php echo $block->getLayout()->createBlock("Mageplaza\Shopbybrand\Block\Brand\Featured")->toHtml();?>') . '</code></pre>';
 
         $html .= '<strong>' . __('Layout file') . '</strong><br />';
-        $html .= '<pre style="background-color: #f5f5dc"><code>' . $this->_escaper->escapeHtml('<block class="Mageplaza\Shopbybrand\Block\Brand\Featured" name="featuredbrand" />') . '</code></pre>';
+        $html .= '<pre style="background-color: #f5f5dc"><code>' . $this->_escaper->escapeHtml('<block class="Mageplaza\Shopbybrand\Block\Brand\Featured" name="featured_brand" />') . '</code></pre>';
 
         $html .= '</div>';
 

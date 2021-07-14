@@ -22,13 +22,14 @@ require([
         'jquery',
         'Magento_Ui/js/modal/modal'
     ], function ($, modal) {
+    'use strict';
         var options = {
             type: 'popup',
             responsive: true,
             innerScroll: true,
             clickableOverlay: true,
             modalClass: 'brand-quick-view',
-            title: 'Brand informations',
+            title: 'Brand Informations',
             buttons: [{
                 text: $.mage.__('Close'),
                 class: '',
@@ -37,15 +38,17 @@ require([
                 }
             }]
         };
-        var popup = modal(options, $('#quick-view'));
+
+        modal(options, $('#quick-view'));
+
         $(".open_model").on("click", function () {
             $('#quick-view').modal('openModal');
-            $('.modals-overlay').addClass('z-index:')
+            $('.modals-overlay').addClass('z-index:');
         });
         $(document).click(function (event) {
-            if ((event.target.className.indexOf('_show')) >= 0) {
+            if (event.target.className.indexOf('_show') >= 0) {
                 $('#quick-view').modal('closeModal');
             }
-        })
+        });
     }
 );

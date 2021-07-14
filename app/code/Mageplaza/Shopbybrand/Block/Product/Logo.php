@@ -24,6 +24,7 @@ namespace Mageplaza\Shopbybrand\Block\Product;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Shopbybrand\Helper\Data as Helper;
+use Mageplaza\Shopbybrand\Model\Config\Source\ShowBrandInfo;
 
 /**
  * Class Logo
@@ -52,17 +53,15 @@ class Logo extends Template
     }
 
     /**
-     * Get product brand
-     *
      * @return mixed|null
      */
-    public function getProductBrand()
+    public function getBrandObject()
     {
-        if ($this->helper->isEnabled() && $this->helper->getGeneralConfig('show_logo')) {
-            return $this->helper->getProductBrand();
+        if (!$this->helper->isEnabled() || in_array(ShowBrandInfo::NOT_SHOW, $this->showBrandInfo(), true)) {
+            return null;
         }
 
-        return null;
+        return $this->helper->getBrandObject();
     }
 
     /**
@@ -71,5 +70,29 @@ class Logo extends Template
     public function helper()
     {
         return $this->helper;
+    }
+
+    /**
+     * @return false|string[]
+     */
+    public function showBrandInfo()
+    {
+        return explode(',', $this->helper->getConfigGeneral('show_brand_info'));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLogoWidth()
+    {
+        return $this->helper->getConfigGeneral('logo_width_on_product_page');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLogoHeight()
+    {
+        return $this->helper->getConfigGeneral('logo_height_on_product_page');
     }
 }

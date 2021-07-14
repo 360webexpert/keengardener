@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -164,6 +164,9 @@ class Information extends \Magento\Config\Block\System\Config\Form\Fieldset
     {
         $src = $this->_assetRepo->getUrl("Amasty_Base::images/amasty_logo.svg");
         $href = 'https://amasty.com' . $this->getSeoparams() . 'amasty_logo_' . static::MODULE_CODE;
+        if ($this->moduleHelper->isOriginMarketplace()) {
+            $href = 'https://marketplace.magento.com/partner/Amasty';
+        }
         $html = '<a target="_blank" href="' . $href . '"><img class="amasty-logo" src="' . $src . '"/></a>';
         $html = '<object>' . $html . '</object>';
         return $html;

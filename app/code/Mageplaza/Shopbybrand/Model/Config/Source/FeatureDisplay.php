@@ -21,13 +21,13 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class FeatureDisplay
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class FeatureDisplay implements ArrayInterface
+class FeatureDisplay implements OptionSourceInterface
 {
     /**
      * Display only logo

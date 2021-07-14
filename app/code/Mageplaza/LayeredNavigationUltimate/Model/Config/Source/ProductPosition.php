@@ -29,9 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class ProductPosition implements ArrayInterface
 {
-    const TOPLINK    = 1;
-    const FOOTERLINK = 2;
-    const CATEGORY   = 3;
+    const TOPLINK = '1';
+    const FOOTERLINK = '2';
+    const CATEGORY = '3';
 
     /**
      * @return array

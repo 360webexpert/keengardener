@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -50,7 +50,7 @@ class Save extends \Magento\Backend\App\Action
             return;
         }
 
-        $isValid = $this->_checkData($data, $id);
+        $isValid = $this->_checkData($data);
 
         if ($isValid) {
             try {

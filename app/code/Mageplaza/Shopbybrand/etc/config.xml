@@ -29,33 +29,24 @@
                 <link_title>Brands</link_title>
                 <show_position>1,2</show_position>
                 <show_dropdown>0</show_dropdown>
-                <show_logo>1</show_logo>
+                <show_brand_menu>2</show_brand_menu>
+                <grid_columns>3</grid_columns>
+                <show_brands_without_products>1</show_brands_without_products>
+                <limit_brands>10</limit_brands>
+                <show_brand_name>1</show_brand_name>
+                <show_brand_info>logo</show_brand_info>
+                <logo_width_on_product_page>30</logo_width_on_product_page>
+                <logo_height_on_product_page>30</logo_height_on_product_page>
             </general>
-            <sidebar>
-                <feature>
-                    <enable>1</enable>
-                    <title>Featured Brands</title>
-                    <show_title>1</show_title>
-                </feature>
-                <brand_thumbnail>
-                    <enable>1</enable>
-                    <title>Brand List</title>
-                    <limit_brands>7</limit_brands>
-                </brand_thumbnail>
-                <category_brand>
-                    <enable>1</enable>
-                    <title>Brand Category</title>
-                    <limit_categories>7</limit_categories>
-                    <show_brand_qty>1</show_brand_qty>
-                </category_brand>
-            </sidebar>
             <brandpage>
                 <name>Brands</name>
                 <brandlist_style>0</brandlist_style>
                 <display>1</display>
-                <show_brandname>1</show_brandname>
+                <brand_logo_width>165</brand_logo_width>
+                <brand_logo_height>165</brand_logo_height>
                 <color>#0ed08e</color>
                 <show_description>0</show_description>
+                <show_brands_without_products>0</show_brands_without_products>
                 <show_product_qty>0</show_product_qty>
                 <show_quick_view>0</show_quick_view>
                 <brand_filter>
@@ -71,13 +62,13 @@
                     <visible_images>1</visible_images>
                 </search>
                 <feature>
-                    <enable>1</enable>
+                    <enable>0</enable>
                     <title>Featured Brands</title>
                     <style>0</style>
                     <display>0</display>
                 </feature>
                 <related_products>
-                    <enabled>1</enabled>
+                    <enabled>0</enabled>
                     <title>Products from the same brand</title>
                     <limit_product>5</limit_product>
                 </related_products>
@@ -87,6 +78,24 @@
                 <show_description>0</show_description>
                 <show_block>0</show_block>
             </brandview>
+            <sidebar>
+                <feature>
+                    <enable>0</enable>
+                    <title>Featured Brands</title>
+                    <show_title>1</show_title>
+                </feature>
+                <brand_thumbnail>
+                    <enable>0</enable>
+                    <title>Brand List</title>
+                    <limit_brands>7</limit_brands>
+                </brand_thumbnail>
+                <category_brand>
+                    <enable>1</enable>
+                    <title>Brand Category</title>
+                    <limit_categories>7</limit_categories>
+                    <show_brand_qty>1</show_brand_qty>
+                </category_brand>
+            </sidebar>
             <brand_seo>
                 <seo_pages>0</seo_pages>
             </brand_seo>

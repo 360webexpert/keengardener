@@ -19,11 +19,21 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
+/** @var \Mageplaza\Shopbybrand\Block\Design $block */
 $helper = $block->helper();
 ?>
 <style type="text/css">
+    .block-brand-list .brand-list-content li.product-item {
+        margin-left: 0;
+        padding: 5px;
+    }
+
+    .block-brand-list .brand-list-content .product-item-info .product-image-photo {
+        width: <?= /** @noEscape */ $block->getLogoWidth() . 'px' ?>;
+        height: <?= /** @noEscape */ $block->getLogoHeight() . 'px' ?>
+    }
     /*===================================================================
-    |                            CONFIGUARATION STYLE                    |
+    |                            Configuration Style                    |
     ====================================================================*/
     <?php if ($color = $helper->getBrandConfig('color')) : ?>
     .block-brand-search,
@@ -54,11 +64,8 @@ $helper = $block->helper();
     ====================================================================*/
 
     .brand-list-content li {
-        width: <?php if ($helper->getBrandConfig('display') == \Mageplaza\Shopbybrand\Model\Config\Source\BrandListDisplay::DISPLAY_LABEL) :
-            ?>33%;
-               <?php else :
-    ?> 16.3% !important;
-                 <?php endif;?>
+        width: <?= $helper->getBrandConfig('display') === \Mageplaza\Shopbybrand\Model\Config\Source\BrandListDisplay::DISPLAY_LABEL
+        ? '33%' : '16.3% !important' ?>;
     }
 
     .related-product-modal-content li.product-item {
@@ -87,7 +94,7 @@ $helper = $block->helper();
         }
     }
 
-    .quicview_popup a:hover {
+    .quickview_popup a:hover {
         color: <?= /** @noEscape */ $helper->getBrandConfig('color') ?>;
         text-decoration: none;
         cursor: pointer;

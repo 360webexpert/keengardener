@@ -2,7 +2,6 @@
 
 - Installation guide: https://www.mageplaza.com/install-magento-2-extension/ 
 - User Guide: https://docs.mageplaza.com/shop-by-brand-m2/index.html
-- Product page: https://www.mageplaza.com/magento-2-shop-by-brand/
 - FAQs: https://www.mageplaza.com/faqs/
 - Get Support: https://mageplaza.freshdesk.com/ or support@mageplaza.com
 - Changelog: https://www.mageplaza.com/releases/shop-by-brand

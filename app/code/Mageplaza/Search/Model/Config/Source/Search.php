@@ -30,10 +30,10 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Search implements ArrayInterface
 {
-    const PRODUCT_SEARCH       = 'product_search';
-    const NEW_PRODUCTS         = 'new_products';
+    const PRODUCT_SEARCH = 'product_search';
+    const NEW_PRODUCTS = 'new_products';
     const MOST_VIEWED_PRODUCTS = 'most_viewed_products';
-    const BESTSELLERS          = 'bestsellers';
+    const BESTSELLERS = 'bestsellers';
 
     /**
      * Options getter

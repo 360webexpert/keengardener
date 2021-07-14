@@ -2,13 +2,14 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
 
+    <!-- To Do After Change by AdminFindAndOpenCreatedProduct in All Tests -->
     <actionGroup name="AdminFindAndOpenProduct">
         <arguments>
             <argument name="products"/>
@@ -78,6 +79,36 @@
         <waitForPageLoad time="50" stepKey="waitForPageLoad8"/>
         <click selector="{{AdminProductSection.Save}}" stepKey="SaveProductSetting"/>
         <waitForPageLoad time="100" stepKey="waitForPageLoad9"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminFindAndOpenCreatedProduct">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <amOnPage url="{{AdminGridProductsPage.url}}" stepKey="navigateToAdminAllProductsPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterOpenGrid"/>
+        <conditionalClick selector="{{AdminGridProductsSection.FilterClearAllButton}}"
+                          dependentSelector="{{AdminGridProductsSection.FilterClearAllButton}}"
+                          visible="true" stepKey="clearAllFilters"/>
+        <click selector="{{AdminGridProductsSection.FiltersButton}}" stepKey="AddFilters"/>
+        <fillField selector="{{AdminGridProductsSection.InputNameFilters}}" userInput="{{product.name}}" stepKey="enterProductName"/>
+        <click selector="{{AdminGridProductsSection.ApplyFiltersButton}}" stepKey="ApplyFilter"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterFilter"/>
+        <click selector="{{AdminGridProductsSection.ProductOnGrid(product.name)}}" stepKey="OpenProduct"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterOpenProduct"/>
+    </actionGroup>
+
+
+    <actionGroup name="AdminEditProductTaxClass" extends="AdminFindAndOpenCreatedProduct">
+        <arguments>
+            <argument name="taxClass"/>
+        </arguments>
+        <selectOption selector="{{AdminProductSection.ProductTaxClass}}"
+                      userInput="{{taxClass}}"
+                      stepKey="selectTaxClass"/>
+        <click selector="{{AdminProductSection.Save}}" stepKey="SaveProductSetting"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterSave"/>
     </actionGroup>
 
 </actionGroups>

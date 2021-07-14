@@ -1,16 +1,26 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
 
 namespace Amasty\Base\Plugin\Backend\Model\Menu;
 
+use Amasty\Base\Model\Feed\ExtensionsProvider;
+use Amasty\Base\Model\ModuleInfoProvider;
 use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Config;
+use Magento\Backend\Model\Menu\Filter\IteratorFactory;
+use Magento\Backend\Model\Menu\ItemFactory;
+use Magento\Config\Model\Config\Structure;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObjectFactory as ObjectFactory;
+use Magento\Framework\Module\ModuleListInterface;
 use Magento\Store\Model\ScopeInterface;
+use Psr\Log\LoggerInterface;
 
 class Builder
 {
@@ -19,7 +29,7 @@ class Builder
     const SETTING_ENABLE = 'amasty_base/menu/enable';
 
     /**
-     * @var Menu\Config
+     * @var Config
      */
     private $menuConfig;
 
@@ -29,27 +39,22 @@ class Builder
     private $amastyItems = null;
 
     /**
-     * @var Menu\Filter\IteratorFactory
+     * @var IteratorFactory
      */
     private $iteratorFactory;
 
     /**
-     * @var \Magento\Backend\Model\Menu\ItemFactory
+     * @var ItemFactory
      */
     private $itemFactory;
 
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface
+     * @var ModuleListInterface
      */
     private $moduleList;
 
     /**
-     * @var \Amasty\Base\Helper\Module
-     */
-    private $moduleHelper;
-
-    /**
-     * @var \Magento\Config\Model\Config\Structure
+     * @var Structure
      */
     private $configStructure;
 
@@ -59,35 +64,54 @@ class Builder
     private $objectFactory;
 
     /**
-     * @var \Magento\Framework\App\ProductMetadataInterface
+     * @var ProductMetadataInterface
      */
     private $metadata;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var ExtensionsProvider
+     */
+    private $extensionsProvider;
+
+    /**
+     * @var ModuleInfoProvider
+     */
+    private $moduleInfoProvider;
+
     public function __construct(
-        \Magento\Backend\Model\Menu\Config $menuConfig,
-        \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory,
-        \Magento\Backend\Model\Menu\ItemFactory $itemFactory,
-        \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Amasty\Base\Helper\Module $moduleHelper,
-        \Magento\Config\Model\Config\Structure $configStructure,
-        \Magento\Framework\App\ProductMetadataInterface $metadata,
+        Config $menuConfig,
+        IteratorFactory $iteratorFactory,
+        ItemFactory $itemFactory,
+        ModuleListInterface $moduleList,
+        Structure $configStructure,
+        ProductMetadataInterface $metadata,
         ObjectFactory $objectFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ExtensionsProvider $extensionsProvider,
+        LoggerInterface $logger,
+        ModuleInfoProvider $moduleInfoProvider
     ) {
         $this->menuConfig = $menuConfig;
         $this->iteratorFactory = $iteratorFactory;
         $this->itemFactory = $itemFactory;
         $this->moduleList = $moduleList;
-        $this->moduleHelper = $moduleHelper;
         $this->configStructure = $configStructure;
         $this->objectFactory = $objectFactory;
         $this->metadata = $metadata;
         $this->scopeConfig = $scopeConfig;
+        $this->logger = $logger;
+        $this->extensionsProvider = $extensionsProvider;
+        $this->moduleInfoProvider = $moduleInfoProvider;
     }
 
     /**
@@ -136,7 +160,7 @@ class Builder
 
         foreach ($this->getInstalledModules($configItems) as $title => $installedModule) {
 
-            $moduleInfo = $this->moduleHelper->getFeedModuleData($installedModule);
+            $moduleInfo = $this->extensionsProvider->getFeedModuleData($installedModule);
 
             if (isset($menuItems[$installedModule])) {
                 $itemsToAdd = $this->cloneMenuItems($menuItems[$installedModule], $menu);
@@ -152,7 +176,10 @@ class Builder
                     'adminhtml/system_config/edit/section/' . $configItems[$installedModule]['id'],
                     __('Configuration')->render()
                 );
-                $itemsToAdd[] = $amastyItem;
+
+                if ($amastyItem) {
+                    $itemsToAdd[] = $amastyItem;
+                }
             }
 
             if (isset($moduleInfo['guide']) && $moduleInfo['guide']) {
@@ -163,7 +190,10 @@ class Builder
                     'adminhtml/system_config/edit/section/ambase',
                     __('User Guide')->render()
                 );
-                $itemsToAdd[] = $amastyItem;
+
+                if ($amastyItem) {
+                    $itemsToAdd[] = $amastyItem;
+                }
             }
 
             $parentNodeResource = '';
@@ -177,14 +207,15 @@ class Builder
 
             if ($itemsToAdd) {
                 $itemId = $installedModule . '::container';
+                $moduleConfigResource = $configItems[$installedModule]['resource'] ?? $installedModule . '::config';
                 /** @var \Magento\Backend\Model\Menu\Item $module */
                 $module = $this->itemFactory->create(
                     [
                         'data' => [
                             'id'       => $itemId,
-                            'title'    => $title,
+                            'title'    => $this->normalizeTitle($title),
                             'module'   => $installedModule,
-                            'resource' => $this->getValidResource($installedModule, $parentNodeResource)
+                            'resource' => $parentNodeResource ?: $moduleConfigResource
                         ]
                     ]
                 );
@@ -201,17 +232,17 @@ class Builder
     }
 
     /**
-     * @param $installedModule
-     * @param $parentNode
-     *
+     * According to default validation rules, title can't be longer than 50 characters
+     * @param string $title
      * @return string
      */
-    private function getValidResource($installedModule, $parentNodeResource)
+    private function normalizeTitle(string $title): string
     {
-        if (!empty($parentNodeResource)) {
-            return $parentNodeResource;
+        if (mb_strlen($title) > 50) {
+            $title = mb_substr($title, 0, 47) . '...';
         }
-        return $installedModule . "::config";
+
+        return $title;
     }
 
     /**
@@ -227,13 +258,17 @@ class Builder
             if ($amastyItem) {
                 $itemData = $amastyItem->toArray();
                 if (isset($itemData['id'], $itemData['resource'], $itemData['title'])) {
-                    $itemsToAdd[] = $this->generateMenuItem(
+                    $itemToAdd = $this->generateMenuItem(
                         $itemData['id'] . 'menu',
                         $this->getModuleFullName($itemData),
                         $itemData['resource'],
                         $itemData['action'],
                         $itemData['title']
                     );
+
+                    if ($itemToAdd) {
+                        $itemsToAdd[] = $itemToAdd;
+                    }
                 }
             }
         }
@@ -278,6 +313,7 @@ class Builder
                 ]
             );
         } catch (\Exception $ex) {
+            $this->logger->warning($ex);
             $item = false;
         }
 
@@ -299,7 +335,7 @@ class Builder
         foreach ($modules as $moduleName) {
             if ($moduleName === 'Amasty_Base'
                 || strpos($moduleName, 'Amasty_') === false
-                || in_array($moduleName, $this->moduleHelper->getRestrictedModules(), true)
+                || in_array($moduleName, $this->moduleInfoProvider->getRestrictedModules(), true)
             ) {
                 continue;
             }
@@ -413,16 +449,13 @@ class Builder
     private function getModuleTitle($name)
     {
         $result = $name;
-        $module = $this->moduleHelper->getFeedModuleData($name);
+        $module = $this->extensionsProvider->getFeedModuleData($name);
         if ($module && isset($module['name'])) {
             $result = $module['name'];
             $result = str_replace(' for Magento 2', '', $result);
         } else {
             $result = str_replace('Amasty_', '', $result);
-            preg_match_all('/((?:^|[A-Z])[a-z]+)/', $result, $matches);
-            if (isset($matches[1]) && $matches[1]) {
-                $result = implode(' ', $matches[1]);
-            }
+            $result = preg_replace('/([a-z0-9])([A-Z])/', '$1 $2', $result);
         }
 
         return $result;

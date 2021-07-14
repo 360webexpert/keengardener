@@ -22,6 +22,7 @@
 namespace Mageplaza\LayeredNavigation\Plugin\Controller\Product;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Wishlist\Controller\Index\Add;
 use Mageplaza\LayeredNavigation\Helper\Data;
 
 /**
@@ -30,17 +31,17 @@ use Mageplaza\LayeredNavigation\Helper\Data;
  */
 class CompareWishlist
 {
-    /** @var \Magento\Framework\App\RequestInterface */
+    /** @var RequestInterface */
     protected $request;
 
-    /** @var \Mageplaza\LayeredNavigation\Helper\Data */
+    /** @var Data */
     protected $dataHelper;
 
     /**
      * Add constructor.
      *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Mageplaza\LayeredNavigation\Helper\Data $helperData
+     * @param RequestInterface $request
+     * @param Data $helperData
      */
     public function __construct(
         RequestInterface $request,
@@ -51,7 +52,7 @@ class CompareWishlist
     }
 
     /**
-     * @param \Magento\Catalog\Controller\Product\Compare\Add|\Magento\Wishlist\Controller\Index\Add $action
+     * @param \Magento\Catalog\Controller\Product\Compare\Add|Add $action
      * @param $page
      *
      * @return mixed

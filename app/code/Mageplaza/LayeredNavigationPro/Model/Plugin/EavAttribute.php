@@ -22,6 +22,8 @@
 namespace Mageplaza\LayeredNavigationPro\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\Exception\FileSystemException;
+use Mageplaza\LayeredNavigation\Helper\Image as HelperImage;
 use Mageplaza\LayeredNavigationPro\Helper\Data;
 
 /**
@@ -30,17 +32,26 @@ use Mageplaza\LayeredNavigationPro\Helper\Data;
  */
 class EavAttribute
 {
-    /** @var \Mageplaza\LayeredNavigationPro\Helper\Data */
+    /** @var Data */
     protected $layerHelper;
+
+    /**
+     * @var HelperImage
+     */
+    protected $helperImage;
 
     /**
      * EavAttribute constructor.
      *
-     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $layerHelper
+     * @param Data $layerHelper
+     * @param HelperImage $helperImage
      */
-    public function __construct(Data $layerHelper)
-    {
+    public function __construct(
+        Data $layerHelper,
+        HelperImage $helperImage
+    ) {
         $this->layerHelper = $layerHelper;
+        $this->helperImage = $helperImage;
     }
 
     /**
@@ -48,13 +59,13 @@ class EavAttribute
      *
      * @param Attribute $attribute
      *
-     * @throws \Zend_Serializer_Exception
+     * @throws FileSystemException
      */
     public function beforeSave(Attribute $attribute)
     {
         if ($this->layerHelper->isEnabled()) {
             $initialAdditionalData = [];
-            $additionalData = (string) $attribute->getData('additional_data');
+            $additionalData        = (string) $attribute->getData('additional_data');
             if (!empty($additionalData)) {
                 $additionalData = $this->layerHelper->unserialize($additionalData);
                 if (is_array($additionalData)) {
@@ -64,8 +75,17 @@ class EavAttribute
 
             $dataToAdd = [];
             foreach ($this->layerHelper->getLayerAdditionalFields() as $key) {
+                if ($key === Data::FIELD_TOOLTIP_THUMBNAIL) {
+                    $data = $attribute->getData();
+                    $this->helperImage->uploadThumbnail(
+                        $data,
+                        Data::FIELD_TOOLTIP_THUMBNAIL,
+                        !empty($data[$key]) ? $data[$key]['value'] : null
+                    );
+                    $attribute->setData($key, $data[$key]);
+                }
                 $dataValue = $attribute->getData($key);
-                if (null !== $dataValue) {
+                if ($dataValue !== null) {
                     $dataToAdd[$key] = $dataValue;
                 }
             }

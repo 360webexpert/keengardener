@@ -27,4 +27,18 @@
     <type name="Magento\Catalog\Model\Layer\FilterList">
         <plugin name="mp_layered_filterlist" type="Mageplaza\LayeredNavigationPro\Model\Plugin\FilterList" sortOrder="1"/>
     </type>
+
+    <type name="Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term">
+        <plugin name="Mageplaza_LayeredNavigationPro::AggregationTermAddTotals"
+                type="Mageplaza\LayeredNavigationPro\Plugin\Elasticsearch\SearchAdapter\Aggregation\Builder\Term"/>
+    </type>
+
+    <type name="Magento\Elasticsearch\SearchAdapter\Mapper">
+        <plugin name="Mageplaza_LayeredNavigationPro::updateElasticQuery"
+                type="Mageplaza\LayeredNavigationPro\Plugin\Elasticsearch\SearchAdapter\Mapper"/>
+    </type>
+    <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper">
+        <plugin name="Mageplaza_LayeredNavigationPro::updateElasticQuery"
+                type="Mageplaza\LayeredNavigationPro\Plugin\Elasticsearch\SearchAdapter\Mapper"/>
+    </type>
 </config>

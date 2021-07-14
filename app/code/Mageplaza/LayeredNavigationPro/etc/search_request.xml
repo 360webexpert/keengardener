@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigation
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request.xsd">
+    <request query="quick_search_container" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="quick_search_container" boost="1">
+                <queryReference clause="must" ref="mp_is_new"/>
+                <queryReference clause="must" ref="mp_on_sale"/>
+            </query>
+            <query xsi:type="filteredQuery" name="mp_is_new">
+                <filterReference clause="must" ref="mp_is_new_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="mp_on_sale">
+                <filterReference clause="must" ref="mp_on_sale_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="rangeFilter" name="mp_is_new_filter" field="mp_is_new" from="$mp_is_new$"/>
+            <filter xsi:type="rangeFilter" name="mp_on_sale_filter" field="mp_on_sale" from="$mp_on_sale$"/>
+        </filters>
+        <aggregations>
+            <bucket name="mp_is_new_bucket" field="mp_is_new" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="mp_on_sale_bucket" field="mp_on_sale" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+        </aggregations>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+    <request query="catalog_view_container" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="catalog_view_container" boost="1">
+                <queryReference clause="must" ref="mp_is_new"/>
+                <queryReference clause="must" ref="mp_on_sale"/>
+            </query>
+            <query xsi:type="filteredQuery" name="mp_is_new">
+                <filterReference clause="must" ref="mp_is_new_filter"/>
+            </query>
+            <query xsi:type="filteredQuery" name="mp_on_sale">
+                <filterReference clause="must" ref="mp_on_sale_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="rangeFilter" name="mp_is_new_filter" field="mp_is_new" from="$mp_is_new$"/>
+            <filter xsi:type="rangeFilter" name="mp_on_sale_filter" field="mp_on_sale" from="$mp_on_sale$"/>
+        </filters>
+        <aggregations>
+            <bucket name="mp_is_new_bucket" field="mp_is_new" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+            <bucket name="mp_on_sale_bucket" field="mp_on_sale" xsi:type="termBucket">
+                <metrics>
+                    <metric type="count"/>
+                </metrics>
+            </bucket>
+        </aggregations>
+        <from>0</from>
+        <size>10000</size>
+    </request>
+</requests>

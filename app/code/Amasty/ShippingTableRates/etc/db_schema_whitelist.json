@@ -1,0 +1,102 @@
+{
+    "amasty_table_method": {
+        "column": {
+            "id": true,
+            "is_active": true,
+            "name": true,
+            "comment": true,
+            "stores": true,
+            "cust_groups": true,
+            "select_rate": true,
+            "min_rate": true,
+            "max_rate": true,
+            "free_types": true,
+            "comment_img": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "amasty_table_rate": {
+        "column": {
+            "id": true,
+            "method_id": true,
+            "country": true,
+            "state": true,
+            "zip_from": true,
+            "zip_to": true,
+            "price_from": true,
+            "price_to": true,
+            "weight_from": true,
+            "weight_to": true,
+            "qty_from": true,
+            "qty_to": true,
+            "shipping_type": true,
+            "cost_base": true,
+            "cost_percent": true,
+            "cost_product": true,
+            "cost_weight": true,
+            "start_weight": true,
+            "time_delivery": true,
+            "num_zip_from": true,
+            "num_zip_to": true,
+            "city": true,
+            "name_delivery": true
+        },
+        "index": {
+            "AMASTY_TABLE_RATE_METHOD_ID": true,
+            "AMASTY_TABLE_RATE_COUNTRY_STATE_CITY_SHIPPING_TYPE": true,
+            "AMASTY_TABLE_RATE_PRICE_FROM_PRICE_TO": true,
+            "AMASTY_TABLE_RATE_WEIGHT_FROM_WEIGHT_TO": true,
+            "AMASTY_TABLE_RATE_QTY_FROM_QTY_TO": true,
+            "AMASTY_TABLE_RATE_NUM_ZIP_FROM_NUM_ZIP_TO": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMASTY_TABLE_RATE_METHOD_ID_AMASTY_TABLE_METHOD_ID": true
+        }
+    },
+    "amasty_method_label": {
+        "column": {
+            "entity_id": true,
+            "method_id": true,
+            "store_id": true,
+            "label": true,
+            "comment": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "AMASTY_METHOD_LABEL_STORE_ID_STORE_STORE_ID": true,
+            "AMASTY_METHOD_LABEL_METHOD_ID_AMASTY_TABLE_METHOD_ID": true
+        }
+    },
+    "amasty_table_rate_replica": {
+        "column": {
+            "id": true,
+            "method_id": true,
+            "country": true,
+            "state": true,
+            "zip_from": true,
+            "zip_to": true,
+            "price_from": true,
+            "price_to": true,
+            "weight_from": true,
+            "weight_to": true,
+            "qty_from": true,
+            "qty_to": true,
+            "shipping_type": true,
+            "cost_base": true,
+            "cost_percent": true,
+            "cost_product": true,
+            "cost_weight": true,
+            "time_delivery": true,
+            "num_zip_from": true,
+            "num_zip_to": true,
+            "city": true,
+            "name_delivery": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

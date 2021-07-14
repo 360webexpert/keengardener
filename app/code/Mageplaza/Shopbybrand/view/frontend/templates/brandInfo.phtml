@@ -1,0 +1,61 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+<?php /** @var \Mageplaza\Shopbybrand\Block\Brand\View $block */
+$brandName = $block->getBrand()->getValue(); ?>
+<script type="text/javascript">
+    require(['jquery'], function ($) {
+        $(".navigation li.mpbrand-top-link").addClass("active");
+    });
+</script>
+<div class="brand-information">
+    <div class="brand-detail">
+        <?php if ($image = $block->getBrandImage()) : ?>
+            <div class="brand-image-container">
+                <img class="brand-image-photo"
+                     src="<?= /** @noEscape */ $block->getBrandImage() ?>"
+                     alt="<?= $block->escapeHtml($brandName) ?>" title="<?= $block->escapeHtml($brandName) ?>">
+            </div>
+        <?php endif; ?>
+        <?php if ($description = $block->getBrandDescription()) : ?>
+            <div class="brand-description-container">
+                <div class="brand-description">
+                    <?= /** @noEscape */ $description ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php if ($blockHtml = $block->getStaticContent()) : ?>
+    <div class="brand-cms-container">
+        <div class="brand-static-block">
+            <?= /** @noEscape */ $blockHtml ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+
+<style type="text/css">
+    .brand-information .brand-detail .brand-image-photo {
+        width: <?= /** @noEscape */ $block->getLogoWidth() . 'px' ?>;
+        height: <?= /** @noEscape */ $block->getLogoHeight() . 'px' ?>
+    }
+</style>
+

@@ -69,4 +69,20 @@ class Design extends Template
     {
         return $this->_helperConfig->getBrandConfig('custom_css');
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLogoWidth()
+    {
+        return $this->_helperConfig->getModuleConfig('brandpage/brand_logo_width');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLogoHeight()
+    {
+        return $this->_helperConfig->getModuleConfig('brandpage/brand_logo_height');
+    }
 }

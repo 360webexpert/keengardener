@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -61,6 +61,6 @@ class ImportCounter
      */
     public function getDeletedCount()
     {
-        return $this->updated;
+        return $this->deleted;
     }
 }

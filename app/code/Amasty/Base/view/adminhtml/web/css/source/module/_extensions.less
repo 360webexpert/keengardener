@@ -99,7 +99,12 @@
     }
 
     .ambase-modules-block {
-        display: flex;
+        display: flex; //for IE 11
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 164px);
+        justify-content: space-between;
+        grid-column-gap: 10px;
+        grid-row-gap: 15px;
         flex-wrap: wrap;
         margin-top: 12px;
     }
@@ -198,7 +203,7 @@
 
         .ambase-svg.-arrow {
             margin: 0 10px;
-            width: 40px;
+            min-width: 40px;
             background: @ambase__icon-arrow no-repeat center;
         }
     }
@@ -226,7 +231,7 @@
         }
     }
 
-    .ambase-tab-container > .admin__page-nav-title {
+    .ambase-tab-container > .admin__page-nav-title._collapsible {
         padding-right: 10rem;
     }
 
@@ -244,5 +249,12 @@
         font-size: 16px;
         font-weight: bold;
         line-height: 22px;
+    }
+}
+
+//for IE 11
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .ambase-modules-block {
+        justify-content: flex-start;
     }
 }

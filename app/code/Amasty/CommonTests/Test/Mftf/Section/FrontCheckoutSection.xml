@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -23,6 +23,8 @@
         <!--Shipping Methods-->
         <element name="FixedShippingMethod" type="radio" selector="//div[@id='checkout-shipping-method-load']//input[@value='flatrate_flatrate']"/>
         <element name="BestWayShippingMethod" type="text" selector="//div[@id='checkout-shipping-method-load']//input[@value='tablerate_bestway']"/>
+        <element name="ShippingMethodPrice" type="text"  parameterized="true"
+                 selector="//input[contains(@value, '{{shippingMethods}}')]/parent::td/following-sibling::td/span/span[@class='price']"/>
         <!--Button Next-->
         <element name="Next" type="button" selector="//button[@data-role='opc-continue']"/>
         <element name="SelectForRegion" type="select" selector="//select[@name='region_id']"/>
@@ -39,6 +41,8 @@
         <element name="discountBlockActive" type="block" selector="//span[@id='block-discount-heading']/parent::div[@aria-selected='true']"/>
         <element name="applyButton" type="button" selector="//form[@id='discount-form']//button[@class='action action-apply']" timeout="30"/>
         <element name="cancelButton" type="button" selector="//form[@id='discount-form']//button[@class='action action-cancel']" timeout="30"/>
+        <element name="DiscountAmount" type="block" selector="//tr[@class='totals discount']/td[@class='amount']/span"/>
+        <element name="Discount" type="button" selector="//span[text()='Discount']"/>
     </section>
 
 </sections>

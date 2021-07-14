@@ -21,7 +21,9 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Block\Type;
 
+use Magento\Framework\App\ObjectManager;
 use Mageplaza\LayeredNavigationPro\Block\Type\Slider as SliderPro;
+use Mageplaza\LayeredNavigationUltimate\Helper\Data;
 
 /**
  * Class Slider
@@ -37,8 +39,8 @@ class Slider extends SliderPro
     {
         parent::_construct();
 
-        /** @var \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper */
-        $helper = \Magento\Framework\App\ObjectManager::getInstance()->get('\Mageplaza\LayeredNavigationUltimate\Helper\Data');
+        /** @var Data $helper */
+        $helper = ObjectManager::getInstance()->get('\Mageplaza\LayeredNavigationUltimate\Helper\Data');
         if ($helper->enableIonRangeSlider()) {
             $this->setTemplate('Mageplaza_LayeredNavigationUltimate::type/slider.phtml');
         }

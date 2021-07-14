@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -19,6 +19,8 @@
         <element name="ShippingMethodName" type="block" selector="//div[@class='admin__page-section-item order-shipping-method']//strong"/>
         <element name="ShippingMethodPrice" type="block" selector="//div[@class='admin__page-section-item order-shipping-method']//span[@class='price']"/>
         <element name="Tax" type="block" selector="//td[contains(string(), 'Tax')]/parent::tr//span[@class='price']"/>
+        <element name="PaymentMethodName" type="block" parameterized="true"
+                 selector="//div[@class='admin__page-section-item-content'][contains(string(), '{{paymentMethods.paymentName}}')]"/>
     </section>
 
     <section name="AdminCreateOrderSection">
@@ -34,8 +36,12 @@
         <element name="SkuFieldForAddProduct" type="input" selector="//table[@id='sku_table']//input[@name='sku']"/>
         <element name="QtyFieldForAddProduct" type="input" selector="//table[@id='sku_table']//input[@name='qty']"/>
         <element name="GetShippingMethodsButton" type="button" selector="//div[@id='order-shipping_method']//a[@class='action-default']"/>
-        <element name="SubmitOrderButton" type="button" selector="//button[@data-ui-id='widget-button-0']"/>
+        <element name="SubmitOrderButton" type="button" selector="//div[@class='actions']//button[@title='Submit Order']"/>
         <element name="PaymentAndShippingSection" type="block" selector="//section[@id='order-methods']"/>
+        <element name="ShippingMethods" type="radio" parameterized="true" selector="//input[@id='{{shippingMethodsName}}']"/>
     </section>
 
+    <section name="AdminSelectCustomerNewOrderSection">
+        <element name="CustomerEmail" type="button" parameterized="true" selector="//tr[@data-role='row']//td[contains(string(),'{{Customer.email}}')]"/>
+    </section>
 </sections>

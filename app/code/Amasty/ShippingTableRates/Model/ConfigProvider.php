@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -41,6 +41,7 @@ class ConfigProvider extends ConfigProviderAbstract
     const XPATH_CONFIGURABLE_CHILD = 'configurable_child';
     const XPATH_BUNDLE_CHILD = 'bundle_child';
     const XPATH_DONT_SPLIT = 'dont_split';
+    const XPATH_NUMERIC_ZIP = 'numeric_zip';
     /**#@-*/
 
     const PATTERN_VALID_VOLUME_DIMENSION = '/^((?:\d+?)(?:[.,](?:\d+?)(?=[^\d.,\s]))?)(?:[^\d.,\s])'
@@ -90,10 +91,10 @@ class ConfigProvider extends ConfigProviderAbstract
         if ($typeVolumetricWeight == Volumetrictype::VOLUMETRIC_ATTRIBUTE_TYPE
             || $typeVolumetricWeight == Volumetrictype::VOLUMETRIC_SEPARATE_DIMENSION_ATTRIBUTE
         ) {
-            $volumetricWeight = $shippingFactor ? $volumeWeight / $shippingFactor : 0;
+            $volumetricWeight = $shippingFactor ? (float)$volumeWeight / $shippingFactor : 0;
         } elseif ($typeVolumetricWeight == Volumetrictype::VOLUMETRIC_DIMENSIONS_ATTRIBUTE) {
             $volumeByDimensions = $this->calculateVolumeByDimensionsAttribtue($volumeWeight);
-            $volumetricWeight = $shippingFactor ? $volumeByDimensions / $shippingFactor : 0;
+            $volumetricWeight = $shippingFactor ? (float)$volumeByDimensions / $shippingFactor : 0;
         }
 
         return (float)$volumetricWeight;
@@ -254,7 +255,7 @@ class ConfigProvider extends ConfigProviderAbstract
     /**
      * @return int
      */
-    public function getConfigurableSippingType()
+    public function getConfigurableShippingType()
     {
         return (int)$this->getValue(self::XPATH_CONFIGURABLE_CHILD);
     }
@@ -273,5 +274,15 @@ class ConfigProvider extends ConfigProviderAbstract
     public function getDontSplit()
     {
         return (int)$this->getValue(self::XPATH_DONT_SPLIT);
+    }
+
+    /**
+     * The method gets value of the option 'Compare post codes as'
+     *
+     * @return int
+     */
+    public function getNumericZip()
+    {
+        return (int)$this->getValue(self::XPATH_NUMERIC_ZIP);
     }
 }

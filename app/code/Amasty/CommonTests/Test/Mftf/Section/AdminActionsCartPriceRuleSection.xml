@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -45,14 +45,8 @@
         <element name="CategoriesInputForSearch" type="input" selector="//div[@data-index='promo_banners_highlights']//input[@data-role='advanced-select-text']"/>
         <element name="CategoriesFoundCategory" type="button" selector="//div[@data-index='promo_banners_highlights']//li[@data-role='option-group']/div"/>
         <element name="HighlightPromotionTopBannerTab" type="button" selector="//div[@data-index='top_banner']/div[@class='fieldset-wrapper-title']"/>
-        <element name="HighlightPromotionTopBannerTabOpen" type="block" selector="//div[@data-index='top_banner']/div[@data-state-collapsible='open']"/>
-        <element name="HighlightPromotionTopBannerTabClose" type="block" selector="//div[@data-index='top_banner']/div[@data-state-collapsible='closed']"/>
         <element name="HighlightPromotionAfterBannerTab" type="button" selector="//div[@data-index='after_description_banner']/div[@class='fieldset-wrapper-title']"/>
-        <element name="HighlightPromotionAfterBannerTabOpen" type="block" selector="//div[@data-index='after_description_banner']/div[@data-state-collapsible='open']"/>
-        <element name="HighlightPromotionAfterBannerTabClose" type="block" selector="//div[@data-index='after_description_banner']/div[@data-state-collapsible='closed']"/>
         <element name="HighlightPromotionLabelBannerTab" type="button" selector="//div[@data-index='product_banner']/div[@class='fieldset-wrapper-title']"/>
-        <element name="HighlightPromotionLabelBannerTabOpen" type="block" selector="//div[@data-index='product_banner']/div[@data-state-collapsible='open']"/>
-        <element name="HighlightPromotionLabelBannerTabClose" type="block" selector="//div[@data-index='product_banner']/div[@data-state-collapsible='closed']"/>
         <element name="TopBannerUpload" type="button" selector="//div[@data-index='top_banner']//input[@type='file']"/>
         <element name="AfterBannerUpload" type="button" selector="//div[@data-index='after_description_banner']//input[@type='file']"/>
         <element name="LabelBannerUpload" type="button" selector="//div[@data-index='product_banner']//input[@type='file']"/>

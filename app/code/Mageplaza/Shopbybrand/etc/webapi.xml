@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/mpbrand" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getBrandList"/>
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/brand/feature" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getFeatureBrand"/>
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/brand/search/:name" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getBrandByName"/>
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+
+    <route url="/V1/mpbrand/brand/:optionId/product" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getProductList"/>
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/brand/:optionId/product/:sku" method="PUT">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="setProduct"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/product/:sku" method="DELETE">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="deleteProduct"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/brand/product/:sku" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getBrandBySku"/>
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+
+    <route url="/V1/mpbrand/options" method="POST">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="add" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/options/:optionId" method="PUT">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="update" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/options/:optionId" method="DELETE">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="delete" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+
+    <route url="/V1/mpbrand/category" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getCategory" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/category/:categoryId" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getCategoryById" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/category" method="POST">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="addCategory" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/category/:categoryId" method="PUT">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="updateCategory" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+    <route url="/V1/mpbrand/category/:categoryId" method="DELETE">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="deleteCategory" />
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+
+    <route url="/V1/mpbrand/brandConfigs" method="GET">
+        <service class="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" method="getBrandConfigs"/>
+        <resources>
+            <resource ref="Mageplaza_Shopbybrand::shopbybrand" />
+        </resources>
+    </route>
+</routes>

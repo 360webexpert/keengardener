@@ -134,20 +134,18 @@ class Category extends AbstractDb
     }
 
     /**
-     * Save brand relation
-     *
-     * @param AbstractModel $object
-     *
-     * @return $this
+     * @inheritDoc
      */
     protected function _afterSave(AbstractModel $object)
     {
         $oldOptionIds = [];
+        $brandCategoryTable = $this->getTable('mageplaza_shopbybrand_brand_category');
         $adapter = $this->getConnection();
         $data = $this->formData->getData();
         $id = $object->getCatId();
-        $sql = 'select * from ' . $this->getTable('mageplaza_shopbybrand_brand_category') . ' where cat_id = ' . $id;
-        $oldRecord = $this->getConnection()->fetchAll($sql);
+        $selectOldRecord = $this->getConnection()->select()->from($brandCategoryTable)->where('cat_id = :cat_id');
+        $bindOldRecord = ['cat_id' => (int)$id];
+        $oldRecord = $this->getConnection()->fetchAll($selectOldRecord, $bindOldRecord);
         foreach ($oldRecord as $item) {
             $oldOptionIds[] = $item['option_id'];
         }
@@ -157,11 +155,11 @@ class Category extends AbstractDb
                 $insert = [];
                 foreach ($optionIds as $optionId) {
                     $insert[] = [
-                        'cat_id'    => $id,
+                        'cat_id' => $id,
                         'option_id' => $optionId
                     ];
                 }
-                $adapter->insertMultiple($this->getTable('mageplaza_shopbybrand_brand_category'), $insert);
+                $adapter->insertMultiple($brandCategoryTable, $insert);
             }
             if (!empty($oldRecord)) {
                 $updateOptionIds = array_diff($optionIds, $oldOptionIds);
@@ -170,19 +168,20 @@ class Category extends AbstractDb
                     $update = [];
                     foreach ($updateOptionIds as $optionId) {
                         $update[] = [
-                            'cat_id'    => $id,
+                            'cat_id' => $id,
                             'option_id' => $optionId
                         ];
                     }
-                    $adapter->insertMultiple($this->getTable('mageplaza_shopbybrand_brand_category'), $update);
+                    $adapter->insertMultiple($brandCategoryTable, $update);
                 }
                 if (!empty($deleteOptionIds)) {
-                    foreach ($deleteOptionIds as $optionId) {
-                        $sql = 'Delete FROM ' . $this->getTable('mageplaza_shopbybrand_brand_category') . ' WHERE option_id = ' . $optionId . ' AND cat_id = ' . $id;
-                        $adapter->query($sql);
-                    }
+                    $condition = ['option_id IN(?)' => $deleteOptionIds, 'cat_id=?' => $id];
+                    $adapter->delete($brandCategoryTable, $condition);
                 }
             }
+        } elseif (!empty($oldRecord) && !isset($data['brand_category'])) {
+            $condition = ['option_id IN(?)' => $oldOptionIds, 'cat_id=?' => $id];
+            $adapter->delete($brandCategoryTable, $condition);
         }
 
         return parent::_afterSave($object);
@@ -204,7 +203,7 @@ class Category extends AbstractDb
     /**
      * Check Url Key function to avoid duplicate
      *
-     * @param $url
+     * @param string $url
      * @param null $id
      *
      * @return string
@@ -215,16 +214,18 @@ class Category extends AbstractDb
         $adapter = $this->getConnection();
         if ($id) {
             $select = $adapter->select()
-                ->from($this->getMainTable(), '*')
+                ->from($this->getMainTable())
                 ->where('url_key = :url_key')
                 ->where('cat_id != :cat_id');
-            $binds['url_key'] = (string) $url;
-            $binds ['cat_id'] = (int) $id;
+            $binds = [
+                'url_key' => $url,
+                'cat_id' => (int)$id
+            ];
         } else {
             $select = $adapter->select()
-                ->from($this->getMainTable(), '*')
+                ->from($this->getMainTable())
                 ->where('url_key = :url_key');
-            $binds = ['url_key' => (string) $url];
+            $binds = ['url_key' => (string)$url];
         }
 
         return $adapter->fetchOne($select, $binds);

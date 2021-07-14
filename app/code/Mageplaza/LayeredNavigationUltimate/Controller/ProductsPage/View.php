@@ -21,7 +21,17 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Controller\ProductsPage;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\LayeredNavigationUltimate\Helper\Data;
 
 /**
  * Class Index
@@ -29,43 +39,43 @@ use Magento\Framework\App\Action\Action;
  */
 class View extends Action
 {
-    /** @var \Magento\Framework\View\Result\PageFactory */
+    /** @var PageFactory */
     protected $_pageFactory;
 
     /** @var \Magento\Framework\Json\Helper\Data */
     protected $_jsonHelper;
 
-    /** @var \Mageplaza\LayeredNavigationUltimate\Helper\Data */
+    /** @var Data */
     protected $_layerHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     protected $_storeManager;
 
-    /** @var \Magento\Framework\Registry */
+    /** @var Registry */
     protected $_coreRegistry;
 
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface */
+    /** @var CategoryRepositoryInterface */
     protected $_categoryRepository;
 
     /**
      * View constructor.
      *
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $pageFactory
+     * @param Context $context
+     * @param PageFactory $pageFactory
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Mageplaza\LayeredNavigationUltimate\Helper\Data $layerHelper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Data $layerHelper
+     * @param StoreManagerInterface $storeManager
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $pageFactory,
+        Context $context,
+        PageFactory $pageFactory,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Mageplaza\LayeredNavigationUltimate\Helper\Data $layerHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Registry $coreRegistry
+        Data $layerHelper,
+        StoreManagerInterface $storeManager,
+        CategoryRepositoryInterface $categoryRepository,
+        Registry $coreRegistry
     ) {
         $this->_pageFactory = $pageFactory;
         $this->_jsonHelper = $jsonHelper;
@@ -78,8 +88,8 @@ class View extends Action
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page|void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return ResponseInterface|ResultInterface|Page|void
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
@@ -105,7 +115,7 @@ class View extends Action
         if ($this->getRequest()->isAjax()) {
             $layout = $resultPage->getLayout();
             $result = [
-                'products'   => $layout->getBlock('layerultimate.productspage.view')->toHtml(),
+                'products' => $layout->getBlock('layerultimate.productspage.view')->toHtml(),
                 'navigation' => $layout->getBlock('catalog.leftnav')->toHtml()
             ];
 

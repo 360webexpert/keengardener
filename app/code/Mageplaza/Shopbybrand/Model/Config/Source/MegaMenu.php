@@ -21,23 +21,18 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class MegaMenu
  *
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class MegaMenu implements ArrayInterface
+class MegaMenu implements OptionSourceInterface
 {
-    /**
-     * Display listing
-     */
-    const MENU_LISTING = 0;
-    /**
-     * Display mega listing
-     */
-    const MENU_MEGA_LISTING = 1;
+    const NO       = '0';
+    const DROPDOWN = '1';
+    const GRID     = '2';
 
     /**
      * @return array
@@ -46,12 +41,16 @@ class MegaMenu implements ArrayInterface
     {
         return [
             [
-                'label' => __('Listing'),
-                'value' => self::MENU_LISTING
+                'label' => __('No'),
+                'value' => self::NO
             ],
             [
-                'label' => __('Mega Listing'),
-                'value' => self::MENU_MEGA_LISTING
+                'label' => __('Drop-down type'),
+                'value' => self::DROPDOWN
+            ],
+            [
+                'label' => __('Grid type'),
+                'value' => self::GRID
             ]
         ];
     }

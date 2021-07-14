@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="adminhtml_import_index"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Amasty\Base\Block\Adminhtml\Import" name="ImportEntityTypeHider" template="Amasty_Base::import.phtml">
+                <arguments>
+                    <argument name="entityTypeCode" xsi:type="string">amstrates_rate_import</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

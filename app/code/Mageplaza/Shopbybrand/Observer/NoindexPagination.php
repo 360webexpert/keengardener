@@ -79,7 +79,7 @@ class NoindexPagination implements ObserverInterface
             && $this->_helper->getModuleConfig('brand_seo/seo_pages')
             && $this->request->getParam('p')
         ) {
-            $this->_corePageConfig->setRobots('NOINDEX,FOLLOW');
+            $this->_corePageConfig->setRobots('NOINDEX,NOFOLLOW');
         }
     }
 }

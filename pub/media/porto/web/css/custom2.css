@@ -89,7 +89,18 @@ header.page-header.type14 .minicart-wrapper .action.showcart {
 .catalog-product-view klarna-placement {
     display: block;
 }
-
+header.page-header.type14 .panel.header .block-search {
+    overflow: visible;
+}
+header.page-header .panel.header .block-search {
+    overflow: visible;
+}
+.block-search .block-content {
+    width: 300px;
+}
+.block-search .autocomplete-suggestions {
+    height: 500px;
+}
 	/* Mobile Tablet Header */
 @media (max-width: 767px) {
 	header.page-header.type14 .navigation li.level0 > a {
@@ -527,7 +538,7 @@ span.stock_button {
 }
 /*Modal*/
 .videoWrapper { position: relative;padding-bottom: 56.25%; /* 16:9 */padding-top: 25px;height: 0; }
-iframe {position: absolute;top: 0;left: 0;width: 100%;height: 100%;}
+/* iframe {position: absolute;top: 0;left: 0;width: 100%;height: 100%;} sagepay form mobile fix*/
 }
 /* Bug Fixes Mageplaza*/
 .owl-carousel .owl-item img {

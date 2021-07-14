@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -46,18 +46,19 @@ class ItemsTotalCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     private $itemValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configProvider = $this->createPartialMock(
             ConfigProvider::class,
-            ['isSippingTypeValid', 'isAfterDiscount', 'isIncludingTax', 'isPromoAllowed']
+            ['isAfterDiscount', 'isIncludingTax', 'isPromoAllowed']
         );
         $this->itemValidator =  $this->createMock(ItemValidator::class);
 
         $this->configProvider->expects($this->any())->method('isIncludingTax')->willReturn(true);
         $this->itemValidator->expects($this->any())->method('getNotFreeQty')->willReturn(44);
         $this->itemValidator->expects($this->any())->method('getItemBasePrice')->willReturn(100);
-        $this->itemValidator->expects($this->any())->method('getItemWeight')->willReturn(5);
+        $this->itemValidator->expects($this->any())->method('getItemWeight')
+            ->willReturn(['weight' => 5, 'volumetric' => 7]);
 
         $this->model = $this->getObjectManager()->getObject(
             ItemsTotalCalculator::class,
@@ -85,7 +86,7 @@ class ItemsTotalCalculatorTest extends \PHPUnit\Framework\TestCase
         $request->expects($this->any())->method('getAllItems')->willReturn([$item]);
         $this->itemValidator->expects($this->any())->method('isSkipItem')->willReturn($skip);
         $this->itemValidator->expects($this->any())->method('isShouldProcessChildren')->willReturn($shouldProcessChildren);
-        $this->itemValidator->expects($this->any())->method('isSippingTypeValid')->willReturn($isShippingTypeValid);
+        $this->itemValidator->expects($this->any())->method('isShippingTypeValid')->willReturn($isShippingTypeValid);
         $this->model->expects($this->any())->method('processChildItems')->willReturn($processChildren);
         $item->expects($this->any())->method('getBaseDiscountTaxCompensationAmount')->willReturn(5);
 
@@ -106,14 +107,16 @@ class ItemsTotalCalculatorTest extends \PHPUnit\Framework\TestCase
             'not_free_weight' => 0.0,
             'qty' => 0.0,
             'not_free_qty' => 0.0,
-            'discount_amount' => 0.0
+            'discount_amount' => 0.0,
+            'not_free_volumetric' => 0.0
         ];
         $changedResult = [
             'not_free_price' => 5.0,
             'not_free_weight' => 0.0,
             'qty' => 0.0,
             'not_free_qty' => 0.0,
-            'discount_amount' => 0.0
+            'discount_amount' => 0.0,
+            'not_free_volumetric' => 0.0
         ];
         return [
             [true, false, false, false, $defaultResult],
@@ -192,7 +195,8 @@ class ItemsTotalCalculatorTest extends \PHPUnit\Framework\TestCase
                     'not_free_qty' => 0.0,
                     'not_free_price' => 0.0,
                     'discount_amount' => 10.0,
-                    'not_free_weight' => 0.0
+                    'not_free_weight' => 0.0,
+                    'not_free_volumetric' => 0.0
                 ],
                 true
             ]
@@ -216,7 +220,7 @@ class ItemsTotalCalculatorTest extends \PHPUnit\Framework\TestCase
             $child = [$child];
         }
 
-        $this->itemValidator->expects($this->any())->method('isSippingTypeValid')->willReturn(true);
+        $this->itemValidator->expects($this->any())->method('isShippingTypeValid')->willReturn(true);
         $item->expects($this->any())->method('getChildren')->willReturn($child);
         $item->expects($this->any())->method('getProduct')->willReturn($product);
         $product->expects($this->any())->method('getTypeId')->willReturn($type);
@@ -249,6 +253,7 @@ class ItemsTotalCalculatorTest extends \PHPUnit\Framework\TestCase
             'qty' => 0,
             'not_free_qty' => 44,
             'discount_amount' => 15,
+            'not_free_volumetric' => 0
         ];
         $item = $this->getMockBuilder(Item::class)
             ->setMethods(
@@ -295,7 +300,8 @@ class ItemsTotalCalculatorTest extends \PHPUnit\Framework\TestCase
             'not_free_weight' => 220,
             'qty' => 10,
             'not_free_qty' => 44,
-            'discount_amount' => 15
+            'discount_amount' => 15,
+            'not_free_volumetric' => 308
         ];
         $item = $this->createPartialMock(Item::class, ['getQty', 'getBaseDiscountAmount']);
 

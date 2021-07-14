@@ -66,13 +66,13 @@ class FilterList
      */
     public function afterGetFilters(\Magento\Catalog\Model\Layer\FilterList $subject, $result)
     {
-        if ($this->request->getFullActionName() !== 'mpbrand_index_view') {
+        if (!$this->helper->isEnabled() || $this->request->getFullActionName() !== 'mpbrand_index_view') {
             return $result;
         }
 
         $brandAttCode = $this->helper->getAttributeCode();
         foreach ($result as $key => $filter) {
-            if ($filter->getRequestVar() == $brandAttCode) {
+            if ($filter->getRequestVar() === $brandAttCode) {
                 $filterBrand = $this->objectManager->create(
                     Attribute::class,
                     ['data' => ['attribute_model' => $filter->getAttributeModel()], 'layer' => $filter->getLayer()]

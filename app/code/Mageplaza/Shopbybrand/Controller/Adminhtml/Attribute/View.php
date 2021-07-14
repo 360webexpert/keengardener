@@ -49,16 +49,16 @@ class View extends Action
      * View constructor.
      *
      * @param Context $context
-     * @param Repository $productRespository
+     * @param Repository $productRepository
      * @param Data $brandHelper
      */
     public function __construct(
         Context $context,
-        Repository $productRespository,
+        Repository $productRepository,
         Data $brandHelper
     ) {
         $this->_brandHelper = $brandHelper;
-        $this->_productAttributeRepository = $productRespository;
+        $this->_productAttributeRepository = $productRepository;
 
         parent::__construct($context);
     }

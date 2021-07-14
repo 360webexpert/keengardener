@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -27,6 +27,8 @@
         <element name="ShippingState" type="select" selector="//select[@name='region_id']"/>
         <element name="TotalsTax" type="block" selector="//tr[@class='totals-tax']/td[@data-th='Tax']/span"/>
         <element name="DiscountAmount" type="block" selector="//tr[@class='totals']/td[@data-th='Discount']/span"/>
+        <element name="ShippingMethodButton" type="button" selector="//input[@id='{{shippingMethod}}']" parameterized="true"/>
+        <element name="ShippingMethodPrice" type="button" selector="//label[@for='{{shippingMethods}}']//span" parameterized="true"/>
     </section>
 
 </sections>

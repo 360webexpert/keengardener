@@ -50,7 +50,7 @@ class Data extends AbstractData
     /**#@+
      * Category tree cache id
      */
-    const SEO_URL_CACHE_KEY  = 'CATALOG_PRODUCT_SEO_URL';
+    const SEO_URL_CACHE_KEY = 'CATALOG_PRODUCT_SEO_URL';
     const CONFIG_MODULE_PATH = 'seourl';
 
     /**
@@ -96,9 +96,9 @@ class Data extends AbstractData
         CollectionFactory $attrOptionCollectionFactory,
         FilterManager $filter
     ) {
-        $this->urlFinder                    = $urlFinder;
+        $this->urlFinder = $urlFinder;
         $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
-        $this->_filter                      = $filter;
+        $this->_filter = $filter;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -138,7 +138,7 @@ class Data extends AbstractData
             unset($params[$key]);
         }
 
-        $urlKey           = [];
+        $urlKey = [];
         $optionCollection = $this->getOptionsArray();
         foreach ($params as $key => $param) {
             $options = array_filter($optionCollection, function ($option) use ($key, $param) {
@@ -155,7 +155,7 @@ class Data extends AbstractData
             return $originUrl;
         }
 
-        $url       = rtrim($url, '/');
+        $url = rtrim($url, '/');
         $urlSuffix = $this->getCategoryUrlSuffix();
         if ($urlSuffix && ($urlSuffix != '/')) {
             $pos = strpos($url, $urlSuffix);
@@ -217,24 +217,24 @@ class Data extends AbstractData
         }
 
         $urlParams = explode('-', array_pop($pathInfo));
-        $pathInfo  = implode('/', $pathInfo) . $urlSuffix;
-        $rewrite   = $this->getRewrite($pathInfo, $this->storeManager->getStore()->getId());
+        $pathInfo = implode('/', $pathInfo) . $urlSuffix;
+        $rewrite = $this->getRewrite($pathInfo, $this->storeManager->getStore()->getId());
         if ($rewrite === null) {
             return null;
         }
 
-        $urlKey           = '';
-        $params           = [];
+        $urlKey = '';
+        $params = [];
         $optionCollection = $this->getOptionsArray();
         foreach ($urlParams as $param) {
-            $urlKey  .= ($urlKey ? '-' : '') . $param;
+            $urlKey .= ($urlKey ? '-' : '') . $param;
             $options = array_filter($optionCollection, function ($option) use ($urlKey) {
                 return ($option['url_key'] == $urlKey);
             });
 
             if (sizeof($options)) {
-                $urlKey                            = '';
-                $option                            = array_shift($options);
+                $urlKey = '';
+                $option = array_shift($options);
                 $params[$option['attribute_code']] = isset($params[$option['attribute_code']]) ?
                     $params[$option['attribute_code']] . ',' . $option['option_id'] :
                     $option['option_id'];
@@ -258,14 +258,14 @@ class Data extends AbstractData
     {
         $rewrite = $this->urlFinder->findOneByData([
             UrlRewrite::REQUEST_PATH => trim($requestPath, '/'),
-            UrlRewrite::STORE_ID     => $storeId,
+            UrlRewrite::STORE_ID => $storeId,
         ]);
 
         if ($rewrite === null) {
             $object = new DataObject([
                 'pathInfo' => $requestPath,
                 'store_id' => $storeId,
-                'rewrite'  => $rewrite
+                'rewrite' => $rewrite
             ]);
             $this->_eventManager->dispatch('seo_friendly_url_get_rewrite_path', ['object' => $object]);
 
@@ -308,7 +308,7 @@ class Data extends AbstractData
     public function getOptionsArray()
     {
         $cacheManager = $this->objectManager->get(CacheInterface::class);
-        $urlOptions   = $cacheManager->load(self::SEO_URL_CACHE_KEY);
+        $urlOptions = $cacheManager->load(self::SEO_URL_CACHE_KEY);
         if ($urlOptions) {
             return $this->unserialize($urlOptions);
         }
@@ -356,7 +356,11 @@ class Data extends AbstractData
     {
         $optionData = $option->getData();
         if (!isset($optionData['url_key'])) {
-            $key = $this->_filter->translitUrl($optionData['default_value']);
+            if (isset($optionData['value'])) {
+                $key = $this->_filter->translitUrl($optionData['value']);
+            }else{
+                $key = $this->_filter->translitUrl($optionData['default_value']);
+            }
             $key = str_replace('-', '', $key);
 
             if (array_key_exists($key, $this->_urlKeys)) {
@@ -369,8 +373,8 @@ class Data extends AbstractData
         }
 
         return [
-            'url_key'        => $optionData['url_key'],
-            'option_id'      => $optionData['option_id'],
+            'url_key' => $optionData['url_key'],
+            'option_id' => $optionData['option_id'],
             'attribute_code' => $optionData['attribute_code']
         ];
     }

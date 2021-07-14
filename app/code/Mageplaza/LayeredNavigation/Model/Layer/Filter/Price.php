@@ -30,11 +30,14 @@ use Magento\Catalog\Model\ResourceModel\Layer\Filter\Price as CatalogPrice;
 use Magento\CatalogSearch\Model\Layer\Filter\Price as AbstractFilter;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Mageplaza\LayeredNavigation\Helper\Data as LayerHelper;
+use Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection;
 
 /**
  * Class Price
@@ -42,34 +45,34 @@ use Mageplaza\LayeredNavigation\Helper\Data as LayerHelper;
  */
 class Price extends AbstractFilter
 {
-    /** @var \Mageplaza\LayeredNavigation\Helper\Data */
+    /** @var LayerHelper */
     protected $_moduleHelper;
 
     /** @var array|null Filter value */
     protected $_filterVal = null;
 
-    /** @var \Magento\Tax\Helper\Data */
+    /** @var TaxHelper */
     protected $_taxHelper;
 
-    /** @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Price */
+    /** @var LayerCatalog\Filter\DataProvider\Price */
     private $dataProvider;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface */
+    /** @var PriceCurrencyInterface */
     private $priceCurrency;
 
     /**
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $layer
-     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Search\Dynamic\Algorithm $priceAlgorithm
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory $algorithmFactory
-     * @param \Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory $dataProviderFactory
-     * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Mageplaza\LayeredNavigation\Helper\Data $moduleHelper
+     * @param ItemFactory $filterItemFactory
+     * @param StoreManagerInterface $storeManager
+     * @param LayerCatalog $layer
+     * @param DataBuilder $itemDataBuilder
+     * @param CatalogPrice $resource
+     * @param Session $customerSession
+     * @param Algorithm $priceAlgorithm
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param AlgorithmFactory $algorithmFactory
+     * @param PriceFactory $dataProviderFactory
+     * @param TaxHelper $taxHelper
+     * @param LayerHelper $moduleHelper
      * @param array $data
      */
     public function __construct(
@@ -133,15 +136,15 @@ class Price extends AbstractFilter
             $this->dataProvider->setPriorIntervals($priorFilters);
         }
 
-        list($from, $to) = $this->_filterVal = $filter;
+        [$from, $to] = $this->_filterVal = $filter;
 
         $this->getLayer()->getProductCollection()->addFieldToFilter('price', [
             'from' => $from / $this->getCurrencyRate(),
-            'to'   => $to / $this->getCurrencyRate()
+            'to' => $to / $this->getCurrencyRate()
         ]);
 
         $this->getLayer()->getState()->addFilter(
-            $this->_createItem($this->_renderRangeLabel(empty($from) ? 0 : $from, $to), $filter)
+            $this->_createItem($this->_renderRangeLayerLabel(empty($from) ? 0 : $from, $to), $filter)
         );
 
         return $this;
@@ -150,11 +153,8 @@ class Price extends AbstractFilter
     /**
      * @inheritdoc
      */
-    protected function _renderRangeLabel($fromPrice, $toPrice)
+    protected function _renderRangeLayerLabel($fromPrice, $toPrice)
     {
-        if (!$this->_moduleHelper->isEnabled()) {
-            return parent::_renderRangeLabel($fromPrice, $toPrice);
-        }
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
@@ -174,11 +174,11 @@ class Price extends AbstractFilter
      */
     public function getSliderConfig()
     {
-        /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
 
         if ($this->_filterVal) {
-            /** @type \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollectionClone */
+            /** @type Collection $productCollectionClone */
             $productCollection = $productCollection->getCollectionClone()
                 ->removeAttributeSearch(['price.from', 'price.to']);
         }
@@ -186,7 +186,7 @@ class Price extends AbstractFilter
         $min = $productCollection->getMinPrice();
         $max = $productCollection->getMaxPrice();
 
-        list($from, $to) = $this->_filterVal ?: [$min, $max];
+        [$from, $to] = $this->_filterVal ?: [$min, $max];
         $from = max(min($from, $max), $min);
         $to = min(max($to, $from), $max);
 
@@ -194,11 +194,11 @@ class Price extends AbstractFilter
 
         return [
             'selectedFrom' => $from,
-            'selectedTo'   => $to,
-            'minValue'     => $min,
-            'maxValue'     => $max,
-            'priceFormat'  => $this->_taxHelper->getPriceFormat(),
-            'ajaxUrl'      => $item->getUrl()
+            'selectedTo' => $to,
+            'minValue' => $min,
+            'maxValue' => $max,
+            'priceFormat' => $this->_taxHelper->getPriceFormat(),
+            'ajaxUrl' => $item->getUrl()
         ];
     }
 
@@ -206,8 +206,8 @@ class Price extends AbstractFilter
      * Get data array for building attribute filter items
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\StateException
+     * @throws LocalizedException
+     * @throws StateException
      */
     protected function _getItemsData()
     {
@@ -222,7 +222,7 @@ class Price extends AbstractFilter
         $productCollection = $this->getLayer()->getProductCollection();
 
         if ($this->_filterVal) {
-            /** @type \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollectionClone */
+            /** @type Collection $productCollectionClone */
             $productCollection = $productCollection->getCollectionClone()
                 ->removeAttributeSearch(['price.from', 'price.to']);
         }
@@ -251,18 +251,18 @@ class Price extends AbstractFilter
      */
     private function prepareData($key, $count)
     {
-        list($from, $to) = explode('_', $key);
+        [$from, $to] = explode('_', $key);
         if ($from === '*') {
             $from = $this->getFrom($to);
         }
         if ($to === '*') {
             $to = $this->getTo($to);
         }
-        $label = $this->_renderRangeLabel(
+        $label = $this->_renderRangeLayerLabel(
             empty($from) ? 0 : $from * $this->getCurrencyRate(),
             empty($to) ? $to : $to * $this->getCurrencyRate()
         );
-        $value = (float) $from * $this->getCurrencyRate() . '-' . (float) $to * $this->getCurrencyRate();
+        $value = (float)$from * $this->getCurrencyRate() . '-' . (float)$to * $this->getCurrencyRate();
 
         return compact('label', 'value', 'count', 'from', 'to');
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -28,8 +28,10 @@ class ItemValidator
      */
     private $productRepository;
 
-    public function __construct(ConfigProvider $configProvider, ProductRepositoryInterface $productRepository)
-    {
+    public function __construct(
+        ConfigProvider $configProvider,
+        ProductRepositoryInterface $productRepository
+    ) {
         $this->configProvider = $configProvider;
         $this->productRepository = $productRepository;
     }
@@ -43,7 +45,7 @@ class ItemValidator
      */
     public function isSkipItem($item)
     {
-        if ($item->getParentItemId()) {
+        if ($item->getParentItemId() || ($item->getQuoteItem() && $item->getQuoteItem()->getParentItemId())) {
             return true;
         }
 
@@ -56,7 +58,7 @@ class ItemValidator
      *
      * @return bool
      */
-    public function isSippingTypeValid($item, $shippingType)
+    public function isShippingTypeValid($item, $shippingType)
     {
         return $shippingType == 0
             || $this->productRepository->getById($item->getProductId())->getAmShippingType() == $shippingType;
@@ -80,7 +82,7 @@ class ItemValidator
             return ($bundleType === 2 || ($bundleType === 0 && $product->getShipmentType() == '1'));
         }
 
-        return $typeId === Configurable::TYPE_CODE && $this->configProvider->getConfigurableSippingType() === 0;
+        return $typeId === Configurable::TYPE_CODE && $this->configProvider->getConfigurableShippingType() === 0;
     }
 
     /**
@@ -127,16 +129,17 @@ class ItemValidator
     }
 
     /**
-     * The method get value of weight depends on attribute
+     * The method get value of weight data depends on attribute
      * from 'volumetric weight attribute'
      *
      * @param \Magento\Quote\Model\Quote\Item $item
      *
-     * @return float
+     * @return array
      */
     public function getItemWeight($item = null)
     {
-        $calculatedWeight = $item ? $item->getWeight() : 0;
+        $calculatedWeight = [];
+        $calculatedWeight['weight'] = $item ? $item->getWeight() : 0;
         $weightAttributeCodes = $this->configProvider->getSelectedWeightAttributeCode();
 
         if (!empty($weightAttributeCodes)) {
@@ -145,13 +148,10 @@ class ItemValidator
             } else {
                 $productId = $item->getProduct()->getId();
             }
-            
+
             $volumeWeight = $this->prepareVolumeWeight($productId, $weightAttributeCodes);
             $volumetricWeight = $this->configProvider->calculateVolumetricWeightWithShippingFactor($volumeWeight);
-
-            if ((float)$volumetricWeight > (float)$calculatedWeight) {
-                $calculatedWeight = $volumetricWeight;
-            }
+            $calculatedWeight['volumetric'] = $volumetricWeight;
         }
 
         return $calculatedWeight;

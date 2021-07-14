@@ -22,6 +22,7 @@
 namespace Mageplaza\LayeredNavigation\Plugin\Model\Layer\Filter;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Block\Html\Pager;
 use Mageplaza\LayeredNavigation\Helper\Data as LayerHelper;
@@ -41,7 +42,7 @@ class Item
     /** @var RequestInterface */
     protected $_request;
 
-    /** @var \Mageplaza\LayeredNavigation\Helper\Data */
+    /** @var LayerHelper */
     protected $_moduleHelper;
 
     /**
@@ -50,7 +51,7 @@ class Item
      * @param UrlInterface $url
      * @param Pager $htmlPagerBlock
      * @param RequestInterface $request
-     * @param \Mageplaza\LayeredNavigation\Helper\Data $moduleHelper
+     * @param LayerHelper $moduleHelper
      */
     public function __construct(
         UrlInterface $url,
@@ -58,10 +59,10 @@ class Item
         RequestInterface $request,
         LayerHelper $moduleHelper
     ) {
-        $this->_url = $url;
+        $this->_url            = $url;
         $this->_htmlPagerBlock = $htmlPagerBlock;
-        $this->_request = $request;
-        $this->_moduleHelper = $moduleHelper;
+        $this->_request        = $request;
+        $this->_moduleHelper   = $moduleHelper;
     }
 
     /**
@@ -69,7 +70,7 @@ class Item
      * @param $proceed
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function aroundGetUrl(\Magento\Catalog\Model\Layer\Filter\Item $item, $proceed)
     {
@@ -77,11 +78,11 @@ class Item
             return $proceed();
         }
 
-        $value = [];
-        $filter = $item->getFilter();
+        $value       = [];
+        $filter      = $item->getFilter();
         $filterModel = $this->_moduleHelper->getFilterModel();
         if ($filterModel->isSliderTypes($filter) || $filter->getData('range_mode')) {
-            $value = ["from-to"];
+            $value = ['from-to'];
         } elseif ($filterModel->isMultiple($filter)) {
             $requestVar = $filter->getRequestVar();
             if ($requestValue = $this->_request->getParam($requestVar)) {
@@ -113,7 +114,7 @@ class Item
      * @param $proceed
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function aroundGetRemoveUrl(\Magento\Catalog\Model\Layer\Filter\Item $item, $proceed)
     {
@@ -121,22 +122,22 @@ class Item
             return $proceed();
         }
 
-        $value = [];
-        $filter = $item->getFilter();
+        $value       = [];
+        $filter      = $item->getFilter();
         $filterModel = $this->_moduleHelper->getFilterModel();
         if ($filterModel->isMultiple($filter)) {
             $value = $filterModel->getFilterValue($filter);
-            if (in_array($item->getValue(), $value, true)) {
+            if (in_array((string) $item->getValue(), $value, true)) {
                 $value = array_diff($value, [$item->getValue()]);
             }
         }
 
-        $params['_query'] = [
+        $params['_query']       = [
             $filter->getRequestVar() => count($value) ? implode(',', $value) : $filter->getResetValue()
         ];
-        $params['_current'] = true;
+        $params['_current']     = true;
         $params['_use_rewrite'] = true;
-        $params['_escape'] = true;
+        $params['_escape']      = true;
 
         return $this->_url->getUrl('*/*/*', $params);
     }

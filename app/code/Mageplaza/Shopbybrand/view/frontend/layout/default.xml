@@ -22,7 +22,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="Mageplaza_Shopbybrand::css/style.css"/>
         <css src="Mageplaza_Core::css/grid-mageplaza.css"/>
     </head>
     <body>
@@ -34,7 +33,7 @@
         </referenceBlock>
         <referenceContainer name="sidebar.main">
             <block class="Magento\Framework\View\Element\Template" name="sidebar.container" template="Mageplaza_Shopbybrand::sidebar.phtml" ifconfig="shopbybrand/general/enabled">
-                <block class="Mageplaza\Shopbybrand\Block\Sidebar\Featured" name="sidebar.featuredbrand" ifconfig="shopbybrand/sidebar/feature/enable"/>
+                <block class="Mageplaza\Shopbybrand\Block\Sidebar\Featured" name="sidebar.featured.brand" ifconfig="shopbybrand/sidebar/feature/enable"/>
                 <block class="Mageplaza\Shopbybrand\Block\Sidebar\BrandCategory" name="sidebar.category.brand" ifconfig="shopbybrand/sidebar/category_brand/enable"/>
                 <block class="Mageplaza\Shopbybrand\Block\Sidebar\BrandList" name="sidebar.brand" ifconfig="shopbybrand/sidebar/brand_thumbnail/enable"/>
             </block>

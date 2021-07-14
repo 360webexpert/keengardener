@@ -25,6 +25,10 @@
             <action method="setTemplate" ifconfig="layered_navigation/general/enabled">
                 <argument name="template" xsi:type="string">Mageplaza_LayeredNavigation::layer/view.phtml</argument>
             </action>
+            <block class="Mageplaza\LayeredNavigation\Block\Navigation\FilterRenderer\CategoryTree"
+                   name="mplayer.category.renderer"
+                   as="mplayer-renderer"
+                   template="Mageplaza_LayeredNavigation::layer/categoryTree.phtml"/>
             <container name="layer.additional.info" as="layer_additional_info"/>
             <container name="layer.content.before" as="layer_content_before"/>
         </referenceBlock>

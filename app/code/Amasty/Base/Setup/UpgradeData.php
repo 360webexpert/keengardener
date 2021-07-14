@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -25,18 +25,18 @@ class UpgradeData implements UpgradeDataInterface
     private $appState;
 
     /**
-     * @var \Amasty\Base\Helper\Module
+     * @var \Amasty\Base\Model\Feed\FeedTypes\Extensions
      */
-    private $moduleHelper;
+    private $extensionsFeed;
 
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
-        \Amasty\Base\Helper\Module $moduleHelper
+        \Amasty\Base\Model\Feed\FeedTypes\Extensions $extensionsFeed
     ) {
         $this->logger = $logger;
         $this->appState = $appState;
-        $this->moduleHelper = $moduleHelper;
+        $this->extensionsFeed = $extensionsFeed;
     }
 
     /**
@@ -69,7 +69,7 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '1.5.0', '<')) {
             try {
-                $this->moduleHelper->reload();
+                $this->extensionsFeed->getFeed();
             } catch (\Exception $ex) {
                 $this->logger->critical($ex);
             }

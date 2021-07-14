@@ -24,10 +24,13 @@ namespace Mageplaza\LayeredNavigationUltimate\Helper;
 use Magento\Catalog\Model\Product\Attribute\Repository;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\LayeredNavigationPro\Helper\Data as AbstractData;
+use Mageplaza\LayeredNavigationPro\Model\Layer\Filter\State;
 use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\SliderType;
+use Mageplaza\LayeredNavigationUltimate\Model\ProductsPage;
 use Mageplaza\LayeredNavigationUltimate\Model\ProductsPageFactory;
 
 /**
@@ -36,11 +39,11 @@ use Mageplaza\LayeredNavigationUltimate\Model\ProductsPageFactory;
  */
 class Data extends AbstractData
 {
-    const FIELD_SLIDER_TYPE    = 'slider_type';
-    const FIELD_DISPLAY_TYPE   = 'display_type';
-    const FIELD_DISPLAY_SIZE   = 'display_size';
+    const FIELD_SLIDER_TYPE = 'slider_type';
+    const FIELD_DISPLAY_TYPE = 'display_type';
+    const FIELD_DISPLAY_SIZE = 'display_size';
     const FIELD_DISPLAY_HEIGHT = 'display_height';
-    const DEFAULT_ROUTE        = 'products';
+    const DEFAULT_ROUTE = 'products';
 
     /**
      * @var CollectionFactory
@@ -63,7 +66,7 @@ class Data extends AbstractData
      * @param Context $context
      * @param ObjectManagerInterface $objectManager
      * @param StoreManagerInterface $storeManager
-     * @param CollectionFactory $attributecollectionFactory
+     * @param CollectionFactory $attributeCollectionFactory
      * @param Repository $attributeRepository
      * @param ProductsPageFactory $pageFactory
      */
@@ -71,11 +74,11 @@ class Data extends AbstractData
         Context $context,
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager,
-        CollectionFactory $attributecollectionFactory,
+        CollectionFactory $attributeCollectionFactory,
         Repository $attributeRepository,
         ProductsPageFactory $pageFactory
     ) {
-        $this->attributes = $attributecollectionFactory;
+        $this->attributes = $attributeCollectionFactory;
         $this->attributeRepository = $attributeRepository;
         $this->pageFactory = $pageFactory;
 
@@ -103,7 +106,7 @@ class Data extends AbstractData
      */
     public function enableIonRangeSlider()
     {
-        return ($this->getDesignConfig('slider_type') != 2);
+        return ($this->getDesignConfig('slider_type') !== '2');
     }
 
     /**
@@ -133,7 +136,7 @@ class Data extends AbstractData
     }
 
     /**
-     * @param \Mageplaza\LayeredNavigationUltimate\Model\ProductsPage $page
+     * @param ProductsPage $page
      * @param $position
      *
      * @return bool
@@ -146,11 +149,11 @@ class Data extends AbstractData
 
         $positionConfig = explode(',', $page->getData('position') ?: '');
 
-        return in_array($position, $positionConfig);
+        return in_array($position, $positionConfig, true);
     }
 
     /**
-     * @param \Mageplaza\LayeredNavigationUltimate\Model\ProductsPage $page
+     * @param ProductsPage $page
      *
      * @return string
      */
@@ -169,7 +172,9 @@ class Data extends AbstractData
 
     /**
      * get all attributes code and frontend label
+     *
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getAllAttributes()
     {
@@ -186,7 +191,9 @@ class Data extends AbstractData
             }
         }
 
-        $allAttributes['state'] = __('Product State');
+        if (!empty($this->getStateOptions())) {
+            $allAttributes['state'] = $this->getModuleConfig('filter/state/label');
+        }
 
         return $allAttributes;
     }
@@ -197,17 +204,14 @@ class Data extends AbstractData
      * @param $attCode
      *
      * @return array
+     * @throws NoSuchEntityException
      */
     public function getAttributeOptions($attCode)
     {
         $result = [];
 
-        if ($attCode == 'state') {
-            $result = [
-                "state=new"     => __('New'),
-                "state=onsales" => __('On Sales'),
-                "state=stock"   => __('In Stock'),
-            ];
+        if ($attCode === 'state') {
+            $result = $this->getStateOptions();
         } else {
             $options = $this->attributeRepository->get($attCode)->getOptions();
             array_shift($options);
@@ -223,8 +227,28 @@ class Data extends AbstractData
     }
 
     /**
-     * get products page list
      * @return array
+     */
+    public function getStateOptions()
+    {
+        $stateConfig = $this->getModuleConfig('filter/state');
+        $options = [State::OPTION_NEW, State::OPTION_SALE, State::OPTION_STOCK];
+        $itemData = [];
+        foreach ($options as $option) {
+            if (!$stateConfig[$option . '_enable']) {
+                continue;
+            }
+            $itemData['state=' . $option] = $stateConfig[$option . '_label'];
+        }
+
+        return $itemData;
+    }
+
+    /**
+     * get products page list
+     *
+     * @return mixed
+     * @throws NoSuchEntityException
      */
     public function getProductsPageCollection()
     {
@@ -240,7 +264,7 @@ class Data extends AbstractData
      *
      * @param $id
      *
-     * @return \Mageplaza\LayeredNavigationUltimate\Model\ProductsPage | null
+     * @return ProductsPage | null
      */
     public function getPageById($id)
     {
@@ -255,10 +279,12 @@ class Data extends AbstractData
     /**
      * @param $route
      *
-     * @return \Mageplaza\LayeredNavigationUltimate\Model\ProductsPage |null
+     * @return ProductsPage|null
+     * @throws NoSuchEntityException
      */
     public function getPageByRoute($route)
     {
+        /** @var ProductsPage $page */
         $page = $this->getProductsPageCollection()
             ->addFieldToFilter('route', $route)
             ->getFirstItem();

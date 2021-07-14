@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Shopbybrand\Block\Brand;
 
-use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Shopbybrand\Block\Brand;
 
 /**
@@ -71,12 +70,14 @@ class Featured extends Brand
 
     /**
      * @return array
-     * @throws LocalizedException
      */
     public function getFeaturedBrand()
     {
         $featureBrands = [];
-        $collection = $this->_brandFactory->create()->getBrandCollection($this->_storeManager->getStore()->getId());
+        if (!$this->helper->enableFeature()) {
+            return $featureBrands;
+        }
+        $collection = $this->getCollection();
         foreach ($collection as $brand) {
             if ($brand->getIsFeatured()) {
                 $featureBrands[] = $brand;

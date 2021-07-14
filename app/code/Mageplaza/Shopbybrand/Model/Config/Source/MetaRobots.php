@@ -21,18 +21,18 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class MetaRobots
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class MetaRobots implements ArrayInterface
+class MetaRobots implements OptionSourceInterface
 {
-    const INDEXFOLLOW     = 'INDEX,FOLLOW';
+    const INDEXFOLLOW = 'INDEX,FOLLOW';
     const NOINDEXNOFOLLOW = 'NOINDEX,NOFOLLOW';
-    const NOINDEXFOLLOW   = 'NOINDEX,FOLLOW';
-    const INDEXNOFOLLOW   = 'INDEX,NOFOLLOW';
+    const NOINDEXFOLLOW = 'NOINDEX,FOLLOW';
+    const INDEXNOFOLLOW = 'INDEX,NOFOLLOW';
 
     /**
      * to option array
@@ -69,10 +69,10 @@ class MetaRobots implements ArrayInterface
     public function getOptionArray()
     {
         return [
-            self::INDEXFOLLOW     => 'INDEX,FOLLOW',
+            self::INDEXFOLLOW => 'INDEX,FOLLOW',
             self::NOINDEXNOFOLLOW => 'NOINDEX,NOFOLLOW',
-            self::NOINDEXFOLLOW   => 'NOINDEX,FOLLOW',
-            self::INDEXNOFOLLOW   => 'INDEX,NOFOLLOW'
+            self::NOINDEXFOLLOW => 'NOINDEX,FOLLOW',
+            self::INDEXNOFOLLOW => 'INDEX,NOFOLLOW'
         ];
     }
 }

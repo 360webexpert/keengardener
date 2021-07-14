@@ -26,7 +26,7 @@
             <block class="Magento\Framework\View\Element\Template" name="layer.custom_css" template="Mageplaza_LayeredNavigationUltimate::design.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="ln_horizontal_navigation" before="-" template="Mageplaza_LayeredNavigationUltimate::navigation/horizontal.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" name="ln_horizontal_navigation" before="layer.catalog.leftnav" template="Mageplaza_LayeredNavigationUltimate::navigation/horizontal.phtml"/>
         </referenceContainer>
     </body>
 </page>

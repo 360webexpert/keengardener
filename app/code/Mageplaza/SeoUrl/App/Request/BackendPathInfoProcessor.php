@@ -51,7 +51,7 @@ class BackendPathInfoProcessor implements PathInfoProcessorInterface
         StorePathInfoProcessor $subject,
         Data $helper
     ) {
-        $this->_helper  = $helper;
+        $this->_helper = $helper;
         $this->_subject = $subject;
     }
 

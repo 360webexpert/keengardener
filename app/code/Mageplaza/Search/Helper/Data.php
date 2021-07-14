@@ -366,26 +366,23 @@ class Data extends AbstractData
                         $parentIds[] = $parentId;
                     }
                 }
-                if ($productPrice != '0') {
-                    $productList[] = [
-                        'value' => $product->getName(),
-                        //sku
-                        's'     => $product->getSku(),
-                        //categoryIds
-                        'c'     => $parentIds,
-                        //short description
-                        'd'     => $this->getProductDescription($product, $store),
-                        //price
-                        'p'     => $productPrice,
-                        //image
-                        'i'     => $this->getMediaHelper()->getProductImage($product),
-                        //product url
-                        'u'     => $this->getProductUrl($product),
-                        'o'     => $option
-                    ];
-                }else{
-                    continue;
-                }
+
+                $productList[] = [
+                    'value' => $product->getName(),
+                    //sku
+                    's'     => $product->getSku(),
+                    //categoryIds
+                    'c'     => $parentIds,
+                    //short description
+                    'd'     => $this->getProductDescription($product, $store),
+                    //price
+                    'p'     => $productPrice,
+                    //image
+                    'i'     => $this->getMediaHelper()->getProductImage($product),
+                    //product url
+                    'u'     => $this->getProductUrl($product),
+                    'o'     => $option
+                ];
             }
 
             $resultCount++;

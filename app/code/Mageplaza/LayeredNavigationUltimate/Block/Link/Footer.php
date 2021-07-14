@@ -21,7 +21,11 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Block\Link;
 
+use Magento\Framework\App\DefaultPathInterface;
 use Magento\Framework\View\Element\Html\Link\Current;
+use Magento\Framework\View\Element\Template\Context;
+use Mageplaza\LayeredNavigationUltimate\Helper\Data;
+use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition;
 
 /**
  * Class Footer
@@ -37,15 +41,15 @@ class Footer extends Current
     /**
      * Footer constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
-     * @param \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper
+     * @param Context $context
+     * @param DefaultPathInterface $defaultPath
+     * @param Data $helper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\DefaultPathInterface $defaultPath,
-        \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper,
+        Context $context,
+        DefaultPathInterface $defaultPath,
+        Data $helper,
         array $data = []
     ) {
         parent::__construct($context, $defaultPath, $data);
@@ -63,7 +67,7 @@ class Footer extends Current
         foreach ($pageCollection as $page) {
             if ($this->helper->canShowProductPageLink(
                 $page,
-                \Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition::FOOTERLINK
+                ProductPosition::FOOTERLINK
             )) {
                 $html .= '<li class="nav item"><a href="' . $this->helper->getProductPageUrl($page) . '" title="' . $page->getPageTitle() . '">' . $page->getPageTitle() . '</a></li>';
             }

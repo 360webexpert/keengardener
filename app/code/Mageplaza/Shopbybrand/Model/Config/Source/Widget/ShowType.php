@@ -21,13 +21,13 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source\Widget;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class ShowType
  * @package Mageplaza\Shopbybrand\Model\Config\Source\Widget
  */
-class ShowType implements ArrayInterface
+class ShowType implements OptionSourceInterface
 {
     /**
      * @return array

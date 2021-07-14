@@ -29,9 +29,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class NavigationType implements ArrayInterface
 {
-    const VERTICAL   = 0;
+    const VERTICAL = 0;
     const HORIZONTAL = 1;
-    const BOTH       = 2;
+    const BOTH = 2;
 
     /**
      * @return array

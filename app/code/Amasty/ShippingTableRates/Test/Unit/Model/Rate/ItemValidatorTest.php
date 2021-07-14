@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -45,13 +45,13 @@ class ItemValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configProvider = $this->createPartialMock(
             ConfigProvider::class,
             [
                 'isIgnoreVirtual',
-                'getConfigurableSippingType',
+                'getConfigurableShippingType',
                 'getBundleShippingType',
                 'isPromoAllowed',
                 'isIncludingTax',
@@ -99,7 +99,7 @@ class ItemValidatorTest extends \PHPUnit\Framework\TestCase
         $item->expects($this->any())->method('getHasChildren')->willReturnOnConsecutiveCalls(false, true, true);
         $product->expects($this->any())->method('getTypeId')
             ->willReturnOnConsecutiveCalls(Configurable::TYPE_CODE, ProductType::TYPE_BUNDLE);
-        $this->configProvider->expects($this->any())->method('getConfigurableSippingType')->willReturn(0);
+        $this->configProvider->expects($this->any())->method('getConfigurableShippingType')->willReturn(0);
         $this->configProvider->expects($this->any())->method('getBundleShippingType')->willReturn(2);
 
         $this->assertFalse($this->model->isShouldProcessChildren($item));
@@ -166,7 +166,7 @@ class ItemValidatorTest extends \PHPUnit\Framework\TestCase
         $this->configProvider->expects($this->any())->method('getSelectedWeightAttributeCode')->willReturn([1]);
         $this->configProvider->expects($this->any())->method('calculateVolumetricWeightWithShippingFactor')->willReturn(7);
 
-        $this->assertEquals(7, $this->model->getItemWeight($item));
+        $this->assertEquals(['weight' => 5, 'volumetric' => 7], $this->model->getItemWeight($item));
     }
 
     /**

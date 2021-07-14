@@ -19,8 +19,9 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-$brands = $block->getBrands();
-$stores = $block->getStoreViews();
+/** @var \Mageplaza\Shopbybrand\Block\Adminhtml\Form\Renderer\BrandCategory $block */
+$brands      = $block->getBrands();
+$stores      = $block->getStoreViews();
 $singleStore = $block->isSingleStoreMode();
 ?>
 <table class="admin__control-table">
@@ -36,16 +37,17 @@ $singleStore = $block->isSingleStoreMode();
     </thead>
     <tbody data-role="options-container" id="default-table-content">
     <?php
-    if (count($brands)) :
-        foreach ($brands as $brand) :
-            ?>
+    if ($brands) :
+        foreach ($brands as $brand) : ?>
             <tr class="brands-row brand-<?= /** @noEscape */ $brand->getId() ?>">
                 <td>
-                    <?php if (in_array($brand->getId(), $block->getSelectedBrands())) { ?>
-                        <input id="brand_<?= /** @noEscape */ $brand->getId() ?>" type="checkbox" name="brand_category[]"
+                    <?php if (in_array($brand->getId(), $block->getSelectedBrands(), true)) { ?>
+                        <input id="brand_<?= /** @noEscape */ $brand->getId() ?>"
+                               type="checkbox" name="brand_category[]"
                                value="<?= /** @noEscape */ $brand->getId() ?>" checked/>
                     <?php } else { ?>
-                        <input id="brand_<?= /** @noEscape */ $brand->getId() ?>" type="checkbox" name="brand_category[]"
+                        <input id="brand_<?= /** @noEscape */ $brand->getId() ?>"
+                               type="checkbox" name="brand_category[]"
                                value="<?= /** @noEscape */ $brand->getId() ?>"/>
                     <?php } ?>
                     <label for="brand_<?= /** @noEscape */ $brand->getId() ?>"></label>
@@ -55,7 +57,7 @@ $singleStore = $block->isSingleStoreMode();
                 <?php if (!$singleStore) : ?>
                     <td>
                         <select disabled title="<?= /** @noEscape */ __('Store View') ?>">
-                            <option value="0" <?php if ($brand->getStoreId() == '0') :
+                            <option value="0" <?php if ($brand->getStoreId() === '0') :
                                 ?>selected<?php
                                               endif; ?>><?= /** @noEscape */ __('All store view') ?></option>
                             <?php foreach ($stores as $store) : ?>
@@ -63,7 +65,7 @@ $singleStore = $block->isSingleStoreMode();
                                     <?php if (is_array($store['value'])) : ?>
                                         <?php foreach ($values = $store['value'] as $value) : ?>
                                             <option value="<?= /** @noEscape */ $value['value'] ?>"
-                                                <?php if ($brand->getStoreId() == $value['value']) :
+                                                <?php if ($brand->getStoreId() === $value['value']) :
                                                     ?>selected<?php
                                                 endif; ?>>
                                                 <?= /** @noEscape */ $value['label'] ?>

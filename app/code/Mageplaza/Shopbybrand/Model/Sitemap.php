@@ -142,7 +142,7 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
             if ($item->getImage()) {
                 $imagesCollection[] = new DataObject(
                     [
-                        'url'     => $this->helper->getBrandImageUrl($item),
+                        'url' => $this->helper->getBrandImageUrl($item),
                         'caption' => null,
                     ]
                 );
@@ -151,8 +151,8 @@ class Sitemap extends \Magento\Sitemap\Model\Sitemap
 
             $itemId = $item->getId();
             $brandSiteMapCollection[$itemId] = new DataObject([
-                'id'     => $itemId,
-                'url'    => $this->router . '/' . $item->getUrlKey() . $this->helper->getUrlSuffix(),
+                'id' => $itemId,
+                'url' => $this->router . '/' . $item->getUrlKey() . $this->helper->getUrlSuffix(),
                 'images' => $images,
             ]);
         }

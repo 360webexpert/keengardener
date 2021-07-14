@@ -61,7 +61,7 @@ define(
                             layerContainer.html(response.navigation);
                         }
                         if (response.quickview) {
-                            layerContainer.html(response.quickview);
+                            quickViewContainer.html(response.quickview);
                         }
                         var products = $('<div>' + productsHtml + '</div>');
 

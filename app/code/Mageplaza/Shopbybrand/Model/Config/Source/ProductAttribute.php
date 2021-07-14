@@ -21,14 +21,15 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class ProductAttribute
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class ProductAttribute implements ArrayInterface
+class ProductAttribute implements OptionSourceInterface
 {
     /**
      * @var CollectionFactory
@@ -50,6 +51,7 @@ class ProductAttribute implements ArrayInterface
      */
     public function toOptionArray()
     {
+        /** @var Collection $attributes */
         $attributes = $this->_collectionFactory->create()->addVisibleFilter();
         $arrAttribute = [
             [

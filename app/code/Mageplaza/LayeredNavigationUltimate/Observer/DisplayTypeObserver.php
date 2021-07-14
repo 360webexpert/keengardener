@@ -22,6 +22,7 @@
 namespace Mageplaza\LayeredNavigationUltimate\Observer;
 
 use Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Mageplaza\LayeredNavigationUltimate\Helper\Data as LayerHelper;
 use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\DisplayType;
@@ -32,17 +33,17 @@ use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\DisplayType;
  */
 class DisplayTypeObserver implements ObserverInterface
 {
-    /** @var \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory */
+    /** @var FieldFactory */
     protected $_fieldFactory;
 
-    /** @var \Mageplaza\LayeredNavigationUltimate\Model\Config\Source\DisplayType */
+    /** @var DisplayType */
     protected $_displayType;
 
     /**
      * DisplayTypeObserver constructor.
      *
-     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
-     * @param \Mageplaza\LayeredNavigationUltimate\Model\Config\Source\DisplayType $displayType
+     * @param FieldFactory $fieldFactory
+     * @param DisplayType $displayType
      */
     public function __construct(
         FieldFactory $fieldFactory,
@@ -53,40 +54,41 @@ class DisplayTypeObserver implements ObserverInterface
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      *
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $form = $observer->getEvent()->getData('form');
         $dependencies = $observer->getEvent()->getData('dependencies');
         $fieldset = $form->getElement('layer_fieldset');
 
         $fieldset->addField(LayerHelper::FIELD_DISPLAY_TYPE, 'select', [
-            'name'   => LayerHelper::FIELD_DISPLAY_TYPE,
-            'label'  => __("Display Type"),
-            'title'  => __("Display Type"),
-            'class'  => 'layer_attribute_field',
+            'name' => LayerHelper::FIELD_DISPLAY_TYPE,
+            'label' => __("Display Type"),
+            'title' => __("Display Type"),
+            'class' => 'layer_attribute_field',
             'values' => $this->_displayType->getOptionForForm()
         ]);
 
         $fieldset->addField(LayerHelper::FIELD_DISPLAY_SIZE, 'text', [
-            'name'  => LayerHelper::FIELD_DISPLAY_SIZE,
+            'name' => LayerHelper::FIELD_DISPLAY_SIZE,
             'label' => __("Number of option"),
             'title' => __("Number of option"),
-            'class' => 'layer_attribute_field'
+            'class' => 'layer_attribute_field validate-greater-than-zero validate-digits',
         ]);
 
         $fieldset->addField(LayerHelper::FIELD_DISPLAY_HEIGHT, 'text', [
-            'name'  => LayerHelper::FIELD_DISPLAY_HEIGHT,
+            'name' => LayerHelper::FIELD_DISPLAY_HEIGHT,
             'label' => __("Block height"),
             'title' => __("Block height"),
-            'class' => 'layer_attribute_field'
+            'class' => 'layer_attribute_field validate-greater-than-zero validate-digits',
         ]);
 
-        $refField = $this->_fieldFactory->create(['fieldData'   => ['value' => '1,2', 'separator' => ','],
-                                                  'fieldPrefix' => ''
+        $refField = $this->_fieldFactory->create([
+            'fieldData' => ['value' => '1,2', 'separator' => ','],
+            'fieldPrefix' => ''
         ]);
         $dependencies->addFieldMap(LayerHelper::FIELD_DISPLAY_TYPE, LayerHelper::FIELD_DISPLAY_TYPE)
             ->addFieldMap(LayerHelper::FIELD_DISPLAY_SIZE, LayerHelper::FIELD_DISPLAY_SIZE)

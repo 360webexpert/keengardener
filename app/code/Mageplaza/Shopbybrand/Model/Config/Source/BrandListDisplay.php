@@ -21,27 +21,27 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class BrandListDisplay
  *
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class BrandListDisplay implements ArrayInterface
+class BrandListDisplay implements OptionSourceInterface
 {
     /**
      * Display only logo
      */
-    const DISPLAY_LOGO = 0;
+    const DISPLAY_LOGO = '0';
     /**
      * Display logo and label
      */
-    const DISPLAY_LOGO_AND_LABEL = 1;
+    const DISPLAY_LOGO_AND_LABEL = '1';
     /**
      * Display label
      */
-    const DISPLAY_LABEL = 2;
+    const DISPLAY_LABEL = '2';
 
     /**
      * @return array
@@ -50,17 +50,17 @@ class BrandListDisplay implements ArrayInterface
     {
         return [
             [
+                'label' => __('Label Only'),
+                'value' => self::DISPLAY_LABEL
+            ],
+            [
                 'label' => __('Logo Only'),
                 'value' => self::DISPLAY_LOGO
             ],
             [
                 'label' => __('Logo and Label'),
                 'value' => self::DISPLAY_LOGO_AND_LABEL
-            ],
-            [
-                'label' => __('Label Only'),
-                'value' => self::DISPLAY_LABEL
-            ],
+            ]
         ];
     }
 }

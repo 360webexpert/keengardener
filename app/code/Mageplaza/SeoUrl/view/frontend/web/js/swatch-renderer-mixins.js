@@ -19,7 +19,7 @@
  */
 define([
     'jquery',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'jquery/jquery.parsequery'
 ], function ($) {
     'use strict';

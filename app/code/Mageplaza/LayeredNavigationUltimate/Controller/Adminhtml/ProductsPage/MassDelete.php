@@ -21,7 +21,9 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Controller\Adminhtml\ProductsPage;
 
+use Exception;
 use Magento\Backend\App\Action;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class MassDelete
@@ -31,7 +33,7 @@ class MassDelete extends Action
 {
     /**
      * @return void
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public function execute()
     {
@@ -45,7 +47,7 @@ class MassDelete extends Action
                     $page = $this->_objectManager->create('Mageplaza\LayeredNavigationUltimate\Model\ProductsPage')->load($id);
                     $page->delete();
                     $numOfSuccess++;
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->messageManager->addErrorMessage(__('Cannot delete page with ID %1', $id));
                 }
             }

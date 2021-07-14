@@ -21,23 +21,23 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class FeatureStyle
  *
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class FeatureStyle implements ArrayInterface
+class FeatureStyle implements OptionSourceInterface
 {
     /**
      * Display slider
      */
-    const DISPLAY_SLIDER = 0;
+    const DISPLAY_SLIDER = '0';
     /**
      * Display simple
      */
-    const DISPLAY_SIMPLE = 1;
+    const DISPLAY_SIMPLE = '1';
 
     /**
      * @return array

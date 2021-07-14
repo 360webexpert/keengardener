@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -56,7 +56,9 @@ class Edit extends \Amasty\ShippingTableRates\Controller\Adminhtml\Methods
         }
         $this->coreRegistry->register('current_amasty_table_method', $model);
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Amasty_ShippingTableRates::amstrates')->_addBreadcrumb(__('Table Rates'), __('Table Rates'));
+        $this->_setActiveMenu('Amasty_ShippingTableRates::amstrates')
+            ->_addBreadcrumb(__('Table Rates'), __('Table Rates'));
+
         if ($model->getId()) {
             $title = __('Edit Method `%1`', $model->getName());
         } else {

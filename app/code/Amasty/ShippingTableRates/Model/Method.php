@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -49,24 +49,6 @@ class Method extends AbstractModel implements MethodInterface
         $this->adapterFactory = $adapterFactory;
         $this->uploadFactory = $uploadFactory;
         $this->filesystem = $filesystem;
-    }
-
-    /**
-     * @param int[] $ids
-     * @param int $status
-     *
-     * @return $this
-     * @deprecated
-     */
-    public function massChangeStatus($ids, $status)
-    {
-        foreach ($ids as $id) {
-            $model = $this->load($id);
-            $model->setIsActive($status);
-            $model->save();
-        }
-
-        return $this;
     }
 
     /**
@@ -273,6 +255,24 @@ class Method extends AbstractModel implements MethodInterface
     public function setCommentImg($commentImg)
     {
         $this->setData(MethodInterface::COMMENT_IMG, $commentImg);
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWeightType()
+    {
+        return $this->_getData(MethodInterface::WEIGHT_TYPE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setWeightType($weightType)
+    {
+        $this->setData(MethodInterface::WEIGHT_TYPE, $weightType);
 
         return $this;
     }

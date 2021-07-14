@@ -22,6 +22,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Sitemap\Model\Sitemap" type="Mageplaza\Shopbybrand\Model\Sitemap"/>
+    <preference for="Mageplaza\Shopbybrand\Api\BrandRepositoryInterface" type="Mageplaza\Shopbybrand\Model\BrandRepository" />
+    <preference for="Mageplaza\Shopbybrand\Api\Data\BrandInterface" type="Mageplaza\Shopbybrand\Model\Brand" />
+    <preference for="Mageplaza\Shopbybrand\Api\Data\BrandCategoryInterface" type="Mageplaza\Shopbybrand\Model\Category" />
+    <preference for="Mageplaza\Shopbybrand\Api\Data\BrandConfigInterface" type="Mageplaza\Shopbybrand\Model\BrandConfig" />
     <type name="Magento\Catalog\Model\Layer\FilterList">
         <plugin name="mp_brand_filterlist" type="Mageplaza\Shopbybrand\Plugin\Model\FilterList" sortOrder="100"/>
     </type>
@@ -38,10 +42,10 @@
         <plugin name="mp_brand_backend_attribute_options" type="Mageplaza\Shopbybrand\Plugin\Block\Adminhtml\Attribute\Edit\Options" sortOrder="100"/>
     </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
-        <plugin name="brand-topmenu" type="Mageplaza\Shopbybrand\Plugin\Link\Topmenu"/>
+        <plugin name="brand-topmenu" type="Mageplaza\Shopbybrand\Plugin\Link\TopMenu"/>
     </type>
     <type name="Smartwave\Megamenu\Block\Topmenu">
-        <plugin name="brand-topmenu-porto" type="Mageplaza\Shopbybrand\Plugin\Link\TopmenuPorto"/>
+        <plugin name="brand-topmenu-porto" type="Mageplaza\Shopbybrand\Plugin\Link\TopMenuPorto"/>
     </type>
     <type name="Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView">
         <plugin name="is_applicable" type="Mageplaza\Shopbybrand\Plugin\Model\Adapter\CatalogView" sortOrder="100"/>

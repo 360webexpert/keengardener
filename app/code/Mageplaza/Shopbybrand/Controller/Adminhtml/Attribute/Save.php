@@ -27,7 +27,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Uploader;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\Store;
 use Mageplaza\Shopbybrand\Helper\Data as BrandHelper;
@@ -39,10 +39,6 @@ use Mageplaza\Shopbybrand\Model\BrandFactory;
  */
 class Save extends Action
 {
-    /**
-     * @type Data
-     */
-    protected $_jsonHelper;
 
     /**
      * @type BrandFactory
@@ -53,6 +49,11 @@ class Save extends Action
      * @type Filesystem
      */
     protected $_fileSystem;
+
+    /**
+     * @var AdapterFactory
+     */
+    protected $_imageFactory;
 
     /**
      * @type PageFactory
@@ -69,25 +70,25 @@ class Save extends Action
      *
      * @param Context $context
      * @param BrandHelper $brandHelper
-     * @param Data $jsonHelper
      * @param BrandFactory $brandFactory
      * @param Filesystem $fileSystem
+     * @param AdapterFactory $adapterFactory
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
         BrandHelper $brandHelper,
-        Data $jsonHelper,
         BrandFactory $brandFactory,
         Filesystem $fileSystem,
+        AdapterFactory $adapterFactory,
         PageFactory $resultPageFactory
     ) {
         parent::__construct($context);
 
         $this->_brandHelper = $brandHelper;
-        $this->_jsonHelper = $jsonHelper;
         $this->_brandFactory = $brandFactory;
         $this->_fileSystem = $fileSystem;
+        $this->_imageFactory = $adapterFactory;
         $this->_resultPageFactory = $resultPageFactory;
     }
 
@@ -131,7 +132,7 @@ class Save extends Action
             }
         }
 
-        $this->getResponse()->representJson($this->_jsonHelper->jsonEncode($result));
+        $this->getResponse()->representJson(BrandHelper::jsonEncode($result));
     }
 
     /**
@@ -159,9 +160,10 @@ class Save extends Action
                 );
 
                 $data['image'] = BrandHelper::BRAND_MEDIA_PATH . '/' . $image['file'];
+                $this->resizeImage($data['image'], 80);
             } catch (Exception $e) {
                 $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
-                if ($e->getCode() != Uploader::TMP_NAME_EMPTY) {
+                if ((int)$e->getCode() !== Uploader::TMP_NAME_EMPTY) {
                     $result['success'] = false;
                     $result['message'] = $e->getMessage();
                 }
@@ -169,5 +171,34 @@ class Save extends Action
         }
 
         return $this;
+    }
+
+    /**
+     * @param $image
+     * @param null $width
+     * @param null $height
+     *
+     * @throws Exception
+     */
+    public function resizeImage($image, $width = null, $height = null)
+    {
+        $absolutePath = $this->_fileSystem->getDirectoryRead(DirectoryList::MEDIA)
+                ->getAbsolutePath() . $image;
+
+        $imageResized = $this->_fileSystem->getDirectoryRead(DirectoryList::MEDIA)
+                ->getAbsolutePath('mageplaza/resized/' . $width . '/') . $image;
+
+        //create image factory...
+        $imageResize = $this->_imageFactory->create();
+        $imageResize->open($absolutePath);
+        $imageResize->constrainOnly(true);
+        $imageResize->keepTransparency(true);
+        $imageResize->keepFrame(false);
+        $imageResize->keepAspectRatio(true);
+        $imageResize->resize($width, $height);
+        //destination folder
+        $destination = $imageResized;
+        //save image
+        $imageResize->save($destination);
     }
 }

@@ -21,8 +21,11 @@
 
 namespace Mageplaza\LayeredNavigationPro\Block\Type;
 
+use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\LayeredNavigationPro\Helper\Data as LayerHelper;
+use Mageplaza\LayeredNavigationPro\Model\Layer\Filter;
 
 /**
  * Class AbstractType
@@ -33,21 +36,21 @@ class AbstractType extends Template
     /** @var string Path to template file. */
     protected $_template = '';
 
-    /** @var \Magento\Catalog\Model\Layer\Filter\AbstractFilter */
+    /** @var AbstractFilter */
     protected $filter;
 
-    /** @var \Mageplaza\LayeredNavigationPro\Helper\Data */
+    /** @var LayerHelper */
     protected $helper;
 
     /**
      * AbstractType constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $helper
+     * @param Context $context
+     * @param LayerHelper $helper
      * @param array $data
      */
     public function __construct(
-        Template\Context $context,
+        Context $context,
         LayerHelper $helper,
         array $data = []
     ) {
@@ -57,7 +60,7 @@ class AbstractType extends Template
     }
 
     /**
-     * @return \Mageplaza\LayeredNavigationPro\Helper\Data
+     * @return LayerHelper
      */
     public function helper()
     {
@@ -83,7 +86,7 @@ class AbstractType extends Template
     }
 
     /**
-     * @return \Magento\Catalog\Model\Layer\Filter\AbstractFilter
+     * @return AbstractFilter
      */
     public function getFilter()
     {
@@ -91,11 +94,11 @@ class AbstractType extends Template
     }
 
     /**
-     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
+     * @param AbstractFilter $filter
      *
      * @return $this
      */
-    public function setFilter(\Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter)
+    public function setFilter(AbstractFilter $filter)
     {
         $this->filter = $filter;
 
@@ -103,7 +106,7 @@ class AbstractType extends Template
     }
 
     /**
-     * @return \Mageplaza\LayeredNavigationPro\Model\Layer\Filter
+     * @return Filter
      */
     public function getFilterModel()
     {

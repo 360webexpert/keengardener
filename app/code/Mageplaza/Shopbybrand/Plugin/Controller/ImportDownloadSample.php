@@ -123,7 +123,7 @@ class ImportDownloadSample
         Download $download,
         Closure $proceed
     ) {
-        if ($this->request->getParam('filename') != self::IMPORT_FILE) {
+        if ($this->request->getParam('filename') !== self::IMPORT_FILE) {
             return $proceed();
         }
 
@@ -135,7 +135,7 @@ class ImportDownloadSample
 
         if (!$directoryRead->isFile($filePath)) {
             /* @var Redirect $resultRedirect */
-            $this->messageManager->addError(__('There is no sample file for this entity.'));
+            $this->messageManager->addErrorMessage(__('There is no sample file for this entity.'));
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/import');
 

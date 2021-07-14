@@ -38,9 +38,11 @@ define([
         },
 
         initObserve: function () {
+            var swatchDisableElements = $('.swatch-option.disabled'),
+                swatch = this.options.swatchOptionText,
+                optionElements = this.element.find('.filter-options a.rating-summary'),
+                self = this;
             this._super();
-
-            var self = this;
 
             this.initDropdownObserver();
             this.initSearchObserver();
@@ -49,23 +51,26 @@ define([
                 this.initApplyFilterButton();
             }
 
-            var swatch = this.options.swatchOptionText;
             if (swatch.length) {
                 swatch.forEach(function (value, index) {
                     self.element.find('[attribute=' + value + '] .swatch-option').each(function () {
-                        var label = $(this).attr('option-label');
+                        var label = $(this).attr('data-option-label');
                         $(this).parent().addClass('swatch-option-label-layered')
                             .append("<span class='swatch-option-text'>" + label + "</span>");
                     });
                 });
             }
 
-            var optionElements = this.element.find('.filter-options a.rating-summary');
             optionElements.each(function (index) {
                 $(this).bind('click', function (e) {
                     optionElements.removeClass('selected');
                     $(this).addClass('selected');
                 });
+            });
+
+            swatchDisableElements.each(function () {
+                var el = $(this);
+                el.parent('a').css('pointer-events', 'none');
             });
         },
 
@@ -279,7 +284,8 @@ define([
             this.filterParams = this.getUrlParams();
 
             self.element.find(this.options.buttonSubmitElement).click(function () {
-                var baseUrl = buttonSubmit.baseUrl,
+                var currentUrl = self.options.buttonSubmit.baseUrl,
+                    baseUrl = buttonSubmit.baseUrl,
                     params = {};
 
                 if (seoUrlEnable && self.seoFilterParams.length) {
@@ -294,7 +300,9 @@ define([
                 }
                 params = $.param(params);
 
-                self.ajaxSubmit(baseUrl + (params.length ? '?' + params : ''), true);
+                if (!seoUrlEnable && params !== '' || seoUrlEnable && params !== '' &&  baseUrl.length !== currentUrl.length) {
+                    self.ajaxSubmit(baseUrl + (params.length ? '?' + params : ''), true);
+                }
             });
         },
 

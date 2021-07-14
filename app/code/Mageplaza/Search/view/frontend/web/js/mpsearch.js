@@ -35,7 +35,7 @@ define(
 
                     /** Mobile*/
                     $('.block-search .block-content .search .label').click(function () {
-                        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        if (self.checkDevice()) {
                             if ($('.block-search .form.minisearch').hasClass('active')) {
                                 $('.minisearch .search-category').hide();
                             } else {
@@ -46,7 +46,8 @@ define(
 
                     $(document).click(function (e) {
                         var containerSearch = $('.block-search .block-content .search .control');
-                        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+                        if (self.checkDevice()) {
                             if ($('.block-search .form.minisearch').hasClass('active')) {
                                 if (!containerSearch.is(e.target) && containerSearch.has(e.target).length === 0) {
                                     $('.minisearch .search-category').hide();
@@ -57,6 +58,13 @@ define(
                     });
 
                     if (categorySelect.length) {
+                        if (this.checkDevice()) {
+                            categorySelect.on('click', function () {
+                                setTimeout(function () {
+                                    $('.block-search').find('.label').addClass('active');
+                                }, 250);
+                            });
+                        }
                         categorySelect.on('change', function () {
                             searchInput.focus();
 
@@ -95,6 +103,7 @@ define(
                             if (query.length === 0) {
                                 return suggestion.o !== 'product_search';
                             }
+
                             /** Product Search*/
                             return suggestion.o === 'product_search' && (decodeEntities(suggestion.s.toLowerCase()).indexOf(queryLowerCase) !== -1
                                 || decodeEntities(suggestion.value.toLowerCase()).indexOf(queryLowerCase) !== -1);
@@ -106,9 +115,8 @@ define(
                             var html = '<a href="' + self.correctProductUrl(suggestion.u) + '">',
                                 displayInfo = self.options.displayInfo,
                                 currencyRate = parseFloat(self.options.currencyRate.replace(",", "")),
-                                priceFormat = self.options.priceFormat;
-
-                            var formatedPrice = priceUtils.formatPrice(suggestion.p);
+                                priceFormat = self.options.priceFormat,
+                                priceByCurrency;
 
                             if ($.inArray('image', displayInfo) !== -1) {
                                 html += '<div class="suggestion-left"><img class="img-responsive" src="' + self.correctProductUrl(suggestion.i, true) + '" alt="" /></div>';
@@ -119,14 +127,11 @@ define(
 
                             if ($.inArray('price', displayInfo) !== -1) {
                                 if (suggestion.p.toString().indexOf('-') == -1) {
-                                    var priceByCurrency = suggestion.p*currencyRate;
+                                    priceByCurrency = suggestion.p*currencyRate;
                                     html += '<div class="product-line product-price">' + $.mage.__('Price ') + priceUtils.formatPrice(priceByCurrency, priceFormat) + '</div>';
-                                }else{
-                                    var priceByCurrency = suggestion.p.split('-'),
-                                        priceFrom = parseFloat(priceByCurrency[0])*currencyRate,
-                                        priceTo = parseFloat(priceByCurrency[1])*currencyRate;
-
-                                    html += '<div class="product-line product-price">' + $.mage.__('Price ') + priceUtils.formatPrice(priceFrom, priceFormat) +' - '+ priceUtils.formatPrice(priceTo, priceFormat) + '</div>';
+                                } else {
+                                    priceByCurrency = suggestion.p.split('-');
+                                    html += '<div class="product-line product-price">' + $.mage.__('Price ') + priceUtils.formatPrice(parseFloat(priceByCurrency[0])*currencyRate, priceFormat) +' - '+ priceUtils.formatPrice(parseFloat(priceByCurrency[1])*currencyRate, priceFormat) + '</div>';
                                 }
                             }
 
@@ -182,6 +187,10 @@ define(
                     }
 
                     return decodeHTMLEntities;
+                },
+
+                checkDevice: function () {
+                    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 }
             }
         );

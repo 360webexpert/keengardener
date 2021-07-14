@@ -22,13 +22,13 @@
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
 use Magento\Cms\Model\BlockFactory;
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * Class StaticBlock
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class StaticBlock implements ArrayInterface
+class StaticBlock implements OptionSourceInterface
 {
     /**
      * @type BlockFactory

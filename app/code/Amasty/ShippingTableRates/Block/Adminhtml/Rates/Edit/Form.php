@@ -1,12 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
 
 namespace Amasty\ShippingTableRates\Block\Adminhtml\Rates\Edit;
+
+use Amasty\ShippingTableRates\Api\Data\ShippingTableRateInterface;
 
 /**
  * Shipping Rate of Method Form initialization
@@ -58,146 +60,150 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         $fieldsetDestination->addField(
-            'method_id',
+            ShippingTableRateInterface::METHOD_ID,
             'hidden',
             [
-                'name' => 'method_id'
+                'name' => ShippingTableRateInterface::METHOD_ID
             ]
         );
 
         $fieldsetDestination->addField(
-            'country',
+            ShippingTableRateInterface::COUNTRY,
             'select',
             [
-                'name' => 'country',
                 'label' => __('Country'),
-                'options' => $this->_helper->getCountries(true),
-
+                'name' => ShippingTableRateInterface::COUNTRY,
+                'options' => $this->_helper->getCountriesHash()
             ]
         );
 
         $fieldsetDestination->addField(
-            'state',
+            ShippingTableRateInterface::STATE,
             'select',
             [
-                'name' => 'state',
                 'label' => __('State'),
-                'options' => $this->_helper->getStates(true),
-
+                'name' => ShippingTableRateInterface::STATE,
+                'options' => $this->_helper->getStatesHash()
             ]
         );
 
         $fieldsetDestination->addField(
-            'city',
+            ShippingTableRateInterface::CITY,
             'text',
             [
-                'name' => 'city',
                 'label' => __('City'),
+                'name' => ShippingTableRateInterface::CITY
             ]
         );
 
         $fieldsetDestination->addField(
-            'zip_from',
+            ShippingTableRateInterface::ZIP_FROM,
             'text',
             [
                 'label' => __('Zip From'),
-                'name' => 'zip_from'
+                'name' => ShippingTableRateInterface::ZIP_FROM
             ]
         );
 
         $fieldsetDestination->addField(
-            'zip_to',
+            ShippingTableRateInterface::ZIP_TO,
             'text',
             [
                 'label' => __('Zip To'),
-                'name' => 'zip_to'
+                'name' => ShippingTableRateInterface::ZIP_TO
             ]
         );
 
         $fieldsetConditions = $form->addFieldset('conditions', ['legend' => __('Conditions')]);
 
         $fieldsetConditions->addField(
-            'weight_from',
+            ShippingTableRateInterface::WEIGHT_FROM,
             'text',
             [
                 'label' => __('Weight From'),
-                'name' => 'weight_from',
+                'name' => ShippingTableRateInterface::WEIGHT_FROM,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetConditions->addField(
-            'weight_to',
+            ShippingTableRateInterface::WEIGHT_TO,
             'text',
             [
                 'label' => __('Weight To'),
-                'name' => 'weight_to',
+                'name' => ShippingTableRateInterface::WEIGHT_TO,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetConditions->addField(
-            'qty_from',
+            ShippingTableRateInterface::QTY_FROM,
             'text',
             [
                 'label' => __('Qty From'),
-                'name' => 'qty_from',
+                'name' => ShippingTableRateInterface::QTY_FROM,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetConditions->addField(
-            'qty_to',
+            ShippingTableRateInterface::QTY_TO,
             'text',
             [
                 'label' => __('Qty To'),
-                'name' => 'qty_to',
+                'name' => ShippingTableRateInterface::QTY_TO,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetConditions->addField(
-            'shipping_type',
+            ShippingTableRateInterface::SHIPPING_TYPE,
             'select',
             [
                 'label' => __('Shipping Type'),
-                'name' => 'shipping_type',
-                'options' => $this->_helper->getTypes(true),
+                'name' => ShippingTableRateInterface::SHIPPING_TYPE,
+                'options' => $this->_helper->getTypesHash(),
             ]
         );
 
         $fieldsetConditions->addField(
-            'price_from',
+            ShippingTableRateInterface::PRICE_FROM,
             'text',
             [
                 'label' => __('Price From'),
-                'name' => 'price_from',
+                'name' => ShippingTableRateInterface::PRICE_FROM,
                 'note' => __('Original product cart price, without discounts.'),
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetConditions->addField(
-            'price_to',
+            ShippingTableRateInterface::PRICE_TO,
             'text',
             [
                 'label' => __('Price To'),
-                'name' => 'price_to',
+                'name' => ShippingTableRateInterface::PRICE_TO,
                 'note' => __('Original product cart price, without discounts.'),
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetConditions->addField(
-            'time_delivery',
+            ShippingTableRateInterface::TIME_DELIVERY,
             'text',
             [
                 'label' => __('Estimated Delivery (days)'),
-                'name' => 'time_delivery',
+                'name' => ShippingTableRateInterface::TIME_DELIVERY,
                 'note' => __('This value will be used for the {day} variable in the Method name')
             ]
         );
 
         $fieldsetConditions->addField(
-            'name_delivery',
+            ShippingTableRateInterface::NAME_DELIVERY,
             'text',
             [
                 'label' => __('Name delivery'),
-                'name' => 'name_delivery',
+                'name' => ShippingTableRateInterface::NAME_DELIVERY,
                 'note' => __('This value will be used for the {name} variable in the Method name')
             ]
         );
@@ -205,38 +211,52 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldsetRate = $form->addFieldset('rate', ['legend' => __('Rate')]);
 
         $fieldsetRate->addField(
-            'cost_base',
+            ShippingTableRateInterface::COST_BASE,
             'text',
             [
                 'label' => __('Base Rate for the Order'),
-                'name' => 'cost_base',
+                'name' => ShippingTableRateInterface::COST_BASE,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetRate->addField(
-            'cost_percent',
+            ShippingTableRateInterface::COST_PERCENT,
             'text',
             [
                 'label' => __('Percentage per Product'),
-                'name' => 'cost_percent',
+                'name' => ShippingTableRateInterface::COST_PERCENT,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetRate->addField(
-            'cost_product',
+            ShippingTableRateInterface::COST_PRODUCT,
             'text',
             [
                 'label' => __('Fixed Rate per Product'),
-                'name' => 'cost_product',
+                'name' => ShippingTableRateInterface::COST_PRODUCT,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
         $fieldsetRate->addField(
-            'cost_weight',
+            ShippingTableRateInterface::COST_WEIGHT,
             'text',
             [
                 'label' => __('Fixed Rate per 1 unit of weight'),
-                'name' => 'cost_weight',
+                'name' => ShippingTableRateInterface::COST_WEIGHT,
+                'class' => 'validate-number validate-zero-or-greater'
+            ]
+        );
+
+        $fieldsetRate->addField(
+            ShippingTableRateInterface::START_WEIGHT,
+            'text',
+            [
+                'label' => __('Count weight from'),
+                'name' => ShippingTableRateInterface::START_WEIGHT,
+                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 

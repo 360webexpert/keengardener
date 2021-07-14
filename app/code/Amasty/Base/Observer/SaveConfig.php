@@ -1,14 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
 
 namespace Amasty\Base\Observer;
 
-use Amasty\Base\Model\AdsProvider;
+use Amasty\Base\Model\Feed\FeedTypes\Ads;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -34,8 +34,8 @@ class SaveConfig implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->cache->test(AdsProvider::CSV_CACHE_ID)) {
-            $this->cache->remove(AdsProvider::CSV_CACHE_ID);
+        if ($this->cache->test(Ads::CSV_CACHE_ID)) {
+            $this->cache->remove(Ads::CSV_CACHE_ID);
         }
     }
 }

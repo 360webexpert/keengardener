@@ -21,7 +21,19 @@
 
 namespace Mageplaza\LayeredNavigationPro\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\CatalogInventory\Helper\Stock;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection;
+use Mageplaza\LayeredNavigationPro\Helper\Data;
+use Zend_Db_Expr;
 
 /**
  * Class State
@@ -33,13 +45,13 @@ class State extends AbstractFilter
     const OPTION_SALE  = 'onsales';
     const OPTION_STOCK = 'stock';
 
-    /** @var \Mageplaza\LayeredNavigationPro\Helper\Data */
+    /** @var Data */
     protected $_moduleHelper;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
+    /** @var TimezoneInterface */
     protected $_localeDate;
 
-    /** @var \Magento\CatalogInventory\Helper\Stock */
+    /** @var Stock */
     protected $stockHelper;
 
     /** Filter Value */
@@ -48,42 +60,42 @@ class State extends AbstractFilter
     /**
      * State constructor.
      *
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $layer
-     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $moduleHelper
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
+     * @param ItemFactory $filterItemFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Layer $layer
+     * @param DataBuilder $itemDataBuilder
+     * @param Data $moduleHelper
+     * @param TimezoneInterface $localeDate
+     * @param Stock $stockHelper
      * @param array $data
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function __construct(
-        \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $layer,
-        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
-        \Mageplaza\LayeredNavigationPro\Helper\Data $moduleHelper,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogInventory\Helper\Stock $stockHelper,
+        ItemFactory $filterItemFactory,
+        StoreManagerInterface $storeManager,
+        Layer $layer,
+        DataBuilder $itemDataBuilder,
+        Data $moduleHelper,
+        TimezoneInterface $localeDate,
+        Stock $stockHelper,
         array $data = []
     ) {
         parent::__construct($filterItemFactory, $storeManager, $layer, $itemDataBuilder, $data);
 
         $this->_moduleHelper = $moduleHelper;
-        $this->_localeDate = $localeDate;
-        $this->stockHelper = $stockHelper;
-        $this->_requestVar = 'state';
+        $this->_localeDate   = $localeDate;
+        $this->stockHelper   = $stockHelper;
+        $this->_requestVar   = 'state';
         $this->setData('search_enable', false);
     }
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      *
      * @return $this
      */
-    public function apply(\Magento\Framework\App\RequestInterface $request)
+    public function apply(RequestInterface $request)
     {
         $attributeValue = $request->getParam($this->_requestVar);
         if (empty($attributeValue)) {
@@ -92,7 +104,7 @@ class State extends AbstractFilter
 
         $attributeValue = $this->filterValue = explode(',', $attributeValue);
 
-        /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
         foreach ($attributeValue as $value) {
             $this->addFilterToCollection($value, $productCollection);
@@ -121,32 +133,13 @@ class State extends AbstractFilter
     {
         switch ($type) {
             case self::OPTION_NEW:
-                $todayStartOfDayDate = $this->_localeDate->date()->setTime(0, 0, 0)->format('Y-m-d H:i:s');
-                $todayEndOfDayDate = $this->_localeDate->date()->setTime(23, 59, 59)->format('Y-m-d H:i:s');
-
-                /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $collection */
-                $collection
-                    ->addAttributeToFilter('news_from_date', [
-                        'or' => [
-                            0 => ['date' => true, 'to' => $todayEndOfDayDate],
-                            1 => ['is' => new \Zend_Db_Expr('null')],
-                        ]
-                    ], 'left')
-                    ->addAttributeToFilter('news_to_date', [
-                        'or' => [
-                            0 => ['date' => true, 'from' => $todayStartOfDayDate],
-                            1 => ['is' => new \Zend_Db_Expr('null')],
-                        ]
-                    ], 'left')
-                    ->addAttributeToFilter([
-                        ['attribute' => 'news_from_date', 'is' => new \Zend_Db_Expr('not null')],
-                        ['attribute' => 'news_to_date', 'is' => new \Zend_Db_Expr('not null')],
-                    ]);
+                /** @var Collection $collection */
+                $collection->addFieldToFilter('mp_is_new', 1);
 
                 break;
             case self::OPTION_SALE:
-                /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $collection */
-                $collection->getSelect()->where('price_index.final_price < price_index.price');
+                /** @var Collection $collection */
+                $collection->addFieldToFilter('mp_on_sale', 1);
 
                 break;
             case self::OPTION_STOCK:
@@ -166,9 +159,9 @@ class State extends AbstractFilter
     protected function getOptionText($optionId)
     {
         $options = [
-            self::OPTION_NEW   => $this->_moduleHelper->getFilterConfig('state/new_label'),
-            self::OPTION_SALE  => $this->_moduleHelper->getFilterConfig('state/onsales_label'),
-            self::OPTION_STOCK => $this->_moduleHelper->getFilterConfig('state/stock_label'),
+            self::OPTION_NEW   => $this->_moduleHelper->getFilterConfig('state/new_label') ?: 'New',
+            self::OPTION_SALE  => $this->_moduleHelper->getFilterConfig('state/onsales_label') ?: 'On Sales',
+            self::OPTION_STOCK => $this->_moduleHelper->getFilterConfig('state/stock_label') ?: 'In Stock',
         ];
 
         if (array_key_exists($optionId, $options)) {
@@ -181,7 +174,7 @@ class State extends AbstractFilter
     /**
      * Get filter name
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getName()
     {
@@ -195,13 +188,13 @@ class State extends AbstractFilter
      */
     protected function _getItemsData()
     {
-        /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
 
         $stateConfig = $this->_moduleHelper->getFilterConfig('state');
-        $checkCount = false;
-        $itemData = [];
-        $options = [self::OPTION_NEW, self::OPTION_SALE, self::OPTION_STOCK];
+        $checkCount  = false;
+        $itemData    = [];
+        $options     = [self::OPTION_NEW, self::OPTION_SALE, self::OPTION_STOCK];
         foreach ($options as $option) {
             if (!$stateConfig[$option . '_enable']) {
                 continue;
@@ -211,9 +204,16 @@ class State extends AbstractFilter
                 $count = $productCollection->getSize();
             } else {
                 $productCollectionClone = clone $productCollection;
-                $this->addFilterToCollection($option, $productCollectionClone);
-
-                $count = $productCollectionClone->resetTotalRecords()->getSize();
+                if ($option === self::OPTION_SALE) {
+                    $optionsFacetedData = $productCollection->getFacetedData('mp_on_sale');
+                    $count = isset($optionsFacetedData[1]) ? $optionsFacetedData[1]['count'] : 0;
+                } elseif ($option === self::OPTION_NEW) {
+                    $optionsFacetedData = $productCollection->getFacetedData('mp_is_new');
+                    $count = isset($optionsFacetedData[1]) ? $optionsFacetedData[1]['count'] : 0;
+                } else {
+                    $this->addFilterToCollection($option, $productCollectionClone);
+                    $count = $productCollectionClone->resetTotalRecords()->getSize();
+                }
             }
 
             if ($count == 0 && !$this->_moduleHelper->getFilterModel()->isShowZero($this)) {

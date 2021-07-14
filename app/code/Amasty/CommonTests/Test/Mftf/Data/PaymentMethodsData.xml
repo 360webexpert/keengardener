@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -71,7 +71,7 @@
 
     <entity name="paymentKlarna" type="paymentMethods">
         <data key="paymentValue">klarna_pay_later</data>
-        <data key="paymentName">Pay later in 14 days</data>
+        <data key="paymentName">Pay later in</data>
     </entity>
 
     <entity name="paymentEWay" type="paymentMethods">

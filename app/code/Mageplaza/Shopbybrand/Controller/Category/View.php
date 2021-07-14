@@ -26,9 +26,12 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Shopbybrand\Helper\Data;
+use Mageplaza\Shopbybrand\Model\CategoryFactory as BrandCategoryModelFactory;
+use Mageplaza\Shopbybrand\Model\ResourceModel\Category as BrandCategoryResourceModel;
 
 /**
  * Class View
@@ -53,22 +56,46 @@ class View extends Action
     protected $helper;
 
     /**
+     * @var BrandCategoryModel
+     */
+    protected $categoryFactory;
+
+    /**
+     * @var BrandCategoryResourceModel
+     */
+    protected $categoryResource;
+
+    /**
+     * @var Registry
+     */
+    private $coreRegistry;
+
+    /**
      * View constructor.
      *
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
+     * @param Registry $coreRegistry
+     * @param BrandCategoryModelFactory $categoryFactory
+     * @param BrandCategoryResourceModel $categoryResource
      * @param Data $helper
      */
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
+        Registry $coreRegistry,
+        BrandCategoryModelFactory $categoryFactory,
+        BrandCategoryResourceModel $categoryResource,
         Data $helper
     ) {
-        $this->helper = $helper;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
+        $this->coreRegistry = $coreRegistry;
+        $this->categoryFactory = $categoryFactory;
+        $this->categoryResource = $categoryResource;
+        $this->helper = $helper;
 
         parent::__construct($context);
     }
@@ -79,7 +106,11 @@ class View extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('cat_id');
-        if ($this->helper->isEnabled() && $id) {
+        if ($id && $this->helper->isEnabled()) {
+            $categoryModel = $this->categoryFactory->create();
+            $this->categoryResource->load($categoryModel, $id);
+            $this->coreRegistry->register('current_brand_category', $categoryModel);
+
             return $this->resultPageFactory->create();
         }
 

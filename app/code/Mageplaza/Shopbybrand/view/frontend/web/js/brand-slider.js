@@ -22,11 +22,12 @@ define([
     'jquery',
     'mageplaza/core/owl.carousel'
 ], function ($) {
+    'use strict';
     return function (config, element) {
         $(element).owlCarousel({
-            center: true,
             loop: true,
             margin: 10,
+            autoHeight: true,
             autoplay: true,
             autoplayTimeout: 4000,
             autoplayHoverPause: true,

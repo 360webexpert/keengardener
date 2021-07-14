@@ -2,12 +2,12 @@
 "Save and Continue Edit","Save and Continue Edit"
 "Method Information","Method Information"
 Import,Import
+"This component is deprecated in module. Please, use ","This component is deprecated in module. Please, use "
+"New Import","New Import"
 "Import Rates","Import Rates"
 "Delete Existing Rates","Delete Existing Rates"
 No,No
 Yes,Yes
-"CSV File","CSV File"
-"Example file http://amasty.com/examples/shipping-table-rates.csv","Example file http://amasty.com/examples/shipping-table-rates.csv"
 Labels,Labels
 "Store View Specific Labels","Store View Specific Labels"
 "Default Label for All Store Views","Default Label for All Store Views"
@@ -25,6 +25,7 @@ Name,Name
 Image,Image
 "Please use {IMG} in Comment field to insert an image","Please use {IMG} in Comment field to insert an image"
 Status,Status
+Priority,Priority
 Rates,Rates
 "Minimal rate","Minimal rate"
 "Maximal rate","Maximal rate"
@@ -32,6 +33,11 @@ Rates,Rates
 "Sum up rates","Sum up rates"
 "Select maximal rate","Select maximal rate"
 "Select minimal rate","Select minimal rate"
+"Weight Type For Calculation","Weight Type For Calculation"
+"Volumetric Weight","Volumetric Weight"
+Weight,Weight
+"Max of V. Weight and Weight","Max of V. Weight and Weight"
+"Min of V. Weight and Weight","Min of V. Weight and Weight"
 "Methods and Rates","Methods and Rates"
 "Add New Rate","Add New Rate"
 Country,Country
@@ -50,6 +56,7 @@ Rate,Rate
 PPP,PPP
 FRPP,FRPP
 FRPUW,FRPUW
+"Count weight from","Count weight from"
 "Estimated Delivery (days)","Estimated Delivery (days)"
 "Name delivery","Name delivery"
 Action,Action
@@ -78,6 +85,7 @@ Conditions,Conditions
 "Fixed Rate per 1 unit of weight","Fixed Rate per 1 unit of weight"
 by,by
 "Confused with configuration? No worries, please consult the <a target=""_blank"" href=""%1"">user guide</a> to properly configure the extension.","Confused with configuration? No worries, please consult the <a target=""_blank"" href=""%1"">user guide</a> to properly configure the extension."
+"Import Shipping Table Rates","Import Shipping Table Rates"
 "Record does not exist","Record does not exist"
 "Shipping method has been successfully deleted","Shipping method has been successfully deleted"
 "Record does not exist.","Record does not exist."
@@ -97,8 +105,6 @@ by,by
 "Rate has been successfully saved","Rate has been successfully saved"
 "This rate already exist!","This rate already exist!"
 "must be less than","must be less than"
-Inactive,Inactive
-Active,Active
 "As in ""Ship Bundle Items"" setting","As in ""Ship Bundle Items"" setting"
 "From bundle product","From bundle product"
 "From items in bundle","From items in bundle"
@@ -106,12 +112,23 @@ Active,Active
 "From parent product","From parent product"
 "Strings, e.g. AB2%","Strings, e.g. AB2%"
 "Numbers, e.g. from 111 to 222 or from AB2 to AB19","Numbers, e.g. from 111 to 222 or from AB2 to AB19"
+Inactive,Inactive
+Active,Active
 None,None
 "Volumetric weight attribute","Volumetric weight attribute"
 "Volume attribute","Volume attribute"
 "Dimensions attribute","Dimensions attribute"
 "Separate dimension attribute","Separate dimension attribute"
-"Specify a valid method ID.","Specify a valid method ID."
+Add,Add
+Replace,Replace
+"This option: <ul><li>keeps rates which are present in both selected shipping method and the file you provided</li><li>keeps rates which are present in selected shipping method but is missing from the file you provided</li><li>adds rates which are not available in selected shipping method but are present in the file you provided</li></ul>","This option: <ul><li>keeps rates which are present in both selected shipping method and the file you provided</li><li>keeps rates which are present in selected shipping method but is missing from the file you provided</li><li>adds rates which are not available in selected shipping method but are present in the file you provided</li></ul>"
+"This option replaces ALL rates in selected shipping method with rates you provided.","This option replaces ALL rates in selected shipping method with rates you provided."
+"This option removes rates you provided from selected shipping method.","This option removes rates you provided from selected shipping method."
+"Unable to save new rate. Error: %1","Unable to save new rate. Error: %1"
+"Unable to remove rate. Error: %1","Unable to remove rate. Error: %1"
+"(id:%1) %2","(id:%1) %2"
+"Shipping Table Rate Methods","Shipping Table Rate Methods"
+"Shipping Table Rate Method","Shipping Table Rate Method"
 "Shipping Address","Shipping Address"
 "New Address","New Address"
 "Shipping Methods","Shipping Methods"
