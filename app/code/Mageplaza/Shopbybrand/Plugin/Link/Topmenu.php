@@ -22,14 +22,31 @@
 namespace Mageplaza\Shopbybrand\Plugin\Link;
 
 use Magento\Framework\Exception\LocalizedException;
-use Mageplaza\Shopbybrand\Block\Brand;
+use Mageplaza\Shopbybrand\Block\Link\CategoryMenu;
+use Mageplaza\Shopbybrand\Helper\Data;
+use Mageplaza\Shopbybrand\Model\Config\Source\BrandPosition;
 
 /**
- * Class Topmenu
+ * Class TopMenu
  * @package Mageplaza\Shopbybrand\Plugin\Link
  */
-class Topmenu
+class TopMenu
 {
+    /**
+     * @var Data
+     */
+    protected $helperData;
+
+    /**
+     * TopMenuPorto constructor.
+     *
+     * @param Data $helperData
+     */
+    public function __construct(Data $helperData)
+    {
+        $this->helperData = $helperData;
+    }
+
     /**
      * @param \Magento\Theme\Block\Html\Topmenu $topmenu
      * @param $html
@@ -39,7 +56,10 @@ class Topmenu
      */
     public function afterGetHtml(\Magento\Theme\Block\Html\Topmenu $topmenu, $html)
     {
-        $brandHtml = $topmenu->getLayout()->createBlock(Brand::class)
+        if (!$this->helperData->isEnabled() || !$this->helperData->canShowBrandLink(BrandPosition::CATEGORY)) {
+            return $html;
+        }
+        $brandHtml = $topmenu->getLayout()->createBlock(CategoryMenu::class)
             ->setTemplate('Mageplaza_Shopbybrand::position/topmenu.phtml')->toHtml();
 
         return $html . $brandHtml;

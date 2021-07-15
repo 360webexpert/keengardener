@@ -21,14 +21,31 @@
 
 namespace Mageplaza\Shopbybrand\Plugin\Link;
 
-use Mageplaza\Shopbybrand\Block\Brand;
+use Mageplaza\Shopbybrand\Block\Link\CategoryMenu;
+use Mageplaza\Shopbybrand\Helper\Data;
+use Mageplaza\Shopbybrand\Model\Config\Source\BrandPosition;
 
 /**
- * Class TopmenuPorto
+ * Class TopMenuPorto
  * @package Mageplaza\Shopbybrand\Plugin\Link
  */
-class TopmenuPorto
+class TopMenuPorto
 {
+    /**
+     * @var Data
+     */
+    protected $helperData;
+
+    /**
+     * TopMenuPorto constructor.
+     *
+     * @param Data $helperData
+     */
+    public function __construct(Data $helperData)
+    {
+        $this->helperData = $helperData;
+    }
+
     /**
      * @param $topmenu
      * @param $html
@@ -37,7 +54,10 @@ class TopmenuPorto
      */
     public function afterGetMegamenuHtml($topmenu, $html)
     {
-        $brandHtml = $topmenu->getLayout()->createBlock(Brand::class)
+        if (!$this->helperData->isEnabled() || !$this->helperData->canShowBrandLink(BrandPosition::CATEGORY)) {
+            return $html;
+        }
+        $brandHtml = $topmenu->getLayout()->createBlock(CategoryMenu::class)
             ->setTemplate('Mageplaza_Shopbybrand::position/topmenuporto.phtml')->toHtml();
 
         return $html . $brandHtml;
