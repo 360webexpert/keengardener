@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Shopbybrand\Plugin\Block\Adminhtml\Attribute\Edit;
 
+use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Shopbybrand\Model\BrandFactory;
 
 /**
@@ -49,6 +50,7 @@ class Options
      * @param $optionId
      *
      * @return string
+     * @throws LocalizedException
      */
     public function getIsFeatured($optionId)
     {
@@ -62,6 +64,7 @@ class Options
      * @param $result
      *
      * @return mixed
+     * @throws LocalizedException
      */
     public function afterGetOptionValues(\Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options $options, $result)
     {

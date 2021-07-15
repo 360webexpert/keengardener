@@ -21,15 +21,6 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Model\Layer\Filter;
 
-use Magento\Catalog\Model\Layer;
-use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
-use Magento\Catalog\Model\Layer\Filter\ItemFactory;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
-use Magento\Store\Model\StoreManagerInterface;
-use Mageplaza\LayeredNavigationPro\Helper\Data;
-
 /**
  * Class Rating
  * @package Mageplaza\LayeredNavigationUltimate\Model\Layer\Filter
@@ -44,21 +35,21 @@ class Rating extends \Mageplaza\LayeredNavigationPro\Model\Layer\Filter\Rating
     /**
      * Rating constructor.
      *
-     * @param ItemFactory $filterItemFactory
-     * @param StoreManagerInterface $storeManager
-     * @param Layer $layer
-     * @param DataBuilder $itemDataBuilder
-     * @param Data $moduleHelper
+     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Layer $layer
+     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
+     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $moduleHelper
      * @param array $data
      *
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        ItemFactory $filterItemFactory,
-        StoreManagerInterface $storeManager,
-        Layer $layer,
-        DataBuilder $itemDataBuilder,
-        Data $moduleHelper,
+        \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Layer $layer,
+        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
+        \Mageplaza\LayeredNavigationPro\Helper\Data $moduleHelper,
         array $data = []
     ) {
         parent::__construct($filterItemFactory, $storeManager, $layer, $itemDataBuilder, $moduleHelper, $data);
@@ -71,7 +62,7 @@ class Rating extends \Mageplaza\LayeredNavigationPro\Model\Layer\Filter\Rating
     /**
      * @inheritdoc
      */
-    public function apply(RequestInterface $request)
+    public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         $showRatingSlider = $this->_moduleHelper->getFilterConfig('rating/show_as_slider');
         if ($showRatingSlider) {
@@ -107,7 +98,7 @@ class Rating extends \Mageplaza\LayeredNavigationPro\Model\Layer\Filter\Rating
             $ratingDown = min($attributeValue);
             $ratingUp = max($attributeValue);
             $productCollection->getSelect()->where('rt.rating_summary >= "'
-                . $ratingDown * 20 . '" AND rt.rating_summary <=  "' . $ratingUp * 20 . '"');
+                                                   . $ratingDown * 20 . '" AND rt.rating_summary <=  "' . $ratingUp * 20 . '"');
 
             $this->getLayer()->getState()->addFilter($this->_createItem(
                 $this->getRatingOptionText($attributeValue),
@@ -131,7 +122,7 @@ class Rating extends \Mageplaza\LayeredNavigationPro\Model\Layer\Filter\Rating
 
         $min = min($ratingsSlider);
         $max = max($ratingsSlider);
-        [$from, $to] = $this->_filterVal ?: [$min, $max];
+        list($from, $to) = $this->_filterVal ?: [$min, $max];
         $from = ($from < $min) ? $min : $from;
         $to = ($to > $max) ? $max : $to;
 
@@ -139,12 +130,12 @@ class Rating extends \Mageplaza\LayeredNavigationPro\Model\Layer\Filter\Rating
 
         return [
             "selectedFrom" => $from,
-            "selectedTo" => $to,
-            "minValue" => $min,
-            "maxValue" => $max,
-            "orientation" => "vertical",
-            "ajaxUrl" => $item->getUrl(),
-            "ratingCode" => Data::FILTER_TYPE_RATING
+            "selectedTo"   => $to,
+            "minValue"     => $min,
+            "maxValue"     => $max,
+            "orientation"  => "vertical",
+            "ajaxUrl"      => $item->getUrl(),
+            "ratingCode"   => \Mageplaza\LayeredNavigationPro\Helper\Data::FILTER_TYPE_RATING
         ];
     }
 
@@ -162,7 +153,7 @@ class Rating extends \Mageplaza\LayeredNavigationPro\Model\Layer\Filter\Rating
             return false;
         }
         foreach ($filter as $v) {
-            if ($v !== '' && $v !== '0' && (double)$v <= 0 || is_infinite((double)$v)) {
+            if ($v !== '' && $v !== '0' && (double) $v <= 0 || is_infinite((double) $v)) {
                 return false;
             }
         }
@@ -175,7 +166,7 @@ class Rating extends \Mageplaza\LayeredNavigationPro\Model\Layer\Filter\Rating
      *
      * @param array $value
      *
-     * @return Phrase
+     * @return \Magento\Framework\Phrase
      */
     public function getRatingOptionText(array $value)
     {

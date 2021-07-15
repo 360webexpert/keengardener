@@ -21,9 +21,8 @@
 ?>
 <?php if ($block->canShowBlock()) : ?>
     <?php
-    $helper = $this->helper(\Mageplaza\AjaxLayer\Helper\Data::class);
     $filters = $block->getFilters();
-    $layerConfig = $helper->getLayerConfiguration($filters);
+    $layerConfig = $this->helper(\Mageplaza\AjaxLayer\Helper\Data::class)->getLayerConfiguration($filters);
     $filtered = count($block->getLayer()->getState()->getFilters());
     ?>
     <div class="block filter" id="layered-filter-block"
@@ -75,15 +74,13 @@
                 });
             </script>
             <?php endif; ?>
-            <?php if ($helper->ajaxEnabled()) : ?>
             <script type="text/x-magento-init">
                 {
                      ".block-content.filter-content":{
-                         "mpAjax": <?= /** @noEscape */ $block->escapeJs($layerConfig) ?>
+                         "mpAjax": <?= /** @noEscape */ $layerConfig ?>
                      }
                 }
             </script>
-            <?php endif; ?>
         </div>
     </div>
 <?php endif; ?>

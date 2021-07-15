@@ -21,23 +21,23 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
-use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class BrandListStyle
  *
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class BrandListStyle implements OptionSourceInterface
+class BrandListStyle implements ArrayInterface
 {
     /**
      * Display listing
      */
-    const DISPLAY_LISTING = '0';
+    const DISPLAY_LISTING = 0;
     /**
      * Display alphabet listing
      */
-    const DISPLAY_ALPHABET_LISTING = '1';
+    const DISPLAY_ALPHABET_LISTING = 1;
 
     /**
      * @return array
@@ -50,7 +50,7 @@ class BrandListStyle implements OptionSourceInterface
                 'value' => self::DISPLAY_LISTING
             ],
             [
-                'label' => __('Alphabet View'),
+                'label' => __('AlphaBet View'),
                 'value' => self::DISPLAY_ALPHABET_LISTING
             ],
         ];

@@ -1,0 +1,79 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigation
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+.ln_overlay {
+  background-color: #FFFFFF;
+  height: 100%;
+  left: 0;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 555;
+  display: none;
+
+  img {
+    top: 40%;
+    left: 45%;
+    display: block;
+    position: fixed;
+  }
+}
+
+.ln_slider_container {
+  width: calc(100% - 20px);
+  margin: 0 15px 0 5px;
+}
+
+.layered-filter-block-container .ln_tooltip {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+.filter-content {
+    .category-items {
+        margin: 0;
+        padding-left: 30px;
+        list-style: none;
+    }
+
+    .icon-expand:after {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-size: 12px;
+        line-height: inherit;
+        color: inherit;
+        content: '\e608';
+        font-family: 'luma-icons';
+        vertical-align: bottom;
+        display: inline-block;
+        font-weight: bold;
+        overflow: hidden;
+        speak: none;
+        text-align: center;
+        padding-right: 5px;
+    }
+
+    .active.icon-expand:after {
+        content: '\e622';
+    }
+}

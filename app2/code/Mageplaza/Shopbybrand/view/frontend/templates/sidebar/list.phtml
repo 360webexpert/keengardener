@@ -1,0 +1,56 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Shopbybrand\Block\Sidebar\BrandList $block */
+$brands = $block->getCollection();
+if (!empty($brands)) :?>
+<div class="block block-brand-thumbnail widget" id="block-brand-thumbnail-container">
+    <div class="block-title">
+        <strong role="heading" aria-level="2" class="block-subtitle"
+                id="thumbnail-brand-subtitle"><?= /** @noEscape */ $block->getTitle() ?></strong>
+    </div>
+    <div class="block-content">
+        <div class="filter-options-content" id='brand-thumbnail-menu'>
+            <ul>
+                <?php foreach ($brands as $brand) : ?>
+                        <li>
+                            <a href='<?= /** @noEscape */ $block->getBrandUrl($brand) ?>'>
+                                <div class="brand-items"
+                                     id="item-<?= /** @noEscape */ $brand->getId() ?>">
+                                    <img class="img-responsive brand-thumbnail-image"
+                                         src="<?= $brand->getImage() ? $block->escapeUrl($block->getBrandThumbnail($brand))
+                                             : $block->escapeUrl($block->helper()->getBrandImageUrl($brand)) ?>"
+                                         style="width: 40px;height: 40px; float: left;" alt=""/>
+                                    <span><?= /** @noEscape */ $brand->getValue() ?></span>
+                                </div>
+                            </a>
+                        </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <div class="pages" id="brand-thumbnail-bottom" style="margin-top:10px">
+            <a class="action" href="<?= /** @noEscape */ $block->getBrandUrl() ?>" style="width:auto;">
+                <span><?= /** @noEscape */ __('View All') ?></span>
+            </a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -12,7 +12,7 @@ use Magento\Backend\Block\Menu as NativeMenu;
 
 class Menu
 {
-    const MAX_ITEMS = 300;
+    const MAX_ITEMS = 10;
 
     /**
      * @param NativeMenu $subject

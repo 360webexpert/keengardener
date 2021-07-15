@@ -72,8 +72,8 @@ class Edit extends Container
         $this->buttonList->add(
             'saveandcontinue',
             [
-                'label' => __('Save and Continue Edit'),
-                'class' => 'save',
+                'label'          => __('Save and Continue Edit'),
+                'class'          => 'save',
                 'data_attribute' => [
                     'mage-init' => ['button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form']]
                 ]
@@ -89,11 +89,10 @@ class Edit extends Container
      */
     public function getHeaderText()
     {
-        $currentBrandCategory = $this->_coreRegistry->registry('current_brand_category');
-        if ($currentBrandCategory && $currentBrandCategory->getId()) {
+        if ($this->_coreRegistry->registry('current_brand_category')->getId()) {
             return __(
                 "Edit Category '%1'",
-                $this->escapeHtml($currentBrandCategory->getName())
+                $this->escapeHtml($this->_coreRegistry->registry('current_brand_category')->getName())
             );
         }
 

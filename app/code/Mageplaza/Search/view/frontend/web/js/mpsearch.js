@@ -32,10 +32,11 @@ define(
                         searchInput = $('#search'),
                         searchVar = [],
                         self = this;
-
+                   
                     /** Mobile*/
                     $('.block-search .block-content .search .label').click(function () {
                         if (self.checkDevice()) {
+                            $('form.minisearch')[0].submit();
                             if ($('.block-search .form.minisearch').hasClass('active')) {
                                 $('.minisearch .search-category').hide();
                             } else {

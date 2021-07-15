@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -9,9 +9,8 @@
 namespace Amasty\Base\Plugin\Backend\Model\Config;
 
 use Amasty\Base\Block\Adminhtml\System\Config\Advertise;
-use Amasty\Base\Model\Feed\AdsProvider;
+use Amasty\Base\Model\AdsProvider;
 use Amasty\Base\Model\Config;
-use Amasty\Base\Model\LinkValidator;
 use Magento\Config\Model\Config\ScopeDefiner;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Element\Section;
@@ -68,21 +67,14 @@ class StructurePlugin
      */
     private $scopeDefiner;
 
-    /**
-     * @var LinkValidator
-     */
-    private $linkValidator;
-
     public function __construct(
         AdsProvider $adsProvider,
         Config $config,
-        ScopeDefiner $scopeDefiner,
-        LinkValidator $linkValidator
+        ScopeDefiner $scopeDefiner
     ) {
         $this->adsProvider = $adsProvider;
         $this->config = $config;
         $this->scopeDefiner = $scopeDefiner;
-        $this->linkValidator = $linkValidator;
     }
 
     /**
@@ -167,7 +159,7 @@ class StructurePlugin
             if (isset($explodedArray[0], $explodedArray[1])) {
                 $linkArray = explode('|', $explodedArray[1]);
 
-                if (isset($linkArray[0], $linkArray[1]) && $this->linkValidator->validate($linkArray[0])) {
+                if (isset($linkArray[0], $linkArray[1]) && $this->adsProvider->validateLink($linkArray[0])) {
                     $format = '<a href="%s"' . strip_tags('title="%s"') . '>%s</a>';
                     $link = sprintf($format, $linkArray[0], $linkArray[1], $linkArray[1]);
                     $text = strip_tags(str_replace($explodedArray[0], $link, $textField), '<a>');

@@ -81,85 +81,85 @@ class Brand extends Generic
         $data = $this->getOptionData();
         $form = $this->_formFactory->create([
             'data' => [
-                'id' => 'brand_attribute_save',
-                'action' => $this->getUrl('mpbrand/attribute/save', ['id' => $data['brand_id']]),
-                'method' => 'post',
+                'id'            => 'brand_attribute_save',
+                'action'        => $this->getUrl('mpbrand/attribute/save', ['id' => $data['brand_id']]),
+                'method'        => 'post',
                 'use_container' => true,
-                'enctype' => 'multipart/form-data'
+                'enctype'       => 'multipart/form-data'
             ]
         ]);
 
-        $mainFieldset = $form->addFieldset('brand_fieldset', [
+        $mainfieldset = $form->addFieldset('brand_fieldset', [
             'legend' => __('Brand Information'),
-            'class' => 'fieldset-wide'
+            'class'  => 'fieldset-wide'
         ]);
-        $mainFieldset->addField('option_id', 'hidden', [
+        $mainfieldset->addField('option_id', 'hidden', [
             'name' => 'option_id'
         ]);
-        $mainFieldset->addField('store_id', 'hidden', [
+        $mainfieldset->addField('store_id', 'hidden', [
             'name' => 'store_id'
         ]);
-        $mainFieldset->addField('page_title', 'text', [
-            'name' => 'page_title',
+        $mainfieldset->addField('page_title', 'text', [
+            'name'  => 'page_title',
             'label' => __('Page Title'),
             'title' => __('Page Title'),
-            'note' => __('If empty, option label by store will be used.')
+            'note'  => __('If empty, option label by store will be used.')
         ]);
-        $mainFieldset->addField('url_key', 'text', [
-            'name' => 'url_key',
-            'label' => __('URL Key'),
-            'title' => __('URL Key'),
+        $mainfieldset->addField('url_key', 'text', [
+            'name'     => 'url_key',
+            'label'    => __('Url Key'),
+            'title'    => __('Url Key'),
             'required' => true,
         ]);
-        $mainFieldset->addField('image', 'image', [
-            'name' => 'image',
+        $mainfieldset->addField('image', 'image', [
+            'name'  => 'image',
             'label' => __('Brand Image'),
             'title' => __('Brand Image'),
-            'note' => __('If empty, option visual image or default image from configuration will be used.')
+            'note'  => __('If empty, option visual image or default image from configuration will be used.')
         ]);
-        $mainFieldset->addField('is_featured', 'select', [
-            'name' => 'is_featured',
-            'label' => __('Featured'),
-            'title' => __('Featured'),
+        $mainfieldset->addField('is_featured', 'select', [
+            'name'   => 'is_featured',
+            'label'  => __('Featured'),
+            'title'  => __('Featured'),
             'values' => ['1' => __('Enabled'), '0' => __('Disabled')],
-            'note' => __('If \'Enabled\', this brand will be displayed on featured brand slider.')
+            'note'   => __('If \'Enabled\', this brand will be displayed on featured brand slider.')
         ]);
-        $mainFieldset->addField('short_description', 'editor', [
-            'name' => 'short_description',
-            'label' => __('Short Description'),
-            'title' => __('Short Description'),
+        $mainfieldset->addField('short_description', 'editor', [
+            'name'   => 'short_description',
+            'label'  => __('Short Description'),
+            'title'  => __('Short Description'),
             'config' => $this->_wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => false])
         ]);
-        $mainFieldset->addField('description', 'editor', [
-            'name' => 'description',
-            'label' => __('Description'),
-            'title' => __('Description'),
+        $mainfieldset->addField('description', 'editor', [
+            'name'   => 'description',
+            'label'  => __('Description'),
+            'title'  => __('Description'),
             'config' => $this->_wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => false])
         ]);
-        $mainFieldset->addField('static_block', 'select', [
-            'name' => 'static_block',
-            'label' => __('CMS Block'),
-            'title' => __('CMS Block'),
+        $mainfieldset->addField('static_block', 'select', [
+            'name'   => 'static_block',
+            'label'  => __('CMS Block'),
+            'title'  => __('CMS Block'),
             'values' => $this->staticBlock->getOptionArray(),
         ]);
 
-        $metaFieldset = $form->addFieldset('brand_meta_fieldset', [
+        $metafieldset = $form->addFieldset('brand_meta_fieldset', [
             'legend' => __('Meta Information'),
-            'class' => 'fieldset-wide'
+            'class'  => 'fieldset-wide'
         ]);
-        $metaFieldset->addField('meta_title', 'text', [
-            'name' => 'meta_title',
+        $metafieldset->addField('meta_title', 'text', [
+            'name'  => 'meta_title',
             'label' => __('Meta Title'),
             'title' => __('Meta Title'),
-            'note' => __('If empty, option label by store will be used.')
+            'note'  => __('If empty, option label by store will be used.')
         ]);
-        $metaFieldset->addField('meta_keywords', 'textarea', [
-            'name' => 'meta_keywords',
+        $metafieldset->addField('meta_keywords', 'textarea', [
+            'name'  => 'meta_keywords',
             'label' => __('Meta Keywords'),
             'title' => __('Meta Keywords'),
         ]);
-        $metaFieldset->addField('meta_description', 'editor', [
-            'name' => 'meta_description',
+        $metafieldset->addField('meta_description', 'editor', [
+            'name'  => 'meta_description',
             'label' => __('Meta Description'),
             'title' => __('Meta Description'),
         ]);

@@ -21,6 +21,7 @@
 
 namespace Mageplaza\AjaxLayer\Plugin\Controller\Category;
 
+use Magento\Framework\Json\Helper\Data;
 use Mageplaza\AjaxLayer\Helper\Data as LayerData;
 
 /**
@@ -30,6 +31,11 @@ use Mageplaza\AjaxLayer\Helper\Data as LayerData;
 class View
 {
     /**
+     * @var Data
+     */
+    protected $_jsonHelper;
+
+    /**
      * @var LayerData
      */
     protected $_moduleHelper;
@@ -37,11 +43,14 @@ class View
     /**
      * View constructor.
      *
+     * @param Data $jsonHelper
      * @param LayerData $moduleHelper
      */
     public function __construct(
+        Data $jsonHelper,
         LayerData $moduleHelper
     ) {
+        $this->_jsonHelper = $jsonHelper;
         $this->_moduleHelper = $moduleHelper;
     }
 
@@ -56,12 +65,17 @@ class View
         if ($this->_moduleHelper->ajaxEnabled() && $action->getRequest()->isAjax()) {
             $navigation = $page->getLayout()->getBlock('catalog.leftnav');
             $products = $page->getLayout()->getBlock('category.products');
-            $result = ['products' => $products->toHtml(), 'navigation' => $navigation->toHtml()];
             if ($this->_moduleHelper->getConfigValue('mpquickview/general/enabled')) {
                 $quickView = $page->getLayout()->getBlock('mpquickview.quickview');
-                $result['quickview'] = $quickView->toHtml();
+                $result = [
+                    'products'   => $products->toHtml(),
+                    'navigation' => $navigation->toHtml(),
+                    'quickview'  => $quickView->toHtml()
+                ];
+            } else {
+                $result = ['products' => $products->toHtml(), 'navigation' => $navigation->toHtml()];
             }
-            $action->getResponse()->representJson(LayerData::jsonEncode($result));
+            $action->getResponse()->representJson($this->_jsonHelper->jsonEncode($result));
         } else {
             return $page;
         }

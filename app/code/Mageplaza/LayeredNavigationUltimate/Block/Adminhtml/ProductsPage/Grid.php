@@ -21,14 +21,10 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\ProductsPage;
 
-use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data;
-use Magento\Catalog\Model\Product;
 use Magento\Config\Model\Config\Source\Enabledisable;
-use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\System\Store;
 use Mageplaza\LayeredNavigationUltimate\Model\ResourceModel\ProductsPage\Collection;
 
@@ -38,23 +34,23 @@ use Mageplaza\LayeredNavigationUltimate\Model\ResourceModel\ProductsPage\Collect
  */
 class Grid extends Extended
 {
-    /** @var Collection */
+    /** @var \Mageplaza\LayeredNavigationUltimate\Model\ResourceModel\ProductsPage\Collection */
     protected $_collectionFactory;
 
-    /** @var Enabledisable */
+    /** @var \Magento\Config\Model\Config\Source\Enabledisable */
     protected $_booleanOptions;
 
-    /** @var Store */
+    /** @var \Magento\Store\Model\System\Store */
     protected $_systemStore;
 
     /**
      * Grid constructor.
      *
-     * @param Context $context
-     * @param Data $backendHelper
-     * @param Enabledisable $booleanOptions
-     * @param Store $systemStore
-     * @param Collection $collectionFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param \Magento\Config\Model\Config\Source\Enabledisable $booleanOptions
+     * @param \Magento\Store\Model\System\Store $systemStore
+     * @param \Mageplaza\LayeredNavigationUltimate\Model\ResourceModel\ProductsPage\Collection $collectionFactory
      * @param array $data
      */
     public function __construct(
@@ -102,64 +98,64 @@ class Grid extends Extended
 
     /**
      * @return $this
-     * @throws Exception
-     * @throws LocalizedException
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareColumns()
     {
         $this->addColumn('page_id', [
-            'header' => __('ID'),
-            'type' => 'number',
-            'index' => 'page_id',
+            'header'           => __('ID'),
+            'type'             => 'number',
+            'index'            => 'page_id',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
 
         $this->addColumn('name', [
             'header' => __('Name'),
-            'index' => 'name'
+            'index'  => 'name'
         ]);
 
         $this->addColumn('route', [
             'header' => __('Url key'),
-            'index' => 'route'
+            'index'  => 'route'
         ]);
 
         $this->addColumn('status', [
-            'header' => __('Status'),
-            'index' => 'status',
-            'type' => 'options',
+            'header'  => __('Status'),
+            'index'   => 'status',
+            'type'    => 'options',
             'options' => $this->getStatusOptions(),
         ]);
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn('store_ids', [
-                'header' => __('Store View'),
-                'index' => 'store_ids',
-                'type' => 'store',
-                'store_all' => true,
-                'store_view' => true,
-                'sortable' => false,
+                'header'                    => __('Store View'),
+                'index'                     => 'store_ids',
+                'type'                      => 'store',
+                'store_all'                 => true,
+                'store_view'                => true,
+                'sortable'                  => false,
                 'filter_condition_callback' => [$this, '_filterStoreCondition']
             ]);
         }
 
         $this->addColumn('edit', [
-            'header' => __('Edit'),
-            'type' => 'action',
-            'getter' => 'getId',
-            'actions' => [
+            'header'           => __('Edit'),
+            'type'             => 'action',
+            'getter'           => 'getId',
+            'actions'          => [
                 [
                     'caption' => __('Edit'),
-                    'url' => [
+                    'url'     => [
                         'base' => '*/*/edit'
                     ],
-                    'field' => 'page_id'
+                    'field'   => 'page_id'
                 ]
             ],
-            'filter' => false,
-            'sortable' => false,
-            'index' => 'stores',
+            'filter'           => false,
+            'sortable'         => false,
+            'index'            => 'stores',
             'header_css_class' => 'col-action',
             'column_css_class' => 'col-action'
         ]);
@@ -176,12 +172,12 @@ class Grid extends Extended
      * Filter store condition
      *
      * @param \Magento\Framework\Data\Collection $collection
-     * @param DataObject $column
+     * @param \Magento\Framework\DataObject $column
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _filterStoreCondition($collection, DataObject $column)
+    protected function _filterStoreCondition($collection, \Magento\Framework\DataObject $column)
     {
         if (!($value = $column->getFilter()->getValue())) {
             return;
@@ -214,8 +210,8 @@ class Grid extends Extended
         $this->getMassactionBlock()->setFormFieldName('page_id');
 
         $this->getMassactionBlock()->addItem('delete', [
-            'label' => __('Delete'),
-            'url' => $this->getUrl('mplayer/*/massDelete'),
+            'label'   => __('Delete'),
+            'url'     => $this->getUrl('mplayer/*/massDelete'),
             'confirm' => __('Are you sure?')
         ]);
 
@@ -231,7 +227,7 @@ class Grid extends Extended
     }
 
     /**
-     * @param Product|Object $row
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $row
      *
      * @return string
      */

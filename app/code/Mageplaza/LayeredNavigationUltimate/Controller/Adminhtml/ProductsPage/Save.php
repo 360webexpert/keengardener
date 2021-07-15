@@ -21,14 +21,11 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Controller\Adminhtml\ProductsPage;
 
-use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\LayeredNavigationUltimate\Helper\Data;
 use Mageplaza\LayeredNavigationUltimate\Model\ProductsPageFactory;
-use RuntimeException;
 
 /**
  * Class Save
@@ -40,7 +37,7 @@ class Save extends Action
     public $pageFactory;
 
     /**
-     * @type FilterManager
+     * @type \Magento\Framework\Filter\FilterManager
      */
     protected $_filter;
 
@@ -49,7 +46,7 @@ class Save extends Action
      *
      * @param Context $context
      * @param ProductsPageFactory $pageFactory
-     * @param FilterManager $filter
+     * @param \Magento\Framework\Filter\FilterManager $filter
      */
     public function __construct(
         Context $context,
@@ -64,7 +61,7 @@ class Save extends Action
 
     /**
      * @return void
-     * @var PageFactory
+     * @var \Magento\Framework\View\Result\PageFactory
      */
     public function execute()
     {
@@ -110,9 +107,9 @@ class Save extends Action
                 $this->_redirect('*/*/');
 
                 return;
-            } catch (RuntimeException $e) {
+            } catch (\RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }

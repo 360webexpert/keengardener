@@ -2,10 +2,10 @@
     "name": "amasty/base",
     "description": "Amasty Base",
     "require": {
-        "php": "^7.1.0"
+        "php": "7.0.2|7.0.4|~7.0.6|^7.1.0"
     },
     "type": "magento2-module",
-    "version": "1.12.9",
+    "version": "1.9.7",
     "license": [
         "Commercial"
     ],

@@ -33,15 +33,15 @@ class Edit extends Container
     /**
      * Core registry
      *
-     * @var Registry
+     * @var \Magento\Framework\Registry
      */
     public $_coreRegistry;
 
     /**
      * constructor
      *
-     * @param Registry $coreRegistry
-     * @param Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param array $data
      */
     public function __construct(
@@ -71,8 +71,8 @@ class Edit extends Container
         $this->buttonList->add(
             'saveandcontinue',
             [
-                'label' => __('Save and Continue Edit'),
-                'class' => 'save',
+                'label'          => __('Save and Continue Edit'),
+                'class'          => 'save',
                 'data_attribute' => [
                     'mage-init' => ['button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form']]
                 ]

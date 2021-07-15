@@ -47,7 +47,7 @@ if ($block->isBrandAttribute()) : ?>
                         {
                             text: $.mage.__('Save'),
                             'class': 'action-primary brand-save-button',
-                            click: function () {
+                            click: function (event) {
                                 var form = $('#brand_attribute_save'),
                                     action = form.attr("action"),
                                     data = new FormData(form[0]);
@@ -83,7 +83,7 @@ if ($block->isBrandAttribute()) : ?>
                         },
                         {
                             text: $.mage.__('Cancel'),
-                            click: function () {
+                            click: function (event) {
                                 brandModal.modal('closeModal');
                             }
                         }
@@ -104,7 +104,7 @@ if ($block->isBrandAttribute()) : ?>
                         .closest('.page-main-actions')
                         .prepend('<div id="brand-store-switcher"></div>');
                 }
-                if (currentOption !== id) {
+                if (currentOption != id) {
                     brandAjaxUpdate({id: id});
                 } else {
                     brandModal.modal('openModal');

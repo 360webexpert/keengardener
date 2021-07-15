@@ -21,27 +21,15 @@
 
 namespace Mageplaza\LayeredNavigationPro\Model\Layer\Filter;
 
-use Magento\Catalog\Model\Layer;
-use Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory;
 use Magento\Catalog\Model\Layer\Filter\Decimal as AbstractFilter;
-use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
-use Magento\Catalog\Model\Layer\Filter\ItemFactory;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Mageplaza\LayeredNavigation\Helper\Data;
-use Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection;
 use Mageplaza\LayeredNavigationPro\Helper\Data as LayerHelper;
-use Zend_Db_Expr;
 
 /**
  * Layer decimal filter
  */
 class Decimal extends AbstractFilter
 {
-    /** @var Data */
+    /** @var \Mageplaza\LayeredNavigation\Helper\Data */
     protected $_moduleHelper;
 
     /** @var array|null Filter value */
@@ -53,28 +41,28 @@ class Decimal extends AbstractFilter
     /** @var  float Max value */
     protected $maxValue;
 
-    /** @var Layer\Filter\DataProvider\Decimal */
+    /** @var \Magento\Catalog\Model\Layer\Filter\DataProvider\Decimal */
     private $dataProvider;
 
     /**
      * Decimal constructor.
      *
-     * @param ItemFactory $filterItemFactory
-     * @param StoreManagerInterface $storeManager
-     * @param Layer $layer
-     * @param DataBuilder $itemDataBuilder
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param DecimalFactory $dataProviderFactory
-     * @param LayerHelper $moduleHelper
+     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Layer $layer
+     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory $dataProviderFactory
+     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $moduleHelper
      * @param array $data
      */
     public function __construct(
-        ItemFactory $filterItemFactory,
-        StoreManagerInterface $storeManager,
-        Layer $layer,
-        DataBuilder $itemDataBuilder,
-        PriceCurrencyInterface $priceCurrency,
-        DecimalFactory $dataProviderFactory,
+        \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Layer $layer,
+        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory $dataProviderFactory,
         LayerHelper $moduleHelper,
         array $data = []
     ) {
@@ -95,7 +83,7 @@ class Decimal extends AbstractFilter
     /**
      * @inheritdoc
      */
-    public function apply(RequestInterface $request)
+    public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         $this->setMinMaxValues();
 
@@ -107,7 +95,7 @@ class Decimal extends AbstractFilter
             return $this;
         }
 
-        [$from, $to] = $this->_filterVal = explode('-', $filter);
+        list($from, $to) = $this->_filterVal = explode('-', $filter);
 
         $this->getLayer()
             ->getProductCollection()
@@ -151,7 +139,7 @@ class Decimal extends AbstractFilter
      */
     public function getSliderConfig()
     {
-        [$from, $to] = $this->_filterVal ?: [$this->minValue, $this->maxValue];
+        list($from, $to) = $this->_filterVal ?: [$this->minValue, $this->maxValue];
         $from = ($from < $this->minValue) ? $this->minValue : $from;
         $to = ($to > $this->maxValue) ? $this->maxValue : $to;
 
@@ -159,10 +147,10 @@ class Decimal extends AbstractFilter
 
         return [
             "selectedFrom" => $from,
-            "selectedTo" => $to,
-            "minValue" => $this->minValue,
-            "maxValue" => $this->maxValue,
-            "ajaxUrl" => $item->getUrl()
+            "selectedTo"   => $to,
+            "minValue"     => $this->minValue,
+            "maxValue"     => $this->maxValue,
+            "ajaxUrl"      => $item->getUrl()
         ];
     }
 
@@ -194,15 +182,15 @@ class Decimal extends AbstractFilter
      * @param $range
      *
      * @return array
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getRangeItemCounts($range)
     {
-        /** @var Collection $productCollection */
+        /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
 
         if ($this->_filterVal) {
-            /** @type Collection $productCollectionClone */
+            /** @type \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollectionClone */
             $productCollection = $productCollection->getCollectionClone()
                 ->removeAttributeSearch([
                     $this->getAttributeModel()->getAttributeCode() . '.from',
@@ -213,10 +201,10 @@ class Decimal extends AbstractFilter
         // clone select from collection with filters
         $select = clone $productCollection->getSelect();
         // reset columns, order and limitation conditions
-        $select->reset(Select::COLUMNS);
-        $select->reset(Select::ORDER);
-        $select->reset(Select::LIMIT_COUNT);
-        $select->reset(Select::LIMIT_OFFSET);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
 
         $attributeId = $this->getAttributeModel()->getId();
         $storeId = $productCollection->getStoreId();
@@ -233,8 +221,8 @@ class Decimal extends AbstractFilter
             []
         );
 
-        $countExpr = new Zend_Db_Expr("COUNT(*)");
-        $rangeExpr = new Zend_Db_Expr("FLOOR(decimal_index.value / {$range}) + 1");
+        $countExpr = new \Zend_Db_Expr("COUNT(*)");
+        $rangeExpr = new \Zend_Db_Expr("FLOOR(decimal_index.value / {$range}) + 1");
 
         $select->columns(['decimal_range' => $rangeExpr, 'count' => $countExpr]);
         $select->group($rangeExpr);

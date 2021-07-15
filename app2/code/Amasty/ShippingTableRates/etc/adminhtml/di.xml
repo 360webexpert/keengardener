@@ -1,0 +1,50 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Config\Block\System\Config\Tabs">
+        <plugin name="Amasty_ShippingTableRates::RedirectToShipping" type="Amasty\ShippingTableRates\Plugin\RedirectToShipping"/>
+    </type>
+
+     <virtualType name="amastyImportSampleFiles" type="Magento\Framework\DataObject">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="amstrates_rate_import" xsi:type="string">Amasty_ShippingTableRates</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Amasty\Base\Component\ComponentRegistrar">
+        <arguments>
+            <argument name="samples" xsi:type="object">amastyImportSampleFiles</argument>
+        </arguments>
+    </type>
+
+    <!-- Import Rates Config -->
+    <virtualType name="Amasty\ShippingTableRates\Model\Import\Rate\ValidatorPool" type="Amasty\Base\Model\Import\Validation\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="basic" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\Validation\Basic</item>
+                <item name="unique" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\Validation\UniqueRow</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Amasty\ShippingTableRates\Model\Import\Rate\Behavior\BehaviorProvider" type="Amasty\Base\Model\Import\Behavior\BehaviorProvider">
+        <arguments>
+            <argument name="behaviors" xsi:type="array">
+                <item name="add_update" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\Behaviors\Add</item>
+                <item name="custom" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\Behaviors\Replace</item>
+                <item name="delete" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\Behaviors\Delete</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Amasty\ShippingTableRates\Model\Import\Rate\Import">
+        <arguments>
+            <argument name="entityTypeCode" xsi:type="string">amstrates_rate_import</argument>
+            <argument name="validatorPool" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\ValidatorPool</argument>
+            <argument name="behaviorProvider" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\Behavior\BehaviorProvider</argument>
+            <argument name="mapping" xsi:type="object">Amasty\ShippingTableRates\Model\Import\Rate\Mapping</argument>
+        </arguments>
+    </type>
+    <!-- End Import Rates Config -->
+</config>

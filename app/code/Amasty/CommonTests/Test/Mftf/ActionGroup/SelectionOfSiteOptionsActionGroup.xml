@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -19,16 +19,6 @@
         <waitForPageLoad time="20" stepKey="waitForPageLoad2"/>
         <click selector="//div[@id='switcher-currency']//ul[@class='dropdown switcher-dropdown']//a[text()='{{currencies.currencyName}}']" stepKey="chooseOpenRuleForEdit"/>
         <waitForPageLoad time="100" stepKey="waitForPageLoad3"/>
-    </actionGroup>
-
-    <!-- For Open Home Page and Change Store View -->
-    <actionGroup name="StorefrontSwitchStoreViewOnHomePage" extends="StorefrontSwitchStoreViewActionGroup">
-        <amOnPage url="{{FrontMainPage.url}}" before="clickStoreViewSwitcher" stepKey="navigateStorefrontHome"/>
-    </actionGroup>
-
-    <!-- For Open Home Page and Sign Out from Account -->
-    <actionGroup name="StorefrontSignOutOnHomePage" extends="StorefrontSignOutActionGroup">
-        <amOnPage url="{{FrontMainPage.url}}" before="clickCustomerButton" stepKey="navigateStorefrontHome"/>
     </actionGroup>
 
 </actionGroups>

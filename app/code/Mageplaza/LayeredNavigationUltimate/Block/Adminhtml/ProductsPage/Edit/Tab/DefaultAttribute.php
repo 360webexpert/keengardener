@@ -23,9 +23,6 @@ namespace Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\ProductsPage\Edit\
 
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
-use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Mageplaza\LayeredNavigationUltimate\Model\ProductsPage;
 
 /**
  * Class DefaultAttribute
@@ -35,19 +32,19 @@ class DefaultAttribute extends Generic implements TabInterface
 {
     /**
      * @return $this
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareForm()
     {
         //todo create default attributes table
-        /** @var ProductsPage $post */
+        /** @var \Mageplaza\LayeredNavigationUltimate\Model\ProductsPage $post */
         $model = $this->_coreRegistry->registry('current_page');
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('page_');
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('Default Attributes'),
-            'class' => 'fieldset-wide'
+            'class'  => 'fieldset-wide'
         ]);
         $fieldset->addField('default_attributes', 'text', [
             'class' => 'no-display'
@@ -55,10 +52,10 @@ class DefaultAttribute extends Generic implements TabInterface
 
         $field = $fieldset->addField('render_default_attributes', 'text', [
             'label' => 'Default Attributes',
-            'name' => 'render_default_attributes'
+            'name'  => 'render_default_attributes'
         ]);
 
-        /** @var RendererInterface $renderer */
+        /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $renderer */
         $renderer = $this->getLayout()->createBlock('Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\Form\Renderer\RenderDefaultAttributes');
         $field->setRenderer($renderer);
 

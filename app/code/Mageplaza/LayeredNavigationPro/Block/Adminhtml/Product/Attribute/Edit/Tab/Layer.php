@@ -29,10 +29,7 @@ use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Framework\Data\FormFactory;
-use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
-use Mageplaza\LayeredNavigationPro\Block\Adminhtml\Product\Attribute\Edit\Tab\Renderer\Image;
-use Mageplaza\LayeredNavigationPro\Block\Adminhtml\Product\Attribute\Edit\Tab\Renderer\Table;
 use Mageplaza\LayeredNavigationPro\Helper\Data as LayerHelper;
 use Mageplaza\LayeredNavigationPro\Model\Config\Source\FilterType;
 
@@ -42,19 +39,19 @@ use Mageplaza\LayeredNavigationPro\Model\Config\Source\FilterType;
  */
 class Layer extends Form implements TabInterface
 {
-    /** @var Yesno */
+    /** @var \Magento\Config\Model\Config\Source\Yesno */
     protected $_yesNo;
 
-    /** @var FilterType */
+    /** @var \Mageplaza\LayeredNavigationPro\Model\Config\Source\FilterType */
     protected $_filterType;
 
-    /** @var FieldFactory */
+    /** @var \Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory */
     protected $_fieldFactory;
 
-    /** @var LayerHelper */
+    /** @var \Mageplaza\LayeredNavigationPro\Helper\Data */
     protected $layerHelper;
 
-    /** @var PropertyLocker */
+    /** @var \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker */
     private $propertyLocker;
 
     /**
@@ -91,7 +88,7 @@ class Layer extends Form implements TabInterface
     }
 
     /**
-     * @return Phrase
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -99,7 +96,7 @@ class Layer extends Form implements TabInterface
     }
 
     /**
-     * @return Phrase
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {
@@ -133,14 +130,7 @@ class Layer extends Form implements TabInterface
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            [
-                'data' => [
-                    'id' => 'edit_form',
-                    'action' => $this->getData('action'),
-                    'method' => 'post',
-                    'enctype' => 'multipart/form-data'
-                ]
-            ]
+            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
         $yesnoSource = $this->_yesNo->toOptionArray();
@@ -148,10 +138,10 @@ class Layer extends Form implements TabInterface
         $fieldset = $form->addFieldset('layer_fieldset', ['legend' => __('ProductsPage Navigation Properties')]);
 
         $fieldset->addField('is_filterable', 'select', [
-            'name' => 'is_filterable',
-            'label' => __('Use in ProductsPage Navigation'),
-            'title' => __('Can be used only with catalog input type Dropdown, Multiple Select, Price'),
-            'note' => __('Can be used only with catalog input type Dropdown, Multiple Select, Price.'),
+            'name'   => 'is_filterable',
+            'label'  => __("Use in ProductsPage Navigation"),
+            'title'  => __('Can be used only with catalog input type Dropdown, Multiple Select, Price'),
+            'note'   => __('Can be used only with catalog input type Dropdown, Multiple Select, Price.'),
             'values' => [
                 ['value' => '0', 'label' => __('No')],
                 ['value' => '1', 'label' => __('Filterable (with results)')],
@@ -160,80 +150,57 @@ class Layer extends Form implements TabInterface
         ]);
 
         $fieldset->addField('is_filterable_in_search', 'select', [
-            'name' => 'is_filterable_in_search',
-            'label' => __('Use in Search Results ProductsPage Navigation'),
-            'title' => __('Can be used only with catalog input type Dropdown, Multiple Select, Price'),
-            'note' => __('Can be used only with catalog input type Dropdown, Multiple Select, Price.'),
+            'name'   => 'is_filterable_in_search',
+            'label'  => __("Use in Search Results ProductsPage Navigation"),
+            'title'  => __('Can be used only with catalog input type Dropdown, Multiple Select, Price'),
+            'note'   => __('Can be used only with catalog input type Dropdown, Multiple Select, Price.'),
             'values' => $yesnoSource
         ]);
 
         $fieldset->addField('position', 'text', [
-            'name' => 'position',
+            'name'  => 'position',
             'label' => __('Position'),
             'title' => __('Position in ProductsPage Navigation'),
-            'note' => __('Position of attribute in layered navigation block.'),
+            'note'  => __('Position of attribute in layered navigation block.'),
             'class' => 'validate-digits'
         ]);
 
         array_unshift($yesnoSource, ['value' => 2, 'label' => __('Use Config Settings')]);
 
         $fieldset->addField(LayerHelper::FIELD_ALLOW_MULTIPLE, 'select', [
-            'name' => LayerHelper::FIELD_ALLOW_MULTIPLE,
-            'label' => __('Allow Multiple Filters'),
-            'title' => __('Allow Multiple Filters'),
-            'class' => 'layer_attribute_field',
+            'name'   => LayerHelper::FIELD_ALLOW_MULTIPLE,
+            'label'  => __('Allow Multiple Filter'),
+            'title'  => __('Allow Multiple Filter'),
+            'class'  => 'layer_attribute_field',
             'values' => $yesnoSource,
         ]);
 
         $fieldset->addField(LayerHelper::FIELD_FILTER_TYPE, 'select', [
-            'name' => LayerHelper::FIELD_FILTER_TYPE,
-            'label' => __('Display Style'),
-            'title' => __('Display Style'),
-            'class' => 'layer_attribute_field',
+            'name'   => LayerHelper::FIELD_FILTER_TYPE,
+            'label'  => __('Display Style'),
+            'title'  => __('Display Style'),
+            'class'  => 'layer_attribute_field',
             'values' => $this->_filterType->toOptionArray()
         ]);
 
         $fieldset->addField(LayerHelper::FIELD_SEARCH_ENABLE, 'select', [
-            'name' => LayerHelper::FIELD_SEARCH_ENABLE,
-            'label' => __('Enable Option Search'),
-            'title' => __('Enable Option Search'),
-            'class' => 'layer_attribute_field',
+            'name'   => LayerHelper::FIELD_SEARCH_ENABLE,
+            'label'  => __('Enable Option Search'),
+            'title'  => __('Enable Option Search'),
+            'class'  => 'layer_attribute_field',
             'values' => $yesnoSource,
         ]);
 
         $fieldset->addField(LayerHelper::FIELD_IS_EXPAND, 'select', [
-            'name' => LayerHelper::FIELD_IS_EXPAND,
-            'label' => __('Expand by default'),
-            'title' => __('Expand by default'),
-            'class' => 'layer_attribute_field',
+            'name'   => LayerHelper::FIELD_IS_EXPAND,
+            'label'  => __('Expand by default'),
+            'title'  => __('Expand by default'),
+            'class'  => 'layer_attribute_field',
             'values' => $yesnoSource,
         ]);
 
-        $fieldset->addField(LayerHelper::FIELD_SHOW_TOOLTIP, 'select', [
-            'name' => LayerHelper::FIELD_SHOW_TOOLTIP,
-            'label' => __('Show Tooltip'),
-            'title' => __('Show Tooltip'),
-            'class' => 'layer_attribute_field',
-            'values' => $this->_yesNo->toOptionArray(),
-        ]);
-
-        $fieldset->addField(LayerHelper::FIELD_TOOLTIP_THUMBNAIL, Image::class, [
-            'name' => LayerHelper::FIELD_TOOLTIP_THUMBNAIL,
-            'label' => __('Tooltip Thumbnail'),
-            'title' => __('Tooltip Thumbnail'),
-            'class' => 'layer_attribute_field',
-        ]);
-
-        $fieldset->addField(LayerHelper::FIELD_TOOLTIP_CONTENT, Table::class, [
-            'name' => LayerHelper::FIELD_TOOLTIP_CONTENT,
-            'label' => __('Tooltip Content'),
-            'title' => __('Tooltip Content'),
-            'class' => 'layer_attribute_field',
-        ]);
-
-        $refField = $this->_fieldFactory->create([
-            'fieldData' => ['value' => '1,2', 'separator' => ','],
-            'fieldPrefix' => ''
+        $refField = $this->_fieldFactory->create(['fieldData'   => ['value' => '1,2', 'separator' => ','],
+                                                  'fieldPrefix' => ''
         ]);
         $dependencies = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence')
             ->addFieldMap("is_filterable", 'is_filterable')
@@ -241,22 +208,14 @@ class Layer extends Form implements TabInterface
             ->addFieldMap(LayerHelper::FIELD_FILTER_TYPE, LayerHelper::FIELD_FILTER_TYPE)
             ->addFieldMap(LayerHelper::FIELD_SEARCH_ENABLE, LayerHelper::FIELD_SEARCH_ENABLE)
             ->addFieldMap(LayerHelper::FIELD_IS_EXPAND, LayerHelper::FIELD_IS_EXPAND)
-            ->addFieldMap(LayerHelper::FIELD_SHOW_TOOLTIP, LayerHelper::FIELD_SHOW_TOOLTIP)
-            ->addFieldMap(LayerHelper::FIELD_TOOLTIP_THUMBNAIL, LayerHelper::FIELD_TOOLTIP_THUMBNAIL)
-            ->addFieldMap(LayerHelper::FIELD_TOOLTIP_CONTENT, LayerHelper::FIELD_TOOLTIP_CONTENT)
             ->addFieldDependence(LayerHelper::FIELD_ALLOW_MULTIPLE, 'is_filterable', $refField)
             ->addFieldDependence(LayerHelper::FIELD_FILTER_TYPE, 'is_filterable', $refField)
             ->addFieldDependence(LayerHelper::FIELD_SEARCH_ENABLE, 'is_filterable', $refField)
-            ->addFieldDependence(LayerHelper::FIELD_IS_EXPAND, 'is_filterable', $refField)
-            ->addFieldDependence(LayerHelper::FIELD_SHOW_TOOLTIP, 'is_filterable', $refField)
-            ->addFieldDependence(LayerHelper::FIELD_TOOLTIP_THUMBNAIL, 'is_filterable', $refField)
-            ->addFieldDependence(LayerHelper::FIELD_TOOLTIP_CONTENT, 'is_filterable', $refField)
-            ->addFieldDependence(LayerHelper::FIELD_TOOLTIP_THUMBNAIL, LayerHelper::FIELD_SHOW_TOOLTIP, '1')
-            ->addFieldDependence(LayerHelper::FIELD_TOOLTIP_CONTENT, LayerHelper::FIELD_SHOW_TOOLTIP, '1');
+            ->addFieldDependence(LayerHelper::FIELD_IS_EXPAND, 'is_filterable', $refField);
 
         $this->_eventManager->dispatch('product_attribute_form_build_layer_tab', [
-            'form' => $form,
-            'attribute' => $attributeObject,
+            'form'         => $form,
+            'attribute'    => $attributeObject,
             'dependencies' => $dependencies
         ]);
 

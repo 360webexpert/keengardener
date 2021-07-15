@@ -13,9 +13,6 @@
  * @return \Magento\Framework\Phrase
  */
 if (!function_exists('__')) {
-    /**
-     * @return \Magento\Framework\Phrase
-     */
     function __()
     {
         $argc = func_get_args();

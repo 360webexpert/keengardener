@@ -25,7 +25,6 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Mageplaza\Shopbybrand\Helper\Data;
 use Zend_Db_Exception;
 
 /**
@@ -34,21 +33,6 @@ use Zend_Db_Exception;
  */
 class InstallSchema implements InstallSchemaInterface
 {
-    /**
-     * @var Data
-     */
-    protected $helperData;
-
-    /**
-     * InstallSchema constructor.
-     *
-     * @param Data $helperData
-     */
-    public function __construct(Data $helperData)
-    {
-        $this->helperData = $helperData;
-    }
-
     /**
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -59,13 +43,13 @@ class InstallSchema implements InstallSchemaInterface
     {
         $installer = $setup;
         $installer->startSetup();
-        if (!$this->helperData->versionCompare('2.3.0') && !$installer->tableExists('mageplaza_brand')) {
+        if (!$installer->tableExists('mageplaza_brand')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_brand'))
                 ->addColumn('brand_id', Table::TYPE_INTEGER, null, [
                     'identity' => true,
                     'nullable' => false,
-                    'primary' => true,
+                    'primary'  => true,
                     'unsigned' => true,
                 ], 'Brand ID')
                 ->addColumn(
@@ -83,9 +67,9 @@ class InstallSchema implements InstallSchemaInterface
                     'Config Scope Id'
                 )
                 ->addColumn('page_title', Table::TYPE_TEXT, 255, [], 'Brand Page Title')
-                ->addColumn('url_key', Table::TYPE_TEXT, 255, ['nullable' => false], 'Url Key')
-                ->addColumn('image', Table::TYPE_TEXT, 255, [], 'Brand Image')
-                ->addColumn('is_featured', Table::TYPE_INTEGER, 1, [], 'Featured Brand')
+                ->addColumn('url_key', Table::TYPE_TEXT, 255, ['nullable => false'], 'Url Key')
+                ->addColumn('image', Table::TYPE_TEXT, 255, [], 'Brand Brand Image')
+                ->addColumn('is_featured', Table::TYPE_INTEGER, 1, [], 'Brand Featured Brand')
                 ->addColumn('short_description', Table::TYPE_TEXT, '64k', [], 'Brand Short Description')
                 ->addColumn('description', Table::TYPE_TEXT, '64k', [], 'Brand Description')
                 ->addColumn('static_block', Table::TYPE_TEXT, null, [], 'Static Block')

@@ -1,46 +1,39 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
 
 namespace Amasty\Base\Model;
 
-use Amasty\Base\Model\Feed\ExtensionsProvider;
 use Magento\Framework\Module\ModuleListInterface;
+use Amasty\Base\Helper\Module;
 
 class ModuleListProcessor
 {
     /**
-     * @var ModuleListInterface
+     * @var \Magento\Framework\Module\ModuleListInterface
      */
     private $moduleList;
+
+    /**
+     * @var \Amasty\Base\Helper\Module
+     */
+    private $moduleHelper;
 
     /**
      * @var array
      */
     private $modules;
 
-    /**
-     * @var Feed\ExtensionsProvider
-     */
-    private $extensionsProvider;
-
-    /**
-     * @var ModuleInfoProvider
-     */
-    private $moduleInfoProvider;
-
     public function __construct(
         ModuleListInterface $moduleList,
-        ExtensionsProvider $extensionsProvider,
-        ModuleInfoProvider $moduleInfoProvider
+        Module $moduleHelper
     ) {
         $this->moduleList = $moduleList;
-        $this->extensionsProvider = $extensionsProvider;
-        $this->moduleInfoProvider = $moduleInfoProvider;
+        $this->moduleHelper = $moduleHelper;
     }
 
     /**
@@ -63,7 +56,7 @@ class ModuleListProcessor
         foreach ($modules as $moduleName) {
             if ($moduleName === 'Amasty_Base'
                 || strpos($moduleName, 'Amasty_') === false
-                || in_array($moduleName, $this->moduleInfoProvider->getRestrictedModules(), true)
+                || in_array($moduleName, $this->moduleHelper->getRestrictedModules(), true)
             ) {
                 continue;
             }
@@ -87,12 +80,12 @@ class ModuleListProcessor
     }
 
     /**
-     * @param string $moduleCode
+     * @param $moduleCode
      * @return array|mixed|string
      */
     protected function getModuleInfo($moduleCode)
     {
-        $module = $this->moduleInfoProvider->getModuleInfo($moduleCode);
+        $module = $this->moduleHelper->getModuleInfo($moduleCode);
 
         if (!is_array($module)
             || !isset($module['version'])
@@ -104,7 +97,7 @@ class ModuleListProcessor
         $currentVer = $module['version'];
         $module['description'] = $this->replaceAmastyText($module['description']);
 
-        $allExtensions = $this->extensionsProvider->getAllFeedExtensions();
+        $allExtensions = $this->moduleHelper->getAllExtensions();
         if ($allExtensions && isset($allExtensions[$moduleCode])) {
             $ext = end($allExtensions[$moduleCode]);
 
@@ -113,7 +106,6 @@ class ModuleListProcessor
             $module['hasUpdate'] = version_compare($currentVer, $lastVer, '<');
             $module['description'] = $this->replaceAmastyText($ext['name']);
             $module['url'] = !empty($ext['url']) ? $ext['url'] : '';
-            $module['date'] = !empty($ext['date']) ? $ext['date'] : '';
 
             return $module;
         }

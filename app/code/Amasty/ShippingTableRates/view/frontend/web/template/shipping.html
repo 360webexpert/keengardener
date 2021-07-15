@@ -49,7 +49,7 @@
 
 <!--Shipping method template-->
 <li id="opc-shipping_method"
-    class="checkout-shipping-method amrates-shipping-method"
+    class="checkout-shipping-method"
     data-bind="fadeVisible: visible(), blockLoader: isLoading"
     role="presentation">
     <div class="checkout-shipping-method">
@@ -90,7 +90,6 @@
                                                     'id': 's_method_' + method.method_code,
                                                     'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
                                                  }" />
-                                <label data-bind="attr: {for: 's_method_' + method.method_code}"></label>
                                 <!-- /ko -->
                                 <!--ko ifnot: ($parent.rates().length == 1)-->
                                 <input name="shipping_method" type="radio"
@@ -103,7 +102,6 @@
                                                 },
                                                 click: $parent.selectShippingMethod"
                                        class="radio"/>
-                                <label data-bind="attr: {for: 's_method_' + method.carrier_code + '_' + method.method_code}"></label>
                                 <!--/ko-->
                                 <!-- /ko -->
                             </td>
@@ -121,7 +119,7 @@
                         </tr>
 
                         <!-- ko if:  method.extension_attributes -->
-                            <!-- ko if: method.extension_attributes.amstorepick_comment -->
+                            <!-- ko if:  !method.comment && method.extension_attributes.amstorepick_comment -->
                             <tr class="row">
                                 <td class="col" colspan="4"
                                     data-bind="html: method.extension_attributes.amstorepick_comment">
@@ -129,10 +127,18 @@
                             </tr>
                             <!-- /ko -->
 
-                            <!-- ko if: method.extension_attributes.amstartes_comment -->
+                            <!-- ko if: !method.comment && method.extension_attributes.amstartes_comment -->
                             <tr class="row">
                                 <td class="col" colspan="4"
                                     data-bind="html: method.extension_attributes.amstartes_comment">
+                                </td>
+                            </tr>
+                            <!-- /ko -->
+
+                            <!-- ko ifnot: !method.comment && method.extension_attributes.amstorepick_comment && method.extension_attributes.amstartes_comment -->
+                            <tr class="row">
+                                <td class="col" colspan="4"
+                                    data-bind="html: method.comment">
                                 </td>
                             </tr>
                             <!-- /ko -->

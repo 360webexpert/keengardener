@@ -35,7 +35,7 @@
             <filter>
                 <state>
                     <label>Product State</label>
-                    <position>10</position>
+                    <position>20</position>
                     <expand>2</expand>
                     <new_enable>0</new_enable>
                     <new_label>New</new_label>
@@ -47,16 +47,10 @@
                 <rating>
                     <rating_enable>0</rating_enable>
                     <label>Rating</label>
-                    <position>10</position>
+                    <position>30</position>
                     <expand>2</expand>
                 </rating>
             </filter>
-            <subcategory_slider>
-                <subcategory_slider_enable>0</subcategory_slider_enable>
-                <display_type>0</display_type>
-                <auto_play>0</auto_play>
-                <responsive>3</responsive>
-            </subcategory_slider>
         </layered_navigation>
     </default>
 </config>

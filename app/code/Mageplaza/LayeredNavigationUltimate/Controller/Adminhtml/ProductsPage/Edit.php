@@ -22,12 +22,6 @@
 namespace Mageplaza\LayeredNavigationUltimate\Controller\Adminhtml\ProductsPage;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\Registry;
-use Magento\Framework\View\Result\Page;
-use Magento\Framework\View\Result\PageFactory;
-use Mageplaza\LayeredNavigationUltimate\Model\ProductsPageFactory;
 
 /**
  * Class Edit
@@ -41,22 +35,22 @@ class Edit extends Action
     public $helper;
 
     /**
-     * @var PageFactory
+     * @var \Magento\Framework\View\Result\PageFactory
      */
     public $resultPageFactory;
 
     /**
-     * @var ProductsPageFactory
+     * @var \Mageplaza\LayeredNavigationUltimate\Model\ProductsPageFactory
      */
     public $productPageFactory;
 
     /**
-     * @var Registry
+     * @var \Magento\Framework\Registry
      */
     public $registry;
 
     /**
-     * @var Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
     public $jsonHelper;
 
@@ -64,19 +58,19 @@ class Edit extends Action
      * Edit constructor.
      *
      * @param \Mageplaza\LayeredNavigationUltimate\Helper\Data $data
-     * @param Data $jsonHelper
-     * @param PageFactory $pageFactory
-     * @param Registry $registry
-     * @param ProductsPageFactory $productPageFactory
-     * @param Context $context
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Framework\View\Result\PageFactory $pageFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Mageplaza\LayeredNavigationUltimate\Model\ProductsPageFactory $productPageFactory
+     * @param Action\Context $context
      */
     public function __construct(
         \Mageplaza\LayeredNavigationUltimate\Helper\Data $data,
-        Data $jsonHelper,
-        PageFactory $pageFactory,
-        Registry $registry,
-        ProductsPageFactory $productPageFactory,
-        Context $context
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\Framework\View\Result\PageFactory $pageFactory,
+        \Magento\Framework\Registry $registry,
+        \Mageplaza\LayeredNavigationUltimate\Model\ProductsPageFactory $productPageFactory,
+        \Magento\Backend\App\Action\Context $context
     ) {
         $this->helper = $data;
         $this->jsonHelper = $jsonHelper;
@@ -88,8 +82,8 @@ class Edit extends Action
     }
 
     /**
-     * @return Page
-     * @var PageFactory
+     * @return \Magento\Framework\View\Result\Page
+     * @var \Magento\Framework\View\Result\PageFactory
      */
     public function execute()
     {

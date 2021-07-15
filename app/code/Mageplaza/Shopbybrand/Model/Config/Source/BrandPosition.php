@@ -21,26 +21,26 @@
 
 namespace Mageplaza\Shopbybrand\Model\Config\Source;
 
-use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class BrandPosition
  * @package Mageplaza\Shopbybrand\Model\Config\Source
  */
-class BrandPosition implements OptionSourceInterface
+class BrandPosition implements ArrayInterface
 {
     /**
      * Show on Toplink
      */
-    const TOPLINK = '0';
+    const TOPLINK = 0;
     /**
-     * Show on Footer link
+     * Show on Footerlink
      */
-    const FOOTERLINK = '1';
+    const FOOTERLINK = 1;
     /**
      * Show on Menubar
      */
-    const CATEGORY = '2';
+    const CATEGORY = 2;
 
     /**
      * @return array

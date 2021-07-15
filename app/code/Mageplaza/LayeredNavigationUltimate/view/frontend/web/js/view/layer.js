@@ -46,8 +46,8 @@ define([
          * Prepare for horizontal side bar
          */
         initActiveItems: function () {
-            var horizonEl = this.element.parents('#layered-horizontal-container');
-            if (horizonEl.length) {
+            var horiEl = this.element.parents('#layered-horizontal-container');
+            if (horiEl.length) {
                 this.options.multipleCollapsible = false;
                 this.options.active = [];
             } else {
@@ -68,10 +68,12 @@ define([
                         element.css('max-height', type.value + 'px');
                         element.css('overflow-y', 'auto');
                     } else if (element.find('li').length > type.value) {
-                        element.after($('<div></div>', {
+                        element.after($('<a></a>', {
+                            href: '#',
                             class: 'active ln-show-more ln-show-more-' + code
                         }).text($t('Show more')));
-                        element.after($('<div></div>', {
+                        element.after($('<a></a>', {
+                            href: '#',
                             class: 'ln-show-less ln-show-less-' + code
                         }).css('display', 'none').attr('size', type.value).text($t('Show less')));
 
@@ -331,7 +333,6 @@ define([
 
             if (listEl.length && ($(window).scrollTop() >= listEl.offset().top + listEl.outerHeight() - window.innerHeight)) {
                 submitInfiniteAction(self, listEl);
-                this.initWishlistCompare();
             }
         }
     });

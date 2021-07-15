@@ -2,28 +2,19 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
+
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
 
-    <!-- TO DO. Delete after change in all modules -->
     <entity name="_FlatRateMethod" type="shippingMethods">
         <data key="shippingMethodsName">s_method_flatrate_flatrate</data>
     </entity>
 
-    <!-- TO DO. Delete after change in all modules -->
     <entity name="_BestWayMethod" type="shippingMethods">
-        <data key="shippingMethodsName">s_method_tablerate_bestway</data>
-    </entity>
-
-    <entity name="flatRateMethodOnCart" type="shippingMethods">
-        <data key="shippingMethodsName">s_method_flatrate_flatrate</data>
-    </entity>
-
-    <entity name="bestWayMethodOnCart" type="shippingMethods">
         <data key="shippingMethodsName">s_method_tablerate_bestway</data>
     </entity>
 

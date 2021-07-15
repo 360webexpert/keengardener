@@ -99,12 +99,7 @@
     }
 
     .ambase-modules-block {
-        display: flex; //for IE 11
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 164px);
-        justify-content: space-between;
-        grid-column-gap: 10px;
-        grid-row-gap: 15px;
+        display: flex;
         flex-wrap: wrap;
         margin-top: 12px;
     }
@@ -203,7 +198,7 @@
 
         .ambase-svg.-arrow {
             margin: 0 10px;
-            min-width: 40px;
+            width: 40px;
             background: @ambase__icon-arrow no-repeat center;
         }
     }
@@ -231,7 +226,7 @@
         }
     }
 
-    .ambase-tab-container > .admin__page-nav-title._collapsible {
+    .ambase-tab-container > .admin__page-nav-title {
         padding-right: 10rem;
     }
 
@@ -249,12 +244,5 @@
         font-size: 16px;
         font-weight: bold;
         line-height: 22px;
-    }
-}
-
-//for IE 11
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .ambase-modules-block {
-        justify-content: flex-start;
     }
 }

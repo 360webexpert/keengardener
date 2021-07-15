@@ -1,0 +1,106 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Shopbybrand\Block\Design $block */
+$helper = $block->helper();
+?>
+<style type="text/css">
+    .block-brand-list .brand-list-content li.product-item {
+        margin-left: 0;
+        padding: 5px;
+    }
+
+    .block-brand-list .brand-list-content .product-item-info .product-image-photo {
+        width: <?= /** @noEscape */ $block->getLogoWidth() . 'px' ?>;
+        height: <?= /** @noEscape */ $block->getLogoHeight() . 'px' ?>
+    }
+    /*===================================================================
+    |                            Configuration Style                    |
+    ====================================================================*/
+    <?php if ($color = $helper->getBrandConfig('color')) : ?>
+    .block-brand-search,
+    .block-brand-list ul.brand-options li.active {
+        background-color: <?= /** @noEscape */ $color ?>;
+    }
+
+    .category-nav-list li.active {
+        background-color: <?= /** @noEscape */ $color ?>;
+        float: left;
+    }
+
+    <?php endif; ?>
+
+    <?php if ($helper->enableSearch() || $helper->enableFeature()) : ?>
+    .page-title-wrapper {
+        display: none
+    }
+
+    <?php endif; ?>
+    /*===================================================================
+    |                           Custom STYLE                             |
+    ====================================================================*/
+    <?= /** @noEscape */ $block->getCustomCss() ?>
+
+    /*===================================================================
+    |           Brand Page product List Responsive Design                |
+    ====================================================================*/
+
+    .brand-list-content li {
+        width: <?= $helper->getBrandConfig('display') === \Mageplaza\Shopbybrand\Model\Config\Source\BrandListDisplay::DISPLAY_LABEL
+        ? '33%' : '16.3% !important' ?>;
+    }
+
+    .related-product-modal-content li.product-item {
+        width: 33% !important;
+    }
+
+    @media (max-width: 1080px) {
+        .brand-list-content li {
+            width: 32.3% !important;
+        }
+
+        .related-product-modal-content li.product-item {
+            width: 50% !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .brand-list-content li {
+            width: 49% !important;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .related-product-modal-content li.product-item {
+            width: 100% !important;
+        }
+    }
+
+    .quickview_popup a:hover {
+        color: <?= /** @noEscape */ $helper->getBrandConfig('color') ?>;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .mix {
+        position: relative;
+    }
+</style>

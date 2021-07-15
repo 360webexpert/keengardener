@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -15,14 +15,13 @@
             <argument name="shippingMethods"/>
         </arguments>
         <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenPage"/>
-        <conditionalClick selector="{{FrontCartSection.EstimateShippingAndTax}}" dependentSelector="{{FrontCartSection.ZipShipping}}"
-                          visible="false" stepKey="OpenTabWithShippingInCart"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenTab"/>
-        <see selector="{{FrontCartSection.ShippingMethodPrice(shippingMethods.shippingMethodsName)}}" userInput="{{shippingPrices}}" stepKey="checkFreeShipping"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterChooseMethod"/>
-        <conditionalClick selector="{{FrontCartSection.EstimateShippingAndTax}}" dependentSelector="{{FrontCartSection.ZipShipping}}"
-                          visible="true" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <see selector="//label[@for='{{shippingMethods.shippingMethodsName}}']//span" userInput="{{shippingPrices}}" stepKey="checkFreeShipping"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
     </actionGroup>
 
 
@@ -230,7 +229,7 @@
                         stepKey="CheckNoHaveLabelBanner"/>
     </actionGroup>
 
-    <!-- To Do After Change by AdminCheckShippingMethodInOrder in All Tests -->
+
     <!-- ActionGroups For Check Data In Admin Area Order-->
     <actionGroup name="CheckAdminShippingMethodInLastOrder">
         <arguments>
@@ -246,16 +245,6 @@
              userInput="{{shippingMethodPrice}}" stepKey="checkShippingMethodPrice"/>
     </actionGroup>
 
-    <actionGroup name="AdminCheckShippingMethodInOrder" extends="AdminOpenOrderOnId">
-        <arguments>
-            <argument name="shippingMethodName"/>
-            <argument name="shippingMethodPrice"/>
-        </arguments>
-        <see selector="{{AdminOpenOrder.ShippingMethodName}}"
-             userInput="{{shippingMethodName}}" stepKey="checkShippingMethodName"/>
-        <see selector="{{AdminOpenOrder.ShippingMethodPrice}}"
-             userInput="{{shippingMethodPrice}}" stepKey="checkShippingMethodPrice"/>
-    </actionGroup>
 
     <actionGroup name="CheckAdminShippingMethodInPenultimateOrder">
         <arguments>
@@ -284,101 +273,27 @@
     </actionGroup>
 
 
-    <actionGroup name="AdminCheckPaymentInOrder" extends="AdminOpenOrderOnId">
-        <arguments>
-            <argument name="paymentMethods"/>
-        </arguments>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenOrder"/>
-        <seeElement selector="{{AdminOpenOrder.PaymentMethodName(paymentMethods.paymentName)}}"
-                    stepKey="checkPaymentMethod"/>
-    </actionGroup>
-
-
-    <actionGroup name="AdminCheckTotalsInOrder" extends="AdminOpenOrderOnId">
-        <arguments>
-            <argument name="totals"/>
-        </arguments>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenOrder"/>
-        <see selector="{{AdminOpenOrder.GrandTotal}}" userInput="{{totals.orderTotal}}"
-             stepKey="checkGrandTotal"/>
-        <see selector="{{AdminOpenOrder.Subtotal}}" userInput="{{totals.cartSubtotal}}"
-             stepKey="checkSubtotal"/>
-    </actionGroup>
-
-
-    <actionGroup name="AdminCheckTotalsInOrderWithTax" extends="AdminOpenOrderOnId">
-        <arguments>
-            <argument name="totalsWithTax"/>
-        </arguments>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenOrder"/>
-        <see selector="{{AdminOpenOrder.GrandTotal}}" userInput="{{totalsWithTax.orderTotal}}"
-             stepKey="checkGrandTotal"/>
-        <see selector="{{AdminOpenOrder.Subtotal}}" userInput="{{totalsWithTax.cartSubtotal}}"
-             stepKey="checkSubtotal"/>
-        <see selector="{{AdminOpenOrder.Tax}}" userInput="{{totalsWithTax.tax}}"
-             stepKey="checkTax"/>
-    </actionGroup>
-
-
-    <!-- Left for Backward Compatibility. Delete after 11.06.2020 -->
     <actionGroup name="AdminCheckTotalsInLastOrder">
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-    </actionGroup>
-
-
-    <!-- Left for Backward Compatibility. Delete after 11.06.2020 -->
-    <actionGroup name="AdminCheckTotalsInLastOrderWithTax">
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-    </actionGroup>
-
-
-    <!-- Check Discount on the Cart -->
-    <actionGroup name="StorefrontCheckCartDiscountAmount">
         <arguments>
-            <argument name="discountAmount"/>
+            <argument name="subtotal"/>
+            <argument name="grandTotal"/>
         </arguments>
-        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenCart"/>
-        <see selector="{{FrontCartSection.DiscountAmount}}"
-             userInput="{{discountAmount}}" stepKey="checkDiscountOne"/>
+        <amOnPage url="{{AdminAllOrdersPage.url}}" stepKey="navigateToOrder"/>
+        <click selector="{{AdminOrdersGridSection.LastOrder}}" stepKey="waitForSelectOrder"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad1"/>
+        <see selector="{{AdminOpenOrder.GrandTotal}}" userInput="{{grandTotal}}"
+             stepKey="checkGrandTotal"/>
+        <see selector="{{AdminOpenOrder.Subtotal}}" userInput="{{subtotal}}"
+             stepKey="checkSubtotal"/>
     </actionGroup>
 
-    <!-- Check No Discount on the Cart -->
-    <actionGroup name="StorefrontCheckNoCartDiscount">
-        <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenCart"/>
-        <dontSeeElement selector="{{FrontCartSection.Discount}}" stepKey="checkNoDiscount"/>
-    </actionGroup>
 
-    <!-- Check Discount on the Checkout -->
-    <actionGroup name="StorefrontCheckDiscountAmountOnCheckout">
+    <actionGroup name="AdminCheckTotalsInLastOrderWithTax" extends="AdminCheckTotalsInLastOrder">
         <arguments>
-            <argument name="discountAmount"/>
+            <argument name="tax"/>
         </arguments>
-        <waitForPageLoad stepKey="waitForPageLoadBeforeCheck"/>
-        <see selector="{{CheckoutPaymentAddressSection.DiscountAmount}}"
-             userInput="{{discountAmount}}" stepKey="checkDiscountOne"/>
-    </actionGroup>
-
-    <!-- Check No Discount on the Checkout -->
-    <actionGroup name="StorefrontCheckNoDiscountOnCheckout">
-        <waitForPageLoad stepKey="waitForPageLoadBeforeCheck"/>
-        <dontSeeElement selector="{{CheckoutPaymentAddressSection.Discount}}" stepKey="checkNoDiscount"/>
-    </actionGroup>
-
-    <actionGroup name="StorefrontCheckShippingPriceOnCheckoutAsCustomer">
-        <arguments>
-            <argument name="shippingPrices"/>
-            <argument name="shippingMethods"/>
-        </arguments>
-        <amOnPage url="{{CheckoutShippingPage.url}}" stepKey="navigateToCheckoutShippingPage"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpen"/>
-        <waitForElementNotVisible selector="{{FrontCartSection.CartTotalLoader}}" stepKey="waitWhenNotVisibleLoaderTotals"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoadAfterOpenPage"/>
-        <scrollTo selector="{{CheckoutShippingAddressSection.Next}}" stepKey="ScrollToDownPage"/>
-        <waitForPageLoad stepKey="waitForPageLoadBeforeCheck"/>
-        <see selector="{{CheckoutShippingAddressSection.ShippingMethodPrice(shippingMethods.shippingMethodsNameOnCheckout)}}"
-             userInput="{{shippingPrices}}" stepKey="checkFreeShipping"/>
+        <see selector="{{AdminOpenOrder.Tax}}" userInput="{{tax}}"
+             stepKey="checkTax"/>
     </actionGroup>
 
 </actionGroups>

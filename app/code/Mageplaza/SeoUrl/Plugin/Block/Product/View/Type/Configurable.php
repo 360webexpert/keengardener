@@ -63,9 +63,9 @@ class Configurable
             return $result;
         }
 
-        $config = HelperData::jsonDecode($result);
+        $config                               = HelperData::jsonDecode($result);
         $config['seoUrl']['optionCollection'] = $this->_helperData->getOptionsArray();
-        $config['seoUrl']['urlSuffix'] = $this->_helperData->getCategoryUrlSuffix();
+        $config['seoUrl']['urlSuffix']        = $this->_helperData->getCategoryUrlSuffix();
 
         return HelperData::jsonEncode($config);
     }

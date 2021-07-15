@@ -32,7 +32,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Stdlib\StringUtils;
@@ -51,28 +50,28 @@ use Mageplaza\Shopbybrand\Helper\Data;
  */
 class Brand extends AbstractEntity
 {
-    const COL_ATTR_CODE = 'attribute_code';
-    const COL_NAME = 'brand_name';
-    const COL_STORE_ID = 'store_id';
-    const COL_VALUE = 'label';
-    const COL_URL_KEY = 'url_key';
-    const COL_IMAGE = 'image';
-    const COL_FEATURED = 'is_featured';
-    const COL_SHORT_DESCRIPTION = 'short_description';
-    const COL_DESCRIPTION = 'description';
-    const COL_STATIC_BLOCK = 'static_block';
-    const COL_META_TITLE = 'meta_title';
-    const COL_META_DESCRIPTION = 'meta_description';
-    const COL_META_KEYWORDS = 'meta_keywords';
-    const COL_SWATCH_TYPE = 'swatch_type';
-    const COL_SWATCH_VALUE = 'swatch_value';
-    const SCOPE_DEFAULT = 0;
-    const SCOPE_STORE = 1;
-    const ERROR_TITLE_IS_EMPTY = 'Empty TITLE';
+    const COL_ATTR_CODE                = 'attribute_code';
+    const COL_NAME                     = 'brand_name';
+    const COL_STORE_ID                 = 'store_id';
+    const COL_VALUE                    = 'label';
+    const COL_URL_KEY                  = 'url_key';
+    const COL_IMAGE                    = 'image';
+    const COL_FEATURED                 = 'is_featured';
+    const COL_SHORT_DESCRIPTION        = 'short_description';
+    const COL_DESCRIPTION              = 'description';
+    const COL_STATIC_BLOCK             = 'static_block';
+    const COL_META_TITLE               = 'meta_title';
+    const COL_META_DESCRIPTION         = 'meta_description';
+    const COL_META_KEYWORDS            = 'meta_keywords';
+    const COL_SWATCH_TYPE              = 'swatch_type';
+    const COL_SWATCH_VALUE             = 'swatch_value';
+    const SCOPE_DEFAULT                = 0;
+    const SCOPE_STORE                  = 1;
+    const ERROR_TITLE_IS_EMPTY         = 'Empty TITLE';
     const ERROR_INVALID_ATTRIBUTE_CODE = 'invalidAttributeCode';
-    const ERROR_INVALID_BRAND_OPTION = 'invalidBrandOption';
-    const ERROR_INVALID_VALUE = 'invalidValue';
-    const ERROR_INVALID_ATTRIBUTE = 'invalidAttribute';
+    const ERROR_INVALID_BRAND_OPTION   = 'invalidBrandOption';
+    const ERROR_INVALID_VALUE          = 'invalidValue';
+    const ERROR_INVALID_ATTRIBUTE      = 'invalidAttribute';
 
     /**
      * @var CollectionFactory
@@ -119,9 +118,9 @@ class Brand extends AbstractEntity
     /** @inheritdoc */
     protected $_messageTemplates = [
         self::ERROR_INVALID_ATTRIBUTE_CODE => 'Invalid value in Attribute Code column',
-        self::ERROR_INVALID_BRAND_OPTION => 'Invalid value in Brand name column',
-        self::ERROR_INVALID_VALUE => 'Invalid value in Value column',
-        self::ERROR_INVALID_ATTRIBUTE => 'Attribute does not exist'
+        self::ERROR_INVALID_BRAND_OPTION   => 'Invalid value in Brand name column',
+        self::ERROR_INVALID_VALUE          => 'Invalid value in Value column',
+        self::ERROR_INVALID_ATTRIBUTE      => 'Attribute does not exist'
     ];
 
     /** @inheritdoc */
@@ -157,7 +156,7 @@ class Brand extends AbstractEntity
      * @param Helper $resourceHelper
      * @param ResourceConnection $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @param Repository $productRepository
+     * @param Repository $productRespository
      * @param CollectionFactory $optionCollection
      * @param Data $brandHelper
      * @param UploaderFactory $uploaderFactory
@@ -174,7 +173,7 @@ class Brand extends AbstractEntity
         Helper $resourceHelper,
         ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        Repository $productRepository,
+        Repository $productRespository,
         CollectionFactory $optionCollection,
         Data $brandHelper,
         UploaderFactory $uploaderFactory,
@@ -183,7 +182,7 @@ class Brand extends AbstractEntity
         array $data = []
     ) {
         $this->_resource = $resource;
-        $this->_productRepository = $productRepository;
+        $this->_productRepository = $productRespository;
         $this->_optionCollection = $optionCollection;
         $this->_brandHelper = $brandHelper;
         $this->_uploaderFactory = $uploaderFactory;
@@ -203,9 +202,15 @@ class Brand extends AbstractEntity
     }
 
     /**
-     * @return bool
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
+     * {@inheritDoc}
+     */
+    public function getValidColumnNames()
+    {
+        return $this->validColumnNames;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     protected function _importData()
     {
@@ -241,21 +246,17 @@ class Brand extends AbstractEntity
                     continue;
                 }
 
-                $options = $this->processBrandOptions(
-                    $this->getAttributeCode($rowData),
-                    self::SCOPE_DEFAULT,
-                    $rowNum
-                );
+                $options = $this->processBrandOptions($this->getAttributeCode($rowData), self::SCOPE_DEFAULT, $rowNum);
                 $optionToDelete = array_filter($options, function ($option) use (&$rowData) {
                     return $option['default_value'] === $rowData[self::COL_NAME];
                 });
-                if (is_array($optionToDelete) && !empty($optionToDelete)) {
+                if (is_array($optionToDelete) && count($optionToDelete)) {
                     $option = array_shift($optionToDelete);
                     $entitiesToDelete[$rowData[self::COL_NAME]] = isset($option['option_id'])
                         ? $option['option_id'] : null;
                 }
             }
-            if (!empty($entitiesToDelete)) {
+            if (count($entitiesToDelete)) {
                 $this->countItemsDeleted += $this->_connection->delete(
                     $this->_resource->getTableName('eav_attribute_option'),
                     $this->_connection->quoteInto('option_id IN (?)', array_values(array_filter($entitiesToDelete)))
@@ -342,17 +343,14 @@ class Brand extends AbstractEntity
     }
 
     /**
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
+     * Save Rows
      */
     protected function _saveBrands()
     {
-        $eavAttributeOptionTable = $this->_resource->getTableName('eav_attribute_option_value');
-        $eavAttributeSwatchTable = $this->_resource->getTableName('eav_attribute_option_swatch');
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $brandData = [
-                $this->_resource->getTableName('mageplaza_brand') => [],
-                $eavAttributeSwatchTable => []
+                $this->_resource->getTableName('mageplaza_brand')             => [],
+                $this->_resource->getTableName('eav_attribute_option_swatch') => []
             ];
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->validateRow($rowData, $rowNum)) {
@@ -371,12 +369,12 @@ class Brand extends AbstractEntity
                     $optionFilters = array_filter($optionList, function ($option) use (&$rowData) {
                         return $option['default_value'] == $rowData[self::COL_NAME];
                     });
-                    if (is_array($optionFilters) && !empty($optionFilters)) {
+                    if (is_array($optionFilters) && count($optionFilters)) {
                         $option = array_shift($optionFilters);
                         $this->_optionList[$rowData[self::COL_NAME]] = $option['option_id'];
                     } else {
                         $attribute = $this->_productRepository->get($attributeCode);
-                        $this->countItemsCreated = $this->_connection->insert(
+                        $this->_connection->insert(
                             $this->_resource->getTableName('eav_attribute_option'),
                             ['attribute_id' => $attribute->getId(), 'sort_order' => 0]
                         );
@@ -387,10 +385,9 @@ class Brand extends AbstractEntity
                 }
 
                 $rowData['option_id'] = $this->_optionList[$rowData[self::COL_NAME]];
-                $scope = ($rowData[self::COL_STORE_ID] === self::SCOPE_DEFAULT) ? $rowData[self::COL_NAME] : '';
                 $rowData['value'] = (isset($rowData[self::COL_VALUE]) && $rowData[self::COL_VALUE])
                     ? $rowData[self::COL_VALUE]
-                    : $scope;
+                    : (($rowData[self::COL_STORE_ID] === self::SCOPE_DEFAULT) ? $rowData[self::COL_NAME] : '');
 
                 if (isset($rowData['value']) && $rowData['value']) {
                     /**
@@ -398,69 +395,70 @@ class Brand extends AbstractEntity
                      * (option_id, store_id) so cannot insert on duplicate row
                      */
                     $this->_connection->delete(
-                        $eavAttributeOptionTable,
+                        $this->_resource->getTableName('eav_attribute_option_value'),
                         ['option_id =?' => $rowData['option_id'], 'store_id =?' => $rowData['store_id']]
                     );
-                    $this->_connection->insert(
-                        $eavAttributeOptionTable,
-                        [
-                            'option_id' => $rowData['option_id'],
-                            'store_id' => $rowData['store_id'],
-                            'value' => $rowData['value']
-                        ]
-                    );
+                    $this->_connection->insert($this->_resource->getTableName('eav_attribute_option_value'), [
+                        'option_id' => $rowData['option_id'],
+                        'store_id'  => $rowData['store_id'],
+                        'value'     => $rowData['value']
+                    ]);
                 }
 
                 if (isset($rowData['image']) && $rowData['image']) {
                     $res = $this->_getUploader('brand')->move($rowData['image']);
-                    $this->_getUploader('resize')->move($rowData['image']);
                     $rowData['image'] = 'mageplaza/brand' . $res['file'];
                 }
 
                 $brandData[$this->_resource->getTableName('mageplaza_brand')][] = [
-                    'option_id' => $rowData['option_id'],
-                    'store_id' => $rowData['store_id'],
-                    'url_key' => isset($rowData['url_key']) ? $rowData['url_key'] : null,
-                    'image' => isset($rowData['image']) ? $rowData['image'] : null,
-                    'is_featured' => isset($rowData['is_featured']) ? $rowData['is_featured'] : null,
+                    'option_id'         => $rowData['option_id'],
+                    'store_id'          => $rowData['store_id'],
+                    'url_key'           => isset($rowData['url_key']) ? $rowData['url_key'] : null,
+                    'image'             => isset($rowData['image']) ? $rowData['image'] : null,
+                    'is_featured'       => isset($rowData['is_featured']) ? $rowData['is_featured'] : null,
                     'short_description' => isset($rowData['short_description']) ? $rowData['short_description'] : null,
-                    'description' => isset($rowData['description']) ? $rowData['description'] : null,
-                    'static_block' => isset($rowData['static_block']) ? $rowData['static_block'] : null,
-                    'meta_title' => isset($rowData['meta_title']) ? $rowData['meta_title'] : null,
-                    'meta_keywords' => isset($rowData['meta_keywords']) ? $rowData['meta_keywords'] : null,
-                    'meta_description' => isset($rowData['meta_description']) ? $rowData['meta_description'] : null,
+                    'description'       => isset($rowData['description']) ? $rowData['description'] : null,
+                    'static_block'      => isset($rowData['static_block']) ? $rowData['static_block'] : null,
+                    'meta_title'        => isset($rowData['meta_title']) ? $rowData['meta_title'] : null,
+                    'meta_keywords'     => isset($rowData['meta_keywords']) ? $rowData['meta_keywords'] : null,
+                    'meta_description'  => isset($rowData['meta_description']) ? $rowData['meta_description'] : null,
                 ];
 
-                if (isset($rowData[self::COL_SWATCH_TYPE], $rowData[self::COL_SWATCH_VALUE])
-                    && ($rowData[self::COL_STORE_ID] == self::SCOPE_DEFAULT)
+                if (($rowData[self::COL_STORE_ID] == self::SCOPE_DEFAULT)
+                    && isset($rowData[self::COL_SWATCH_TYPE])
+                    && isset($rowData[self::COL_SWATCH_VALUE])
                 ) {
                     if (($rowData[self::COL_SWATCH_TYPE] == Swatch::SWATCH_TYPE_VISUAL_IMAGE)
                         && $rowData[self::COL_SWATCH_VALUE]
                     ) {
-                        $res = $this->_getUploader('swatch')->move(
-                            $rowData[self::COL_SWATCH_VALUE],
-                            true
-                        );
+                        $res = $this->_getUploader('swatch')->move($rowData[self::COL_SWATCH_VALUE], true);
                         $rowData[self::COL_SWATCH_VALUE] = $res['file'];
                     }
-                    $brandData[$eavAttributeSwatchTable][] = [
+                    $brandData[$this->_resource->getTableName('eav_attribute_option_swatch')][] = [
                         'option_id' => $rowData['option_id'],
-                        'store_id' => self::SCOPE_DEFAULT,
-                        'type' => $rowData[self::COL_SWATCH_TYPE],
-                        'value' => $rowData[self::COL_SWATCH_VALUE]
+                        'store_id'  => self::SCOPE_DEFAULT,
+                        'type'      => $rowData[self::COL_SWATCH_TYPE],
+                        'value'     => $rowData[self::COL_SWATCH_VALUE]
                     ];
                 }
             }
             foreach ($brandData as $key => $data) {
-                if (!empty($data)) {
-                    $updateFields = ($key === $eavAttributeOptionTable) ? ['value'] :
-                        $this->getAttributeFields($key);
+                if (count($data)) {
+                    $updateFields = ($key == $this->_resource->getTableName('eav_attribute_option_value')) ? ['value'] :
+                        ($key == $this->_resource->getTableName('eav_attribute_option_swatch') ? ['type', 'value'] :
+                            [
+                                'url_key',
+                                'image',
+                                'is_featured',
+                                'short_description',
+                                'description',
+                                'static_block',
+                                'meta_title',
+                                'meta_keywords',
+                                'meta_description'
+                            ]);
 
-                    $this->countItemsUpdated = $this->_connection->insertOnDuplicate(
-                        $this->_connection->getTableName($key),
-                        $data,
-                        $updateFields
-                    );
+                    $this->_connection->insertOnDuplicate($this->_connection->getTableName($key), $data, $updateFields);
                 }
             }
         }
@@ -472,6 +470,7 @@ class Brand extends AbstractEntity
      * @param $type
      *
      * @return Uploader
+     * @throws FileSystemException
      * @throws LocalizedException
      */
     protected function _getUploader($type)
@@ -497,20 +496,7 @@ class Brand extends AbstractEntity
                     __('File directory \'%1\' is not readable.', $tmpPath)
                 );
             }
-            switch ($type) {
-                case 'brand':
-                    $destinationDir = 'mageplaza/brand';
-                    break;
-                case 'resize':
-                    $destinationDir = 'mageplaza/resized/80/mageplaza/brand';
-                    break;
-                case 'swatch':
-                    $destinationDir = 'attribute/swatch';
-                    break;
-                default:
-                    $destinationDir = 'mageplaza/brand';
-                    break;
-            }
+            $destinationDir = ($type === 'brand') ? "mageplaza/brand" : 'attribute/swatch';
             $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationPath);
@@ -524,26 +510,5 @@ class Brand extends AbstractEntity
         }
 
         return $this->_fileUploader[$type];
-    }
-
-    /**
-     * @param $key
-     *
-     * @return array
-     */
-    public function getAttributeFields($key)
-    {
-        return $key === $this->_resource->getTableName('eav_attribute_option_swatch') ? ['type', 'value'] :
-            [
-                'url_key',
-                'image',
-                'is_featured',
-                'short_description',
-                'description',
-                'static_block',
-                'meta_title',
-                'meta_keywords',
-                'meta_description'
-            ];
     }
 }

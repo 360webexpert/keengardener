@@ -22,7 +22,7 @@ define([
     'jquery',
     'Mageplaza_AjaxLayer/js/action/submit-filter',
     'Magento_Catalog/js/price-utils',
-    'jquery-ui-modules/widget',
+    'jquery/ui',
     'accordion',
     'productListToolbarForm'
 ], function ($, submitFilterAction, ultil) {
@@ -56,8 +56,6 @@ define([
             this.initObserve();
             this.initSlider();
             this.initWishlistCompare();
-            this.selectedAttr();
-            this.renderCategoryTree();
         },
 
         initActiveItems: function () {
@@ -116,19 +114,6 @@ define([
         initObserve: function () {
             var self = this;
             var isAjax = this.options.isAjax;
-
-            // fix browser back, forward button
-            if (typeof window.history.replaceState === "function") {
-                window.history.replaceState({url: document.URL}, document.title);
-
-                setTimeout(function () {
-                    window.onpopstate = function (e) {
-                        if (e.state) {
-                            submitFilterAction(e.state.url, 1);
-                        }
-                    };
-                }, 0)
-            }
 
             var pageElements = $('#layer-product-list').find('.pages a');
             pageElements.each(function () {
@@ -306,55 +291,11 @@ define([
 
                     e.stopPropagation();
                     e.preventDefault();
-
-                    if (isAjax && el.hasClass('towishlist')) {
-                        submitFilterAction(url, true);
-                    } else if (isAjax) {
+                    if (isAjax) {
                         submitFilterAction(url);
                     } else location.href = url;
                 });
             })
-        },
-
-        //Selected attribute color after page load.
-        selectedAttr: function () {
-            var filterCurrent = $('.layered-filter-block-container .filter-current .items .item .filter-value');
-
-            filterCurrent.each(function(){
-                var el         = $(this),
-                    colorLabel = el.html(),
-                    colorAttr  = $('.filter-options .filter-options-item .color .swatch-option-link-layered .swatch-option');
-
-                colorAttr.each(function(){
-                    var elA = $(this);
-                    if(elA.attr('data-option-label') === colorLabel && !elA.hasClass('selected')){
-                        elA.addClass('selected');
-                    }
-                });
-            });
-        },
-
-        renderCategoryTree: function () {
-            var iconExpand = this.element.find('.filter-options .icon-expand');
-
-            iconExpand.each(function () {
-                var el = $(this);
-
-                el.nextAll('ol').each(function() {
-                    if($(this).find('input[checked]').length !== 0
-                        && !$(this).prevAll('.icon-expand').hasClass('active')
-                    ) {
-                        $(this).show();
-                        $(this).prevAll('.icon-expand').toggleClass('active');
-                    }
-                });
-
-                el.bind('click', function (e) {
-                    el.nextAll('ol').toggle();
-                    el.toggleClass('active');
-                    e.stopPropagation();
-                });
-            });
         }
     });
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -10,9 +10,6 @@ namespace Amasty\ShippingTableRates\Test\Unit\Helper;
 
 use Amasty\ShippingTableRates\Helper\Data;
 use Amasty\ShippingTableRates\Test\Unit\Traits;
-use Magento\Directory\Model\ResourceModel\Country\Collection as CountryCollection;
-use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCollectionFactory;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -36,48 +33,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ]
         ]
     ];
-
     const ALL_COUNTRIES = [
-        'value' => [
-            'country_id' => 0,
-            'label' => 'All/testLabel',
-            'value' => 'All'
-        ]
-    ];
-
-    /**
-     * @var Data
-     */
-    private $model;
-
-    /**
-     * @var CountryCollectionFactory
-     */
-    private $countryCollectionFactory;
-
-    /**
-     * @var CountryCollection
-     */
-    private $countryCollection;
-
-    protected function setUp(): void
-    {
-        $this->countryCollectionFactory = $this->createMock(CountryCollectionFactory::class);
-        $this->countryCollection = $this->createMock(CountryCollection::class);
-
-        $this->countryCollectionFactory->expects($this->any())
-            ->method('create')->willReturn($this->countryCollection);
-
-        $this->countryCollection->expects($this->any())
-            ->method('toOptionArray')->willReturn(self::ALL_COUNTRIES);
-
-        $this->model = $this->getObjectManager()->getObject(
-            Data::class,
-            [
-                'countryCollectionFactory' => $this->countryCollectionFactory
+            'value' => [
+                'country_id' => 0,
+                'label' => 'All/testLabel'
             ]
-        );
-    }
+        ];
 
     /**
      * @covers Data::getDataFromZip
@@ -115,12 +76,23 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddCountriesToStates()
     {
-        /** @var AbstractCollection|MockObject $collection */
-        $collection = $this->createMock(AbstractCollection::class);
+        /** @var Data $helper */
+        $helper = $this->createPartialMock(Data::class, []);
+        /** @var \Magento\Directory\Model\Country|MockObject $countryModel */
+        $countryModel = $this->createMock(\Magento\Directory\Model\Country::class);
+        /** @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection|MockObject $collection */
+        $collection = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class);
         $collection->expects($this->any())->method('toOptionArray')->willReturn([]);
 
-        $result = $this->model->addCountriesToStates(self::REGIONS);
+        $countryModel->expects($this->any())->method('getCollection')->willReturn($collection);
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager|MockObject */
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class, ['get']);
+        $objectManager->expects($this->any())->method('get')->willReturn($countryModel);
 
-        $this->assertEquals($result,self::REGIONS);
+        $this->setProperty($helper, '_objectManager', $objectManager, Data::class);
+
+        $result = $this->invokeMethod($helper, '_addCountriesToStates', self::REGIONS);
+
+        $this->assertEquals($result,self::ALL_COUNTRIES);
     }
 }

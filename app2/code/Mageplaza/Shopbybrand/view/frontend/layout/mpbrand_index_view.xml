@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="catalog_category_view"/>
+    <update handle="catalog_category_view_type_layered"/>
+    <body>
+        <referenceContainer name="columns.top">
+            <container name="mpbrand.view.container" htmlTag="div" htmlClass="mpbrand-view" after="-">
+                <block class="Mageplaza\Shopbybrand\Block\Brand\View" name="brand.info" template="brandInfo.phtml"/>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Mageplaza\Shopbybrand\Block\Brand\View" name="brand.category.products" template="Mageplaza_Shopbybrand::brand/view.phtml">
+                <block class="Magento\Framework\View\Element\Template" name="brand.category.products.list" as="brand_product_list" template="Mageplaza_Shopbybrand::brand/productList.phtml"/>
+            </block>
+        </referenceContainer>
+        <move element="category.products.list" destination="brand.category.products.list"/>
+        <referenceBlock name="category.products" remove="true"/>
+        <referenceBlock name="layer.category.products" remove="true"/>
+        <referenceContainer name="category.view.container" remove="true"/>
+    </body>
+</page>

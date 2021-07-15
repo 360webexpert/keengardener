@@ -1,41 +1,31 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
 
 namespace Amasty\Base\Block;
 
-use Amasty\Base\Model\ModuleInfoProvider;
-use Magento\Backend\Block\Context;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Config\Block\System\Config\Form\Field;
-use Magento\Config\Block\System\Config\Form\Fieldset;
-use Magento\Cron\Model\ResourceModel\Schedule\CollectionFactory;
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\View\Helper\Js;
 
-class Info extends Fieldset
+class Info extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
     /**
-     * @var CollectionFactory
+     * @var \Magento\Cron\Model\ResourceModel\Schedule\CollectionFactory
      */
     private $cronFactory;
 
     /**
-     * @var DirectoryList
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryList;
 
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\App\ResourceConnection
      */
     private $resourceConnection;
 
@@ -45,39 +35,33 @@ class Info extends Fieldset
     private $productMetadata;
 
     /**
-     * @var Reader
+     * @var \Magento\Framework\App\DeploymentConfig\Reader
      */
     private $reader;
 
     /**
-     * @var Field|null
+     * @var \Magento\Config\Block\System\Config\Form\Field|null
      */
     protected $fieldRenderer;
 
-    /**
-     * @var ModuleInfoProvider
-     */
-    private $moduleInfoProvider;
-
     public function __construct(
-        Context $context,
-        Session $authSession,
-        Js $jsHelper,
-        CollectionFactory $cronFactory,
-        DirectoryList $directoryList,
-        Reader $reader,
-        ResourceConnection $resourceConnection,
+        \Magento\Backend\Block\Context $context,
+        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Framework\View\Helper\Js $jsHelper,
+        \Magento\Cron\Model\ResourceModel\Schedule\CollectionFactory $cronFactory,
+        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        \Magento\Framework\App\DeploymentConfig\Reader $reader,
+        \Magento\Framework\App\ResourceConnection $resourceConnection,
         ProductMetadataInterface $productMetadata,
-        ModuleInfoProvider $moduleInfoProvider,
         array $data = []
     ) {
         parent::__construct($context, $authSession, $jsHelper, $data);
+
         $this->cronFactory = $cronFactory;
         $this->directoryList = $directoryList;
         $this->resourceConnection = $resourceConnection;
         $this->productMetadata = $productMetadata;
         $this->reader = $reader;
-        $this->moduleInfoProvider = $moduleInfoProvider;
     }
 
     /**
@@ -108,7 +92,7 @@ class Info extends Fieldset
     {
         if (empty($this->fieldRenderer)) {
             $this->fieldRenderer = $this->_layout->createBlock(
-                Field::class
+                \Magento\Config\Block\System\Config\Form\Field::class
             );
         }
 
@@ -191,21 +175,19 @@ class Info extends Fieldset
         if ($crontabCollection->count() === 0) {
             $value = '<div class="red">';
             $value .= __('No cron jobs found') . '</div>';
-            if (!$this->moduleInfoProvider->isOriginMarketplace()) {
-                $value .=
-                    '<a target="_blank"
+            $value .=
+                '<a target="_blank"
                   href="https://support.amasty.com/index.php?/Knowledgebase/Article/View/72/24/magento-cron">' .
-                    __('Learn more') .
-                    '</a>';
-            }
+                __('Learn more') .
+                '</a>';
         } else {
             $value = '<table>';
             foreach ($crontabCollection as $crontabRow) {
                 $value .=
                     '<tr>' .
-                    '<td>' . $crontabRow['job_code'] . '</td>' .
-                    '<td>' . $crontabRow['status'] . '</td>' .
-                    '<td>' . $crontabRow['created_at'] . '</td>' .
+                        '<td>' . $crontabRow['job_code'] . '</td>' .
+                        '<td>' . $crontabRow['status'] . '</td>' .
+                        '<td>' . $crontabRow['created_at'] . '</td>' .
                     '</tr>';
             }
             $value .= '</table>';

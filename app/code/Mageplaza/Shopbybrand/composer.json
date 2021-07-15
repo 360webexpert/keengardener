@@ -2,10 +2,10 @@
   "name": "mageplaza/magento-2-shop-by-brand",
   "description": "Magento 2 Shop By Brand extension",
   "require": {
-    "mageplaza/module-core": "^1.4.5"
+    "mageplaza/module-core": "^1.4.4"
   },
   "type": "magento2-module",
-  "version": "4.2.0",
+  "version": "2.4.4",
   "license": "proprietary",
   "authors": [
     {

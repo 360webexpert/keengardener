@@ -44,7 +44,6 @@ class MassDelete extends Category
             $numOfSuccess = 0;
             foreach ($ids as $id) {
                 try {
-                    /** @var \Mageplaza\Shopbybrand\Model\Category $cat */
                     $cat = $this->_objectManager->create(\Mageplaza\Shopbybrand\Model\Category::class)->load($id);
                     $cat->delete();
                     $numOfSuccess++;

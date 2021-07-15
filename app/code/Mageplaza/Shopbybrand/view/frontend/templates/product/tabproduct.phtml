@@ -19,7 +19,6 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 ?>
-<?php if ($block->isEnabled()) : ?>
+
 <h2><?= /** @noEscape */ $block->getRelatedTitle() ?></h2>
-    <?= /** @noEscape */ $block->getChildHtml('related_product') ?>
-<?php endif; ?>
+<?= /** @noEscape */ $block->getChildHtml('related_product') ?>

@@ -1,0 +1,66 @@
+"ProductsPage Navigation Properties","ProductsPage Navigation Properties"
+"Use in ProductsPage Navigation","Use in ProductsPage Navigation"
+"Can be used only with catalog input type Dropdown, Multiple Select, Price","Can be used only with catalog input type Dropdown, Multiple Select, Price"
+"Can be used only with catalog input type Dropdown, Multiple Select, Price.","Can be used only with catalog input type Dropdown, Multiple Select, Price."
+No,No
+"Filterable (with results)","Filterable (with results)"
+"Filterable (no results)","Filterable (no results)"
+"Use in Search Results ProductsPage Navigation","Use in Search Results ProductsPage Navigation"
+Position,Position
+"Position in ProductsPage Navigation","Position in ProductsPage Navigation"
+"Position of attribute in layered navigation block.","Position of attribute in layered navigation block."
+"Use Config Settings","Use Config Settings"
+"Allow Multiple Filters","Allow Multiple Filters"
+"Display Style","Display Style"
+"Enable Option Search","Enable Option Search"
+"Expand by default","Expand by default"
+"Show Tooltip","Show Tooltip"
+"Tooltip Thumbnail","Tooltip Thumbnail"
+"Tooltip Content","Tooltip Content"
+Slider,Slider
+"Slider and range","Slider and range"
+Range,Range
+List,List
+Dropdown,Dropdown
+Rating,Rating
+Swatch,Swatch
+"Swatch and text","Swatch and text"
+Label,Label
+"Image and Label","Image and Label"
+Yes,Yes
+"Use Default Config","Use Default Config"
+"%1 and above","%1 and above"
+"%1 - %2","%1 - %2"
+"%1 star & up","%1 star & up"
+"%1 stars & up","%1 stars & up"
+"Product State","Product State"
+"Apply Filter","Apply Filter"
+Search,Search
+" & up "," & up "
+From,From
+To,To
+"Enable Multi-filter","Enable Multi-filter"
+"Scroll to top after filtering","Scroll to top after filtering"
+"Enable quick lookup options","Enable quick lookup options"
+"Display the out-of-stock option","Display the out-of-stock option"
+"Display Product Count","Display Product Count"
+"Add Apply Filter button","Add Apply Filter button"
+"Additional Filters","Additional Filters"
+"Product State Filter","Product State Filter"
+"Group label","Group label"
+"The position of the attribute in the layered navigation block.","The position of the attribute in the layered navigation block."
+"Enable Product New Filter","Enable Product New Filter"
+"Product New label","Product New label"
+"Enable On Sales Filter","Enable On Sales Filter"
+"On Sales label","On Sales label"
+"Enable Stock Filter","Enable Stock Filter"
+"Stock label","Stock label"
+"Rating Filter","Rating Filter"
+"Enable Rating Filter","Enable Rating Filter"
+"If yes, this group will be expanded by default.","If yes, this group will be expanded by default."
+"SubCategory Slider","SubCategory Slider"
+"Enable SubCategory Slider","Enable SubCategory Slider"
+"Display Type","Display Type"
+"Apply for Categories","Apply for Categories"
+"Auto Play","Auto Play"
+"Items per Slider","Items per Slider"

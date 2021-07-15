@@ -68,6 +68,6 @@ class Index extends Action
      */
     public function execute()
     {
-        return $this->helper->isEnabled() ? $this->resultPageFactory->create() : $this->_redirect('noroute');
+        return $this->helper->isEnabled() ? $this->resultPageFactory->create() : $this->_forward('noroute');
     }
 }

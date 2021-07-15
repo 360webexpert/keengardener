@@ -1,0 +1,99 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<div class="block block-brand-search">
+    <div class="block-title">
+        <strong><?= /** @noEscape */ $block->getPageTitle() ?></strong>
+    </div>
+    <div class="block-content">
+        <div class="mp-searchbox">
+            <input id="mp-search" type="text" class="mp-search form-control input-query ui-autocomplete-input" name="q"
+                   placeholder="<?= /** @noEscape */ __('Search a brand name') ?>">
+            <button type="submit" id="mp-brand-search-button" class="btn btn-primary btn-lg search-btn fa fa-search">
+                <span><?= /** @noEscape */ __('Search') ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+<script id="mpbrand-autocomplete-suggest" type="text/x-magento-template">
+    <a class="shopbybrand-suggestion" href="<%- data.brandUrl %>">
+        <?php if ($block->isVisibleImage()) : ?>
+        <div class="shopbybrand-suggestion-left">
+            <img class="shopbybrand-img-responsive" src="<%- data.image %>" alt="" width="70" />
+        </div>
+        <?php endif; ?>
+        <div class="shopbybrand-suggestion-right">
+            <div class="shopbybrand-product-line shopbybrand-product-name">
+                <%- data.value %>
+            </div>
+            <div class='shopbybrand-product-des'>
+                <p class='shopbybrand-short-des'>
+                    <%= data.desc %>
+                </p>
+            </div>
+        </div>
+    </a>
+</script>
+<script>
+    require([
+        'jquery',
+        'mage/template',
+        'mpDevbridgeAutocomplete'
+    ], function ($, mageTemplate) {
+        $(document).ready(function () {
+            var mpSearch     = $('#mp-search');
+
+            mpSearch.devbridgeAutocomplete({
+                lookup: <?= /** @noEscape */ $block->getSearchData()?>,
+                lookupLimit: <?= /** @noEscape */ $block->getMaxQueryResult() ?>,
+                maxHeight: 2000,
+                minChars: <?= /** @noEscape */ $block->getMinSearchChar() ?>,
+                onSelect: function (suggestion) {
+                    window.location.href = suggestion.brandUrl;
+                },
+                formatResult: function (suggestion, currentValue) {
+                    var template;
+
+                    template = mageTemplate(
+                        '#mpbrand-autocomplete-suggest',
+                        {
+                            data: {
+                                brandUrl: suggestion.brandUrl,
+                                image: suggestion.image,
+                                value: suggestion.value,
+                                desc: suggestion.desc
+                            }
+                        }
+                    );
+
+                    return template;
+                }
+            });
+
+            $('#mp-brand-search-button').click(function () {
+                if (!$('.autocomplete-suggestions').is(':visible')) {
+                    mpSearch.focus();
+                }
+            });
+        });
+    });
+</script>

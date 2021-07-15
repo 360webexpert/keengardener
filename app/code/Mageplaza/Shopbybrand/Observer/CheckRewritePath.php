@@ -54,9 +54,7 @@ class CheckRewritePath implements ObserverInterface
         $pathInfo = $object->getData('pathInfo');
         $routePath = explode('/', $pathInfo);
 
-        if ((count($routePath) === 2)
-            && (array_shift($routePath) === $this->_helper->getRoute())
-        ) {
+        if ((count($routePath) === 2) && (array_shift($routePath) === $this->_helper->getRoute())) {
             $object->setData('rewrite', true);
         }
     }

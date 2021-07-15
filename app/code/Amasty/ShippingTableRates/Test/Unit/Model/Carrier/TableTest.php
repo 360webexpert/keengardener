@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -11,6 +11,7 @@ namespace Amasty\ShippingTableRates\Test\Unit\Model\Carrier;
 use Amasty\ShippingTableRates\Model\Carrier\Table;
 use Amasty\ShippingTableRates\Test\Unit\Traits;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class TableTest
@@ -30,13 +31,12 @@ class TableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerGroupId()
     {
-        $model = $this->getMockBuilder(Table::class)->disableOriginalConstructor()->getMock();
-
+        $model = $this->getObjectManager()->getObject(Table::class);
         $request = $this->createPartialMock(RateRequest::class, ['getAllItems']);
         $object = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getProduct']);
 
         $request->expects($this->any())->method('getAllItems')->willReturnOnConsecutiveCalls(false, [$object]);
-        $object->expects($this->any())->method('getProduct')->willReturn($object);
+        $object->expects($this->once())->method('getProduct')->willReturn($object);
 
         $this->assertEquals(0, $model->getCustomerGroupId($request));
         $model->getCustomerGroupId($request);
@@ -47,15 +47,14 @@ class TableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetStoreIdFromQuoteItem()
     {
-        $model = $this->getMockBuilder(Table::class)->disableOriginalConstructor()->getMock();
-
+        $model = $this->getObjectManager()->getObject(Table::class);
         $request = $this->createPartialMock(RateRequest::class, ['getAllItems']);
         $object = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getStoreId']);
 
         $request->expects($this->any())->method('getAllItems')->willReturnOnConsecutiveCalls(false, [$object]);
-        $object->expects($this->any())->method('getStoreId');
+        $object->expects($this->once())->method('getStoreId');
 
-        $this->assertEquals(null, $model->getStoreIdFromQuoteItem($request));
+        $this->assertEquals(1, $model->getStoreIdFromQuoteItem($request));
         $model->getStoreIdFromQuoteItem($request);
     }
 }

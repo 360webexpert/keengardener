@@ -109,58 +109,58 @@ class Grid extends Extended
     protected function _prepareColumns()
     {
         $this->addColumn('cat_id', [
-            'header' => __('ID'),
-            'type' => 'number',
-            'index' => 'cat_id',
+            'header'           => __('ID'),
+            'type'             => 'number',
+            'index'            => 'cat_id',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
 
         $this->addColumn('name', [
             'header' => __('Name'),
-            'index' => 'name'
+            'index'  => 'name'
         ]);
 
         $this->addColumn('route', [
-            'header' => __('URL Key'),
-            'index' => 'url_key'
+            'header' => __('Url key'),
+            'index'  => 'url_key'
         ]);
 
         $this->addColumn('status', [
-            'header' => __('Status'),
-            'index' => 'status',
-            'type' => 'options',
+            'header'  => __('Status'),
+            'index'   => 'status',
+            'type'    => 'options',
             'options' => $this->getStatusOptions(),
         ]);
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn('store_ids', [
-                'header' => __('Store View'),
-                'index' => 'store_ids',
-                'type' => 'store',
-                'store_all' => true,
-                'store_view' => true,
-                'sortable' => false,
+                'header'                    => __('Store View'),
+                'index'                     => 'store_ids',
+                'type'                      => 'store',
+                'store_all'                 => true,
+                'store_view'                => true,
+                'sortable'                  => false,
                 'filter_condition_callback' => [$this, '_filterStoreCondition']
             ]);
         }
 
         $this->addColumn('edit', [
-            'header' => __('Edit'),
-            'type' => 'action',
-            'getter' => 'getId',
-            'actions' => [
+            'header'           => __('Edit'),
+            'type'             => 'action',
+            'getter'           => 'getId',
+            'actions'          => [
                 [
                     'caption' => __('Edit'),
-                    'url' => [
+                    'url'     => [
                         'base' => '*/*/edit'
                     ],
-                    'field' => 'cat_id'
+                    'field'   => 'cat_id'
                 ]
             ],
-            'filter' => false,
-            'sortable' => false,
-            'index' => 'stores',
+            'filter'           => false,
+            'sortable'         => false,
+            'index'            => 'stores',
             'header_css_class' => 'col-action',
             'column_css_class' => 'col-action'
         ]);
@@ -210,8 +210,8 @@ class Grid extends Extended
         $this->getMassactionBlock()->setFormFieldName('cat_id');
 
         $this->getMassactionBlock()->addItem('delete', [
-            'label' => __('Delete'),
-            'url' => $this->getUrl('mpbrand/*/massDelete'),
+            'label'   => __('Delete'),
+            'url'     => $this->getUrl('mpbrand/*/massDelete'),
             'confirm' => __('Are you sure?')
         ]);
 

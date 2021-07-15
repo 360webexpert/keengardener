@@ -32,14 +32,13 @@ if (count($selectedBrands) > 1) : ?>
             </div>
         <?php endif; ?>
         <div class="block-content">
-            <div class="owl-carousel owl-theme brand-carousel"
-                 id="feature-brand-carousel-<?= /** @noEscape */ $timeId ?>"
+            <div class="owl-carousel owl-theme brand-carousel" id="feature-brand-carousel-<?= $timeId ?>"
                  data-mage-init='{"brandSlider": {}}'>
                 <?php foreach ($selectedBrands as $brand) : ?>
                     <div class="relate-content item">
                         <a href="<?= /** @noEscape */ $block->helper()->getBrandUrl($brand) ?>">
                             <img class="img-responsive brand-image"
-                                 src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>" alt="">
+                                 src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>">
                         </a>
                     </div>
                 <?php endforeach; ?>

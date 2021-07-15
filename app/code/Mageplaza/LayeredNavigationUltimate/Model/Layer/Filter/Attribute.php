@@ -21,15 +21,6 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Model\Layer\Filter;
 
-use Magento\Catalog\Model\Layer;
-use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
-use Magento\Catalog\Model\Layer\Filter\ItemFactory;
-use Magento\Catalog\Model\Product\ProductList\Toolbar;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Filter\StripTags;
-use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
-use Mageplaza\LayeredNavigation\Helper\Data;
 use Mageplaza\LayeredNavigation\Model\Layer\Filter\Attribute as ParentAttribute;
 
 /**
@@ -38,28 +29,28 @@ use Mageplaza\LayeredNavigation\Model\Layer\Filter\Attribute as ParentAttribute;
  */
 class Attribute extends ParentAttribute
 {
-    /** @var Registry */
+    /** @var \Magento\Framework\Registry */
     protected $_coreRegistry;
 
     /**
      * Attribute constructor.
      *
-     * @param ItemFactory $filterItemFactory
-     * @param StoreManagerInterface $storeManager
-     * @param Layer $layer
-     * @param DataBuilder $itemDataBuilder
-     * @param StripTags $tagFilter
-     * @param Data $moduleHelper
+     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Layer $layer
+     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
+     * @param \Magento\Framework\Filter\StripTags $tagFilter
+     * @param \Mageplaza\LayeredNavigation\Helper\Data $moduleHelper
      * @param array $data
      */
     public function __construct(
-        ItemFactory $filterItemFactory,
-        StoreManagerInterface $storeManager,
-        Layer $layer,
-        DataBuilder $itemDataBuilder,
-        StripTags $tagFilter,
-        Data $moduleHelper,
-        Registry $coreRegistry,
+        \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Layer $layer,
+        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
+        \Magento\Framework\Filter\StripTags $tagFilter,
+        \Mageplaza\LayeredNavigation\Helper\Data $moduleHelper,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;
@@ -78,7 +69,7 @@ class Attribute extends ParentAttribute
     /**
      * @inheritdoc
      */
-    public function apply(RequestInterface $request)
+    public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         parent::apply($request);
 
@@ -116,9 +107,9 @@ class Attribute extends ParentAttribute
     public function setProductCollectionOrder($request)
     {
         $sortConfig = $this->_moduleHelper->getConfigValue('catalog/frontend/default_sort_by');
-        $productListSort = $request->getParam(Toolbar::ORDER_PARAM_NAME);
+        $productListSort = $request->getParam(\Magento\Catalog\Model\Product\ProductList\Toolbar::ORDER_PARAM_NAME);
         if ($sortConfig == 'position' || $productListSort == 'position') {
-            $productsListDir = $request->getParam(Toolbar::DIRECTION_PARAM_NAME)
+            $productsListDir = $request->getParam(\Magento\Catalog\Model\Product\ProductList\Toolbar::DIRECTION_PARAM_NAME)
                 ?: 'ASC';
             $this->getLayer()->getProductCollection()->setOrder('cat_index_position', $productsListDir);
         }

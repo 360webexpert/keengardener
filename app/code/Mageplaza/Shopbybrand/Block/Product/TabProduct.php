@@ -27,7 +27,6 @@ use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Url\Helper\Data;
@@ -64,12 +63,7 @@ class TabProduct extends ListProduct
     protected $_productCollectionFactory;
 
     /**
-     * @var Collection
-     */
-    protected $brandProductCollection;
-
-    /**
-     * TabProduct constructor.
+     * RelatedProduct constructor.
      *
      * @param Context $context
      * @param PostHelper $postDataHelper
@@ -92,14 +86,13 @@ class TabProduct extends ListProduct
         Visibility $visibleProducts,
         array $data = []
     ) {
-        $this->_helper                   = $helper;
-        $this->visibleProducts           = $visibleProducts;
+        $this->_helper = $helper;
+        $this->visibleProducts = $visibleProducts;
         $this->_productCollectionFactory = $productCollectionFactory;
 
         parent::__construct($context, $postDataHelper, $layerResolver, $categoryRepository, $urlHelper, $data);
 
         $this->setTabTitle();
-        $this->setData('sort_order', 100);
     }
 
     /**
@@ -107,34 +100,36 @@ class TabProduct extends ListProduct
      */
     public function setTabTitle()
     {
-        $this->setTitle($this->getRelatedTitle());
+        $products = $this->_getProductCollection()->getPageSize();
+        $title = __('More from this Brand (%1)', $products);
+        $this->setTitle($title);
     }
 
     /**
      * @return mixed
      * get ProductCollection in same brand ( filter by Attribute Option_Id )
      */
-    protected function _getProductCollection()
+    public function _getProductCollection()
     {
-        $product = $this->getProduct();
-        if (!$this->brandProductCollection && $product && $product->getId()) {
-            $attCode  = $this->_helper->getAttributeCode();
+        $product = $this->_helper->getCurrentProduct();
+        if (($product instanceof Product) && $product->getId()) {
+            $attCode = $this->_helper->getAttributeCode();
             $optionId = $product->getData($attCode);
-
-            /** @var Collection $collection */
             $collection = $this->_productCollectionFactory->create()
                 ->setVisibility($this->visibleProducts->getVisibleInCatalogIds())
                 ->addAttributeToSelect('*')->addAttributeToFilter($attCode, ['eq' => $optionId])
                 ->addFieldToFilter('entity_id', ['neq' => $product->getId()]);
 
-            $limit = min($collection->getSize(), $this->getLimitProductConfig());
+            $limit = ($this->getLimitProductConfig() > $collection->getSize())
+                ? $collection->getSize()
+                : $this->getLimitProductConfig();
 
             $collection->setPageSize($limit);
 
-            $this->brandProductCollection = $collection;
+            return $collection;
         }
 
-        return $this->brandProductCollection;
+        return null;
     }
 
     /**
@@ -144,7 +139,7 @@ class TabProduct extends ListProduct
     {
         $title = $this->_helper->getBrandConfig('related_products/title');
 
-        return $title ?: self::TITLE;
+        return $title ? $title : self::TITLE;
     }
 
     /**
@@ -152,7 +147,7 @@ class TabProduct extends ListProduct
      */
     public function getLimitProductConfig()
     {
-        return (int)$this->_helper->getBrandConfig('related_products/limit_product') ?: self::LIMIT;
+        return (int) $this->_helper->getBrandConfig('related_products/limit_product') ?: self::LIMIT;
     }
 
     /**
@@ -169,13 +164,5 @@ class TabProduct extends ListProduct
     public function getAdditionalHtml()
     {
         return null;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEnabled()
-    {
-        return $this->_helper->isEnabled();
     }
 }

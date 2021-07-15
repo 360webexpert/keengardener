@@ -22,7 +22,9 @@
 namespace Mageplaza\Shopbybrand\Plugin\Block;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
 use Mageplaza\Shopbybrand\Helper\Data;
+use Mageplaza\Shopbybrand\Model\BrandFactory;
 
 /**
  * Class ListProduct
@@ -36,14 +38,38 @@ class ListProduct
     protected $helper;
 
     /**
+     * @var BrandFactory
+     */
+    protected $_brandFactory;
+
+    /**
      * ListProduct constructor.
      *
      * @param Data $helper
+     * @param BrandFactory $brandFactory
      */
     public function __construct(
-        Data $helper
+        Data $helper,
+        BrandFactory $brandFactory
     ) {
         $this->helper = $helper;
+        $this->_brandFactory = $brandFactory;
+    }
+
+    /**
+     * @param $product
+     *
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getProductBrand($product)
+    {
+        $attCode = $this->helper->getAttributeCode();
+        $objectManager = ObjectManager::getInstance();
+        $product = $objectManager->create(Product::class)->load($product->getId());
+        $optionId = $product->getData($attCode);
+
+        return $this->_brandFactory->create()->loadByOption($optionId)->getValue();
     }
 
     /**
@@ -52,18 +78,15 @@ class ListProduct
      * @param Product $product
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function aroundGetProductPrice(
         \Magento\Catalog\Block\Product\ListProduct $listProduct,
         callable $proceed,
         Product $product
     ) {
-        if (!$this->helper->isEnabled() || empty($this->helper->getAttributeCode())) {
-            return $proceed($product);
-        }
-
-        return $this->helper->getConfigGeneral('show_brand_name')
-            ? $product->getAttributeText($this->helper->getAttributeCode()) . $proceed($product)
+        return $this->helper->getModuleConfig('brandpage/show_brandname')
+            ? $this->getProductBrand($product) . $proceed($product)
             : $proceed($product);
     }
 }

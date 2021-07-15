@@ -19,8 +19,7 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Shopbybrand\Block\Brand $block */
-$helper = $block->helper();
+$helper = $this->helper(\Mageplaza\Shopbybrand\Helper\Data::class);
 $allChars = $block->getAlphabet();
 $categories = $block->getCategories();
 ?>
@@ -31,8 +30,8 @@ $categories = $block->getCategories();
             'Mageplaza_Shopbybrand/js/quick-view',
             'Mageplaza_Shopbybrand/js/modal-popup'
         ],
-        function ($, mixitup) {
-            window.quickviewUrl = '<?= /** @noEscape */ $helper->getQuickViewUrl()?>';
+        function ($, mixitup, quickview, modalPopup) {
+            window.quickviewUrl = '<?= /** @noEscape */ $helper->getQuickViewUrl();?>';
             mixitup('.brand-mix-container');
 
             $(".brand-options li").on('click', function () {
@@ -62,17 +61,17 @@ $categories = $block->getCategories();
                     <a class="filter mp-option-item" data-filter="all"><?= /** @noEscape */ __('All') ?></a>
                 </li>
                 <?php foreach ($allChars as $_char) : ?>
-                    <?php $_numberChar['char'] = (is_numeric($_char['char'])) ? 'num' . $_char['char'] : $_char['char']; ?>
+                    <?php $_numchar["char"] = (is_numeric($_char["char"])) ? 'num' . $_char["char"] : $_char["char"]; ?>
                     <?php if ($_char['active']) : ?>
                         <li class="control">
-                            <a class="filter mp-option-item" data-filter="<?= '.' . /** @noEscape */ $_numberChar['char'] ?>">
-                                <?= isset($_char['label']) ? /** @noEscape */ $_char['label'] : /** @noEscape */ $_char['char'] ?>
+                            <a class="filter mp-option-item" data-filter="<?= /** @noEscape */ '.' . $_numchar['char'] ?>">
+                                <?= /** @noEscape */ isset($_char['label']) ? $_char['label'] : $_char['char'] ?>
                             </a>
                         </li>
                     <?php else : ?>
                         <li class="disabled">
                             <a class="disabled mp-option-item">
-                                <?= isset($_char['label']) ? /** @noEscape */ $_char['label'] : /** @noEscape */ $_char['char'] ?>
+                                <?= /** @noEscape */ isset($_char['label']) ? $_char['label'] : $_char['char'] ?>
                             </a>
                         </li>
                     <?php endif; ?>
@@ -88,7 +87,7 @@ $categories = $block->getCategories();
                 <?php foreach ($categories as $category) : ?>
                     <?php if ($block->getBrandQty($category->getId())) : ?>
                         <li class="control">
-                            <a class="filter mp-option-item" <?= 'data-filter=".cat' . /** @noEscape */ $block->getCatNameFilter($category->getName()) . '"' ?>><?= /** @noEscape */ $category->getName() ?></a>
+                            <a class="filter mp-option-item" <?= /** @noEscape */ 'data-filter=".cat' . $block->getCatNameFilter($category->getName()) . '"'; ?>><?= /** @noEscape */ $category->getName() ?></a>
                         </li>
                     <?php else : ?>
                         <li class="disabled">
@@ -102,7 +101,7 @@ $categories = $block->getCategories();
     </div>
 
     <div class="block-content brand-mix-container products wrapper grid products-grid">
-        <?= /** @noEscape */ ($helper->getBrandConfig('brandlist_style') === '1')
+        <?= /** @noEscape */ ($helper->getBrandConfig('brandlist_style') == 1)
             ? $block->getChildHtml('alphabet')
             : $block->getChildHtml('listing')
         ?>
@@ -112,7 +111,7 @@ $categories = $block->getCategories();
             <div class="brand-info-container">
                 <div class="brand_title"></div>
                 <div class="img-content">
-                    <img class="quickview_img" alt="">
+                    <img class="quickview_img">
                 </div>
                 <div class="brand_description"></div>
             </div>
@@ -130,9 +129,3 @@ $categories = $block->getCategories();
         </div>
     </div>
 </div>
-<style type="text/css">
-    .brand-info-container .img-content .quickview_img {
-        width: <?= /** @noEscape */ $block->getLogoWidth() . 'px' ?>;
-        height: <?= /** @noEscape */ $block->getLogoHeight() . 'px' ?>
-    }
-</style>

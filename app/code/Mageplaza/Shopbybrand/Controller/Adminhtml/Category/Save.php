@@ -79,7 +79,7 @@ class Save extends Category
             }
 
             $errors = $this->validateData($data);
-            if (!empty($errors)) {
+            if (count($errors)) {
                 foreach ($errors as $error) {
                     $this->messageManager->addErrorMessage($error);
                 }
@@ -157,22 +157,22 @@ class Save extends Category
             $errors[] = __('Please enter the category name.');
         }
 
-        if (isset($data['url_key'])) {
+        if (!isset($data['url_key'])) {
+            $errors[] = __('Please enter the category url key.');
+        } else {
             $pages = $this->categoryFactory->create()->getCollection()
                 ->addFieldToFilter('url_key', $data['url_key']);
-            if ($pages->getSize()) {
-                if (isset($data['cat_id'])) {
+            if (count($pages)) {
+                if (!isset($data['cat_id'])) {
+                    $errors[] = __('The url key "%1" has been used.', $data['url_key']);
+                } else {
                     foreach ($pages as $page) {
                         if ($page->getId() != $data['cat_id']) {
                             $errors[] = __('The url key "%1" has been used.', $data['url_key']);
                         }
                     }
-                } else {
-                    $errors[] = __('The url key "%1" has been used.', $data['url_key']);
                 }
             }
-        } else {
-            $errors[] = __('Please enter the category url key.');
         }
 
         return $errors;

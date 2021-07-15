@@ -26,13 +26,10 @@ use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Config\Model\Config\Source\Enabledisable;
-use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition;
-use Mageplaza\LayeredNavigationUltimate\Model\ProductsPage;
 
 /**
  * Class Page
@@ -41,33 +38,33 @@ use Mageplaza\LayeredNavigationUltimate\Model\ProductsPage;
 class Page extends Generic implements TabInterface
 {
     /**
-     * @var ProductPosition
+     * @var \Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition
      */
     protected $pagePosition;
 
     /**
-     * @var Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
     /**
-     * @var Enabledisable
+     * @var \Magento\Config\Model\Config\Source\Enabledisable
      */
     protected $_booleanOptions;
 
-    /** @var Config */
+    /** @var \Magento\Cms\Model\Wysiwyg\Config */
     protected $_wysiwygConfig;
 
     /**
      * Page constructor.
      *
-     * @param ProductPosition $position
-     * @param Enabledisable $booleanOptions
-     * @param Context $context
-     * @param Registry $registry
-     * @param FormFactory $formFactory
-     * @param Store $systemStore
-     * @param Config $wysiwygConfig
+     * @param \Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition $position
+     * @param \Magento\Config\Model\Config\Source\Enabledisable $booleanOptions
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Store\Model\System\Store $systemStore
+     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param array $data
      */
     public function __construct(
@@ -90,13 +87,13 @@ class Page extends Generic implements TabInterface
 
     /**
      * @return $this
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareForm()
     {
-        /* @var $model ProductsPage */
+        /* @var $model \Mageplaza\LayeredNavigationUltimate\Model\ProductsPage */
         $model = $this->_coreRegistry->registry('current_page');
-        /** @var Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('page_');
 
@@ -107,71 +104,71 @@ class Page extends Generic implements TabInterface
         }
 
         $fieldset->addField('name', 'text', [
-            'name' => 'name',
-            'label' => __('Name'),
-            'title' => __('Name'),
+            'name'     => 'name',
+            'label'    => __('Name'),
+            'title'    => __('Name'),
             'required' => true
         ]);
 
         $fieldset->addField('page_title', 'text', [
-            'name' => 'page_title',
-            'label' => __('Page Title'),
-            'title' => __('Page Title'),
+            'name'     => 'page_title',
+            'label'    => __('Page Title'),
+            'title'    => __('Page Title'),
             'required' => true
         ]);
         $fieldset->addField('route', 'text', [
-            'name' => 'route',
-            'label' => __('Url key'),
-            'title' => __('Url key'),
+            'name'     => 'route',
+            'label'    => __('Url key'),
+            'title'    => __('Url key'),
             'required' => true
         ]);
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $fieldset->addField('store_ids', 'multiselect', [
-                'name' => 'store_ids',
-                'label' => __('Stores view'),
-                'title' => __('Stores view'),
+                'name'   => 'store_ids',
+                'label'  => __('Stores view'),
+                'title'  => __('Stores view'),
                 'values' => $this->_systemStore->getStoreValuesForForm(false, true)
             ]);
         }
 
         $fieldset->addField('status', 'select', [
-            'name' => 'status',
-            'label' => __('Status'),
-            'title' => __('Status'),
+            'name'   => 'status',
+            'label'  => __('Status'),
+            'title'  => __('Status'),
             'values' => $this->_booleanOptions->toOptionArray()
         ]);
         $fieldset->addField('position', 'multiselect', [
-            'name' => 'position',
-            'label' => __('Link Position'),
-            'title' => __('Link Position'),
+            'name'   => 'position',
+            'label'  => __('Link Position'),
+            'title'  => __('Link Position'),
             'values' => $this->pagePosition->toOptionArray()
         ]);
         $fieldset->addField('description', 'editor', [
-            'name' => 'description',
-            'label' => __('Description'),
-            'title' => __('Description'),
+            'name'   => 'description',
+            'label'  => __('Description'),
+            'title'  => __('Description'),
             'config' => $this->_wysiwygConfig->getConfig(['add_variables' => false, 'add_widgets' => false])
         ]);
         $fieldset->addField('meta_title', 'text', [
-            'name' => 'meta_title',
+            'name'  => 'meta_title',
             'label' => __('Meta Title'),
             'title' => __('Meta Title')
         ]);
         $fieldset->addField('meta_keywords', 'text', [
-            'name' => 'meta_keywords',
+            'name'  => 'meta_keywords',
             'label' => __('Meta Keywords'),
             'title' => __('Meta Keywords')
         ]);
         $fieldset->addField('meta_description', 'textarea', [
-            'name' => 'meta_description',
+            'name'  => 'meta_description',
             'label' => __('Meta Description'),
             'title' => __('Meta Description')
         ]);
 
         if (!$model->getId()) {
             $model->addData([
-                'status' => 1,
+                'status'    => 1,
                 'store_ids' => '0'
             ]);
         }

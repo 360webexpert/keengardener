@@ -100,53 +100,53 @@ class Category extends Generic implements TabInterface
         }
 
         $fieldset->addField('name', 'text', [
-            'name' => 'name',
-            'label' => __('Name'),
-            'title' => __('Name'),
+            'name'     => 'name',
+            'label'    => __('Name'),
+            'title'    => __('Name'),
             'required' => true
         ]);
 
         $fieldset->addField('url_key', 'text', [
-            'name' => 'url_key',
-            'label' => __('URL Key'),
-            'title' => __('URL Key'),
+            'name'     => 'url_key',
+            'label'    => __('Url key'),
+            'title'    => __('Url key'),
             'required' => true
         ]);
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $fieldset->addField('store_ids', 'multiselect', [
-                'name' => 'store_ids',
-                'label' => __('Stores view'),
-                'title' => __('Stores view'),
+                'name'   => 'store_ids',
+                'label'  => __('Stores view'),
+                'title'  => __('Stores view'),
                 'values' => $this->_systemStore->getStoreValuesForForm(false, true)
             ]);
         }
 
         $fieldset->addField('status', 'select', [
-            'name' => 'status',
-            'label' => __('Status'),
-            'title' => __('Status'),
+            'name'   => 'status',
+            'label'  => __('Status'),
+            'title'  => __('Status'),
             'values' => $this->_booleanOptions->toOptionArray()
         ]);
         $fieldset->addField('meta_title', 'text', [
-            'name' => 'meta_title',
+            'name'  => 'meta_title',
             'label' => __('Meta Title'),
             'title' => __('Meta Title')
         ]);
         $fieldset->addField('meta_keywords', 'text', [
-            'name' => 'meta_keywords',
+            'name'  => 'meta_keywords',
             'label' => __('Meta Keywords'),
             'title' => __('Meta Keywords')
         ]);
         $fieldset->addField('meta_description', 'textarea', [
-            'name' => 'meta_description',
+            'name'  => 'meta_description',
             'label' => __('Meta Description'),
             'title' => __('Meta Description')
         ]);
         $fieldset->addField('meta_robots', 'select', [
-            'name' => 'meta_robots',
-            'label' => __('Meta Robots'),
-            'title' => __('Meta Robots'),
+            'name'   => 'meta_robots',
+            'label'  => __('Meta Robots'),
+            'title'  => __('Meta Robots'),
             'values' => $this->metaRobotsOptions->toOptionArray()
         ]);
         if (!$model->getId()) {

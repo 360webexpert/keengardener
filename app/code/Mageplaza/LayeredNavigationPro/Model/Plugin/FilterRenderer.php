@@ -21,66 +21,60 @@
 
 namespace Mageplaza\LayeredNavigationPro\Model\Plugin;
 
-use Closure;
-use Magento\Catalog\Model\Layer\Filter\FilterInterface;
-use Magento\Framework\Event\Manager;
-use Magento\Framework\View\LayoutInterface;
-use Mageplaza\LayeredNavigationPro\Helper\Data;
-
 /**
  * Class FilterRenderer
  */
 class FilterRenderer
 {
     /**
-     * @var LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $layout;
 
     /**
-     * @type Data
+     * @type \Mageplaza\LayeredNavigationPro\Helper\Data
      */
     protected $helper;
 
     /**
-     * @var Manager
+     * @var \Magento\Framework\Event\Manager
      */
     protected $_manager;
 
     /**
      * FilterRenderer constructor.
      *
-     * @param Manager $manager
-     * @param LayoutInterface $layout
-     * @param Data $helper
+     * @param \Magento\Framework\Event\Manager $manager
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $helper
      * @param array $blocks
      */
     public function __construct(
-        Manager $manager,
-        LayoutInterface $layout,
-        Data $helper,
+        \Magento\Framework\Event\Manager $manager,
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Mageplaza\LayeredNavigationPro\Helper\Data $helper,
         array $blocks = []
     ) {
-        $this->layout   = $layout;
-        $this->helper   = $helper;
+        $this->layout = $layout;
+        $this->helper = $helper;
         $this->_manager = $manager;
     }
 
     /**
      * @param \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $subject
-     * @param Closure $proceed
-     * @param FilterInterface $filter
+     * @param \Closure $proceed
+     * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      *
      * @return mixed
      */
     public function aroundRender(
         \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $subject,
-        Closure $proceed,
-        FilterInterface $filter
+        \Closure $proceed,
+        \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
     ) {
         if ($this->helper->isEnabled()) {
             $displayTypes = $this->helper->getDisplayTypes();
-            $filterType   = $this->helper->getFilterModel()->getFilterType($filter);
+            $filterType = $this->helper->getFilterModel()->getFilterType($filter);
 
             if (isset($displayTypes[$filterType]) && isset($displayTypes[$filterType]['class'])) {
                 $this->_manager->dispatch('custom_display_filter', ['filter' => $filter]);

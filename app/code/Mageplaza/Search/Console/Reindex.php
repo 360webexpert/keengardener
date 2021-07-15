@@ -75,7 +75,7 @@ class Reindex extends Command
         $this->appState->setAreaCode(Area::AREA_FRONTEND);
 
         $objectManager = ObjectManager::getInstance();
-        $helperData = $objectManager->create('Mageplaza\Search\Helper\Data');
+        $helperData    = $objectManager->create('Mageplaza\Search\Helper\Data');
 
         $errs = $helperData->createJsonFile();
         if (!empty($errs)) {

@@ -1,0 +1,142 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+use Mageplaza\Shopbybrand\Model\Config\Source\BrandListDisplay;
+
+/** @var Mageplaza\Shopbybrand\Block\Link\CategoryMenu $block */
+$brands = $block->getCollection();
+$showDropdownMenu = $block->showBrandMenu() && $brands->getData() ;
+$count  = 0;
+$limit = $block->getLimit();
+$columns = $block->getGridColumns();
+$layout = $block->showBrandMenu() === '2' ? 'grid-' . $columns : '';
+$showBrandLogo = $block->showBrandInfo() === BrandListDisplay::DISPLAY_LOGO
+    || $block->showBrandInfo() === BrandListDisplay::DISPLAY_LOGO_AND_LABEL;
+$showBrandName = $block->showBrandInfo() === BrandListDisplay::DISPLAY_LABEL
+    || $block->showBrandInfo() === BrandListDisplay::DISPLAY_LOGO_AND_LABEL;
+?>
+<li class="level0 nav-8 last level-top parent ui-menu-item mpbrand-top-link <?= $layout ?>" role="presentation">
+    <a href="<?= $block->escapeUrl($block->getBrandUrl()) ?>"
+       class="level-top ui-corner-all" id="ui-id-8" tabindex="-1" role="menuitem">
+        <?php if ($showDropdownMenu) : ?>
+            <span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+        <?php endif; ?>
+        <span><?= $block->escapeHtml($block->getBrandTitle()) ?></span>
+    </a>
+    <?php if ($showDropdownMenu) : ?>
+        <?php if ($block->showBrandMenu() === \Mageplaza\Shopbybrand\Model\Config\Source\MegaMenu::DROPDOWN) : ?>
+        <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all" role="menu"
+                aria-expanded="false" style="display: none; top: 47px; left: -0.15625px;padding: 10px 0"
+                aria-hidden="true">
+                <div class="ui-menu-item mpbrand-dropdown-menu" role="presentation">
+                    <?php foreach ($brands as $brand) : ?>
+                        <?php if ($block->isShowBrandsWithoutProducts() || (!$block->isShowBrandsWithoutProducts() && $block->getProductQuantity($brand->getOptionId()))) : ?>
+                        <li class="level1 nav-8-<?= /** @noEscape */ $count ?> ui-menu-item" role="presentation">
+                            <a href="<?= /** @noEscape */ $block->getBrandUrl($brand) ?>"
+                               id="ui-brand-id-<?= /** @noEscape */ $brand->getId() ?>"
+                               class="ui-corner-all" tabindex="-1"
+                               role="menuitem">
+                                <?php if ($showBrandLogo) : ?>
+                                    <span class="mpbrand-image-container">
+                                            <span class="mpbrand-image-wrapper">
+                                                <img class="img-responsive brand-topmenu-image"
+                                                     src="<?= /** @noEscape */ $brand->getImage()
+                                                         ? $block->escapeUrl($block->getBrandThumbnail($brand))
+                                                         : $block->escapeUrl($block->getBrandImageUrl($brand)) ?>"
+                                                     alt="<?= $block->escapeHtml($brand->getValue()) ?>"/>
+                                            </span>
+                                        </span>
+                                <?php endif; ?>
+                                <?php if ($showBrandName) : ?>
+                                    <span style="padding-left: 10px">
+                                            <?= $block->escapeHtml($brand->getValue()) ?>
+                                        </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
+                            <?php
+                            $count++;
+                            if ($count === $limit) {
+                                break;
+                            } ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <li class="level1 nav-8-<?= /** @noEscape */ $count + 1 ?> ui-menu-item"
+                    style="border-top:solid 1px #dfdfdf; margin: 0 5px; " role="presentation">
+                    <a href="<?= $block->escapeUrl($block->getBrandUrl()) ?>"
+                       id="ui-all-brand" class="ui-corner-all"
+                       tabindex="-1" role="menuitem">
+                        <span style="padding-left: 10px;"><?= /** @noEscape */ __('View All') ?></span>
+                    </a>
+                </li>
+        </ul>
+        <?php else : ?>
+            <ul class="level0 submenu" role="menu">
+                <div class="container">
+                    <div class="row-mp">
+                        <div class="subchildmenu" role="presentation">
+                            <?php foreach ($brands as $brand) : ?>
+                                <?php if ($block->isShowBrandsWithoutProducts() || (!$block->isShowBrandsWithoutProducts() && $block->getProductQuantity($brand->getOptionId()))) : ?>
+                                <li class="level1 nav-8-<?= /** @noEscape */ $count ?> ui-menu-item col-mp <?=/** @noEscape */ 'mp-' . 12/$columns ?>" role="presentation">
+                                    <a href="<?= /** @noEscape */ $block->getBrandUrl($brand) ?>"
+                                       id="ui-brand-id-<?= /** @noEscape */ $brand->getId() ?>"
+                                       class="ui-corner-all" tabindex="-1"
+                                       role="menuitem">
+                                        <?php if ($showBrandLogo) : ?>
+                                        <span class="mpbrand-image-container">
+                                            <span class="mpbrand-image-wrapper">
+                                                <img class="img-responsive brand-topmenu-image"
+                                                     src="<?= /** @noEscape */ $brand->getImage()
+                                                         ? $block->escapeUrl($block->getBrandThumbnail($brand))
+                                                         : $block->escapeUrl($block->getBrandImageUrl($brand)) ?>"
+                                                     alt="<?= $block->escapeHtml($brand->getValue()) ?>"/>
+                                            </span>
+                                        </span>
+                                        <?php endif; ?>
+                                        <?php if ($showBrandName) : ?>
+                                        <div style="padding-left: 10px">
+                                            <?= $block->escapeHtml($brand->getValue()) ?>
+                                        </div>
+                                        <?php endif; ?>
+                                    </a>
+                                </li>
+                                    <?php
+                                    $count++;
+                                    if ($count === $limit) {
+                                        break;
+                                    }
+                                endif;
+                            endforeach; ?>
+                            <li class="level1 nav-8-<?= /** @noEscape */ $count + 1 ?> ui-menu-item col-mp mp-12 mp-sm-12"
+                                style="border-top:solid 1px #dfdfdf; margin: 0 5px; " role="presentation">
+                                <a href="<?= $block->escapeUrl($block->getBrandUrl()) ?>"
+                                   id="ui-all-brand" class="ui-corner-all"
+                                   tabindex="-1" role="menuitem">
+                                    <span style="padding-left: 10px;"><?= /** @noEscape */ __('View All') ?></span>
+                                </a>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        <?php endif; ?>
+    <?php endif; ?>
+</li>

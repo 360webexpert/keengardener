@@ -26,7 +26,6 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Mageplaza\Shopbybrand\Helper\Data;
 use Zend_Db_Exception;
 
 /**
@@ -35,22 +34,6 @@ use Zend_Db_Exception;
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
-
-    /**
-     * @var Data
-     */
-    protected $helperData;
-
-    /**
-     * InstallSchema constructor.
-     *
-     * @param Data $helperData
-     */
-    public function __construct(Data $helperData)
-    {
-        $this->helperData = $helperData;
-    }
-
     /**
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -62,7 +45,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $installer = $setup;
         $installer->startSetup();
 
-        if (!$this->helperData->versionCompare('2.3.0') && version_compare($context->getVersion(), '2.2.0', '<')) {
+        if (version_compare($context->getVersion(), '2.2.0', '<')) {
             if (!$installer->tableExists('mageplaza_shopbybrand_category')) {
                 $table = $installer->getConnection()
                     ->newTable($installer->getTable('mageplaza_shopbybrand_category'))
@@ -70,15 +53,15 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'identity' => true,
                         'unsigned' => true,
                         'nullable' => false,
-                        'primary' => true
+                        'primary'  => true
                     ])
-                    ->addColumn('name', Table::TYPE_TEXT, '256')
+                    ->addColumn('name', Table::TYPE_TEXT, '256', [])
                     ->addColumn('status', Table::TYPE_SMALLINT, 1, ['nullable' => false, 'default' => 1])
-                    ->addColumn('url_key', Table::TYPE_TEXT, '255')
+                    ->addColumn('url_key', Table::TYPE_TEXT, '255', [])
                     ->addColumn('store_ids', Table::TYPE_TEXT, '255', ['nullable' => false, 'default' => '0'])
-                    ->addColumn('meta_title', Table::TYPE_TEXT, '256')
-                    ->addColumn('meta_keywords', Table::TYPE_TEXT, '64k')
-                    ->addColumn('meta_description', Table::TYPE_TEXT, '2M')
+                    ->addColumn('meta_title', Table::TYPE_TEXT, '256', [])
+                    ->addColumn('meta_keywords', Table::TYPE_TEXT, '64k', [])
+                    ->addColumn('meta_description', Table::TYPE_TEXT, '2M', [])
                     ->addColumn('meta_robots', Table::TYPE_TEXT, null, [], 'Category Meta Robots')
                     ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, [], 'Category Created At')
                     ->addColumn('updated_at', Table::TYPE_TIMESTAMP, null, [], 'Tag Updated At')
@@ -98,7 +81,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn('cat_id', Table::TYPE_INTEGER, null, [
                         'unsigned' => true,
                         'nullable' => false,
-                        'primary' => true
+                        'primary'  => true
                     ])
                     ->addColumn(
                         'option_id',
@@ -122,6 +105,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'option_id',
                         $installer->getTable('eav_attribute_option'),
                         'option_id',
+                        Table::ACTION_CASCADE,
                         Table::ACTION_CASCADE
                     )
                     ->addForeignKey(
@@ -134,6 +118,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'cat_id',
                         $installer->getTable('mageplaza_shopbybrand_category'),
                         'cat_id',
+                        Table::ACTION_CASCADE,
                         Table::ACTION_CASCADE
                     )
                     ->addIndex(

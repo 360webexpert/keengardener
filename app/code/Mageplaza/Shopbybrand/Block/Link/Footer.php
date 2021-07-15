@@ -69,7 +69,7 @@ class Footer extends Current
 
         $this->setData([
             'label' => $this->helper->getBrandTitle(),
-            'path' => $this->helper->getRoute()
+            'path'  => $this->helper->getRoute()
         ]);
 
         return parent::_toHtml();

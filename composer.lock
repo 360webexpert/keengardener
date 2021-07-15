@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e4dad4a4c1f02a499bdb483f463ec6d",
+    "content-hash": "7eb4bb18d90ffa426b4d2657da920567",
     "packages": [
         {
             "name": "amzn/amazon-pay-and-login-magento-2-module",
@@ -4763,6 +4763,83 @@
                 }
             ],
             "time": "2021-06-24T12:49:22+00:00"
+        },
+        {
+            "name": "lcobucci/jwt",
+            "version": "3.4.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lcobucci/jwt.git",
+                "reference": "511629a54465e89a31d3d7e4cf0935feab8b14c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/511629a54465e89a31d3d7e4cf0935feab8b14c1",
+                "reference": "511629a54465e89a31d3d7e4cf0935feab8b14c1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "~1.5",
+                "phpmd/phpmd": "~2.2",
+                "phpunit/php-invoker": "~1.1",
+                "phpunit/phpunit": "^5.7 || ^7.3",
+                "squizlabs/php_codesniffer": "~2.3"
+            },
+            "suggest": {
+                "lcobucci/clock": "*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Lcobucci\\JWT\\": "src"
+                },
+                "files": [
+                    "compat/class-aliases.php",
+                    "compat/json-exception-polyfill.php",
+                    "compat/lcobucci-clock-polyfill.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Luís Otávio Cobucci Oblonczyk",
+                    "email": "lcobucci@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to work with JSON Web Token and JSON Web Signature",
+            "keywords": [
+                "JWS",
+                "jwt"
+            ],
+            "support": {
+                "issues": "https://github.com/lcobucci/jwt/issues",
+                "source": "https://github.com/lcobucci/jwt/tree/3.4.5"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/lcobucci",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/lcobucci",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2021-02-16T09:40:01+00:00"
         },
         {
             "name": "magento/adobe-stock-integration",
@@ -14346,6 +14423,57 @@
             "description": "Two Factor Authentication module for Magento2"
         },
         {
+            "name": "netresearch/jsonmapper",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cweiske/jsonmapper.git",
+                "reference": "0d4d1b48d682a93b6bfedf60b88c7750e9cb0b06"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cweiske/jsonmapper/zipball/0d4d1b48d682a93b6bfedf60b88c7750e9cb0b06",
+                "reference": "0d4d1b48d682a93b6bfedf60b88c7750e9cb0b06",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-pcre": "*",
+                "ext-reflection": "*",
+                "ext-spl": "*",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8.35 || ~5.7 || ~6.4",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JsonMapper": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Weiske",
+                    "email": "cweiske@cweiske.de",
+                    "homepage": "http://github.com/cweiske/jsonmapper/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Map nested JSON structures onto PHP classes",
+            "support": {
+                "email": "cweiske@cweiske.de",
+                "issues": "https://github.com/cweiske/jsonmapper/issues",
+                "source": "https://github.com/cweiske/jsonmapper/tree/master"
+            },
+            "time": "2019-08-15T19:41:25+00:00"
+        },
+        {
             "name": "paragonie/constant_time_encoding",
             "version": "v2.4.0",
             "source": {
@@ -15307,6 +15435,340 @@
                 "source": "https://github.com/Seldaek/phar-utils/tree/master"
             },
             "time": "2020-07-07T18:42:57+00:00"
+        },
+        {
+            "name": "shipperhq/library-graphql",
+            "version": "20.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipperhq/library-graphql.git",
+                "reference": "77a961ae3f43c0ed018d7966fff59368248e5665"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipperhq/library-graphql/zipball/77a961ae3f43c0ed018d7966fff59368248e5665",
+                "reference": "77a961ae3f43c0ed018d7966fff59368248e5665",
+                "shasum": ""
+            },
+            "require": {
+                "netresearch/jsonmapper": "~1.4",
+                "php": "~7.1",
+                "zendframework/zend-http": "~2.0"
+            },
+            "type": "magento2-library",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "ShipperHQ\\GraphQL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "ShipperHQ",
+                    "email": "sales@shipperhq.com",
+                    "homepage": "http://www.Shipperhq.com"
+                },
+                {
+                    "name": "Zowta LLC"
+                }
+            ],
+            "description": "ShipperHQ GraphQL Library",
+            "support": {
+                "documentation": "http://docs.shipperhq.com",
+                "issues": "https://github.com/shipperhq/library-graphql/issues",
+                "source": "https://github.com/shipperhq/library-graphql/tree/20.2.0"
+            },
+            "time": "2021-03-29T20:03:01+00:00"
+        },
+        {
+            "name": "shipperhq/library-shipper",
+            "version": "20.14.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipperhq/library-shipper.git",
+                "reference": "cad67071eeef8fa38c85a7347e3861640415a18a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipperhq/library-shipper/zipball/cad67071eeef8fa38c85a7347e3861640415a18a",
+                "reference": "cad67071eeef8fa38c85a7347e3861640415a18a",
+                "shasum": ""
+            },
+            "type": "magento2-library",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "ShipperHQ\\Lib\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "ShipperHQ",
+                    "email": "sales@shipperhq.com",
+                    "homepage": "http://www.Shipperhq.com"
+                },
+                {
+                    "name": "Zowta LLC"
+                }
+            ],
+            "description": "ShipperHQ Library",
+            "support": {
+                "documentation": "http://docs.shipperhq.com",
+                "issues": "https://github.com/shipperhq/library-shipper/issues",
+                "source": "https://github.com/shipperhq/library-shipper/tree/20.14.2"
+            },
+            "time": "2021-07-08T09:54:38+00:00"
+        },
+        {
+            "name": "shipperhq/library-ws",
+            "version": "20.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipperhq/library-ws.git",
+                "reference": "0b8fde385a560a0624a27e8d3fbdf4f5372cb6df"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipperhq/library-ws/zipball/0b8fde385a560a0624a27e8d3fbdf4f5372cb6df",
+                "reference": "0b8fde385a560a0624a27e8d3fbdf4f5372cb6df",
+                "shasum": ""
+            },
+            "type": "magento2-library",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "ShipperHQ\\WS\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "ShipperHQ",
+                    "email": "sales@shipperhq.com",
+                    "homepage": "http://www.Shipperhq.com"
+                },
+                {
+                    "name": "Zowta LLC"
+                }
+            ],
+            "description": "ShipperHQ WS Library",
+            "support": {
+                "documentation": "http://docs.shipperhq.com",
+                "issues": "https://github.com/shipperhq/library-ws/issues",
+                "source": "https://github.com/shipperhq/library-ws/tree/20.5.0"
+            },
+            "time": "2021-03-30T09:30:34+00:00"
+        },
+        {
+            "name": "shipperhq/module-common",
+            "version": "20.9.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipperhq/module-common.git",
+                "reference": "c11e02cd7376911630a6ffca889e0a4372ec74f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipperhq/module-common/zipball/c11e02cd7376911630a6ffca889e0a4372ec74f2",
+                "reference": "c11e02cd7376911630a6ffca889e0a4372ec74f2",
+                "shasum": ""
+            },
+            "require": {
+                "magento/framework": ">=100.0",
+                "magento/module-store": ">=100.0",
+                "shipperhq/library-shipper": "^20.12",
+                "shipperhq/library-ws": "^20.4"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.1.1",
+                "jakub-onderka/php-console-highlighter": "^0.3.2",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "lusitanian/oauth": "~0.8.10",
+                "mikey179/vfsstream": "^1.6",
+                "pdepend/pdepend": "^2.5",
+                "phploc/phploc": "^4.0",
+                "phpmd/phpmd": "@stable",
+                "phpro/grumphp": "^0.12.1",
+                "phpunit/phpunit": "~5.3.0",
+                "sebastian/phpcpd": "2.0.4",
+                "squizlabs/php_codesniffer": "^3.2",
+                "symfony/dependency-injection": ">3.4.26",
+                "theseer/phpdox": "^0.10.1"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "ShipperHQ\\Common\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "ShipperHQ",
+                    "email": "sales@shipperhq.com",
+                    "homepage": "http://www.Shipperhq.com"
+                },
+                {
+                    "name": "Zowta LLC"
+                }
+            ],
+            "description": "ShipperHQ Common",
+            "support": {
+                "documentation": "http://docs.shipperhq.com",
+                "issues": "https://github.com/shipperhq/module-common/issues",
+                "source": "https://github.com/shipperhq/module-common/tree/20.9.3"
+            },
+            "time": "2021-04-22T15:42:25+00:00"
+        },
+        {
+            "name": "shipperhq/module-logger",
+            "version": "20.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipperhq/module-logger.git",
+                "reference": "c8bcee6ff98105d15fb711785d8a9f78a8e4a8e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipperhq/module-logger/zipball/c8bcee6ff98105d15fb711785d8a9f78a8e4a8e1",
+                "reference": "c8bcee6ff98105d15fb711785d8a9f78a8e4a8e1",
+                "shasum": ""
+            },
+            "require": {
+                "magento/framework": ">=100.0"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "ShipperHQ\\Logger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "ShipperHQ",
+                    "email": "sales@shipperhq.com",
+                    "homepage": "http://www.Shipperhq.com"
+                },
+                {
+                    "name": "Zowta LLC"
+                }
+            ],
+            "description": "ShipperHQ Logger",
+            "support": {
+                "documentation": "http://docs.shipperhq.com",
+                "issues": "https://github.com/shipperhq/module-logger/issues",
+                "source": "https://github.com/shipperhq/module-logger/tree/20.5.0"
+            },
+            "time": "2020-09-17T09:20:05+00:00"
+        },
+        {
+            "name": "shipperhq/module-shipper",
+            "version": "20.44.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipperhq/module-shipper.git",
+                "reference": "110976f90e69b5ffdc0f1953da5ad5e9a59e3331"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipperhq/module-shipper/zipball/110976f90e69b5ffdc0f1953da5ad5e9a59e3331",
+                "reference": "110976f90e69b5ffdc0f1953da5ad5e9a59e3331",
+                "shasum": ""
+            },
+            "require": {
+                "lcobucci/jwt": "~3.4.2",
+                "magento/framework": ">=100.0",
+                "magento/module-store": ">=100.2",
+                "shipperhq/library-graphql": "^20.2.0",
+                "shipperhq/library-shipper": "^20.14",
+                "shipperhq/library-ws": "^20.5.0",
+                "shipperhq/module-common": "^20.9.3",
+                "shipperhq/module-logger": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2.1.1",
+                "jakub-onderka/php-console-highlighter": "^0.3.2",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
+                "lusitanian/oauth": "~0.8.10",
+                "magento-ecg/coding-standard": "^3.1",
+                "mikey179/vfsstream": "^1.6",
+                "pdepend/pdepend": "^2.5",
+                "phploc/phploc": "^4.0",
+                "phpmd/phpmd": "@stable",
+                "phpro/grumphp": "^0.12.1",
+                "phpunit/phpunit": "~5.3.0",
+                "sebastian/phpcpd": "2.0.4",
+                "squizlabs/php_codesniffer": "^3.2",
+                "symfony/dependency-injection": ">3.4.26",
+                "symfony/proxy-manager-bridge": ">3.4.26",
+                "theseer/phpdox": "^0.10.1"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "ShipperHQ\\Shipper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "ShipperHQ",
+                    "email": "sales@shipperhq.com",
+                    "homepage": "http://www.Shipperhq.com"
+                },
+                {
+                    "name": "Zowta LLC"
+                }
+            ],
+            "description": "Magento Shipping integration with ShipperHQ",
+            "support": {
+                "documentation": "http://docs.shipperhq.com",
+                "issues": "https://github.com/shipperhq/module-shipper/issues",
+                "source": "https://github.com/shipperhq/module-shipper/tree/20.44.3"
+            },
+            "time": "2021-07-09T08:20:38+00:00"
         },
         {
             "name": "spomky-labs/otphp",

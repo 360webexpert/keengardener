@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -69,50 +69,12 @@
     <entity name="newCustomerAddress" type="customer">
         <data key="firstName">Veronica</data>
         <data key="lastName">Costello</data>
-        <data key="email" unique="prefix">amtest@example.com</data>
         <data key="street">My street</data>
         <data key="city">London</data>
         <data key="postcode">12345</data>
         <data key="telephone">1234567</data>
         <data key="region">Alabama</data>
         <data key="country">United States</data>
-    </entity>
-
-    <entity name="CommonCustomerArizona" type="customer">
-        <data key="group_id">3</data>
-        <data key="default_billing">false</data>
-        <data key="default_shipping">false</data>
-        <data key="email" unique="prefix">CommonTest@example.com</data>
-        <data key="firstname">FirstCommon</data>
-        <data key="lastname">LastCommon</data>
-        <data key="password">aA111111</data>
-        <data key="store_id">0</data>
-        <data key="website_id">0</data>
-        <requiredEntity type="address">Common_Address_AZ</requiredEntity>
-    </entity>
-
-    <entity name="Common_Address_AZ" type="address">
-        <data key="firstname">FirstCommon</data>
-        <data key="lastname">LastCommon</data>
-        <data key="company">Company</data>
-        <array key="street">
-            <item>298-218 N Central Ave</item>
-        </array>
-        <data key="city">Phoenix</data>
-        <data key="state">Arizona</data>
-        <data key="country_id">US</data>
-        <data key="country">United States</data>
-        <data key="postcode">85004</data>
-        <data key="telephone">(555) 229-3326</data>
-        <data key="default_billing">Yes</data>
-        <data key="default_shipping">Yes</data>
-        <requiredEntity type="region">CommonRegionAZ</requiredEntity>
-    </entity>
-
-    <entity name="CommonRegionAZ" type="region">
-        <data key="region">Arizona</data>
-        <data key="region_code">AZ</data>
-        <data key="region_id">4</data>
     </entity>
 
 </entities>

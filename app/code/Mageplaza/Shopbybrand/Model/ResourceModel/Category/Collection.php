@@ -51,7 +51,7 @@ class Collection extends AbstractCollection
         if (!is_array($storeIds)) {
             $storeIds = [$storeIds];
         }
-        if ($withDefaultStore && !in_array('0', $storeIds, false)) {
+        if ($withDefaultStore && !in_array('0', $storeIds)) {
             array_unshift($storeIds, 0);
         }
         $where = [];

@@ -21,8 +21,6 @@
 
 namespace Mageplaza\LayeredNavigationPro\Block\Type;
 
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Class Dropdown
  * @package Mageplaza\LayeredNavigationPro\Block\Type
@@ -34,7 +32,7 @@ class Dropdown extends AbstractType
 
     /**
      * @return array
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getOptions()
     {
@@ -43,8 +41,8 @@ class Dropdown extends AbstractType
 
         $options = [
             [
-                'value' => '',
-                'label' => '',
+                'value'    => '',
+                'label'    => '',
                 'selected' => false,
                 'disabled' => false
             ]
@@ -63,8 +61,8 @@ class Dropdown extends AbstractType
             }
 
             $options[] = [
-                'value' => $filterModel->getItemUrl($filterItem),
-                'label' => $label,
+                'value'    => $filterModel->getItemUrl($filterItem),
+                'label'    => $label,
                 'selected' => $filterModel->isSelected($filterItem),
                 'disabled' => $filterItem->getCount() == 0
             ];

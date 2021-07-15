@@ -47,8 +47,6 @@ class Preprocessor
      */
     protected $productMetadata;
 
-    private $invalidFields = ['mp_is_new', 'mp_on_sale'];
-
     /**
      * Preprocessor constructor.
      *
@@ -61,8 +59,8 @@ class Preprocessor
         ObjectManagerInterface $objectManager,
         ProductMetadataInterface $productMetadata
     ) {
-        $this->_moduleHelper   = $moduleHelper;
-        $this->objectManager   = $objectManager;
+        $this->_moduleHelper = $moduleHelper;
+        $this->objectManager = $objectManager;
         $this->productMetadata = $productMetadata;
     }
 
@@ -82,13 +80,7 @@ class Preprocessor
         $isNegation,
         $query
     ) {
-        if (!$this->_moduleHelper->isEnabled()) {
-            return $proceed($filter, $isNegation, $query);
-        }
-        if (in_array($filter->getField(), $this->invalidFields, true)) {
-            return '';
-        }
-        if (($filter->getField() === 'category_ids')) {
+        if ($this->_moduleHelper->isEnabled() && ($filter->getField() === 'category_ids')) {
             $filterValue = implode(',', array_map([$this, 'validateCatIds'], explode(',', $filter->getValue())));
 
             $version = $this->productMetadata->getVersion();

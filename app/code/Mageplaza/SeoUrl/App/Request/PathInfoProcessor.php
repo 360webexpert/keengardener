@@ -63,7 +63,7 @@ class PathInfoProcessor extends StorePathInfoProcessor
      */
     public function process(RequestInterface $request, $pathInfo)
     {
-        $pathInfo = parent::process($request, $pathInfo);
+        $pathInfo  = parent::process($request, $pathInfo);
         $decodeUrl = $this->helper->decodeFriendlyUrl($pathInfo);
 
         if (!$decodeUrl) {

@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -184,62 +184,65 @@
     <actionGroup name="EditRuleAddTopBanner" extends="OpenCartPriceRule">
         <conditionalClick stepKey="openHighlightPromotionTab"
                           selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTab}}"
-                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTopBannerTab}}"
+                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTabOpen}}"
                           visible="false"/>
         <conditionalClick stepKey="openTopBannerTab"
                           selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTopBannerTab}}"
-                          dependentSelector="{{AdminActionsCartPriceRuleSection.TopBannerUpload}}"
+                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTopBannerTabOpen}}"
                           visible="false"/>
-        <scrollTo selector="{{AdminActionsCartPriceRuleSection.ShowBannerFor}}" stepKey="scrollToShowBannerFor"/>
+        <scrollTo selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionAfterBannerTab}}" stepKey="scrollToDown"/>
         <attachFile userInput="magento.jpg" selector="{{AdminActionsCartPriceRuleSection.TopBannerUpload}}"
-                    stepKey="uploadFileForTopBanner"/>
-        <wait time="2" stepKey="waitTwoSecondForAddImage"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoadAfterAddBanner"/>
+                    stepKey="uploadFile1"/>
+        <wait time="2" stepKey="waitSeconds1"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <wait time="2" stepKey="waitSeconds2"/>
         <click selector="{{AdminActionsCartPriceRuleSection.SaveAndContinueEdit}}" stepKey="clickOnSave"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterSave"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad1"/>
     </actionGroup>
 
 
     <actionGroup name="EditRuleAddAfterBanner" extends="OpenCartPriceRule">
         <conditionalClick stepKey="openHighlightPromotionTab"
                           selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTab}}"
-                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionAfterBannerTab}}"
+                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTabOpen}}"
                           visible="false"/>
         <conditionalClick stepKey="openAfterBannerTab"
                           selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionAfterBannerTab}}"
-                          dependentSelector="{{AdminActionsCartPriceRuleSection.AfterBannerUpload}}"
+                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionAfterBannerTabOpen}}"
                           visible="false"/>
-        <scrollTo selector="{{AdminActionsCartPriceRuleSection.ShowBannerFor}}" stepKey="scrollToShowBannerFor"/>
+        <scrollTo selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionLabelBannerTab}}" stepKey="scrollToDown"/>
         <attachFile userInput="magento.jpg" selector="{{AdminActionsCartPriceRuleSection.AfterBannerUpload}}"
-                    stepKey="uploadFileForAfterBanner"/>
-        <wait time="2" stepKey="waitTwoSecondForAddImage"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoadAfterAddBanner"/>
+                    stepKey="uploadFile1"/>
+        <wait time="2" stepKey="waitSeconds1"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <wait time="2" stepKey="waitSeconds2"/>
         <click selector="{{AdminActionsCartPriceRuleSection.SaveAndContinueEdit}}" stepKey="clickOnSave"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterSave"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad1"/>
     </actionGroup>
 
 
     <actionGroup name="EditRuleAddLabelBanner" extends="OpenCartPriceRule">
         <conditionalClick stepKey="openHighlightPromotionTab"
                           selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTab}}"
-                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionLabelBannerTab}}"
+                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionTabOpen}}"
                           visible="false"/>
         <conditionalClick stepKey="openLabelBannerTab"
                           selector="{{AdminActionsCartPriceRuleSection.HighlightPromotionLabelBannerTab}}"
-                          dependentSelector="{{AdminActionsCartPriceRuleSection.LabelBannerUpload}}"
+                          dependentSelector="{{AdminActionsCartPriceRuleSection.HighlightPromotionLabelBannerTabOpen}}"
                           visible="false"/>
-        <scrollTo selector="{{AdminActionsCartPriceRuleSection.ShowBannerFor}}" stepKey="scrollToShowBannerFor"/>
+        <scrollTo selector="{{AdminActionsCartPriceRuleSection.HighlightLabelBannerAltField}}" stepKey="scrollToDown"/>
         <attachFile userInput="magento.jpg" selector="{{AdminActionsCartPriceRuleSection.LabelBannerUpload}}"
-                    stepKey="uploadFileForLabel"/>
-        <wait time="2" stepKey="waitTwoSecondForAddImage"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoadAfterAddBanner"/>
+                    stepKey="uploadFile1"/>
+        <wait time="2" stepKey="waitSeconds1"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <wait time="2" stepKey="waitSeconds2"/>
         <click selector="{{AdminActionsCartPriceRuleSection.SaveAndContinueEdit}}" stepKey="clickOnSave"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterSave"/>
+        <waitForPageLoad time="10" stepKey="waitForPageLoad1"/>
     </actionGroup>
 
 
-    <!-- Apply Sales Rule Coupon to the Checkout -->
     <actionGroup name="StorefrontApplyCouponCodeOnTheCheckout">
+        <!-- Apply Sales Rule Coupon to the checkout -->
         <arguments>
             <argument name="coupon"/>
         </arguments>
@@ -254,8 +257,8 @@
     </actionGroup>
 
 
-    <!-- Cancel Sales Rule Coupon Applied to the Checkout -->
     <actionGroup name="StorefrontCancelCouponCodeOnTheCheckout">
+        <!-- Cancel Sales Rule Coupon applied to the checkout -->
         <waitForElement selector="{{CheckoutPaymentAddressSection.couponHeader}}" time="30" stepKey="waitForCouponHeader" />
         <conditionalClick selector="{{CheckoutPaymentAddressSection.couponHeader}}"
                           dependentSelector="{{CheckoutPaymentAddressSection.discountBlockActive}}"

@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -11,8 +11,6 @@
 
     <section name="StorefrontProductPageSection">
         <element name="QtyInput" type="input" selector="//input[@name='qty']"/>
-        <element name="SelectAttributeOption" type="select" selector="//div[@class='product-add-form']//div//select[contains(@name, 'attribute')]"/>
-        <element name="QtyLabel" type="block" selector="//label[@for='qty']"/>
         <element name="AddToCartBtn" type="button" selector="//button[@id='product-addtocart-button']"/>
         <element name="SuccessMsg" type="text" selector="//div[@data-ui-id='message-success']"/>
         <element name="AddToWishList" type="button" selector="//a[@data-action='add-to-wishlist']"/>

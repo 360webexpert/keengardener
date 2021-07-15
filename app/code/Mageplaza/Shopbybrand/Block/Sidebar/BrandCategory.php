@@ -23,7 +23,6 @@ namespace Mageplaza\Shopbybrand\Block\Sidebar;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Shopbybrand\Block\Brand;
-use Mageplaza\Shopbybrand\Model\ResourceModel\Category\Collection;
 
 /**
  * Class BrandCategory
@@ -68,18 +67,16 @@ class BrandCategory extends Brand
     }
 
     /**
-     * @return Collection
+     * @return int|mixed
      */
-    public function getCategories()
+    public function getLimit()
     {
-        $categories = parent::getCategories();
         $limit = $this->helper->getSidebarConfig('category_brand/limit_categories') ?: self::LIMIT;
-        $size = $categories->getSize();
-        if ($size && $size > $limit) {
-            $categories->setPageSize($limit);
-        }
 
-        return $categories;
+        $collectionSize = count($this->getCategories()->getData());
+        $result = ($limit < $collectionSize) ? $limit : (string) $collectionSize;
+
+        return $this->toString($result);
     }
 
     /**

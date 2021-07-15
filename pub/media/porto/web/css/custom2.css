@@ -30,7 +30,7 @@ header.page-header.type14 .logo img {
 	max-height:100px;
 }
 header.page-header.type14 .header.content > .logo {
-	margin-right:0px;
+	margin-right:0px; 
 }
 
 header.page-header.type14 .navigation li.level0 > a {
@@ -100,6 +100,13 @@ header.page-header .panel.header .block-search {
 }
 .block-search .autocomplete-suggestions {
     height: 500px;
+}
+.yotpo.yotpo-main-widget {
+    display: none;
+}
+
+div#product\.yotpo\.reviews .yotpo.yotpo-main-widget {
+    display: block;
 }
 	/* Mobile Tablet Header */
 @media (max-width: 767px) {
@@ -314,10 +321,11 @@ span.product_availabilty {
 	font-weight:bold;
 	text-align:center;
 	margin-top:5px;
+	    white-space: break-spaces;
 }
 .products-grid .product-item-info .product-item-details .product-item-actions .tocart {
 	background: #48580c;
-	padding: 0px 50px;
+	padding: 0px 15px;
 	border: solid 1px #48580c;
 	color:#fff;
 	font-weight:bold;
@@ -326,9 +334,10 @@ span.product_availabilty {
 div.sidebar.sidebar-main div.admin__data-grid-outer-wrap div.block.widget.block-viewed-products-grid div.block-content div.products-grid ol.product-items li.product-item div.product-item-info div.product-item-details div.product-item-actions div.actions-primary button.action.tocart.primary {
 	padding: 0 15px;
 }
+
 .products-grid .product-item-info:hover .product-item-details .product-item-actions .tocart {
 	background: #9ec11a;
-	padding: 0px 50px;
+	padding: 0px 15px;
 	border: solid 1px #9ec11a;
 }
 .price-box .price {
@@ -412,7 +421,7 @@ z-index:100;
 span.stock_button {
 	color:#fff;
 	background-color:#bd0000;
-	padding:10px 50px;
+	padding:10px 15px;
 	font-weight:bold;
 	border-radius: 5px;
 }
@@ -641,6 +650,9 @@ html body.checkout-index-index.page-layout-1column.layout-fullwidth.wide.yotpo-y
 
 * {font-family: 'Sofia Pro'!important;}
 .list-category .group .content h3 {font-size: 20px;}
+#search_mini_form {
+	position: relative;
+}
 form#search_mini_form .control {
     border-radius: 30px;  position: relative;
     background: #fff;     border: 2px solid #bcd20e;
@@ -654,7 +666,7 @@ form#search_mini_form .control::before {
     right: 0;
     height: 100%;
     border-bottom-right-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-right-radius: 20px; cursor: pointer;
 }
 
 form#search_mini_form input#search:focus {
@@ -669,9 +681,11 @@ header.page-header.type14 .block-search .action.search::before {
     opacity: 1!important;
     font-size: 16px;
     top: 65px;
-    line-height: 50px;
+    line-height: 35px;
 }
-header.page-header.type14 .block-search .action.search {opacity: 1;}
+header.page-header.type14 .block-search .action.search {opacity: 1;     width: 42px;
+    height: 45px;
+    right: 0;}
 
 .header.content .minicart-wrapper {
     background: white!important;
@@ -734,6 +748,12 @@ header.page-header.type14 .nav-sections-item-content > .navigation ul li.level0:
     background: #b9d00f!important;
 }
 
+.column.main .product-items {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+
 /**** 22-6-2021 ***/
 @media (max-width: 1200px) {
 	#carousel-widget {
@@ -781,9 +801,61 @@ display:none;
 		display:none;
 	}
 }
+
+@media screen and (max-width: 990px) {
+	#search_mini_form {
+	position: relative;
+}
+	header.page-header.type14 .header.content > .logo {margin-top: -10px;}
+	header.page-header.type14 .logo img {height: 72px;}
+	header.page-header.type14 .header.content {max-width: 100%;}
+}
+
+
+@media screen and (max-width: 767px) {
+	header.page-header.type14 .header.content {height: 150px;}
+header.page-header.type14 .panel.header .search-area {
+	width: 100%; 
+	left: 0; 
+	right: 0; 
+	margin: auto;
+	top: auto;
+	bottom: 10px;
+}
+.block-search .block-content {width: 86%;}
+header.page-header.type14 .minicart-wrapper {top: 20px;}
+header.page-header.type14 .nav-toggle {right: 80px;}
+form#search_mini_form input {top: -40px;
+    width: 90%;
+    color: #fff;
+}
+header.page-header.type14 .block-search .label::before {
+    font-size: 21px;
+    position: absolute;
+    top: -33px;
+    right: 0;
+}
+form#search_mini_form .control {
+    border-width: 1px;
+}
+
+}
+
+
+@media screen and (max-width: 500px) {
+header.page-header.type14 .logo img {max-height: 55px;}
+}
+
 .footer {
 	border-top: 5px solid #b9d00f;
 }
 .action.primary, .action.primary:hover {
 	background-color: #04432a;
 }
+.reviewMeta p, .stats__right *, span.js-ruk_word, p.author, .reviewText p {
+    font-family: 'Sofia Pro'!important;
+}
+
+
+
+

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -70,8 +70,7 @@ class Edit extends \Magento\Backend\App\Action
 
         $this->_view->loadLayout();
 
-        $this->_setActiveMenu('Amasty_ShippingTableRates::amstrates')
-            ->_addBreadcrumb(__('Table Rates'), __('Table Rates'));
+        $this->_setActiveMenu('Amasty_ShippingTableRates::amstrates')->_addBreadcrumb(__('Table Rates'), __('Table Rates'));
         $this->_view->getPage()->getConfig()->getTitle()->prepend('Rate Configuration');
 
         $this->_view->renderLayout();

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
@@ -26,42 +26,24 @@ class Field
     /**
      * @param NativeField $field
      * @param string $html
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     *
      * @return string
      */
     public function afterRender(
         NativeField $field,
-        $html,
-        \Magento\Framework\Data\Form\Element\AbstractElement $element
+        $html
     ) {
         if (strpos($html, 'tooltip-content') !== false) {
-            $html = $this->replaceString($html);
-        }
-
-        $elementTooltip = $element->getTooltip();
-        if ($elementTooltip) {
-            $elementTooltip = $this->replaceString($elementTooltip);
-            $element->setTooltip($elementTooltip);
-        }
-
-        return $html;
-    }
-
-    /**
-     * @param string $content
-     * @return string
-     */
-    private function replaceString(string $content): string
-    {
-        preg_match('/<img.*?src="(Amasty.*?)"/', $content, $result);
-        if (count($result) >=2) {
-            $path = $result[1];
-            $newPath = $this->assetRepo->getUrl($path);
-            if ($newPath) {
-                $content = str_replace($path, $newPath, $content);
+            preg_match('/<img.*?src="(Amasty.*?)"/', $html, $result);
+            if (count($result) >=2) {
+                $path = $result[1];
+                $newPath = $this->assetRepo->getUrl($path);
+                if ($newPath) {
+                    $html = str_replace($path, $newPath, $html);
+                }
             }
         }
 
-        return $content;
+        return $html;
     }
 }

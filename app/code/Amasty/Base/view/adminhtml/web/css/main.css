@@ -50,73 +50,17 @@
     display: none;
 }
 
-#menu-menuamasty-base-menu .submenu .level-1,
-#menu-menuamasty-base-menu .submenu .level-0 {
-    margin-right: 15px;
-}
-
-#menu-menuamasty-base-menu .submenu .level-0._show > a {
-    color: #fff;
-    font-weight: 700;
-}
-
-#menu-menuamasty-base-menu .submenu .level-1 > a:hover {
-    background-color: #524d49;
-    color: #fff;
-}
-
-#menu-menuamasty-base-menu .submenu .level-1 > a,
 #menu-menuamasty-base-menu .submenu .level-0 > a {
     display: block;
-    margin: .7rem 0;
-    padding: 1rem 1.5rem;
-    min-height: 0;
     width: 99%;
-    color: #a79d95;
+    min-height: 0;
+    margin: .7rem 0;
+    padding: 1.25rem 1rem 1.25rem 2rem;
+    font-weight: 600;
+    font-size: 1.6rem;
     text-align: left;
+    color: #a79d95;
     text-transform: none;
-    font-weight: 400;
-    font-size: 14px;
-}
-
-#menu-menuamasty-base-menu .submenu .level-1 {
-    margin-left: 0;
-}
-
-.item-extensions a,
-.item-marketplace a {
-    color: #fff!important;
-    font-weight: 600!important;
-}
-
-#menu-menuamasty-base-menu .submenu .column {
-    min-width: 22rem;
-}
-
-#menu-menuamasty-base-menu .submenu > #nav,
-#menu-menuamasty-base-menu .submenu .column > ul {
-    overflow-y: auto;
-    margin-right: 15px;
-    max-height: 720px;
-    scrollbar-color: #a79d95;
-    scrollbar-width: thin;
-}
-
-#menu-menuamasty-base-menu .submenu > #nav::-webkit-scrollbar,
-#menu-menuamasty-base-menu .submenu .column > ul::-webkit-scrollbar {
-    width: 3px;
-}
-
-#menu-menuamasty-base-menu .submenu > #nav::-webkit-scrollbar-track,
-#menu-menuamasty-base-menu .submenu .column > ul::-webkit-scrollbar-track {
-    width: 3px;
-    background: #a79d95;
-}
-
-#menu-menuamasty-base-menu .submenu > #nav::-webkit-scrollbar-thumb,
-#menu-menuamasty-base-menu .submenu .column > ul::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: #fff;
 }
 
 #menu-menuamasty-base-menu .submenu .level-0 > a:hover {
@@ -153,23 +97,12 @@
     background-size: contain;
 }
 
-.admin__menu .level-0#menu-menuamasty-base-menu > .submenu > ul[role='menubar'] {
-    min-height: 720px;
-}
-
-.admin__menu .level-0#menu-menuamasty-base-menu .submenu > ul[role='menu'] {
-    min-height: inherit;
-}
-
 .admin__menu .level-0 > .submenu .submenu {
-    min-width: 253px;
     min-height: 100%;
+    width: 300px;
 }
 
 .admin__menu .submenu .submenu .submenu-title {
-    margin-left: 18px;
     height: 60px;
-    font-size: 18px;
-    line-height: 130%;
 }
 /* main amasty menu end*/

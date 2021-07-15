@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigationPro
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\LayeredNavigation\Block\Navigation\FilterRenderer">
+        <plugin name="mp_layered_renderer" type="Mageplaza\LayeredNavigationPro\Model\Plugin\FilterRenderer" sortOrder="0"/>
+    </type>
+    <type name="Magento\Catalog\Model\Layer\FilterList">
+        <plugin name="mp_layered_filterlist" type="Mageplaza\LayeredNavigationPro\Model\Plugin\FilterList" sortOrder="1"/>
+    </type>
+
+    <type name="Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term">
+        <plugin name="Mageplaza_LayeredNavigationPro::AggregationTermAddTotals"
+                type="Mageplaza\LayeredNavigationPro\Plugin\Elasticsearch\SearchAdapter\Aggregation\Builder\Term"/>
+    </type>
+
+    <type name="Magento\Elasticsearch\SearchAdapter\Mapper">
+        <plugin name="Mageplaza_LayeredNavigationPro::updateElasticQuery"
+                type="Mageplaza\LayeredNavigationPro\Plugin\Elasticsearch\SearchAdapter\Mapper"/>
+    </type>
+    <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper">
+        <plugin name="Mageplaza_LayeredNavigationPro::updateElasticQuery"
+                type="Mageplaza\LayeredNavigationPro\Plugin\Elasticsearch\SearchAdapter\Mapper"/>
+    </type>
+</config>

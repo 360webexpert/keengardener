@@ -23,7 +23,6 @@ namespace Mageplaza\LayeredNavigationUltimate\Controller\Adminhtml\ProductsPage;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
@@ -33,7 +32,7 @@ use Magento\Framework\View\Result\PageFactory;
 class Index extends Action
 {
     /**
-     * @var PageFactory
+     * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
 
@@ -56,7 +55,7 @@ class Index extends Action
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|Page
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page
      */
     public function execute()
     {

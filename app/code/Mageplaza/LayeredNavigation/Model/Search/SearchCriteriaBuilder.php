@@ -34,7 +34,7 @@ use Mageplaza\LayeredNavigation\Helper\Data as LayerHelper;
 class SearchCriteriaBuilder extends SourceSearchCriteriaBuilder
 {
     /**
-     * @var LayerHelper as LayerHelper;
+     * @var \Mageplaza\LayeredNavigation\Helper\Data as LayerHelper;
      */
     protected $helper;
 
@@ -65,18 +65,6 @@ class SearchCriteriaBuilder extends SourceSearchCriteriaBuilder
     public function removeFilter($attributeCode)
     {
         $this->filterGroupBuilder->removeFilter($attributeCode);
-
-        return $this;
-    }
-
-    /**
-     * @param $categoryIds
-     *
-     * @return $this
-     */
-    public function setCategoryFilter($categoryIds)
-    {
-        $this->filterGroupBuilder->setCategoryFilter($categoryIds);
 
         return $this;
     }
@@ -117,8 +105,10 @@ class SearchCriteriaBuilder extends SourceSearchCriteriaBuilder
      */
     public function create()
     {
-        $this->data[SearchCriteria::FILTER_GROUPS] = [$this->filterGroupBuilder->create()];
-        $this->data[SearchCriteria::SORT_ORDERS] = [$this->sortOrderBuilder->create()];
+        if ($this->helper->versionCompare('2.2.0')) {
+            $this->data[SearchCriteria::FILTER_GROUPS] = [$this->filterGroupBuilder->create()];
+            $this->data[SearchCriteria::SORT_ORDERS] = [$this->sortOrderBuilder->create()];
+        }
 
         return parent::create();
     }

@@ -1,0 +1,88 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Shopbybrand\Block\Adminhtml\Form\Renderer\BrandCategory $block */
+$brands      = $block->getBrands();
+$stores      = $block->getStoreViews();
+$singleStore = $block->isSingleStoreMode();
+?>
+<table class="admin__control-table">
+    <thead>
+    <tr>
+        <th class="col-select-brand"><?= /** @noEscape */ __('Selected') ?></th>
+        <th class="col-brands-id"><?= /** @noEscape */ __('Option Id') ?></th>
+        <th class="col-brands-name"><?= /** @noEscape */ __('Name') ?></th>
+        <?php if (!$singleStore) : ?>
+            <th class="col-brands-store"><?= /** @noEscape */ __('Store view') ?></th>
+        <?php endif; ?>
+    </tr>
+    </thead>
+    <tbody data-role="options-container" id="default-table-content">
+    <?php
+    if ($brands) :
+        foreach ($brands as $brand) : ?>
+            <tr class="brands-row brand-<?= /** @noEscape */ $brand->getId() ?>">
+                <td>
+                    <?php if (in_array($brand->getId(), $block->getSelectedBrands(), true)) { ?>
+                        <input id="brand_<?= /** @noEscape */ $brand->getId() ?>"
+                               type="checkbox" name="brand_category[]"
+                               value="<?= /** @noEscape */ $brand->getId() ?>" checked/>
+                    <?php } else { ?>
+                        <input id="brand_<?= /** @noEscape */ $brand->getId() ?>"
+                               type="checkbox" name="brand_category[]"
+                               value="<?= /** @noEscape */ $brand->getId() ?>"/>
+                    <?php } ?>
+                    <label for="brand_<?= /** @noEscape */ $brand->getId() ?>"></label>
+                </td>
+                <td><span class="brands id"><?= /** @noEscape */ $brand->getId() ?></span></td>
+                <td><span class="brands name"><?= /** @noEscape */ $brand->getValue() ?></span></td>
+                <?php if (!$singleStore) : ?>
+                    <td>
+                        <select disabled title="<?= /** @noEscape */ __('Store View') ?>">
+                            <option value="0" <?php if ($brand->getStoreId() === '0') :
+                                ?>selected<?php
+                                              endif; ?>><?= /** @noEscape */ __('All store view') ?></option>
+                            <?php foreach ($stores as $store) : ?>
+                                <optgroup label="<?= /** @noEscape */ $store['label'] ?>">
+                                    <?php if (is_array($store['value'])) : ?>
+                                        <?php foreach ($values = $store['value'] as $value) : ?>
+                                            <option value="<?= /** @noEscape */ $value['value'] ?>"
+                                                <?php if ($brand->getStoreId() === $value['value']) :
+                                                    ?>selected<?php
+                                                endif; ?>>
+                                                <?= /** @noEscape */ $value['label'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                <?php endif; ?>
+            </tr>
+        <?php endforeach; ?>
+    <?php else : ?>
+        <tr class="no-result-row">
+            <td><span><?= /** @noEscape */ __('No brand found') ?></span></td>
+        </tr>
+    <?php endif; ?>
+    </tbody>
+</table>

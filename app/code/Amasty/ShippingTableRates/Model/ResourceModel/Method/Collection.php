@@ -1,16 +1,17 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
 
 namespace Amasty\ShippingTableRates\Model\ResourceModel\Method;
 
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-
-class Collection extends AbstractCollection
+/**
+ * Shipping Method Resource Collection
+ */
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     protected function _construct()
     {
@@ -20,11 +21,6 @@ class Collection extends AbstractCollection
         );
     }
 
-    /**
-     * @param int $storeId
-     *
-     * @return $this
-     */
     public function addStoreFilter($storeId)
     {
         $storeId = (int)$storeId;
@@ -33,11 +29,6 @@ class Collection extends AbstractCollection
         return $this;
     }
 
-    /**
-     * @param int $groupId
-     *
-     * @return $this
-     */
     public function addCustomerGroupFilter($groupId)
     {
         $groupId = (int)$groupId;
@@ -46,27 +37,16 @@ class Collection extends AbstractCollection
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function hashMinRate()
     {
         return $this->_toOptionHash('id', 'min_rate');
     }
 
-    /**
-     * @return array
-     */
     public function hashMaxRate()
     {
         return $this->_toOptionHash('id', 'max_rate');
     }
 
-    /**
-     * @param int $modelId
-     *
-     * @return $this
-     */
     public function joinLabels($modelId)
     {
         $this->getSelect()->joinLeft(
@@ -78,13 +58,5 @@ class Collection extends AbstractCollection
         );
 
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function hashMethodsName()
-    {
-        return $this->_toOptionHash('id', 'name');
     }
 }

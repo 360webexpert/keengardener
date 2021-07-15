@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -62,7 +62,6 @@ class Main extends Generic implements TabInterface
 
     protected function _prepareForm()
     {
-        /** @var \Amasty\ShippingTableRates\Api\Data\MethodInterface $model */
         $model = $this->_coreRegistry->registry('current_amasty_table_method');
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
@@ -142,17 +141,6 @@ class Main extends Generic implements TabInterface
             ]
         );
 
-        $fieldsetGeneral->addField(
-            'sort_order',
-            'text',
-            [
-                'name' => 'sort_order',
-                'label' => __('Priority'),
-                'title' => __('Priority'),
-                'class' => 'validate-number validate-zero-or-greater'
-            ]
-        );
-
         $fieldsetRates = $form->addFieldset('rates_fieldset', ['legend' => __('Rates')]);
 
         $fieldsetRates->addField(
@@ -162,7 +150,6 @@ class Main extends Generic implements TabInterface
                 'name' => 'min_rate',
                 'label' => __('Minimal rate'),
                 'title' => __('Minimal rate'),
-                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
@@ -173,7 +160,6 @@ class Main extends Generic implements TabInterface
                 'name' => 'max_rate',
                 'label' => __('Maximal rate'),
                 'title' => __('Maximal rate'),
-                'class' => 'validate-number validate-zero-or-greater'
             ]
         );
 
@@ -200,39 +186,6 @@ class Main extends Generic implements TabInterface
                 ]
             ]
         );
-
-        $fieldsetRates->addField(
-            'weight_type',
-            'select',
-            [
-                'name' => 'weight_type',
-                'label' => __('Weight Type For Calculation'),
-                'value' => Rate::WEIGHT_TYPE_MAX,
-                'values' => [
-                    [
-                        'value' => Rate::WEIGHT_TYPE_VOLUMETRIC,
-                        'label' => __('Volumetric Weight')
-                    ],
-                    [
-                        'value' => Rate::WEIGHT_TYPE_WEIGHT,
-                        'label' => __('Weight')
-                    ],
-                    [
-                        'value' => Rate::WEIGHT_TYPE_MAX,
-                        'label' => __('Max of V. Weight and Weight'),
-                        'selected' => true
-                    ],
-                    [
-                        'value' => Rate::WEIGHT_TYPE_MIN,
-                        'label' => __('Min of V. Weight and Weight')
-                    ]
-                ]
-            ]
-        );
-
-        if (!$model->getWeightType()) {
-            $model->setWeightType(Rate::WEIGHT_TYPE_MAX);
-        }
 
         $form->setValues($model->getData());
         $this->setForm($form);

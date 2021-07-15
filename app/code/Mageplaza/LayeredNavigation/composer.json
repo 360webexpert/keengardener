@@ -2,10 +2,10 @@
   "name": "mageplaza/layered-navigation-m2",
   "description": "Magento Layered Navigation extension",
   "require": {
-    "mageplaza/module-ajax-layered-navigation": "^4.0.1"
+    "mageplaza/module-ajax-layered-navigation": "*"
   },
   "type": "magento2-module",
-  "version": "4.1.1",
+  "version": "2.3.8",
   "license": "proprietary",
   "authors": [
     {

@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -24,25 +24,6 @@
         <waitForPageLoad stepKey="waitForApplyFilters"/>
         <click selector="{{AdminDataGridTableSection.firstRow}}" after="clickOrderApplyFilters" stepKey="openOrderViewPage"/>
         <waitForPageLoad after="openOrderViewPage" stepKey="waitForOrderViewPageOpened"/>
-    </actionGroup>
-
-    <actionGroup name="AdminOpenShipmentsTabOnOrderDetailsPageActionGroup">
-        <click selector="{{AdminOrderDetailsMainActionsSection.shipmentsTab}}" stepKey="clickShipmentsTab"/>
-        <waitForPageLoad stepKey="waitOrderShipTabToLoad"/>
-    </actionGroup>
-
-    <actionGroup name="AdminFilterShipmentByTotalQuantityOnOrderDetailsPageActionGroup">
-        <arguments>
-            <argument name="filterShipmentByTotalQuantity"/>
-        </arguments>
-        <conditionalClick selector="{{AdminOrderShipmentsTabSection.clearFilters}}" dependentSelector="{{AdminOrderShipmentsTabSection.clearFilters}}" visible="true" stepKey="clearShipmentsFilters"/>
-        <click selector="{{AdminOrderShipmentsTabSection.filters}}" stepKey="openOrderShipmentsGridFilters"/>
-        <fillField selector="{{AdminOrderShipmentsTabSection.totalQtyFrom}}" userInput="{{filterShipmentByTotalQuantity.totalQtyFrom}}" stepKey="fillTotalQtyFromFilter"/>
-        <fillField selector="{{AdminOrderShipmentsTabSection.totalQtyTo}}" userInput="{{filterShipmentByTotalQuantity.totalQtyTo}}" stepKey="fillTotalQtyToFilter"/>
-        <click selector="{{AdminOrderShipmentsTabSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <waitForPageLoad stepKey="waitForFilterShipmentLoad"/>
-        <click selector="{{AdminShippingAreaGridSection.TableRowOne}}" stepKey="openShipmentPage"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
     </actionGroup>
 
 </actionGroups>

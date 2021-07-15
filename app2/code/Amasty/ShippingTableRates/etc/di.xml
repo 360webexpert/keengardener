@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Amasty Team
+ * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @package Amasty_ShippingTableRates
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Quote\Model\Cart\ShippingMethodConverter">
+        <plugin name="amstrates-cart-comment"
+                type="Amasty\ShippingTableRates\Model\Cart\ShippingMethodConverter"/>
+    </type>
+
+    <type name="Magento\ImportExport\Block\Adminhtml\Import\Edit\Form">
+        <plugin name="amstrates-import-edit"
+                type="Amasty\ShippingTableRates\Plugin\ImportExport\Block\Adminhtml\Import\Edit\Form"/>
+    </type>
+
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="amstrates_rate_import" xsi:type="string">Amasty_ShippingTableRates</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Amasty\ShippingTableRates\Api\Data\ShippingTableRateInterface"
+                type="Amasty\ShippingTableRates\Model\Rate"/>
+    <preference for="Amasty\ShippingTableRates\Api\RateRepositoryInterface"
+                type="Amasty\ShippingTableRates\Model\RateRepository"/>
+    <type name="Magento\Shipping\Model\Rate\CarrierResult">
+        <plugin name="Amasty_ShippingTableRates::SortRates" type="Amasty\ShippingTableRates\Plugin\Shipping\Model\Rate\CarrierResultPlugin"/>
+    </type>
+
+    <type name="Magento\Shipping\Model\Rate\Result">
+        <plugin name="Amasty_ShippingTableRates::SortRates" type="Amasty\ShippingTableRates\Plugin\Shipping\Model\Rate\CarrierResultPlugin"/>
+    </type>
+</config>

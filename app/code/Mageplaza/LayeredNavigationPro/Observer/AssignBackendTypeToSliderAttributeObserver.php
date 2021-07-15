@@ -21,8 +21,6 @@
 
 namespace Mageplaza\LayeredNavigationPro\Observer;
 
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
@@ -32,13 +30,13 @@ use Magento\Framework\Event\ObserverInterface;
 class AssignBackendTypeToSliderAttributeObserver implements ObserverInterface
 {
     /**
-     * @param Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      *
      * @return $this
      */
-    public function execute(Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $object AbstractAttribute */
+        /** @var $object \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
         $object = $observer->getEvent()->getAttribute();
         if (($object->getFrontendInput() == 'text') && in_array(
             $object->getFrontendClass(),

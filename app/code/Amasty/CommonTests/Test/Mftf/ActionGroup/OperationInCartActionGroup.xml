@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -33,7 +33,7 @@
         </arguments>
         <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
         <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
-        <click selector="//tr[@class='item-info']//a[contains(@title,'{{products.productName}}')]/following::tr[1]//a[@title='Remove item']"
+        <click selector="//tr[@class='item-info']//a[@title='{{products.productName}}']/following::tr[1]//a[@title='Remove item']"
                stepKey="deleteBagFromTheCart"/>
         <waitForPageLoad time="100" stepKey="waitForPageLoad2"/>
     </actionGroup>
@@ -58,14 +58,13 @@
             <argument name="shippingMethods"/>
         </arguments>
         <amOnPage url="{{FrontCartPage.url}}" stepKey="navigateToShoppingCart1"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenPage"/>
-        <conditionalClick selector="{{FrontCartSection.EstimateShippingAndTax}}" dependentSelector="{{FrontCartSection.ZipShipping}}"
-                          visible="false" stepKey="OpenTabWithShippingInCart"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterOpenTab"/>
-        <click selector="{{FrontCartSection.ShippingMethodButton(shippingMethods.shippingMethodsName)}}" stepKey="chooseShippingMethod"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterChooseMethod"/>
-        <conditionalClick selector="{{FrontCartSection.EstimateShippingAndTax}}" dependentSelector="{{FrontCartSection.ZipShipping}}"
-                          visible="true" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="100" stepKey="waitForPageLoad1"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="OpenTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad2"/>
+        <click selector="//input[@id='{{shippingMethods.shippingMethodsName}}']" stepKey="chooseShippingMethod"/>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad3"/>
+        <click selector="{{FrontCartSection.EstimateShippingAndTax}}" stepKey="CloseTabWithShippingInCart"/>
+        <waitForPageLoad time="50" stepKey="waitForPageLoad4"/>
     </actionGroup>
 
 
@@ -82,12 +81,6 @@
         <waitForPageLoad time="5" stepKey="waitForPageLoad2"/>
         <click selector="{{FrontCartSection.UpdateShoppingCart}}" stepKey="updateCart"/>
         <waitForPageLoad time="100" stepKey="waitForPageLoad3"/>
-    </actionGroup>
-
-
-    <actionGroup name="StorefrontOpenCartAndApplyCoupon" extends="StorefrontApplyCouponActionGroup">
-        <amOnPage url="{{FrontCartPage.url}}" before="waitForCouponHeader" stepKey="navigateToShoppingCart1"/>
-        <waitForPageLoad after="navigateToShoppingCart1" stepKey="waitForPageLoadAfterOpenCartPage"/>
     </actionGroup>
 
 </actionGroups>

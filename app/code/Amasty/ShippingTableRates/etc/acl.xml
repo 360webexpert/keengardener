@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 -->
@@ -24,11 +24,6 @@
                 <resource id="Magento_Sales::sales">
                     <resource id="Magento_Sales::sales_operation">
                         <resource id="Amasty_ShippingTableRates::amstrates" title="Shipping Table Rates" sortOrder="10"/>
-                    </resource>
-                </resource>
-                <resource id="Magento_Backend::system">
-                    <resource id="Magento_Backend::convert">
-                        <resource id="Amasty_ShippingTableRates::rates_import" title="Amasty Import Shipping Table Rates" sortOrder="100" />
                     </resource>
                 </resource>
             </resource>

@@ -21,11 +21,7 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Block\ProductsPage;
 
-use Magento\Catalog\Block\Product\Context;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
-use Mageplaza\LayeredNavigationUltimate\Helper\Data;
 
 /**
  * Class View
@@ -33,22 +29,22 @@ use Mageplaza\LayeredNavigationUltimate\Helper\Data;
  */
 class View extends Template
 {
-    /** @var Data */
+    /** @var \Mageplaza\LayeredNavigationUltimate\Helper\Data */
     protected $_helper;
 
-    /** @var Registry */
+    /** @var \Magento\Framework\Registry */
     protected $_coreRegistry;
 
     /**
      * Products constructor.
      *
-     * @param Context $context
-     * @param Data $helper
+     * @param \Magento\Catalog\Block\Product\Context $context
+     * @param \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        Data $helper,
+        \Magento\Catalog\Block\Product\Context $context,
+        \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper,
         array $data = []
     ) {
         $this->_helper = $helper;
@@ -59,7 +55,7 @@ class View extends Template
 
     /**
      * @return $this
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function _prepareLayout()
     {

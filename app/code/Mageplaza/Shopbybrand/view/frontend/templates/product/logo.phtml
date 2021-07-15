@@ -18,33 +18,13 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
-use Mageplaza\Shopbybrand\Model\Config\Source\ShowBrandInfo;
-
-/** @var Mageplaza\Shopbybrand\Block\Product\Logo $block */
 ?>
-<?php if ($brand = $block->getBrandObject()) : ?>
-    <?php $brand->setShortDescription($block->helper()->getBrandDescription($brand, true)); ?>
-    <?php if (in_array(ShowBrandInfo::BRAND_LOGO, $block->showBrandInfo(), true)) : ?>
-            <div class="product-brand-logo">
-                <a href="<?= /** @noEscape */ $block->helper()->getBrandUrl($brand) ?>">
-                    <img src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>"
-                         title="<?= /** @noEscape */ $brand->getValue() ?>"
-                         alt="<?= /** @noEscape */ $brand->getValue() ?>"
-                         style="width: <?= /** @noEscape */ $block->getLogoWidth() . 'px' ?>;
-                                height: <?= /** @noEscape */ $block->getLogoHeight() . 'px' ?>;">
-                </a>
-            </div>
-    <?php endif; ?>
-    <?php if (in_array(ShowBrandInfo::BRAND_NAME, $block->showBrandInfo(), true)) : ?>
-        <div class="product-brand-name">
-            <a href="<?= /** @noEscape */ $block->helper()->getBrandUrl($brand) ?>">
-                <span title="<?= $block->escapeHtml($brand->getValue()) ?>"><?= $block->escapeHtml($brand->getValue()) ?></span>
-            </a>
-        </div>
-    <?php endif; ?>
-    <?php if (in_array(ShowBrandInfo::BRAND_DESC, $block->showBrandInfo(), true)) : ?>
-        <div class="product-brand-desc">
-            <?= /** @noEscape */ $brand->getShortDescription() ?>
-        </div>
-    <?php endif; ?>
+<?php if ($brand = $block->getProductBrand()) : ?>
+    <div class="product-brand-logo">
+        <a href="<?= /** @noEscape */ $block->helper()->getBrandUrl($brand) ?>">
+            <img src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>"
+                 title="<?= /** @noEscape */ $brand->getValue() ?>"
+                 alt="<?= /** @noEscape */ $brand->getValue() ?>">
+        </a>
+    </div>
 <?php endif; ?>

@@ -1,14 +1,14 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_Base
  */
 
 
 namespace Amasty\Base\Block\Adminhtml;
 
-use Amasty\Base\Model\ModuleInfoProvider;
+use Amasty\Base\Helper\Module;
 use Amasty\Base\Model\ModuleListProcessor;
 use Magento\Backend\Block\Template;
 use Magento\Config\Block\System\Config\Form\Field;
@@ -24,21 +24,20 @@ class Extensions extends Field
      * @var ModuleListProcessor
      */
     private $moduleListProcessor;
-
     /**
-     * @var ModuleInfoProvider
+     * @var Module
      */
-    private $moduleInfoProvider;
+    private $moduleHelper;
 
     public function __construct(
         Template\Context $context,
         ModuleListProcessor $moduleListProcessor,
-        ModuleInfoProvider $moduleInfoProvider,
+        Module $moduleHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->moduleListProcessor = $moduleListProcessor;
-        $this->moduleInfoProvider = $moduleInfoProvider;
+        $this->moduleHelper = $moduleHelper;
     }
 
     protected function _getElementHtml(AbstractElement $element)
@@ -59,7 +58,7 @@ class Extensions extends Field
      */
     public function isOriginMarketplace()
     {
-        return $this->moduleInfoProvider->isOriginMarketplace();
+        return $this->moduleHelper->isOriginMarketplace();
     }
 
     /**

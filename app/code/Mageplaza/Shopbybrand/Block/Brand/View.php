@@ -41,9 +41,6 @@ class View extends Brand
         parent::_prepareLayout();
 
         $brand = $this->getBrand();
-        if (!$brand) {
-            return $this;
-        }
         $title = $brand->getPageTitle() ?: $brand->getValue();
         if ($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs')) {
             $breadcrumbsBlock->addCrumb('view', ['label' => $title]);
@@ -78,7 +75,7 @@ class View extends Brand
         $block->addCrumb('brand', [
             'label' => __($title),
             'title' => __($title),
-            'link' => $this->helper->getBrandUrl()
+            'link'  => $this->helper->getBrandUrl()
         ]);
 
         $brand = $this->getBrand();
@@ -89,17 +86,11 @@ class View extends Brand
     }
 
     /**
-     * Retrieve current brand model object
-     *
-     * @return \Mageplaza\Shopbybrand\Model\Brand
+     * @return mixed
      */
     public function getBrand()
     {
-        if (!$this->hasData('current_brand') || !$this->getData('current_brand')) {
-            $this->setData('current_brand', $this->helper()->getBrand());
-        }
-
-        return $this->getData('current_brand');
+        return $this->helper()->getBrand();
     }
 
     /**
@@ -116,7 +107,7 @@ class View extends Brand
 
         $title = $brand->getPageTitle() ?: $brand->getValue();
 
-        return implode($this->getTitleSeparator(), [$title, $this->getPageTitle()]);
+        return join($this->getTitleSeparator(), [$title, $this->getPageTitle()]);
     }
 
     /**
@@ -128,7 +119,9 @@ class View extends Brand
             return '';
         }
 
-        return $this->getBrand()->getImage();
+        $brand = $this->getBrand();
+
+        return $brand->getImage();
     }
 
     /**

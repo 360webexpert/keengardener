@@ -23,7 +23,6 @@ namespace Mageplaza\Shopbybrand\Block\Brand;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\Shopbybrand\Block\Brand;
-use Mageplaza\Shopbybrand\Helper\Data;
 
 /**
  * Class Search
@@ -40,16 +39,14 @@ class Search extends Brand
         $searchData = [];
         foreach ($this->getCollection() as $brand) {
             $searchData[] = [
-                'value' => $brand->getValue(),
-                'desc' => $this->helper->getBrandDescription($brand, true),
-                'image' => $brand->getImage()
-                    ? $this->getBrandThumbnail($brand)
-                    : $this->helper->getBrandImageUrl($brand),
+                'value'    => $brand->getValue(),
+                'desc'     => $this->helper->getBrandDescription($brand, true),
+                'image'    => $this->helper->getBrandImageUrl($brand),
                 'brandUrl' => $this->helper->getBrandUrl($brand)
             ];
         }
 
-        return Data::jsonEncode($searchData);
+        return json_encode($searchData);
     }
 
     /**

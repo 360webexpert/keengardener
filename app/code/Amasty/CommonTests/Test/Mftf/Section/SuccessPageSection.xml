@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -15,7 +15,6 @@
         <element name="OrderNumberCustomerAccount" type="text" selector="//div[@class='checkout-success']//a[@class='order-number']/strong"/>
         <element name="SuccessMessageCreatedOrderInAdminArea" type="text" selector="//div[@id='messages']//div[contains(text(),'You created the order.')]"/>
         <element name="OrderNumberAfterPlaceOrder" type="text" selector="//a[@class='order-number']//strong"/>
-        <element name="OrderNumberAfterPlaceOrderGuest" type="text" selector="//div[@class='checkout-success']//p//span"/>
     </section>
 
 </sections>

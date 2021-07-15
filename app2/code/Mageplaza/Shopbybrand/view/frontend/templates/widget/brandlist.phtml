@@ -1,0 +1,49 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+$timeId = time();
+$selectedBrands = $block->getCollection();
+
+if (count($selectedBrands) > 1) : ?>
+    <?= /** @noEscape */ $block->includeCssLib() ?>
+    <div class="block block-brand-feature widget">
+        <?php if ($block->hasData('show_title')) : ?>
+            <div class="block-title">
+                <strong id="block-feature-brand-heading" role="heading"
+                        aria-level="2"><?= /** @noEscape */ $block->getTitle() ?></strong>
+            </div>
+        <?php endif; ?>
+        <div class="block-content">
+            <div class="owl-carousel owl-theme brand-carousel"
+                 id="feature-brand-carousel-<?= /** @noEscape */ $timeId ?>"
+                 data-mage-init='{"brandSlider": {}}'>
+                <?php foreach ($selectedBrands as $brand) : ?>
+                    <div class="relate-content item">
+                        <a href="<?= /** @noEscape */ $block->helper()->getBrandUrl($brand) ?>">
+                            <img class="img-responsive brand-image"
+                                 src="<?= /** @noEscape */ $block->helper()->getBrandImageUrl($brand) ?>" alt="">
+                        </a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

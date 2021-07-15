@@ -21,7 +21,6 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Observer;
 
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Mageplaza\LayeredNavigationUltimate\Helper\Data as LayerHelper;
 
@@ -31,13 +30,13 @@ use Mageplaza\LayeredNavigationUltimate\Helper\Data as LayerHelper;
  */
 class CheckSeoUrlObserver implements ObserverInterface
 {
-    /** @var LayerHelper */
+    /** @var \Mageplaza\LayeredNavigationUltimate\Helper\Data */
     protected $_helper;
 
     /**
      * CheckSeoUrlObserver constructor.
      *
-     * @param LayerHelper $helper
+     * @param \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper
      */
     public function __construct(LayerHelper $helper)
     {
@@ -45,11 +44,11 @@ class CheckSeoUrlObserver implements ObserverInterface
     }
 
     /**
-     * @param Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      *
      * @return $this
      */
-    public function execute(Observer $observer)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
         if (!$this->_helper->isEnabled()) {
             return $this;

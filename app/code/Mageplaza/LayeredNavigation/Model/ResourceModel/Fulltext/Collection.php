@@ -34,13 +34,9 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\EntityFactory as EavEntityFactory;
-use Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\Search\SearchResultFactory;
-use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
@@ -52,19 +48,15 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
-use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Search\Api\SearchInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\LayeredNavigation\Model\Search\SearchCriteriaBuilder;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Zend_Db_Exception;
-use Zend_Db_Expr;
 
 /**
  * Class Collection
@@ -72,7 +64,7 @@ use Zend_Db_Expr;
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
-    /** @var Collection|null Clone collection */
+    /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection|null Clone collection */
     public $collectionClone = null;
 
     /** @var string */
@@ -93,29 +85,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
-    /** @var SearchResultInterface */
+    /** @var \Magento\Framework\Api\Search\SearchResultInterface */
     private $searchResult;
 
     /** @var FilterBuilder */
     private $filterBuilder;
-
-    /**
-     * @var Http
-     */
-    protected $request;
-
-    /**
-     * @var array
-     */
-    private $searchOrders;
-    /**
-     * @var SearchResultFactory
-     */
-    protected $searchResultFactory;
-    /**
-     * @var TotalRecordsResolverFactory
-     */
-    protected $totalRecordsResolverFactory;
 
     /**
      * Collection constructor.
@@ -140,10 +114,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
      * @param TemporaryStorageFactory $tempStorageFactory
-     * @param Http $request
      * @param AdapterInterface|null $connection
      * @param string $searchRequestName
-     * @param SearchResultFactory|null $searchResultFactory
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -166,11 +138,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         DateTime $dateTime,
         GroupManagementInterface $groupManagement,
         TemporaryStorageFactory $tempStorageFactory,
-        Http $request,
-        TotalRecordsResolverFactory $totalRecordsResolver,
         AdapterInterface $connection = null,
-        $searchRequestName = 'catalog_view_container',
-        SearchResultFactory $searchResultFactory = null
+        $searchRequestName = 'catalog_view_container'
     ) {
         parent::__construct(
             $entityFactory,
@@ -197,10 +166,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $this->temporaryStorageFactory = $tempStorageFactory;
         $this->searchRequestName = $searchRequestName;
-        $this->request = $request;
-        $this->searchResultFactory = $searchResultFactory ?? ObjectManager::getInstance()
-                ->get(SearchResultFactory::class);
-        $this->totalRecordsResolverFactory = $totalRecordsResolver;
     }
 
     /**
@@ -217,7 +182,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $searchCriterialBuilder = $this->collectionClone->getSearchCriteriaBuilder()->cloneObject();
 
-        /** @var Collection $collectionClone */
+        /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $collectionClone */
         $collectionClone = clone $this->collectionClone;
         $collectionClone->setSearchCriteriaBuilder($searchCriterialBuilder);
 
@@ -233,9 +198,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addLayerCategoryFilter($categories)
     {
-        if ((strpos($this->getSearchEngine(), 'elasticsearch') !== false)
-            || $this->getSearchEngine() === 'amasty_elastic'
-        ) {
+        if ($this->getSearchEngine() === 'elasticsearch') {
             $this->addFieldToFilter('category_ids', ['in' => $categories]);
         } else {
             $this->addFieldToFilter('category_ids', implode(',', $categories));
@@ -261,31 +224,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->searchCriteriaBuilder->removeFilter($attributeCode);
         }
 
-        $this->_isFiltersRendered = false;
-
-        return $this->loadWithFilter();
-    }
-
-    /**
-     * @param $categoryIds
-     *
-     * @return $this
-     */
-    public function resetCategoryFilter($categoryIds)
-    {
-        $this->searchCriteriaBuilder->setCategoryFilter($categoryIds);
-
-        return $this;
-    }
-
-    /**
-     * @param $categoryIds
-     *
-     * @return Collection
-     */
-    public function setCategoryFilter($categoryIds)
-    {
-        $this->searchCriteriaBuilder->setCategoryFilter($categoryIds);
         $this->_isFiltersRendered = false;
 
         return $this->loadWithFilter();
@@ -406,10 +344,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getSearchCriteriaBuilder();
         $this->getFilterBuilder();
 
-        if (isset($condition['in'])
-            && (strpos($this->getSearchEngine(), 'elasticsearch') !== false
-                || $this->getSearchEngine() === 'amasty_elastic')
-        ) {
+        if (isset($condition['in']) && $this->getSearchEngine() === 'elasticsearch') {
             $this->filterBuilder->setField($field);
             $this->filterBuilder->setValue($condition['in']);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
@@ -448,53 +383,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * @inheritdoc
-     */
-    public function setOrder($attribute, $dir = Select::SQL_DESC)
-    {
-        $this->setSearchOrder($attribute, $dir);
-        if ($attribute === 'relevance') {
-            $this->order[$attribute] = $dir;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add attribute to sort order.
-     *
-     * @param string $attribute
-     * @param string $dir
-     *
-     * @return $this
-     * @since 101.0.2
-     */
-    public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
-    {
-        $this->setOrder($attribute, $dir);
-
-        return $this;
-    }
-
-    /**
-     * Set sort order for search query.
-     *
-     * @param string $field
-     * @param string $direction
-     *
-     * @return void
-     */
-    private function setSearchOrder($field, $direction)
-    {
-        $field = (string)$this->_getMappedField($field);
-        $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
-
-        $this->searchOrders[$field] = $direction;
-    }
-
-    /**
      * @throws LocalizedException
-     * @throws Zend_Db_Exception
+     * @throws \Zend_Db_Exception
      */
     protected function _renderFiltersBefore()
     {
@@ -504,52 +394,44 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getFilterBuilder();
         $this->getSearch();
 
-        if ($this->searchRequestName !== 'quick_search_container'
-            || trim($this->queryText) !== ''
-        ) {
-            if ($this->queryText) {
-                $this->filterBuilder->setField('search_term');
-                $this->filterBuilder->setValue($this->queryText);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-            }
-
-            $priceRangeCalculation = $this->_scopeConfig->getValue(
-                AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
-                ScopeInterface::SCOPE_STORE
-            );
-            if ($priceRangeCalculation) {
-                $this->filterBuilder->setField('price_dynamic_algorithm');
-                $this->filterBuilder->setValue('auto');
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-            }
-            if ($this->request->getFullActionName() === 'catalogsearch_result_index') {
-                $this->searchRequestName = 'quick_search_container';
-                $this->filterBuilder->setField('visibility');
-                $this->filterBuilder->setValue([3, 4]);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-            }
-
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-            $searchCriteria->setRequestName($this->searchRequestName);
-            $searchCriteria->setSortOrders($this->searchOrders);
-            $searchCriteria->setCurrentPage((int)$this->_curPage);
-
-            try {
-                $this->searchResult = $this->getSearch()->search($searchCriteria);
-                $this->_totalRecords = $this->searchResult->getTotalCount();
-            } catch (EmptyRequestDataException $e) {
-                $this->searchResult = $this->createEmptyResult();
-            } catch (Exception $e) {
-                throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
-            }
-        } else {
-            $this->searchResult = $this->createEmptyResult();
+        if ($this->queryText) {
+            $this->filterBuilder->setField('search_term');
+            $this->filterBuilder->setValue($this->queryText);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         }
 
-        if (strpos($this->getSearchEngine(), 'elasticsearch') !== false) {
-            $this->ElasticSearchApply();
-        } else {
-            $this->CatalogSearchApply();
+        $priceRangeCalculation = $this->_scopeConfig->getValue(
+            AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
+            ScopeInterface::SCOPE_STORE
+        );
+        if ($priceRangeCalculation) {
+            $this->filterBuilder->setField('price_dynamic_algorithm');
+            $this->filterBuilder->setValue('auto');
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+        }
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria->setRequestName($this->searchRequestName);
+
+        try {
+            $this->searchResult = $this->getSearch()->search($searchCriteria);
+        } catch (Exception $e) {
+            throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+        }
+
+        $temporaryStorage = $this->temporaryStorageFactory->create();
+        $table = $temporaryStorage->storeDocuments($this->searchResult->getItems());
+
+        $this->getSelect()->joinInner(
+            [
+                'search_result' => $table->getName(),
+            ],
+            'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
+            []
+        );
+
+        if ($this->order && ('relevance' === $this->order['field'])) {
+            $this->getSelect()->order('search_result.' . TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
         }
 
         parent::_renderFiltersBefore();
@@ -576,13 +458,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Create empty search result
+     * Set Order field
      *
-     * @return SearchResultInterface
+     * @param string $attribute
+     * @param string $dir
+     *
+     * @return $this
      */
-    private function createEmptyResult()
+    public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
-        return $this->searchResultFactory->create()->setItems([]);
+        $this->order = ['field' => $attribute, 'dir' => $dir];
+        if ($attribute !== 'relevance') {
+            parent::setOrder($attribute, $dir);
+        }
+
+        return $this;
     }
 
     /**
@@ -593,57 +483,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setGeneralDefaultQuery()
     {
         return $this;
-    }
-
-    protected function CatalogSearchApply()
-    {
-        $temporaryStorage = $this->temporaryStorageFactory->create();
-        $table = $temporaryStorage->storeDocuments($this->searchResult->getItems());
-
-        $this->getSelect()->joinInner(
-            [
-                'search_result' => $table->getName(),
-            ],
-            'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
-            []
-        );
-        if ($this->order && isset($this->order['relevance'])) {
-            $this->getSelect()->order(
-                'search_result.' . TemporaryStorage::FIELD_SCORE . ' ' . $this->order['relevance']
-            );
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function ElasticSearchApply()
-    {
-        if (empty($this->searchResult->getItems())) {
-            $this->getSelect()->where('NULL');
-
-            return;
-        }
-
-        $ids = [];
-        foreach ($this->searchResult->getItems() as $item) {
-            $ids[] = (int)$item->getId();
-        }
-        $this->getSelect()
-            ->where('e.entity_id IN (?)', $ids);
-        $sortOrder = $this->searchResult->getSearchCriteria()
-            ->getSortOrders();
-        if (!empty($sortOrder['price']) && $this->getLimitationFilters()->isUsingPriceIndex()) {
-            $sortDirection = $sortOrder['price'];
-            $this->getSelect()
-                ->order(
-                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$sortDirection}")
-                );
-        } else {
-            $orderList = implode(',', $ids);
-            $this->getSelect()
-                ->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
-        }
     }
 
     /**
@@ -688,23 +527,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->addFieldToFilter('category_ids', $category->getId());
 
         return parent::addCategoryFilter($category);
-    }
-
-    /**
-     * @param string $categoryIds
-     *
-     * @return $this
-     */
-    public function resetCategoryIds($categoryIds)
-    {
-        $this->_productLimitationFilters['category_id'] = $categoryIds;
-        if ($this->getStoreId() == Store::DEFAULT_STORE_ID) {
-            $this->_applyZeroStoreProductLimitations();
-        } else {
-            $this->_applyProductLimitations();
-        }
-
-        return $this;
     }
 
     /**

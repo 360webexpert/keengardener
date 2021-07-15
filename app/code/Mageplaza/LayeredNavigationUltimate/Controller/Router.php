@@ -22,10 +22,7 @@
 namespace Mageplaza\LayeredNavigationUltimate\Controller;
 
 use Magento\Framework\App\ActionFactory;
-use Magento\Framework\App\ActionInterface;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
-use Magento\Framework\Url;
 use Mageplaza\LayeredNavigationUltimate\Helper\Data;
 
 /**
@@ -57,11 +54,11 @@ class Router implements RouterInterface
     /**
      * Validate and Match Layer Products Page and modify request
      *
-     * @param RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      *
-     * @return ActionInterface|null
+     * @return \Magento\Framework\App\ActionInterface|null
      */
-    public function match(RequestInterface $request)
+    public function match(\Magento\Framework\App\RequestInterface $request)
     {
         $identifier = trim($request->getPathInfo(), '/');
         $routePath = explode('/', $identifier);
@@ -90,7 +87,7 @@ class Router implements RouterInterface
             ->setControllerName('productspage')
             ->setActionName('view')
             ->setParam('page_id', $page->getId())
-            ->setAlias(Url::REWRITE_REQUEST_PATH_ALIAS, $identifier)
+            ->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier)
             ->setPathInfo('/mplayer/productspage/view');
 
         return $this->actionFactory->create('Magento\Framework\App\Action\Forward');

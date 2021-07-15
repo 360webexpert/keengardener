@@ -22,6 +22,7 @@
 namespace Mageplaza\Shopbybrand\Block\Widget;
 
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Shopbybrand\Helper\Data as Helper;
 use Mageplaza\Shopbybrand\Model\BrandFactory;
@@ -80,6 +81,7 @@ class OptionId extends AbstractBrand
      * get brand by option IDs
      *
      * @return Collection
+     * @throws LocalizedException
      */
     public function getCollection()
     {

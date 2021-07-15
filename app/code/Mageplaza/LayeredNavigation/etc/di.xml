@@ -48,25 +48,4 @@
             <argument name="searchRequestName" xsi:type="string">quick_search_container</argument>
         </arguments>
     </virtualType>
-    <virtualType name="elasticsearchLayerCategoryItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Category\ItemCollectionProvider">
-        <arguments>
-            <argument name="factories" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="object">Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\CollectionFactory</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="elasticsearchLayerSearchItemCollectionProvider" type="Magento\Elasticsearch\Model\Layer\Search\ItemCollectionProvider">
-        <arguments>
-            <argument name="factories" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="object">Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\CollectionFactory</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\Framework\App\PageCache\Identifier">
-        <plugin name="mplayerPagecacheIdentifier" type="Mageplaza\LayeredNavigation\Plugin\PageCache\Identifier" />
-    </type>
-    <type name="Magento\Framework\App\PageCache\Kernel">
-        <plugin name="mplayerProcessRequest" type="Mageplaza\LayeredNavigation\Plugin\PageCache\ProcessRequest" />
-    </type>
 </config>

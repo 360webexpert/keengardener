@@ -2,7 +2,7 @@
 <!--
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_CommonTests
  */
 -->
@@ -13,8 +13,6 @@
         <element name="FiltersButton" type="button" selector="//div[@class='data-grid-filters-action-wrap']/button[text()='Filters']" timeout="30"/>
         <element name="InputNameFilters" type="input" selector="//input[@name='name']" timeout="30"/>
         <element name="ApplyFiltersButton" type="button" selector="//button[@data-action='grid-filter-apply']" timeout="30"/>
-        <element name="ProductOnGrid" type="block" parameterized="true" selector="//tbody//div[text()='{{productName}}']"/>
-        <element name="FilterClearAllButton" type="button" selector="//div[@class='admin__data-grid-header']//button[@data-action='grid-filter-reset']" timeout="30"/>
     </section>
 
     <section name="AdminProductSection">
@@ -28,7 +26,6 @@
         <element name="BackordersConfigSetting" type="input" selector="//input[@name='product[stock_data][use_config_backorders]']"/>
         <element name="BackordersConfigSettingYes" type="block" selector="//input[@name='product[stock_data][use_config_backorders]'][@value='1']"/>
         <element name="BackordersConfigSettingNo" type="block" selector="//input[@name='product[stock_data][use_config_backorders]'][@value='0']"/>
-        <element name="ProductTaxClass" type="select" selector="//select[@name='product[tax_class_id]']"/>
     </section>
 
 </sections>

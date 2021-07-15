@@ -21,7 +21,6 @@
 
 namespace Mageplaza\LayeredNavigationUltimate\Model\ResourceModel;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
@@ -42,11 +41,11 @@ class ProductsPage extends AbstractDb
     }
 
     /**
-     * @param AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      *
      * @return $this
      */
-    protected function _beforeSave(AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_beforeSave($object);
 

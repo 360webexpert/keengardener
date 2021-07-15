@@ -1,0 +1,54 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var Mageplaza\Shopbybrand\Block\Sidebar\BrandCategory $block */
+$categories = $block->getCategories();
+?>
+<div class="block block-category-brand widget" id="block-category-brand-container">
+    <div class="block-title">
+        <strong role="heading" aria-level="2" class="block-subtitle"
+                id="category-brand-subtitle"><?= /** @noEscape */ $block->getTitle() ?></strong>
+    </div>
+    <div class="block-content">
+        <?php if ($categories->getSize()) : ?>
+            <div class="filter-options-content" id='category-brand-menu'>
+                <ul>
+                    <?php foreach ($categories as $category) : ?>
+                        <?php if ($block->getBrandQty($category->getId())) : ?>
+                            <li>
+                                <a href="<?= $block->escapeUrl($block->getCatUrl($category)) ?>">
+                                    <span><?= /** @noEscape */ $block->showBrandQty()
+                                            ? $block->escapeHtml($category->getName() . ' (' . $block->getBrandQty($category->getId()) . ')')
+                                            : $block->escapeHtml($category->getName()) ?></span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php else : ?>
+            <div class="filter-options-content" id='category-brand-menu'>
+                <span><?= /** @noEscape */
+                    __('No categories available.') ?></span>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

@@ -27,65 +27,40 @@
     <div class="block-content">
         <div class="mp-searchbox">
             <input id="mp-search" type="text" class="mp-search form-control input-query ui-autocomplete-input" name="q"
-                   placeholder="<?= /** @noEscape */ __('Search a brand name') ?>">
+                   placeholder="<?= /** @noEscape */ __('Search a brand name') ?>" ">
             <button type="submit" id="mp-brand-search-button" class="btn btn-primary btn-lg search-btn fa fa-search">
                 <span><?= /** @noEscape */ __('Search') ?></span>
             </button>
         </div>
     </div>
 </div>
-<script id="mpbrand-autocomplete-suggest" type="text/x-magento-template">
-    <a class="shopbybrand-suggestion" href="<%- data.brandUrl %>">
-        <?php if ($block->isVisibleImage()) : ?>
-        <div class="shopbybrand-suggestion-left">
-            <img class="shopbybrand-img-responsive" src="<%- data.image %>" alt="" width="70" />
-        </div>
-        <?php endif; ?>
-        <div class="shopbybrand-suggestion-right">
-            <div class="shopbybrand-product-line shopbybrand-product-name">
-                <%- data.value %>
-            </div>
-            <div class='shopbybrand-product-des'>
-                <p class='shopbybrand-short-des'>
-                    <%= data.desc %>
-                </p>
-            </div>
-        </div>
-    </a>
-</script>
 <script>
     require([
         'jquery',
-        'mage/template',
-        'mpDevbridgeAutocomplete'
-    ], function ($, mageTemplate) {
+        'Mageplaza_Shopbybrand/js/lib/jquery.autocomplete.min'
+    ], function ($) {
         $(document).ready(function () {
-            var mpSearch     = $('#mp-search');
-
+            var mpSearch = $('.mp-search'),
+                visibleImage = <?= /** @noEscape */ $block->isVisibleImage(); ?>;
             mpSearch.devbridgeAutocomplete({
-                lookup: <?= /** @noEscape */ $block->getSearchData()?>,
-                lookupLimit: <?= /** @noEscape */ $block->getMaxQueryResult() ?>,
+                lookup: <?= /** @noEscape */ $block->getSearchData();?>,
+                lookupLimit: <?= /** @noEscape */ $block->getMaxQueryResult(); ?>,
                 maxHeight: 2000,
-                minChars: <?= /** @noEscape */ $block->getMinSearchChar() ?>,
+                minChars: <?= /** @noEscape */ $block->getMinSearchChar(); ?>,
                 onSelect: function (suggestion) {
                     window.location.href = suggestion.brandUrl;
                 },
                 formatResult: function (suggestion, currentValue) {
-                    var template;
+                    var html = "<a class='shopbybrand-suggestion' href='" + suggestion.brandUrl + "'>";
 
-                    template = mageTemplate(
-                        '#mpbrand-autocomplete-suggest',
-                        {
-                            data: {
-                                brandUrl: suggestion.brandUrl,
-                                image: suggestion.image,
-                                value: suggestion.value,
-                                desc: suggestion.desc
-                            }
-                        }
-                    );
+                    if (visibleImage) {
+                        html += "<div class='shopbybrand-suggestion-left'><img class='shopbybrand-img-responsive' src='" + suggestion.image + "' alt=''" + " width='70' /></div>"
+                    }
+                    html += "<div class='shopbybrand-suggestion-right'>" +
+                        "<div class='shopbybrand-product-line shopbybrand-product-name'>" + suggestion.value + "</div>" +
+                        "<div class='shopbybrand-product-des'><p class='shopbybrand-short-des'>" + suggestion.desc + "</p></div></div></a>";
 
-                    return template;
+                    return html;
                 }
             });
 

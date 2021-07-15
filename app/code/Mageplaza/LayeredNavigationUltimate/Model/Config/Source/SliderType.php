@@ -29,12 +29,12 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class SliderType implements ArrayInterface
 {
-    const TYPE_FLAT = '1';
+    const TYPE_FLAT    = '1';
     const TYPE_DEFAULT = '2';
-    const TYPE_HTML = '3';
-    const TYPE_MODERN = '4';
-    const TYPE_NICE = '5';
-    const TYPE_SIMPLE = '6';
+    const TYPE_HTML    = '3';
+    const TYPE_MODERN  = '4';
+    const TYPE_NICE    = '5';
+    const TYPE_SIMPLE  = '6';
 
     /**
      * Css file name for ion range slider
@@ -102,11 +102,11 @@ class SliderType implements ArrayInterface
     {
         return [
             self::TYPE_DEFAULT => __('Default'),
-            self::TYPE_FLAT => __('Flat UI'),
-            self::TYPE_HTML => __('Html5'),
-            self::TYPE_MODERN => __('Modern'),
-            self::TYPE_NICE => __('Nice white'),
-            self::TYPE_SIMPLE => __('Simple dark')
+            self::TYPE_FLAT    => __('Flat UI'),
+            self::TYPE_HTML    => __('Html5'),
+            self::TYPE_MODERN  => __('Modern'),
+            self::TYPE_NICE    => __('Nice white'),
+            self::TYPE_SIMPLE  => __('Simple dark')
         ];
     }
 }

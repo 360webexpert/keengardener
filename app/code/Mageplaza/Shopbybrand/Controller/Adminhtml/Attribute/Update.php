@@ -77,7 +77,7 @@ class Update extends Action
      * @param Context $context
      * @param Data $jsonHelper
      * @param StoreManagerInterface $storeManager
-     * @param Repository $productRepository
+     * @param Repository $productRespository
      * @param PageFactory $resultPageFactory
      * @param HelperData $brandHelper
      * @param BrandFactory $brandFactory
@@ -86,7 +86,7 @@ class Update extends Action
         Context $context,
         Data $jsonHelper,
         StoreManagerInterface $storeManager,
-        Repository $productRepository,
+        Repository $productRespository,
         PageFactory $resultPageFactory,
         HelperData $brandHelper,
         BrandFactory $brandFactory
@@ -95,7 +95,7 @@ class Update extends Action
 
         $this->_jsonHelper = $jsonHelper;
         $this->_brandHelper = $brandHelper;
-        $this->_productAttributeRepository = $productRepository;
+        $this->_productAttributeRepository = $productRespository;
         $this->_brandFactory = $brandFactory;
         $this->_resultPageFactory = $resultPageFactory;
         $this->_storeManager = $storeManager;
@@ -109,7 +109,7 @@ class Update extends Action
     public function execute()
     {
         $result = ['success' => false];
-        $optionId = (int)$this->getRequest()->getParam('id');
+        $optionId = (int) $this->getRequest()->getParam('id');
         $attributeCode = $this->_brandHelper->getAttributeCode();
         $options = $this->_productAttributeRepository->get($attributeCode)->getOptions();
         foreach ($options as $option) {
@@ -119,7 +119,9 @@ class Update extends Action
             }
         }
 
-        if ($result['success']) {
+        if (!$result['success']) {
+            $result['message'] = __('Attribute option does not exist.');
+        } else {
             $store = $this->getRequest()->getParam('store') ?: 0;
             $brand = $this->_brandFactory->create()->loadByOption($optionId, $store);
             if (!$brand->getUrlKey()) {
@@ -139,8 +141,6 @@ class Update extends Action
                 ->toHtml();
             $result['switcher'] = $resultPage->getLayout()->getBlock('brand.store.switcher')
                 ->toHtml();
-        } else {
-            $result['message'] = __('Attribute option does not exist.');
         }
 
         $this->getResponse()->representJson($this->_jsonHelper->jsonEncode($result));

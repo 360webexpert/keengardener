@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Shopbybrand\Block\Widget;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template\Context;
 use Mageplaza\Shopbybrand\Helper\Data as Helper;
 use Mageplaza\Shopbybrand\Model\BrandFactory;
@@ -63,6 +64,7 @@ class Featured extends AbstractBrand
      * get feature brand
      *
      * @return array
+     * @throws LocalizedException
      */
     public function getCollection()
     {

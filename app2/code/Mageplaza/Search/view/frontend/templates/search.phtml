@@ -1,0 +1,58 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Search
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var $block \Magento\Framework\View\Element\Template */
+
+/** @var $helper \Mageplaza\Search\Helper\Data */
+$helper = $this->helper(\Mageplaza\Search\Helper\Data::class);
+if ($helper->isEnabled()) : ?>
+    <?php if ($helper->getConfigGeneral('category/enable')) : ?>
+        <div class="search-category" style="position:absolute; top: 0; right: 35px; width: 130px">
+            <select id="mpsearch-category">
+                <?php foreach ($helper->getCategoryTree() as $id => $name) : ?>
+                    <option value="<?= /** @noEscape */ $id ?>"><?= /** @noEscape */ $name ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    <?php endif; ?>
+    <script src="<?= /** @noEscape */ $helper->getJsFileUrl() ?>"></script>
+    <?php if ($helper->isEnableSuggestion()) : ?>
+        <script src="<?= /** @noEscape */ $helper->getAdditionJsFileUrl() ?>"></script>
+    <?php endif; ?>
+
+    <div id="mpsearch-js" style="display: none;"></div>
+    <script type="text/x-magento-init">
+    {
+        "#mpsearch-js": {
+            "Mageplaza_Search/js/mpsearch":{
+                "baseUrl": "<?= /** @noEscape */ trim($block->getBaseUrl(), '/') . '/' ?>",
+                "baseImageUrl": "<?= /** @noEscape */ $helper->getMediaHelper()->getSearchMediaUrl() ?>",
+                "priceFormat": <?= /** @noEscape */ $helper->getPriceFormat() ?>,
+                "displayInfo": <?= /** @noEscape */ $helper->getDisplay() ?>,
+                "isEnableSuggestion": "<?= /** @noEscape */ $helper->isEnableSuggestion() ?>",
+                "sortBy": "<?= /** @noEscape */ $helper->getSortBy()?>",
+                "currencyRate": <?= /** @noEscape */ json_encode(number_format($helper->getCurrentCurrencyRate(),'4')) ?>,
+                "lookupLimit": <?= /** @noEscape */ (int) $helper->getConfigGeneral('max_query_results') ?: 10 ?>
+            }
+        }
+    }
+    </script>
+<?php endif; ?>

@@ -26,7 +26,6 @@ use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Mageplaza\LayeredNavigationUltimate\Helper\Data as LayerHelper;
-use Mageplaza\LayeredNavigationUltimate\Model\ProductsPage;
 
 /**
  * Class RenderDefaultAttributes
@@ -38,15 +37,15 @@ class RenderDefaultAttributes extends Element implements RendererInterface
     protected $_template = 'Mageplaza_LayeredNavigationUltimate::form/renderer/default_attributes.phtml';
 
     /**
-     * @var LayerHelper
+     * @var \Mageplaza\LayeredNavigationUltimate\Helper\Data
      */
     public $helperData;
 
     /**
      * RenderDefaultAttributes constructor.
      *
-     * @param LayerHelper $helperData
-     * @param Context $context
+     * @param \Mageplaza\LayeredNavigationUltimate\Helper\Data $helperData
+     * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
     public function __construct(
@@ -62,7 +61,7 @@ class RenderDefaultAttributes extends Element implements RendererInterface
     /**
      * render custom form element
      *
-     * @param AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      *
      * @return string
      */
@@ -100,7 +99,7 @@ class RenderDefaultAttributes extends Element implements RendererInterface
      *
      * @param $id
      *
-     * @return ProductsPage | null
+     * @return \Mageplaza\LayeredNavigationUltimate\Model\ProductsPage | null
      */
     public function getPageById($id)
     {

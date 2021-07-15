@@ -32,7 +32,7 @@ use Mageplaza\Core\Helper\AbstractData;
 class Data extends AbstractData
 {
     const CONFIG_MODULE_PATH = 'layered_navigation';
-    const FILTER_TYPE_LIST = 'list';
+    const FILTER_TYPE_LIST   = 'list';
 
     /**
      * @param null $storeId
@@ -51,17 +51,11 @@ class Data extends AbstractData
      */
     public function getLayerConfiguration($filters)
     {
-        $params       = $this->_getRequest()->getParams();
-        $filterParams = [];
-        foreach ($params as $key => $param) {
-            if ($key === 'amp;dimbaar') {
-                continue;
-            }
-            $filterParams[htmlentities($key)] = htmlentities($param);
-        }
+        $filterParams = $this->_getRequest()->getParams();
+
         $config = new DataObject([
-            'active' => array_keys($filterParams),
-            'params' => $filterParams,
+            'active'             => array_keys($filterParams),
+            'params'             => $filterParams,
             'isCustomerLoggedIn' => $this->objectManager->create(Session::class)->isLoggedIn()
         ]);
 

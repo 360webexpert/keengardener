@@ -22,9 +22,6 @@
 namespace Mageplaza\LayeredNavigationUltimate\Block\Link;
 
 use Magento\Framework\View\Element\Html\Link;
-use Magento\Framework\View\Element\Template\Context;
-use Mageplaza\LayeredNavigationUltimate\Helper\Data;
-use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition;
 
 /**
  * Class Top
@@ -33,18 +30,18 @@ use Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition;
 class Top extends Link
 {
     /**
-     * @type Data
+     * @type \Mageplaza\LayeredNavigationUltimate\Helper\Data
      */
     protected $helper;
 
     /**
-     * @param Context $context
-     * @param Data $helper
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        Data $helper,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Mageplaza\LayeredNavigationUltimate\Helper\Data $helper,
         array $data = []
     ) {
         $this->helper = $helper;
@@ -62,7 +59,7 @@ class Top extends Link
         foreach ($pageCollection as $page) {
             if ($this->helper->canShowProductPageLink(
                 $page,
-                ProductPosition::TOPLINK
+                \Mageplaza\LayeredNavigationUltimate\Model\Config\Source\ProductPosition::TOPLINK
             )) {
                 $html .= '<li class="nav item"><a href="' . $this->helper->getProductPageUrl($page) . '" title="' . $page->getPageTitle() . '">' . $page->getPageTitle() . '</a></li>';
             }

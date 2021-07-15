@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
@@ -42,11 +42,6 @@ class Import extends Generic implements TabInterface
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('amstrates_');
-
-        $url = $this->getUrl('amstrates/import/rateimport');
-        $newImportLinkHtml = __('This component is deprecated in module. Please, use ').
-            "<a href=" . $url . " target='_blank' >" . __('New Import') . "</a>";
-
         $fieldset = $form->addFieldset('import_fieldset', ['legend' => __('Import Rates')]);
 
         $fieldset->addField(
@@ -69,10 +64,13 @@ class Import extends Generic implements TabInterface
         );
 
         $fieldset->addField(
-            'new_import',
-            'link',
+            'import_file',
+            'file',
             [
-                'after_element_html' => $newImportLinkHtml,
+                'name' => 'import_file',
+                'label' => __('CSV File'),
+                'title' => __('CSV File'),
+                'note' => __('Example file http://amasty.com/examples/shipping-table-rates.csv')
             ]
         );
 

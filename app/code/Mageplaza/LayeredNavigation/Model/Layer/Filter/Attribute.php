@@ -29,7 +29,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\StripTags;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\LayeredNavigation\Helper\Data as LayerHelper;
-use Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection;
 
 /**
  * Class Attribute
@@ -37,13 +36,13 @@ use Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection;
  */
 class Attribute extends AbstractFilter
 {
-    /** @var LayerHelper */
+    /** @var \Mageplaza\LayeredNavigation\Helper\Data */
     protected $_moduleHelper;
 
     /** @var bool Is Filterable Flag */
     protected $_isFilter = true;
 
-    /** @var StripTags */
+    /** @var \Magento\Framework\Filter\StripTags */
     private $tagFilter;
 
     /**
@@ -127,7 +126,7 @@ class Attribute extends AbstractFilter
 
         $attribute = $this->getAttributeModel();
 
-        /** @var Collection $productCollection */
+        /** @var \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
 
         if ($this->_isFilter) {
@@ -156,7 +155,7 @@ class Attribute extends AbstractFilter
             $value = $option['value'];
 
             $count = isset($optionsFacetedData[$value]['count'])
-                ? (int)$optionsFacetedData[$value]['count']
+                ? (int) $optionsFacetedData[$value]['count']
                 : 0;
 
             // Check filter type

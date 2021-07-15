@@ -34,7 +34,6 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Shopbybrand\Helper\Data as Helper;
-use Mageplaza\Shopbybrand\Model\Brand;
 use Mageplaza\Shopbybrand\Model\BrandFactory;
 
 /**
@@ -129,21 +128,21 @@ class View extends Action
             $this->getRequest()->setParam($this->helper->getAttributeCode(), $brand->getId());
             $page = $this->resultPageFactory->create();
             $page->getConfig()->addBodyClass('page-products');
-            $imageUrl = $this->helper->getBrandImageUrl($brand);
-            $brand->setImage($imageUrl);
 
+            $status = '';
+            if ($this->helper->showQuickView()) {
+                $imageUrl = $this->helper->getBrandImageUrl($brand);
+                $brand->setImage($imageUrl);
+                $status = 'ok';
+            }
             if ($this->getRequest()->isAjax()) {
                 $layout = $page->getLayout();
                 $result = [
-                    'products' => $layout->getBlock('brand.category.products.list')->toHtml(),
-                    'navigation' => $layout->getBlock('catalog.leftnav')->toHtml()
+                    'products'   => $layout->getBlock('brand.category.products.list')->toHtml(),
+                    'navigation' => $layout->getBlock('catalog.leftnav')->toHtml(),
+                    'brand'      => $brand->getData(),
+                    'status'     => $status
                 ];
-                if ($this->helper->showQuickView()) {
-                    $brand->setShortDescription($this->helper->getBrandDescription($brand, true));
-                    $status = 'ok';
-                    $result['brand'] = $brand->getData();
-                    $result['status'] = $status;
-                }
 
                 return $this->getResponse()->representJson($this->_jsonHelper->jsonEncode($result));
             }
@@ -155,7 +154,7 @@ class View extends Action
     }
 
     /**
-     * @return bool|Brand
+     * @return bool
      */
     protected function _initBrand()
     {
@@ -166,20 +165,22 @@ class View extends Action
 
         $currentBrand = false;
         try {
+            $brandCollection = $this->_brandFactory->create()->getBrandCollection();
+            foreach ($brandCollection as $brand) {
+                if ($this->helper->processKey($brand) == $urlKey) {
+                    $currentBrand = $brand;
+                    break;
+                }
+            }
+
             $category = $this->categoryRepository->get(
                 $this->_storeManager->getStore()->getRootCategoryId()
             );
-            $this->_coreRegistry->register('current_category', $category);
         } catch (Exception $e) {
             return false;
         }
-        $brandCollection = $this->_brandFactory->create()->getBrandCollection();
-        foreach ($brandCollection as $brand) {
-            if ($this->helper->processKey($brand) === $urlKey) {
-                $currentBrand = $brand;
-                break;
-            }
-        }
+
+        $this->_coreRegistry->register('current_category', $category);
         if ($currentBrand) {
             $this->_coreRegistry->register('current_brand', $currentBrand);
         }

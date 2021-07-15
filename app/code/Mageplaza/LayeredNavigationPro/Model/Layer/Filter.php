@@ -21,11 +21,8 @@
 
 namespace Mageplaza\LayeredNavigationPro\Model\Layer;
 
-use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Helper\Data as SwatchHelper;
 use Mageplaza\LayeredNavigation\Model\Layer\Filter as FilterModel;
 use Mageplaza\LayeredNavigationPro\Helper\Data as LayerHelper;
@@ -36,19 +33,14 @@ use Mageplaza\LayeredNavigationPro\Helper\Data as LayerHelper;
  */
 class Filter extends FilterModel
 {
-    /** @var LayerHelper */
+    /** @var \Mageplaza\LayeredNavigationPro\Helper\Data */
     protected $helper;
 
-    /** @var SwatchHelper */
+    /** @var \Magento\Swatches\Helper\Data */
     protected $swatchHelper;
 
-    /** @var ObjectManagerInterface */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;
-
-    /**
-     * @type StoreManagerInterface
-     */
-    protected $storeManager;
 
     /** @var array Slider Types */
     protected $sliderTypes = [
@@ -60,23 +52,20 @@ class Filter extends FilterModel
     /**
      * Filter constructor.
      *
-     * @param RequestInterface $request
-     * @param LayerHelper $layerHelper
-     * @param SwatchHelper $swatchHelper
-     * @param ObjectManagerInterface $objectManager
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Mageplaza\LayeredNavigationPro\Helper\Data $layerHelper
+     * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
         RequestInterface $request,
         LayerHelper $layerHelper,
         SwatchHelper $swatchHelper,
-        ObjectManagerInterface $objectManager,
-        StoreManagerInterface $storeManager
+        ObjectManagerInterface $objectManager
     ) {
-        $this->helper         = $layerHelper;
-        $this->swatchHelper   = $swatchHelper;
+        $this->helper = $layerHelper;
+        $this->swatchHelper = $swatchHelper;
         $this->_objectManager = $objectManager;
-        $this->storeManager   = $storeManager;
 
         parent::__construct($request);
     }
@@ -88,12 +77,12 @@ class Filter extends FilterModel
     {
         parent::getLayerConfiguration($filters, $config);
 
-        $active            = $config->getActive();
-        $swatchOptionText  = [];
+        $active = $config->getActive();
+        $swatchOptionText = [];
         $multipleAttribute = [];
         foreach ($filters as $filter) {
             $requestVar = $filter->getRequestVar();
-            if (!in_array($requestVar, $active, true) && $this->isExpand($filter)) {
+            if (!in_array($requestVar, $active) && $this->isExpand($filter)) {
                 $active[] = $requestVar;
             }
             if ($this->isMultiple($filter)) {
@@ -119,28 +108,32 @@ class Filter extends FilterModel
      * @param $multipleAttribute
      *
      * @return array
-     * @throws NoSuchEntityException
      */
     protected function initButtonSubmit($multipleAttribute)
     {
-        $enable       = (bool) $this->helper->getConfigGeneral('apply_filter');
+        $enable = (bool) $this->helper->getConfigGeneral('apply_filter');
         $seoUrlEnable = (bool) $this->helper->isModuleOutputEnabled('Mageplaza_SeoUrl');
-        $baseUrl      = trim($this->storeManager->getStore()->getBaseUrl(), '/') . '/'
-            . trim($this->request->getOriginalPathInfo(), '/');
-        $urlSuffix    = strpos($baseUrl, 'catalogsearch') ? '' : $this->helper->getUrlSuffix();
+        $baseUrl = trim($this->request->getDistroBaseUrl(), '/') . '/' . trim(
+            $this->request->getOriginalPathInfo(),
+            '/'
+        );
+        $urlSuffix = strpos($baseUrl, 'catalogsearch') ? '' : $this->helper->getUrlSuffix();
         $submitResult = [
             'enable'       => $enable,
             'seoUrlEnable' => $seoUrlEnable,
-            'baseUrl'      => $baseUrl,
+            'baseUrl'      => trim(
+                $this->request->getDistroBaseUrl(),
+                '/'
+            ) . '/' . trim($this->request->getOriginalPathInfo(), '/'),
             'urlSuffix'    => $urlSuffix
         ];
 
         if ($enable && $seoUrlEnable) {
             $seoMultipleAttrs = [];
-            $seoHelper        = $this->_objectManager->get('Mageplaza\SeoUrl\Helper\Data');
+            $seoHelper = $this->_objectManager->get('Mageplaza\SeoUrl\Helper\Data');
             $optionCollection = $seoHelper->getOptionsArray();
             foreach ($optionCollection as $options) {
-                if (!in_array($options['attribute_code'], $multipleAttribute, true)) {
+                if (!in_array($options['attribute_code'], $multipleAttribute)) {
                     $seoMultipleAttrs[$options['attribute_code']][] = $options['url_key'];
                 }
             }
@@ -157,10 +150,11 @@ class Filter extends FilterModel
      * @param $filter
      *
      * @return mixed
+     * @throws \Zend_Serializer_Exception
      */
     public function isExpand($filter)
     {
-        $code   = $filter->getRequestVar();
+        $code = $filter->getRequestVar();
         $config = $this->helper->getFilterConfig($code);
         if (isset($config['is_expand']) && ($config['is_expand'] != 2)) {
             return $config['is_expand'];
@@ -174,6 +168,7 @@ class Filter extends FilterModel
      * @param $field
      *
      * @return mixed
+     * @throws \Zend_Serializer_Exception
      */
     protected function getLayerProperty($filter, $field)
     {
@@ -182,7 +177,7 @@ class Filter extends FilterModel
             $this->prepareAttributeData($attribute);
 
             $fieldValue = $attribute->getData($field);
-            if ($fieldValue !== null && $fieldValue != 2) {
+            if (!is_null($fieldValue) && $fieldValue != 2) {
                 return $fieldValue;
             }
         }
@@ -194,6 +189,8 @@ class Filter extends FilterModel
      * Prepare layer data from attribute additional data
      *
      * @param $attribute
+     *
+     * @throws \Zend_Serializer_Exception
      */
     public function prepareAttributeData($attribute)
     {
@@ -224,11 +221,11 @@ class Filter extends FilterModel
     {
         if ($filter->hasMultipleMode()) {
             return $filter->getMultipleMode();
-        }
-
-        if ($filter->hasAttributeModel()) {
+        } elseif ($filter->hasAttributeModel()) {
             $attribute = $filter->getAttributeModel();
-            if ($attribute->getFrontendInput() === 'price' || $attribute->getBackendType() === 'decimal') {
+            if (($attribute->getFrontendInput() == 'price') ||
+                ($attribute->getBackendType() == 'decimal')
+            ) {
                 return false;
             }
         }
@@ -237,16 +234,12 @@ class Filter extends FilterModel
     }
 
     /**
-     * @param AbstractFilter $filter
-     * @param null $compareType
-     *
-     * @return bool|mixed|string
-     * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
      */
     public function getFilterType($filter, $compareType = null)
     {
         $type = LayerHelper::FILTER_TYPE_LIST;
+
         if ($filter->hasFilterType()) {
             $type = $filter->getFilterType();
         } elseif ($filter->hasAttributeModel()) {
@@ -261,27 +254,17 @@ class Filter extends FilterModel
                         $filterType = LayerHelper::FILTER_TYPE_SLIDER;
                         break;
                     case 'select':
-                        if ($this->swatchHelper->isVisualSwatch($attribute)
-                            || $this->swatchHelper->isTextSwatch($attribute)
-                        ) {
+                        if ($this->swatchHelper->isVisualSwatch($attribute) || $this->swatchHelper->isTextSwatch($attribute)) {
                             $filterType = LayerHelper::FILTER_TYPE_SWATCH;
+                            break;
                         }
-                        break;
                     case 'multiselect':
                         $filterType = LayerHelper::FILTER_TYPE_LIST;
                         break;
                 }
-            } elseif ($filter->getRequestVar() === 'cat'
-                && $filter instanceof \Mageplaza\LayeredNavigation\Model\Layer\Filter\Category
-                && $filter->isRenderCategoryTree()) {
-                $type = LayerHelper::FILTER_TYPE_TREE;
             }
 
             $type = $filterType ?: $type;
-        } elseif ($filter->getRequestVar() === 'cat'
-            && $filter instanceof \Mageplaza\LayeredNavigation\Model\Layer\Filter\Category
-            && $filter->isRenderCategoryTree()) {
-            $type = LayerHelper::FILTER_TYPE_TREE;
         }
 
         return $compareType ? ($type == $compareType) : $type;
@@ -293,17 +276,16 @@ class Filter extends FilterModel
      * @param $filter
      *
      * @return bool|mixed
+     * @throws \Zend_Serializer_Exception
      */
     public function isSearchEnable($filter)
     {
         if ($filter->hasSearchEnable()) {
             return $filter->getSearchEnable();
-        }
-
-        if ($filter->hasAttributeModel()) {
+        } elseif ($filter->hasAttributeModel()) {
             $attribute = $filter->getAttributeModel();
-            if (($attribute->getFrontendInput() === 'price') ||
-                ($attribute->getBackendType() === 'decimal')
+            if (($attribute->getFrontendInput() == 'price') ||
+                ($attribute->getBackendType() == 'decimal')
             ) {
                 return false;
             }
@@ -323,7 +305,7 @@ class Filter extends FilterModel
     /**
      * Checks whether the option reduces the number of results
      *
-     * @param AbstractFilter $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      * @param int $optionCount Count of search results with this option
      * @param int $totalSize Current search results count
      *

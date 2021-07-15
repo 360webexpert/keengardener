@@ -35,6 +35,10 @@ Delete,Delete
 "Please enter the page title.","Please enter the page title."
 "Please enter the page route.","Please enter the page route."
 "The url key ""%1"" has been used.","The url key ""%1"" has been used."
+"Product State","Product State"
+New,New
+"On Sales","On Sales"
+"In Stock","In Stock"
 "Use Config Settings","Use Config Settings"
 Normal,Normal
 Hidden,Hidden

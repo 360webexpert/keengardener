@@ -29,8 +29,8 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Display implements ArrayInterface
 {
-    const DISPLAY_PRICE = 'price';
-    const DISPLAY_IMAGE = 'image';
+    const DISPLAY_PRICE       = 'price';
+    const DISPLAY_IMAGE       = 'image';
     const DISPLAY_DESCRIPTION = 'description';
 
     /**
@@ -63,8 +63,8 @@ class Display implements ArrayInterface
     public function toArray()
     {
         return [
-            self::DISPLAY_PRICE => __('Price'),
-            self::DISPLAY_IMAGE => __('Image'),
+            self::DISPLAY_PRICE       => __('Price'),
+            self::DISPLAY_IMAGE       => __('Image'),
             self::DISPLAY_DESCRIPTION => __('Short Description')
         ];
     }

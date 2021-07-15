@@ -21,7 +21,7 @@
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
-    <widget id="mpbrand_option" class="Mageplaza\Shopbybrand\Block\Widget\OptionId">
+    <widget id="mpbrand_optionid" class="Mageplaza\Shopbybrand\Block\Widget\OptionId">
         <label>MP Brand Option ID Widget</label>
         <description>MP Brand Option ID Widget</description>
         <parameters>
@@ -77,7 +77,7 @@
             </container>
         </containers>
     </widget>
-    <widget id="mpbrand_category" class="Mageplaza\Shopbybrand\Block\Widget\CategoryId">
+    <widget id="mpbrand_categoryid" class="Mageplaza\Shopbybrand\Block\Widget\CategoryId">
         <label>MP Brand Category ID Widget</label>
         <description>MP Brand Category ID Widget</description>
         <parameters>

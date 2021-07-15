@@ -24,8 +24,12 @@ namespace Mageplaza\Shopbybrand\Block\Adminhtml\Form\Renderer;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
+use Mageplaza\Shopbybrand\Block\Brand;
 use Mageplaza\Shopbybrand\Helper\Data as BrandHelper;
 use Mageplaza\Shopbybrand\Model\BrandFactory;
 use Mageplaza\Shopbybrand\Model\CategoryFactory;
@@ -94,7 +98,23 @@ class BrandCategory extends Element
     }
 
     /**
+     * render custom form element
+     *
+     * @param AbstractElement $element
+     *
+     * @return string
+     */
+    public function render(AbstractElement $element)
+    {
+        $this->_element = $element;
+        $html = $this->toHtml();
+
+        return $html;
+    }
+
+    /**
      * @return Collection
+     * @throws LocalizedException
      */
     public function getBrands()
     {

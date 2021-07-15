@@ -22,7 +22,6 @@
 namespace Mageplaza\LayeredNavigationUltimate\Block\Adminhtml\ProductsPage\Edit;
 
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Form
@@ -32,7 +31,7 @@ class Form extends Generic
 {
     /**
      * @return $this
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareForm()
     {
@@ -40,9 +39,9 @@ class Form extends Generic
         $form = $this->_formFactory->create(
             [
                 'data' => [
-                    'id' => 'edit_form',
-                    'action' => $this->getUrl('*/*/save'),
-                    'method' => 'post',
+                    'id'      => 'edit_form',
+                    'action'  => $this->getUrl('*/*/save'),
+                    'method'  => 'post',
                     'enctype' => 'multipart/form-data'
                 ]
             ]

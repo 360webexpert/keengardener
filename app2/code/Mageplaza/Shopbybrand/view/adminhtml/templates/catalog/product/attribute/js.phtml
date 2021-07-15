@@ -1,0 +1,156 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Shopbybrand
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+if ($block->isBrandAttribute()) : ?>
+    <div id="brand-attribute-popup">
+        <div class="messages">
+            <div id="brand-attribute-popup-success" class="message message-success success" style="display: none">
+                <div class="content" data-ui-id="messages-message-success"></div>
+            </div>
+            <div id="brand-attribute-popup-error" class="message message-error error" style="display: none">
+                <div class="content" data-ui-id="messages-message-error"></div>
+            </div>
+        </div>
+        <div id="brand-attribute-popup-content"></div>
+    </div>
+    <script type="text/javascript">
+        require([
+            "jquery",
+            'mage/mage',
+            "Magento_Ui/js/modal/modal"
+        ], function ($) {
+            var currentOption = 0,
+                successMessage = '#brand-attribute-popup-success',
+                errorMessage = '#brand-attribute-popup-error',
+                brandModal = $('#brand-attribute-popup').modal({
+                    title: $.mage.__('Brand Configuration'),
+                    type: 'slide',
+                    buttons: [
+                        {
+                            text: $.mage.__('Save'),
+                            'class': 'action-primary brand-save-button',
+                            click: function () {
+                                var form = $('#brand_attribute_save'),
+                                    action = form.attr("action"),
+                                    data = new FormData(form[0]);
+
+                                $(successMessage).hide();
+                                $(errorMessage).hide();
+
+                                if (form.valid()) {
+                                    $.ajax({
+                                        url: action,
+                                        type: 'POST',
+                                        data: data,
+                                        mimeType: "multipart/form-data",
+                                        showLoader: true,
+                                        contentType: false,
+                                        cache: false,
+                                        processData: false,
+                                        success: function (response) {
+                                            var result = $.parseJSON(response);
+                                            if (result.success) {
+                                                $('#brand-attribute-popup-content').html(result.html);
+                                                $('#brand_attribute_save').mage('validation', {});
+                                                $(successMessage + ' .content').html(result.message);
+                                                $(successMessage).show();
+                                            } else {
+                                                $(errorMessage + ' .content').html(result.message);
+                                                $(errorMessage).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        },
+                        {
+                            text: $.mage.__('Cancel'),
+                            click: function () {
+                                brandModal.modal('closeModal');
+                            }
+                        }
+                    ],
+                    opened: function () {
+                        $('#brand_attribute_save').mage('validation', {});
+                        window.switchScope = brandSwitchScope;
+                    },
+                    closed: function () {
+                        $(successMessage).hide();
+                        $(errorMessage).hide();
+                    }
+                });
+
+            window.openBrandModal = function (id) {
+                if (!$('#brand-store-switcher').length) {
+                    $('.brand-save-button')
+                        .closest('.page-main-actions')
+                        .prepend('<div id="brand-store-switcher"></div>');
+                }
+                if (currentOption !== id) {
+                    brandAjaxUpdate({id: id});
+                } else {
+                    brandModal.modal('openModal');
+                }
+            };
+
+            function brandSwitchScope(obj) {
+                var switcher = $(obj),
+                    scopeId = switcher.val();
+
+                var param = {id: currentOption};
+                param[switcher.data('param')] = scopeId;
+
+                brandAjaxUpdate(param);
+            }
+
+            /**
+             * @param param
+             */
+            function brandAjaxUpdate(param) {
+                $.ajax({
+                    url: '<?= /** @noEscape */ $block->getBrandUpdateUrl() ?>',
+                    type: 'POST',
+                    data: param,
+                    showLoader: true,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#brand-attribute-popup-content').html(response.html);
+
+                            var storeSwitcher = $('#brand-store-switcher');
+                            storeSwitcher.html(response.switcher);
+                            storeSwitcher.trigger('contentUpdated');
+
+                            currentOption = param.id;
+                            brandModal.modal('openModal');
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    <style type="text/css">
+        button[class*=brand_setting_option_] {
+            display: none;
+        }
+    </style>
+<?php endif; ?>

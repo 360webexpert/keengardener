@@ -1,113 +1,84 @@
 <?php
 /**
  * @author Amasty Team
- * @copyright Copyright (c) 2021 Amasty (https://www.amasty.com)
+ * @copyright Copyright (c) 2020 Amasty (https://www.amasty.com)
  * @package Amasty_ShippingTableRates
  */
 
 
 namespace Amasty\ShippingTableRates\Model\Carrier;
 
-use Amasty\ShippingTableRates\Model\Rate\Provider;
-use Amasty\ShippingTableRates\Model\ResourceModel\Label\Collection as LabelCollection;
-use Amasty\ShippingTableRates\Model\ResourceModel\Label\CollectionFactory as LabelCollectionFactory;
-use Amasty\ShippingTableRates\Model\ResourceModel\Method\Collection as MethodCollection;
-use Amasty\ShippingTableRates\Model\ResourceModel\Method\CollectionFactory as MethodCollectionFactory;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
-use Magento\Quote\Model\Quote\Address\RateResult\Method;
-use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
-use Magento\Shipping\Model\Carrier\AbstractCarrier;
-use Magento\Shipping\Model\Carrier\CarrierInterface;
-use Magento\Shipping\Model\Rate\Result;
-use Magento\Shipping\Model\Rate\ResultFactory;
-use Magento\Store\Model\StoreManagerInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Shipping Table Rate implementation
  */
-class Table extends AbstractCarrier implements CarrierInterface
+class Table extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
+    \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     const VARIABLE_DAY = '{day}';
     const VARIABLE_DLIVERY_NAME = '{name}';
 
-    /**
-     * @var string
-     */
     protected $_code = 'amstrates';
-
-    /**
-     * @var bool
-     */
     protected $_isFixed = true;
-
+    protected $_rateResultFactory;
+    protected $_rateMethodFactory;
     /**
-     * @var ResultFactory
-     */
-    protected $rateResultFactory;
-
-    /**
-     * @var MethodFactory
-     */
-    protected $rateMethodFactory;
-
-    /**
-     * @var LabelCollectionFactory
+     * @var \Amasty\ShippingTableRates\Model\ResourceModel\Label\CollectionFactory
      */
     private $labelCollectionFactory;
-
     /**
-     * @var MethodCollectionFactory
+     * @var \Amasty\ShippingTableRates\Model\ResourceModel\Method\CollectionFactory
      */
     private $methodCollectionFactory;
-
     /**
-     * @var StoreManagerInterface
+     * @var \Amasty\ShippingTableRates\Model\RateFactory
+     */
+    private $rateFactory;
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
+    /**
+     * @var \Amasty\ShippingTableRates\Helper\Data
+     */
+    private $helperData;
 
     /**
-     * @var State
+     * @var \Magento\Framework\App\State
      */
     private $state;
 
-    /**
-     * @var Provider
-     */
-    private $rateProvider;
-
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        ErrorFactory $rateErrorFactory,
-        LoggerInterface $logger,
-        ResultFactory $rateResultFactory,
-        MethodFactory $rateMethodFactory,
-        LabelCollectionFactory $labelCollectionFactory,
-        MethodCollectionFactory $methodCollectionFactory,
-        StoreManagerInterface $storeManager,
-        State $state,
-        Provider $rateProvider,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+        \Amasty\ShippingTableRates\Model\ResourceModel\Label\CollectionFactory $labelCollectionFactory,
+        \Amasty\ShippingTableRates\Model\ResourceModel\Method\CollectionFactory $methodCollectionFactory,
+        \Amasty\ShippingTableRates\Model\RateFactory $rateFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Amasty\ShippingTableRates\Helper\Data $helperData,
+        \Magento\Framework\App\State $state,
         array $data = []
     ) {
-        $this->rateResultFactory = $rateResultFactory;
-        $this->rateMethodFactory = $rateMethodFactory;
+        $this->_rateResultFactory = $rateResultFactory;
+        $this->_rateMethodFactory = $rateMethodFactory;
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
         $this->labelCollectionFactory = $labelCollectionFactory;
         $this->methodCollectionFactory = $methodCollectionFactory;
+        $this->rateFactory = $rateFactory;
         $this->storeManager = $storeManager;
+        $this->helperData = $helperData;
         $this->state = $state;
-        $this->rateProvider = $rateProvider;
     }
 
     /**
      * @param RateRequest $request
      *
-     * @return bool|DataObject|Result|null
+     * @return bool|\Magento\Framework\DataObject|\Magento\Shipping\Model\Rate\Result|null
      */
     public function collectRates(RateRequest $request)
     {
@@ -115,11 +86,11 @@ class Table extends AbstractCarrier implements CarrierInterface
             return false;
         }
 
-        /** @var Result $result */
-        $result = $this->rateResultFactory->create();
-        /** @var LabelCollection $customLabelCollection */
-        $customLabelCollection = $this->labelCollectionFactory->create();
-        /** @var MethodCollection $methodCollection */
+        /** @var \Magento\Shipping\Model\Rate\Result $result */
+        $result = $this->_rateResultFactory->create();
+        /** @var \Amasty\ShippingTableRates\Model\ResourceModel\Label\Collection $customLabel */
+        $customLabel = $this->labelCollectionFactory->create();
+        /** @var \Amasty\ShippingTableRates\Model\ResourceModel\Method\Collection $methodCollection */
         $methodCollection = $this->methodCollectionFactory->create();
 
         $storeId = $this->getStoreId($request);
@@ -127,19 +98,17 @@ class Table extends AbstractCarrier implements CarrierInterface
         $methodCollection
             ->addFieldToFilter('is_active', 1)
             ->addStoreFilter($storeId)
-            ->addCustomerGroupFilter($this->getCustomerGroupId($request))
-            ->addOrder('main_table.sort_order');
+            ->addCustomerGroupFilter($this->getCustomerGroupId($request));
 
-        $rates = $this->rateProvider->getRates($request, $methodCollection);
+        /** @var \Amasty\ShippingTableRates\Model\Rate $modelRate */
+        $modelRate = $this->rateFactory->create();
+        $rates = $modelRate->findBy($request, $methodCollection);
         $countOfRates = 0;
-
         foreach ($methodCollection as $customMethod) {
-            $customLabelData = $customLabelCollection
-                ->addFiltersByMethodIdStoreId($customMethod->getId(), $storeId)
+            $customLabelData = $customLabel->addFiltersByMethodIdStoreId($customMethod->getId(), $storeId)
                 ->getLastItem();
-
-            /** @var Method $method */
-            $method = $this->rateMethodFactory->create();
+            /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
+            $method = $this->_rateMethodFactory->create();
             // record carrier information
             $method->setCarrier($this->_code);
             $method->setCarrierTitle($this->getConfigData('title'));
@@ -164,7 +133,6 @@ class Table extends AbstractCarrier implements CarrierInterface
 
                 $method->setCost($rates[$customMethod->getId()]['cost']);
                 $method->setPrice($rates[$customMethod->getId()]['cost']);
-                $method->setSortOrder($customMethod->getSortOrder());
 
                 $method->setPos($customMethod->getPos());
 
@@ -206,7 +174,7 @@ class Table extends AbstractCarrier implements CarrierInterface
 
     public function getAllowedMethods()
     {
-        /** @var MethodCollection $collection */
+        /** @var \Amasty\ShippingTableRates\Model\ResourceModel\Method\Collection $collection */
         $collection = $this->methodCollectionFactory->create();
         $collection
             ->addFieldToFilter('is_active', 1);

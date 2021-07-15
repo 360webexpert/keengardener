@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Shopbybrand\Block\Brand;
 
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Mageplaza\Shopbybrand\Block\Brand;
 use Mageplaza\Shopbybrand\Helper\Data;
 
@@ -31,31 +30,35 @@ use Mageplaza\Shopbybrand\Helper\Data;
  */
 class BrandList extends Brand
 {
-    protected $optionIds = [];
-
     /**
-     * @var Collection
+     * @inheritdoc
      */
-    protected $brandCollection;
+    public function getCollection($type = null, $option = null, $char = null)
+    {
+        $brandCollection = [];
+
+        $collection = parent::getCollection($type, $option, $char);
+        foreach ($collection as $brand) {
+            $qty = $this->getProductQuantity($brand->getOptionId());
+            if ($qty) {
+                $brand->setProductQuantity($qty);
+                $brandCollection[] = $brand;
+            }
+        }
+
+        return $brandCollection;
+    }
 
     /**
-     * Get Brand List by First Character
+     * Get Brand List by First Char
      *
      * @param $char
      *
-     * @return Collection|mixed
+     * @return mixed
      */
     public function getCollectionByChar($char)
     {
-        if (!$this->brandCollection) {
-            $this->brandCollection = $this->getCollection(Data::BRAND_FIRST_CHAR);
-        }
-        $collection = clone $this->brandCollection;
-        $sqlString = $this->helper->checkCharacter($char);
-        $collection->getSelect()->where($sqlString);
-        $this->optionIds[$char] = $this->getOptionIdsToFilter($collection);
-
-        return $collection;
+        return $this->getCollection(Data::BRAND_FIRST_CHAR, null, $char);
     }
 
     /**
@@ -81,25 +84,16 @@ class BrandList extends Brand
     }
 
     /**
-     * @param string $char
-     *
-     * @return mixed
-     */
-    public function getOptionIdByChar($char)
-    {
-        return $this->optionIds[$char];
-    }
-
-    /**
-     * @param Collection $collection
+     * @param $char
      *
      * @return string
      */
-    public function getOptionIdsToFilter($collection)
+    public function getOptionIdsByChar($char)
     {
         $optionIds = [];
 
-        foreach ($collection as $brand) {
+        $brandCollection = $this->getCollectionByChar($char);
+        foreach ($brandCollection as $brand) {
             $optionIds [] = $brand->getId();
         }
         $result = implode(',', $optionIds);

@@ -1,0 +1,82 @@
+"Custom Products Pages","Custom Products Pages"
+"Add New Page","Add New Page"
+"Save Page","Save Page"
+"Delete Page","Delete Page"
+"Save and Continue Edit","Save and Continue Edit"
+"Edit Page '%1'","Edit Page '%1'"
+"New Page","New Page"
+"Default Attributes","Default Attributes"
+"Page Information","Page Information"
+Name,Name
+"Page Title","Page Title"
+"Url key","Url key"
+"Stores view","Stores view"
+Status,Status
+"Link Position","Link Position"
+Description,Description
+"Meta Title","Meta Title"
+"Meta Keywords","Meta Keywords"
+"Meta Description","Meta Description"
+"Custom Products Page Information","Custom Products Page Information"
+ID,ID
+"Store View","Store View"
+Edit,Edit
+Delete,Delete
+"Are you sure?","Are you sure?"
+"Delete successfully !","Delete successfully !"
+"Cannot find page to delete.","Cannot find page to delete."
+"The page doesnot exist.","The page doesnot exist."
+"Please select page(s).","Please select page(s)."
+"Cannot delete page with ID %1","Cannot delete page with ID %1"
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"The page has been saved successfully.","The page has been saved successfully."
+"Something went wrong while saving the page.","Something went wrong while saving the page."
+"Please enter the page name.","Please enter the page name."
+"Please enter the page title.","Please enter the page title."
+"Please enter the page route.","Please enter the page route."
+"The url key ""%1"" has been used.","The url key ""%1"" has been used."
+"Use Config Settings","Use Config Settings"
+Normal,Normal
+Hidden,Hidden
+Scroll,Scroll
+Vertical,Vertical
+Horizontal,Horizontal
+Both,Both
+"-- Please select --","-- Please select --"
+"Top link","Top link"
+"Footer link","Footer link"
+Category,Category
+Default,Default
+"Flat UI","Flat UI"
+Html5,Html5
+Modern,Modern
+"Nice white","Nice white"
+"Simple dark","Simple dark"
+"%1 star","%1 star"
+"%1 stars","%1 stars"
+"%1 star to %2 stars","%1 star to %2 stars"
+"%1 stars to %2 stars","%1 stars to %2 stars"
+"Display Type","Display Type"
+"Number of option","Number of option"
+"Block height","Block height"
+Attributes,Attributes
+Options,Options
+"Add Attribute","Add Attribute"
+"-- Please select attribute --","-- Please select attribute --"
+From,From
+To,To
+"Show more","Show more"
+"Show less","Show less"
+"Show Type","Show Type"
+"Choose attribute display option types.","Choose attribute display option types."
+"Number of options","Number of options"
+"Number of options in attribute can be display by default. Default '5'","Number of options in attribute can be display by default. Default '5'"
+"Attribute height","Attribute height"
+"Max height of each attribute in px. Default '200'","Max height of each attribute in px. Default '200'"
+"Enable Infinite scroll","Enable Infinite scroll"
+"If yes, products will auto load when scroll down.","If yes, products will auto load when scroll down."
+"Show Navigation","Show Navigation"
+"Show As Slider","Show As Slider"
+"Design Configuration","Design Configuration"
+"Slider Type","Slider Type"
+"Custom Css","Custom Css"

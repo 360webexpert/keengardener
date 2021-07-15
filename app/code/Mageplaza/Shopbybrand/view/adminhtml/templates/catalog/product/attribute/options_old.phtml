@@ -19,14 +19,13 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Shopbybrand\Block\Adminhtml\Attribute\Edit\Options $block */
 if ($block->isBrandAttribute()) :
     ?>
     <script id="row-template" type="text/x-magento-template">
         <tr>
             <td class="col-draggable">
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
-                    <div data-role="draggable-handle" class="draggable-handle" title="<?= /** @noEscape */ __('Sort Option') ?>"></div>
+                    <div data-role="draggable-handle" class="draggable-handle" title="<?= __('Sort Option') ?>"></div>
                 <?php endif; ?>
                 <input data-role="order" type="hidden" name="option[order][<%- data.id %>]"
                        value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) :
@@ -40,8 +39,8 @@ if ($block->isBrandAttribute()) :
             </td>
             <?php foreach ($block->getStores() as $_store) : ?>
                 <td class="col-<%- data.id %>">
-                    <input name="option[value][<%- data.id %>][<?= /** @noEscape */ $_store->getId() ?>]"
-                           value="<%- data.store<?= /** @noEscape */ $_store->getId() ?> %>"
+                    <input name="option[value][<%- data.id %>][<?= $_store->getId() ?>]"
+                           value="<%- data.store<?= $_store->getId() ?> %>"
                            class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :
                                 ?> required-option<?php
                                             endif; ?>"
@@ -55,16 +54,16 @@ if ($block->isBrandAttribute()) :
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
                     <button
                             id="setting_button_<%- data.id %>"
-                            title="<?= $block->escapeHtml(__('Configure')) ?>"
+                            title="<?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?>"
                             type="button"
                             class="action- scalable setting setting-option brand_setting_<%- data.id %>"
                             onclick="window.openBrandModal('<%- data.id %>');">
-                        <span><?= $block->escapeHtml(__('Configure')) ?></span>
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?></span>
                     </button>
-                    <button id="delete_button_<%- data.id %>" title="<?= $block->escapeHtml(__('Delete')) ?>" type="button"
+                    <button id="delete_button_<%- data.id %>" title="<?= __('Delete') ?>" type="button"
                             class="action- scalable delete delete-option"
                     >
-                        <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                        <span><?= __('Delete') ?></span>
                     </button>
                 <?php endif; ?>
             </td>
@@ -74,7 +73,7 @@ if ($block->isBrandAttribute()) :
         <tr>
             <td class="col-draggable">
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
-                    <div data-role="draggable-handle" class="draggable-handle" title="<?= $block->escapeHtml(__('Sort Option')) ?>"></div>
+                    <div data-role="draggable-handle" class="draggable-handle" title="<?= __('Sort Option'); ?>"></div>
                 <?php endif; ?>
                 <input data-role="order" type="hidden" name="optiontext[order][<%- data.id %>]"
                        value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) :
@@ -89,13 +88,13 @@ if ($block->isBrandAttribute()) :
             </td>
             <?php foreach ($block->getStores() as $_store) : ?>
                 <td class="col-<%- data.id %>" style="width: 50px;">
-                    <input class="input-text swatch-text-field-<?= /** @noEscape */ $_store->getId() ?> <?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :
+                    <input class="input-text swatch-text-field-<?= $_store->getId() ?> <?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :
                         ?>required-option<?php
                                                                endif; ?>"
-                           name="swatchtext[value][<%- data.id %>][<?= /** @noEscape */ $_store->getId() ?>]" type="text" value="<%- data.swatch<?= /** @noEscape */ $_store->getId() ?> %>"/>
+                           name="swatchtext[value][<%- data.id %>][<?= $_store->getId() ?>]" type="text" value="<%- data.swatch<?= $_store->getId() ?> %>"/>
                 </td>
                 <td class="swatch-col-<%- data.id %>">
-                    <input name="optiontext[value][<%- data.id %>][<?= /** @noEscape */ $_store->getId() ?>]" value="<%- data.store<?= /** @noEscape */ $_store->getId() ?> %>"
+                    <input name="optiontext[value][<%- data.id %>][<?= $_store->getId() ?>]" value="<%- data.store<?= $_store->getId() ?> %>"
                            class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :
                                 ?> required-option<?php
                                             endif; ?>"
@@ -107,16 +106,16 @@ if ($block->isBrandAttribute()) :
             <td id="delete_button_swatch_container_<%- data.id %>" class="col-delete">
                 <input type="hidden" class="delete-flag" name="optiontext[delete][<%- data.id %>]" value=""/>
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
-                    <button title="<?= $block->escapeHtml(__('Configure')) ?>" type="button"
+                    <button title="<?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?>" type="button"
                             class="action- scalable delete setting-option brand_setting_<%- data.id %>"
                             onclick="window.openBrandModal('<%- data.id %>');"
                     >
-                        <span><?= $block->escapeHtml(__('Configure')) ?></span>
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?></span>
                     </button>
-                    <button title="<?= $block->escapeHtml(__('Delete')) ?>" type="button"
+                    <button title="<?= __('Delete') ?>" type="button"
                             class="action- scalable delete delete-option"
                     >
-                        <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                        <span><?= __('Delete') ?></span>
                     </button>
                 <?php endif; ?>
             </td>
@@ -126,7 +125,7 @@ if ($block->isBrandAttribute()) :
         <tr>
             <td class="col-draggable">
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
-                    <div data-role="draggable-handle" class="draggable-handle" title="<?= $block->escapeHtml(__('Sort Option')) ?>"></div>
+                    <div data-role="draggable-handle" class="draggable-handle" title="<?= __('Sort Option') ?>"></div>
                 <?php endif; ?>
                 <input data-role="order" type="hidden" name="optionvisual[order][<%- data.id %>]"
                        value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) :
@@ -157,9 +156,9 @@ if ($block->isBrandAttribute()) :
                     </div>
                     <div class="swatch_row" style="border:1px solid black;">
                         <form class="ignore-validate">
-                            <input type="hidden" name="form_key" value="<?= /** @noEscape */ $block->getFormKey() ?>"/>
+                            <input type="hidden" name="form_key" value="<?= $block->getFormKey() ?>"/>
                             <input type="file" name="datafile" id="swatch_file_option_<%- data.id %>"
-                                   onchange="fileUpload(this.previous('input'), this.form,'<?= $block->escapeUrl($block->getUrl('swatches/iframe/show')) ?>','swatch_window_option_<%- data.id %>'); return false;"><br/>
+                                   onchange="fileUpload(this.previous('input'), this.form,'<?= $block->getUrl('swatches/iframe/show'); ?>','swatch_window_option_<%- data.id %>'); return false;"><br/>
                         </form>
                         <div class="swatch_row_name" onclick="$('swatch_file_option_<%- data.id %>').click();">
                             <p>Upload a file</p>
@@ -174,7 +173,7 @@ if ($block->isBrandAttribute()) :
             </td>
             <?php foreach ($block->getStores() as $_store) : ?>
                 <td class="swatch-col-<%- data.id %>">
-                    <input name="optionvisual[value][<%- data.id %>][<?= /** @noEscape */ $_store->getId() ?>]" value="<%- data.store<?= /** @noEscape */ $_store->getId() ?> %>"
+                    <input name="optionvisual[value][<%- data.id %>][<?= $_store->getId() ?>]" value="<%- data.store<?= $_store->getId() ?> %>"
                            class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :
                                 ?> required-option<?php
                                             endif; ?>"
@@ -186,15 +185,15 @@ if ($block->isBrandAttribute()) :
             <td id="delete_button_swatch_container_<%- data.id %>" class="col-delete">
                 <input type="hidden" class="delete-flag" name="optionvisual[delete][<%- data.id %>]" value=""/>
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
-                    <button title="<?= $block->escapeHtml(__('Configure')) ?>" type="button"
+                    <button title="<?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?>" type="button"
                             class="action- scalable delete setting-option brand_setting_<%- data.id %>"
                             onclick="window.openBrandModal('<%- data.id %>');">
-                        <span><?= $block->escapeHtml(__('Configure')) ?></span>
+                        <span><?= /** @noEscape */ $block->escapeHtml(__('Configure')) ?></span>
                     </button>
-                    <button title="<?= $block->escapeHtml(__('Delete')) ?>" type="button"
+                    <button title="<?= __('Delete') ?>" type="button"
                             class="action- scalable delete delete-option"
                     >
-                        <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                        <span><?= __('Delete') ?></span>
                     </button>
                 <?php endif; ?>
             </td>

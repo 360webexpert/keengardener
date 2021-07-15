@@ -1,0 +1,4 @@
+brand_name,store_id,label,url_key,image,is_featured,short_description,description,static_block,meta_title,meta_description,meta_keywords,swatch_type,swatch_value,attribute_code
+Adidas,0,Adidas,shoes,brands/adidas.jpg,1,Adidas Short Description,Adidas Description,,,Adidas Meta Description,Adidas Meta Keywords,,,
+Adidas,1,Shoes,shoes,brands/adidas.jpg,0,Store Adidas Short Description,Store Adidas Description,,Store Adidas Meta Title,Store Adidas Meta Description,Store Adidas Meta Keywords,,,
+Nike,0,Nike,nike,brands/nike.jpg,0,Nike Description,Nike Description,,Nike Meta Title,Nike Meta Description,Nike Meta Keywords,,,

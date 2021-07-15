@@ -21,13 +21,9 @@
 
 namespace Mageplaza\LayeredNavigation\Model\Layer;
 
-use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Mageplaza\LayeredNavigation\Helper\Data as LayerHelper;
-use Mageplaza\LayeredNavigation\Model\Layer\Filter\Category;
 
 /**
  * Class Filter
@@ -35,7 +31,7 @@ use Mageplaza\LayeredNavigation\Model\Layer\Filter\Category;
  */
 class Filter
 {
-    /** @var RequestInterface */
+    /** @var \Magento\Framework\App\RequestInterface */
     protected $request;
 
     /** @var array Slider types */
@@ -44,7 +40,7 @@ class Filter
     /**
      * Filter constructor.
      *
-     * @param RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(RequestInterface $request)
     {
@@ -54,7 +50,7 @@ class Filter
     /**
      * Layered configuration for js widget
      *
-     * @param AbstractFilter $filters
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filters
      * @param $config
      *
      * @return mixed
@@ -81,27 +77,22 @@ class Filter
     public function isSliderTypes($filter, $types = null)
     {
         $filterType = $this->getFilterType($filter);
-        $types      = $types ?: $this->sliderTypes;
+        $types = $types ?: $this->sliderTypes;
 
         return in_array($filterType, $types, true);
     }
 
     /**
-     * @param AbstractFilter $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      * @param null $compareType
      *
      * @return bool|string
-     * @throws NoSuchEntityException
      */
     public function getFilterType($filter, $compareType = null)
     {
         $type = LayerHelper::FILTER_TYPE_LIST;
         if ($filter->getRequestVar() === 'price') {
             $type = LayerHelper::FILTER_TYPE_SLIDER;
-        } elseif ($filter->getRequestVar() === 'cat'
-            && $filter instanceof Category
-            && $filter->isRenderCategoryTree()) {
-            $type = LayerHelper::FILTER_TYPE_TREE;
         }
 
         return $compareType ? ($type === $compareType) : $type;
@@ -129,17 +120,17 @@ class Filter
      * @param Item $item
      *
      * @return bool
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isSelected(Item $item)
     {
         $filterValue = $this->getFilterValue($item->getFilter());
 
-        return !empty($filterValue) && in_array((string)$item->getValue(), $filterValue, true);
+        return !empty($filterValue) && in_array((string) $item->getValue(), $filterValue, true);
     }
 
     /**
-     * @param AbstractFilter $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      * @param bool|true $explode
      *
      * @return array|mixed
@@ -157,7 +148,7 @@ class Filter
     /**
      * Allow to show counter after options
      *
-     * @param AbstractFilter $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      *
      * @return bool
      */
@@ -169,19 +160,19 @@ class Filter
     /**
      * Allow multiple filter
      *
-     * @param AbstractFilter $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      *
      * @return bool
      */
     public function isMultiple($filter)
     {
-        return !($this->isSliderTypes($filter) || $filter->getRequestVar() === 'price');
+        return !$this->isSliderTypes($filter) && !$filter->getRequestVar() === 'price';
     }
 
     /**
      * Checks whether the option reduces the number of results
      *
-     * @param AbstractFilter $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      * @param int $optionCount Count of search results with this option
      * @param int $totalSize Current search results count
      *
@@ -199,7 +190,7 @@ class Filter
     }
 
     /**
-     * @param AbstractFilter $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
      *
      * @return bool
      */
