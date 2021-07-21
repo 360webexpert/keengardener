@@ -67,8 +67,7 @@
                     <source_model>WeSupply\Toolbox\Model\Config\Source\OrderExportFilter</source_model>
                     <comment>
                     <![CDATA[
-                    Select which orders will be exported and than updated to WeSupply Platform. <br />
-                    NOTE: downloadable and virtual product types are not exported as they cannot be tracked. <br />
+                    Select which orders will be exported and updated to WeSupply Platform.
                     ]]>
                     </comment>
                 </field>
@@ -78,6 +77,22 @@
                     <comment>Orders which are shipped to selected country(s) are not exported to WeSupply Platform.</comment>
                     <depends>
                         <field id="wesupply_api/wesupply_order_export/wesupply_order_filter">exclude_specific</field>
+                    </depends>
+                </field>
+                <field id="wesupply_order_filter_pending" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Exclude Pending Orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Select "Yes" if you would like to exclude orders in the "Pending" status from being exported to WeSupply.</comment>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
+                    </depends>
+                </field>
+                <field id="wesupply_order_filter_complete" translate="label" type="select" sortOrder="24" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Exclude Complete Orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Select "Yes" if you would like to exclude orders in the "Complete" status from being exported to WeSupply (this applies only to orders created directly with the "Complete" status).</comment>
+                    <depends>
+                        <field id="wesupply_api/wesupply_order_export/wesupply_order_filter" separator=",">allow_all,exclude_specific</field>
                     </depends>
                 </field>
                 <field id="wesupply_order_product_attributes" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -282,7 +297,7 @@
                    If enabled, your customers will have the possibility to get an estimations on the delivery time based on their IP address location detection,
                    <br />or by entering a specific zip-code directly on the product page, shopping cart and checkout page.
                    <br/>
-                   <strong style="color: #ff0000">In order to enable Estimate Delivery Date, make sure this addon is activated under your WeSupply account.</strong>
+                   <strong style="color: #ff0000">In order to enable Estimate Delivery Date, make sure this addon is activated and enabled under your WeSupply account.</strong>
                     ]]>
                 </comment>
                 <field id="enable_delivery_estimations" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -328,7 +343,7 @@
                 </field>
                 <field id="estimation_range" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Estimations Range</label>
-                    <validate>validate-number validate-zero-or-greater</validate>
+                    <validate>integer</validate>
                     <comment>
                         <![CDATA[
                             Insert number of days for delivery estimations, applicable when <strong>All Shipping Methods</strong> is set. Eg: If you set range with value 2 and  shipping vendor estimation is for 28 January, shown estimation will be as follows: 28 January - 30 January.
@@ -381,8 +396,29 @@
                 </field>
                 <field id="estimation_order_within" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>"Order within" Display</label>
-                    <validate>validate-number</validate>
+                    <validate>integer</validate>
                     <comment>Display "Order within" if remaining time is lower than this value (in hours).</comment>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_label_arrival" translate="label" type="text" sortOrder="53" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>"Estimated Arrival" Text</label>
+                    <validate>validate-no-empty</validate>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_label_zip" translate="label" type="text" sortOrder="56" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>"at ZIP" Text</label>
+                    <validate>validate-no-empty</validate>
+                    <depends>
+                        <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
+                    </depends>
+                </field>
+                <field id="estimation_label_order_within" translate="label" type="text" sortOrder="59" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>"Order within" Text</label>
+                    <validate>validate-no-empty</validate>
                     <depends>
                         <field id="wesupply_api/step_5/enable_delivery_estimations">1</field>
                     </depends>
@@ -413,6 +449,66 @@
                 <depends>
                     <field id="wesupply_api/integration/wesupply_enabled">1</field>
                 </depends>
+            </group>
+        </section>
+        <section id="help_center_order_tracking_notification" translate="label"  type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Order Tracking &amp; Notifications</label>
+            <tab>wesupply</tab>
+            <resource>WeSupply_Toolbox::OrderTrackingNotifications</resource>
+            <group id="order_tracking_notification" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Order Tracking &amp; Notifications</label>
+                <fieldset_css>help-center</fieldset_css>
+                <frontend_model>WeSupply\Toolbox\Block\Adminhtml\System\Config\HelpCenterLink</frontend_model>
+            </group>
+        </section>
+        <section id="help_center_returns_rma" translate="label"  type="text" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Returns &amp; RMA</label>
+            <tab>wesupply</tab>
+            <resource>WeSupply_Toolbox::ReturnsRMA</resource>
+            <group id="returns_rma" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Returns &amp; RMA</label>
+                <fieldset_css>help-center</fieldset_css>
+                <frontend_model>WeSupply\Toolbox\Block\Adminhtml\System\Config\HelpCenterLink</frontend_model>
+            </group>
+        </section>
+        <section id="help_center_estimated_delivery_dates" translate="label"  type="text" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Estimated Delivery Dates</label>
+            <tab>wesupply</tab>
+            <resource>WeSupply_Toolbox::EstimatedDeliveryDates</resource>
+            <group id="estimated_delivery_dates" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Estimated Delivery Dates</label>
+                <fieldset_css>help-center</fieldset_css>
+                <frontend_model>WeSupply\Toolbox\Block\Adminhtml\System\Config\HelpCenterLink</frontend_model>
+            </group>
+        </section>
+        <section id="help_center_store_locator" translate="label"  type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Store Locator</label>
+            <tab>wesupply</tab>
+            <resource>WeSupply_Toolbox::StoreLocator</resource>
+            <group id="store_locator" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Store Locator</label>
+                <fieldset_css>help-center</fieldset_css>
+                <frontend_model>WeSupply\Toolbox\Block\Adminhtml\System\Config\HelpCenterLink</frontend_model>
+            </group>
+        </section>
+        <section id="help_center_store_pickup_curbside" translate="label"  type="text" sortOrder="240" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Store Pickup &amp; Curbside</label>
+            <tab>wesupply</tab>
+            <resource>WeSupply_Toolbox::StorePickupCurbside</resource>
+            <group id="store_pickup_curbside" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Store Pickup &amp; Curbside</label>
+                <fieldset_css>help-center</fieldset_css>
+                <frontend_model>WeSupply\Toolbox\Block\Adminhtml\System\Config\HelpCenterLink</frontend_model>
+            </group>
+        </section>
+        <section id="help_center_reviews" translate="label"  type="text" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Reviews</label>
+            <tab>wesupply</tab>
+            <resource>WeSupply_Toolbox::Reviews</resource>
+            <group id="reviews" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Reviews</label>
+                <fieldset_css>help-center</fieldset_css>
+                <frontend_model>WeSupply\Toolbox\Block\Adminhtml\System\Config\HelpCenterLink</frontend_model>
             </group>
         </section>
     </system>

@@ -2,7 +2,6 @@
 namespace WeSupply\Toolbox\Model;
 
 use WeSupply\Toolbox\Api\Data\OrderInterface;
-use WeSupply\Toolbox\Model\ResourceModel\Order as ResourceWesupplyOrder;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 
@@ -106,6 +105,16 @@ class Order extends AbstractModel implements OrderInterface, IdentityInterface
     }
 
     /**
+     * Get Awaiting Update flag
+     *
+     * @return bool
+     */
+    public function getAwaitingUpdate()
+    {
+        return $this->getData(self::AWAITING_UPDATE);
+    }
+
+    /**
      * Set ID
      *
      * @param int $id
@@ -167,6 +176,18 @@ class Order extends AbstractModel implements OrderInterface, IdentityInterface
      */
     public function setStoreId($id) {
         return $this->setData(self::STORE_ID, $id);
+    }
+
+    /**
+     * Set Awaiting Update flag
+     *
+     * @param bool $awaiting
+     *
+     * @return OrderInterface|Order
+     */
+    public function setAwaitingUpdate($awaiting)
+    {
+        return $this->setData(self::AWAITING_UPDATE, $awaiting);
     }
 
     /**

@@ -3,17 +3,17 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-               <resource id="Magento_Backend::stores">
-                    <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Config::config">
-                            <resource id="WeSupply_Toolbox::APISettings" title="WeSupply Configuration" sortOrder="100" />
-                        </resource>
+                <resource id="WeSupply_Toolbox::WeSupply" title="WeSupply" sortOrder="500">
+                    <resource id="WeSupply_Toolbox::Toolbox_Label" sortOrder="100" title="Settings">
+                        <resource id="WeSupply_Toolbox::Toolbox" title="Configuration" sortOrder="10" />
                     </resource>
-                </resource>
-
-                <resource id="WeSupply_Toolbox::WeSupply" title="WeSupply" >
-                    <resource id="WeSupply_Toolbox::Toolbox_Label" sortOrder="100" title="WeSupply" >
-                        <resource id="WeSupply_Toolbox::Toolbox" sortOrder="10" title="Configuration" />
+                    <resource id="WeSupply_Toolbox::HelpCenter" sortOrder="200" title="Help Center">
+                        <resource id="WeSupply_Toolbox::OrderTrackingNotifications" sortOrder="10" title="Order Tracking &amp; Notifications" />
+                        <resource id="WeSupply_Toolbox::ReturnsRMA" sortOrder="10" title="Returns &amp; RMA" />
+                        <resource id="WeSupply_Toolbox::EstimatedDeliveryDates" sortOrder="10" title="Estimated Delivery Dates" />
+                        <resource id="WeSupply_Toolbox::StoreLocator" sortOrder="10" title="Store Locator" />
+                        <resource id="WeSupply_Toolbox::StorePickupCurbside" sortOrder="10" title="Store Pickup &amp; Curbside" />
+                        <resource id="WeSupply_Toolbox::Reviews" sortOrder="10" title="Reviews" />
                     </resource>
                 </resource>
             </resource>

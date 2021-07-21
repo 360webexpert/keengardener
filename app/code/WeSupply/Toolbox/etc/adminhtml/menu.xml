@@ -1,23 +1,91 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="WeSupply_Toolbox::WeSupply" title="WeSupply" module="WeSupply_Toolbox" sortOrder="500" resource="WeSupply_Toolbox::WeSupply"/>
         <add
-                id="WeSupply_Toolbox::Toolbox_Label"
-                title="WeSupply"
-                module="WeSupply_Toolbox"
-                sortOrder="100"
-                resource="WeSupply_Toolbox::Toolbox_Label"
-                parent="WeSupply_Toolbox::WeSupply"
+            id="WeSupply_Toolbox::WeSupply"
+            title="WeSupply"
+            module="WeSupply_Toolbox"
+            sortOrder="500"
+            resource="WeSupply_Toolbox::WeSupply"
         />
         <add
-                id="WeSupply_Toolbox::Toolbox"
-                title="Configuration"
-                module="WeSupply_Toolbox"
-                action="adminhtml/system_config/edit/section/wesupply_api/"
-                sortOrder="10"
-                parent="WeSupply_Toolbox::Toolbox_Label"
-                resource="WeSupply_Toolbox::Toolbox"
+            id="WeSupply_Toolbox::Toolbox_Label"
+            title="Settings"
+            module="WeSupply_Toolbox"
+            sortOrder="100"
+            resource="WeSupply_Toolbox::Toolbox_Label"
+            parent="WeSupply_Toolbox::WeSupply"
+        />
+        <add
+            id="WeSupply_Toolbox::Toolbox"
+            title="Configuration"
+            module="WeSupply_Toolbox"
+            action="adminhtml/system_config/edit/section/wesupply_api/"
+            sortOrder="10"
+            parent="WeSupply_Toolbox::Toolbox_Label"
+            resource="WeSupply_Toolbox::Toolbox"
+        />
+        <add
+            id="WeSupply_Toolbox::HelpCenter"
+            title="Help Center"
+            module="WeSupply_Toolbox"
+            sortOrder="200"
+            parent="WeSupply_Toolbox::WeSupply"
+            resource="WeSupply_Toolbox::HelpCenter"
+        />
+        <add
+            id="WeSupply_Toolbox::OrderTrackingNotifications"
+            title="Order Tracking &amp; Notifications"
+            module="WeSupply_Toolbox"
+            action="adminhtml/system_config/edit/section/help_center_order_tracking_notification/"
+            sortOrder="10"
+            parent="WeSupply_Toolbox::HelpCenter"
+            resource="WeSupply_Toolbox::OrderTrackingNotifications"
+        />
+        <add
+            id="WeSupply_Toolbox::ReturnsRMA"
+            title="Returns &amp; RMA"
+            module="WeSupply_Toolbox"
+            action="adminhtml/system_config/edit/section/help_center_returns_rma/"
+            sortOrder="20"
+            parent="WeSupply_Toolbox::HelpCenter"
+            resource="WeSupply_Toolbox::ReturnsRMA"
+        />
+        <add
+            id="WeSupply_Toolbox::EstimatedDeliveryDates"
+            title="Estimated Delivery Dates"
+            module="WeSupply_Toolbox"
+            action="adminhtml/system_config/edit/section/help_center_estimated_delivery_dates/"
+            sortOrder="30"
+            parent="WeSupply_Toolbox::HelpCenter"
+            resource="WeSupply_Toolbox::EstimatedDeliveryDates"
+        />
+        <add
+            id="WeSupply_Toolbox::StoreLocator"
+            title="Store Locator"
+            module="WeSupply_Toolbox"
+            action="adminhtml/system_config/edit/section/help_center_store_locator/"
+            sortOrder="40"
+            parent="WeSupply_Toolbox::HelpCenter"
+            resource="WeSupply_Toolbox::StoreLocator"
+        />
+        <add
+            id="WeSupply_Toolbox::StorePickupCurbside"
+            title="Store Pickup &amp; Curbside"
+            module="WeSupply_Toolbox"
+            action="adminhtml/system_config/edit/section/help_center_store_pickup_curbside/"
+            sortOrder="50"
+            parent="WeSupply_Toolbox::HelpCenter"
+            resource="WeSupply_Toolbox::StorePickupCurbside"
+        />
+        <add
+            id="WeSupply_Toolbox::Reviews"
+            title="Reviews"
+            module="WeSupply_Toolbox"
+            action="adminhtml/system_config/edit/section/help_center_reviews/"
+            sortOrder="60"
+            parent="WeSupply_Toolbox::HelpCenter"
+            resource="WeSupply_Toolbox::Reviews"
         />
     </menu>
 </config>

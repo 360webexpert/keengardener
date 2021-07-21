@@ -196,12 +196,17 @@ class DeliveryProduct extends Action
         $estimationData['estimated_delivery_date'] = date($estimationsFormat, $estimatedTimestamp);
 
         // apply estimation as range
-        $estimationsRange = $this->estimatesHelper->getEstimationsRangeByShipperMethod($shipperMethod);
-        if (!$estimationsRange) {
-            return $estimationData;
+        if ($this->estimatesHelper->estimationRangeEnabled()) {
+            $estimationsRange = $this->estimatesHelper->getApplyEstimationRangeTo() === 'all_shipping_methods' ?
+                $this->estimatesHelper->getEstimationRange() :
+                $this->estimatesHelper->getEstimationsRangeByShipperMethod($shipperMethod);
+
+            if (empty($estimationsRange)) {
+                return $estimationData;
+            }
+            $estimatedRange = date($estimationsFormat, strtotime('+' . $estimationsRange . ' days', $estimatedTimestamp));
+            $estimationData['estimated_delivery_date'] = date($estimationsFormat, $estimatedTimestamp) . ' - ' . $estimatedRange;
         }
-        $estimatedRange = date($estimationsFormat, strtotime('+' . $estimationsRange . ' days', $estimatedTimestamp));
-        $estimationData['estimated_delivery_date'] = date($estimationsFormat, $estimatedTimestamp) . ' - ' . $estimatedRange;
 
         return $estimationData;
     }

@@ -94,7 +94,6 @@ class DeliveryCheckoutCart implements ObserverInterface
 
         if (!$items) {
             $this->resetEstimationQuotes();
-            $this->logger->error('Odd situation... no items in cart!');
             $this->setEstimationQuotes($this->json->serialize(['estimation_attempt' => 'observer']));
 
             return $this;

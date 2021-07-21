@@ -12,6 +12,8 @@
             </integration>
             <wesupply_order_export>
                 <wesupply_order_filter>allow_all</wesupply_order_filter>
+                <wesupply_order_filter_pending>0</wesupply_order_filter_pending>
+                <wesupply_order_filter_complete>0</wesupply_order_filter_complete>
                 <wesupply_order_product_attributes_fetch>itself_parent</wesupply_order_product_attributes_fetch>
             </wesupply_order_export>
             <step_3>
@@ -35,6 +37,9 @@
                 <estimation_range>0</estimation_range>
                 <estimation_display>earliest</estimation_display>
                 <estimation_order_within>24</estimation_order_within>
+                <estimation_label_arrival>Estimated Arrival</estimation_label_arrival>
+                <estimation_label_zip>at ZIP</estimation_label_zip>
+                <estimation_label_order_within>Order within</estimation_label_order_within>
             </step_5>
             <step_6>
                 <store_locator_cms>wesupply-store-locator</store_locator_cms>

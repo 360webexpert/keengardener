@@ -74,4 +74,11 @@ interface OrderRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deleteById($orderId);
+
+    /**
+     * @param Data\OrderInterface  $order
+     *
+     * @return mixed
+     */
+    public function setOrder($order);
 }

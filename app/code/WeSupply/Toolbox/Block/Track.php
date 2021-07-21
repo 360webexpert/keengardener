@@ -9,6 +9,15 @@ use WeSupply\Toolbox\Helper\Data as Helper;
 class Track extends Template
 {
     /**
+     * @const array
+     */
+    private const PARAMS_SANITIZER = [
+        FILTER_SANITIZE_SPECIAL_CHARS,
+        FILTER_SANITIZE_ADD_SLASHES,
+        FILTER_SANITIZE_STRING
+    ];
+
+    /**
      * @var array
      */
     private $params;
@@ -49,7 +58,10 @@ class Track extends Template
     {
         $params = $this->getParams();
         if (isset($params['orderID'])) {
-            return $params['orderID'];
+            $orderId = $params['orderID'];
+            $this->sanitizeParamsVal($orderId);
+
+            return $orderId;
         }
 
         return false;
@@ -101,9 +113,25 @@ class Track extends Template
 
         if ($res) {
             $keys = array_keys($res);
-            return reset($keys) ?? false;
+            $trackId = reset($keys);
+
+            $this->sanitizeParamsVal($trackId);
+
+            return $trackId ?? false;
         }
 
         return false;
+    }
+
+    /**
+     * @param $value
+     */
+    private function sanitizeParamsVal(&$value)
+    {
+        foreach (self::PARAMS_SANITIZER as $sanitizer) {
+            $value = filter_var($value, $sanitizer);
+        }
+
+        $value = preg_replace('/[^\da-z_]/i', '', $value);
     }
 }

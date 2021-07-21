@@ -10,13 +10,14 @@ interface OrderInterface
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const ID            = 'id';
-    const ORDER_ID      = 'order_id';
-    const ORDER_NUMBER  = 'order_number';
-    const UPDATED_AT    = 'updated_at';
-    const INFO          = 'info';
-    const STORE_ID      = 'store_id';
-    const IS_EXCLUDED   = 'is_excluded';
+    const ID              = 'id';
+    const ORDER_ID        = 'order_id';
+    const ORDER_NUMBER    = 'order_number';
+    const UPDATED_AT      = 'updated_at';
+    const INFO            = 'info';
+    const STORE_ID        = 'store_id';
+    const AWAITING_UPDATE = 'awaiting_update';
+    const IS_EXCLUDED     = 'is_excluded';
     /**#@-*/
 
     /**
@@ -60,6 +61,13 @@ interface OrderInterface
      * @return int
      */
     public function getStoreId();
+
+    /**
+     * Get Awaiting Update flag
+     *
+     * @return bool
+     */
+    public function getAwaitingUpdate();
 
     /**
      * Set ID
@@ -108,6 +116,14 @@ interface OrderInterface
      * @return OrderInterface
      */
     public function setStoreId($id);
+
+    /**
+     * Set Awaiting Update flag
+     *
+     * @param bool $awaiting
+     * @return OrderInterface
+     */
+    public function setAwaitingUpdate($awaiting);
 
     /**
      * @return mixed

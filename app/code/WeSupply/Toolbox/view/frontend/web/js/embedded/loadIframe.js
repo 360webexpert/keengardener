@@ -59,10 +59,10 @@ define([
                         }, 300);
                     },
                     onMessage: function(messageData) {
-                        if (messageData.message.event === 'openReturnPanel') {
+                        if (messageData.message.event === 'resize') {
                             resizeTo = calcMaxHeight(messageData.iframe);
                         }
-                        if (messageData.message.event === 'closeReturnPanel') {
+                        if (messageData.message.event === 'stop') {
                             resizeTo = 0;
                         }
                     }

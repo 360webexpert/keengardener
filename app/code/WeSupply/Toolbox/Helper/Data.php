@@ -8,7 +8,6 @@
 namespace WeSupply\Toolbox\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -26,6 +25,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use WeSupply\Toolbox\Api\OrderRepositoryInterface as WeSupplyOrderRepositoryInterface;
 use WeSupply\Toolbox\Model\OrderInfoBuilder;
 use WeSupply\Toolbox\Api\WeSupplyApiInterface;
 use WeSupply\Toolbox\Logger\Logger;
@@ -60,11 +60,6 @@ class Data extends AbstractHelper
     ];
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    protected $orderRepository;
-
-    /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
@@ -73,6 +68,11 @@ class Data extends AbstractHelper
      * @var \WeSupply\Toolbox\Api\WeSupplyApiInterface
      */
     protected $weSupplyApi;
+
+    /**
+     * @var WeSupplyOrderRepositoryInterface
+     */
+    protected $weSupplyOrderRepository;
 
     /**
      * @var \Magento\Shipping\Model\Config
@@ -132,9 +132,9 @@ class Data extends AbstractHelper
     /**
      * Data constructor.
      *
-     * @param OrderRepositoryInterface $orderRepository
      * @param SerializerInterface $serializer
      * @param WeSupplyApiInterface $weSupplyApi
+     * @param WeSupplyOrderRepositoryInterface $weSupplyOrderRepository
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param Config $shipConfig
@@ -149,9 +149,9 @@ class Data extends AbstractHelper
      * @param Logger $logger
      */
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
         SerializerInterface $serializer,
         WeSupplyApiInterface $weSupplyApi,
+        WeSupplyOrderRepositoryInterface $weSupplyOrderRepository,
         Context $context,
         StoreManagerInterface $storeManager,
         Config $shipConfig,
@@ -167,10 +167,10 @@ class Data extends AbstractHelper
     ) {
         parent::__construct($context);
 
-        $this->orderRepository = $orderRepository;
         $this->storeManager = $storeManager;
         $this->serializer = $serializer;
         $this->weSupplyApi = $weSupplyApi;
+        $this->weSupplyOrderRepository = $weSupplyOrderRepository;
         $this->shipConfig = $shipConfig;
         $this->catalogSession = $catalogSession;
         $this->customerSession = $customerSession;
@@ -219,7 +219,7 @@ class Data extends AbstractHelper
     public function getApiEndpointByScope($copeId = 0)
     {
         try {
-            return $this->getBaseUrlByScopeConfigView($this->getScopeConfigView($copeId)) . 'wesupply';
+            return rtrim($this->getBaseUrlByScopeConfigView($this->getScopeConfigView($copeId)), '/') . '/wesupply';
         } catch (NoSuchEntityException $e) {
             $this->logger->addError($e->getMessage());
         } catch (LocalizedException $e) {
@@ -1040,6 +1040,29 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if pending orders are excluded from import/update
+     *
+     * @return mixed
+     */
+    public function excludePendingOrders()
+    {
+        return $this->scopeConfig->getValue('wesupply_api/wesupply_order_export/wesupply_order_filter_pending', ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * Check if complete orders are excluded from import/update
+     *
+     * @return mixed
+     */
+    public function excludeCompleteOrders()
+    {
+        return $this->scopeConfig->getValue(
+            'wesupply_api/wesupply_order_export/wesupply_order_filter_complete',
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
      * @return array
      */
     public function getAttributesToBeExported()
@@ -1121,21 +1144,40 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Check if order have to be excluded from import or updates
+     * @param      $order
+     * @param null $weSupplyOrder
      *
-     * @param $orderId
      * @return bool
      */
-    public function shouldIgnoreOrder($orderId)
+    public function shouldIgnoreOrder($order, $weSupplyOrder = null)
     {
-        if ($this->orderExportExcludeAll()) {
-            /** exit if exclude all orders is set */
+        /**
+         * exit if:
+         * exclude all orders is set or
+         * exclude pending order is set or
+         * exclude complete order is set (apply only for new orders)
+         */
+        if (!$weSupplyOrder) {
+            $weSupplyOrder = $this->weSupplyOrderRepository->getByOrderId($order->getId());
+        }
+
+        if (
+            $this->orderExportExcludeAll()
+            || (
+                !$weSupplyOrder->getId() &&
+                $order->getStatus() === 'pending' &&
+                $order->getExcludeImportPending()
+            )
+            || (
+                !$weSupplyOrder->getId() &&
+                $order->getStatus() === 'complete' &&
+                $order->getExcludeImportComplete()
+            )
+        ) {
             return true;
         }
 
         if ($this->hasOrderExportRules()) {
-            $order = $this->orderRepository->get($orderId);
-
             $filters = $this->getOrderExportRules();
             foreach ($filters as $attribute => $filterVal) {
                 if (!$filterVal || empty($filterVal)) {

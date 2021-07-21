@@ -8,6 +8,7 @@
 namespace WeSupply\Toolbox\Model;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Message\ManagerInterface;
 use WeSupply\Toolbox\Helper\Data as Helper;
 use WeSupply\Toolbox\Api\WeSupplyApiInterface;
 use WeSupply\Toolbox\Logger\Logger;
@@ -21,6 +22,9 @@ class Webhook extends DataObject
     /**#@+
      * Constants
      */
+
+    const ORDER_PREFIX = 'mage_';
+
     const RETURN_PARAMS = [
         'guid',
         'client-name',
@@ -30,6 +34,26 @@ class Webhook extends DataObject
         'guid' => 'wesupply_api/integration/access_key',
         'client-name' => 'wesupply_api/integration/wesupply_subdomain',
         'reference' => null
+    ];
+
+    const PICKUP_PARAMS = [
+        'guid',
+        'client_name',
+        'order_id',
+        'pickup_store_id',
+        'action',
+        'item_ids',
+        'item_quantities'
+    ];
+
+    const PICKUP_PARAMS_MAP = [
+        'guid' => 'wesupply_api/integration/access_key',
+        'client_name' => 'wesupply_api/integration/wesupply_subdomain',
+        'order_id' => null,
+        'pickup_store_id' => null,
+        'action' => null,
+        'item_ids' => null,
+        'item_quantities' => null
     ];
 
     /**
@@ -53,20 +77,28 @@ class Webhook extends DataObject
     protected $errorResponse = [];
 
     /**
+     * @var ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * Webhook constructor.
      * @param Helper $helper
      * @param WeSupplyApiInterface $weSupplyApi
+     * @param ManagerInterface $messageManager
      * @param Logger $logger
      * @param array $data
      */
     public function __construct(
         Helper $helper,
         WeSupplyApiInterface $weSupplyApi,
+        ManagerInterface $messageManager,
         Logger $logger,
         array $data = []
     ) {
         $this->helper = $helper;
         $this->weSupplyApi = $weSupplyApi;
+        $this->messageManager = $messageManager;
         $this->logger = $logger;
 
         parent::__construct($data);
@@ -135,7 +167,11 @@ class Webhook extends DataObject
 
         $response = $this->weSupplyApi->grabUrl($apiEndpoint, $requestType, $params);
         if ($response === false) {
-            $this->setError(__('WeSupply returned an empty response. See log file for more details.'));
+            $message = $this->collectSessionMessages();
+            if (empty($message)) {
+                $message = 'WeSupply returned an empty response. See log file for more details.';
+            }
+            $this->setError($message);
         }
 
         return $response;
@@ -150,6 +186,15 @@ class Webhook extends DataObject
     }
 
     /**
+     * @param $wsExternalOrderId
+     * @return int
+     */
+    public function prepareOrderId($wsExternalOrderId): int
+    {
+        return (int) str_replace(self::ORDER_PREFIX, '', $wsExternalOrderId);
+    }
+
+    /**
      * Set error message
      * @param $message
      */
@@ -157,7 +202,7 @@ class Webhook extends DataObject
     {
         $this->errorResponse = [
             'success' => false,
-            'status-title' => __('Error!'),
+            'status-title' => 'Error!',
             'status-message' => $message
         ];
     }
@@ -189,5 +234,18 @@ class Webhook extends DataObject
     private function getConstantByName($name)
     {
         return constant("self::$name");
+    }
+
+    /**
+     * @return string
+     */
+    private function collectSessionMessages()
+    {
+        $sessionMessages = $this->messageManager->getMessages()->getItems();
+        foreach ($sessionMessages as $sessMsg) {
+            $message = $sessMsg->getText() . ' ';
+        }
+
+        return $message ?? '';
     }
 }

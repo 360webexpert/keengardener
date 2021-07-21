@@ -2,14 +2,15 @@
     require(['jquery', 'iframeResizer' ],
         function ($) {
             $(function () {
-                var iframe = $('iframe.embedded-iframe');
-                if (iframe.length) {
-                    iframe.on('load', function(){
-                        var headerHeight = $('header').outerHeight(),
-                            windowHeight = $(window).innerHeight(),
-                            availableHeight =  windowHeight - headerHeight - 70,
-                            isOldIE = (navigator.userAgent.indexOf("MSIE") !== -1);
+                waitUntilExists(function() { return $('.embedded-iframe').length; }, function() {
+                    var iframe = $('.embedded-iframe'),
+                        headerHeight = $('header').outerHeight(),
+                        windowHeight = $(window).innerHeight(),
+                        availableHeight =  windowHeight - headerHeight - 70,
+                        isOldIE = (navigator.userAgent.indexOf("MSIE") !== -1);
+                    iframe.css({'height': availableHeight + 'px'});
 
+                    iframe.on('load', function(){
                         iFrameResize({
                             log: false,
                             minHeight: availableHeight,
@@ -34,6 +35,28 @@
                             }
                         }, '.embedded-iframe');
                     });
+
+                }, function() { });
+                function waitUntilExists(isReady, success, error, count, interval){
+                    if (count === undefined) {
+                        count = 300;
+                    }
+                    if (interval === undefined) {
+                        interval = 20;
+                    }
+                    if (isReady()) {
+                        success();
+                        return;
+                    }
+                    setTimeout(function(){
+                        if (!count) {
+                            if (error !== undefined) {
+                                error();
+                            }
+                        } else {
+                            waitUntilExists(isReady, success, error, count -1, interval);
+                        }
+                    }, interval);
                 }
             });
         });

@@ -7,14 +7,36 @@
 
 namespace WeSupply\Toolbox\Model;
 
+use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\ImageFactory;
+use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Downloadable\Model\Link\Purchased\Item;
+use Magento\Downloadable\Model\Product\Type as DownloadableType;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\CollectionFactory as PurchasedCollectionFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory as PurchasedItemCollectionFactory;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use WeSupply\Toolbox\Api\OrderInfoBuilderInterface;
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use WeSupply\Toolbox\Api\OrderInfoBuilderInterface;
+use WeSupply\Toolbox\Helper\Data;
+use WeSupply\Toolbox\Helper\WeSupplyMappings;
+use WeSupply\Toolbox\Logger\Logger;
 
 /**
  * Class OrderInfoBuilder
@@ -22,54 +44,33 @@ use Magento\Framework\Phrase;
  */
 class OrderInfoBuilder implements OrderInfoBuilderInterface
 {
-    const DO_NOT_UPDATE = [
-        'ItemImageUri',
-        'ItemProductUri',
-        'OptionHidden',
-        'ItemWeight',
-        'ItemWidth',
-        'ItemHeight',
-        'ItemLength',
-        'ItemWeightUnit',
-        'ItemMeasureUnit'
-    ];
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
-     */
-    protected $orderRepositoryInterface;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory
+     * @var CountryFactory
      */
     protected $countryFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var Logger
      */
     protected $logger;
 
     /**
-     * @var bool
-     */
-    protected $debug = FALSE;
-
-    /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     protected $customer;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterfaceFactory
+     * @var ProductRepositoryInterface
      */
-    protected $productRepositoryInterfaceFactory;
+    protected $productRepositoryInterface;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManagerInterface;
 
@@ -90,6 +91,11 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
     protected $mediaUrl;
 
     /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * @var string
      * order status label
      */
@@ -100,11 +106,15 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     protected $weSupplyStatusMappedArray;
 
-
     /**
-     * @var \WeSupply\Toolbox\Helper\WeSupplyMappings
+     * @var WeSupplyMappings
      */
     protected $weSupplyMappings;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
 
     /**
      * @var TimezoneInterface
@@ -112,143 +122,183 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
     private $timezone;
 
     /**
-     * @var \WeSupply\Toolbox\Helper\Data
+     * @var Data
      */
     private $_helper;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader
+     * @var Reader
      */
     private $moduleReader;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     private $assetRepos;
 
     /**
-     * @var \Magento\Catalog\Helper\ImageFactory
+     * @var ImageFactory
      */
     private $helperImageFactory;
 
     /**
-     * @string  product image subdirectory
+     * @var ShipmentRepositoryInterface
      */
-    CONST PRODUCT_IMAGE_SUBDIRECTORY = 'catalog/product/';
+    private $shipmentRepository;
 
     /**
-     * @string used as prefix for wesupply order id to avoid duplicate id with other providers (aptos)
+     * Product image subdirectory
+     * @var string
      */
-    CONST PREFIX = 'mage_';
+    const PRODUCT_IMAGE_SUBDIRECTORY = 'catalog/product/';
 
     /**
-     * @int
+     * Used as prefix for wesupply order id
+     * to avoid duplicate id with other providers (aptos)
+     * @var string
      */
-    CONST ITEM_STATUS_SHIPPED = 1;
+    const PREFIX = 'mage_';
 
-    CONST EXCLUDED_ITEMS
+    /**
+     * Products excluded from export that cannot be tracked
+     * @var array
+     */
+    const EXCLUDED_ITEMS
         = [
-            1 => \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
-            2 => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+            1 => DownloadableType::TYPE_DOWNLOADABLE,
+            2 => ProductType::TYPE_VIRTUAL
         ];
 
+    /**
+     * Product attributes whose value must remain as they were
+     * when placing the order
+     * @var array
+     */
+    const DO_NOT_UPDATE =
+        [
+            'ItemImageUri',
+            'ItemProductUri',
+            'OptionHidden',
+            'ItemWeight',
+            'ItemWidth',
+            'ItemHeight',
+            'ItemLength',
+            'ItemWeightUnit',
+            'ItemMeasureUnit'
+        ];
+
+    /**
+     * @var PurchasedCollectionFactory
+     */
+    private $linksFactory;
+
+    /**
+     * @var PurchasedItemCollectionFactory
+     */
+    private $itemsFactory;
+
+    /**
+     * @var int
+     */
+    private $availableDownloadableItems;
 
     /**
      * OrderInfoBuilder constructor.
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepositoryInterface
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customer
-     * @param \Magento\Catalog\Api\ProductRepositoryInterfaceFactory $productRepositoryInterfaceFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManagerInterface
-     * @param Attribute $productAttr;
-     * @param AttributeInterface $attributeInterface
-     * @param \WeSupply\Toolbox\Helper\WeSupplyMappings $weSupplyMappings
-     * @param TimezoneInterface $timezone
-     * @param \WeSupply\Toolbox\Helper\Data $helper
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
-     * @param \Magento\Framework\View\Asset\Repository $assetRepos,
-     * @param \Magento\Catalog\Helper\ImageFactory $helperImageFactory
+     *
+     * @param ProductRepositoryInterface     $productRepositoryInterface
+     * @param ImageFactory                   $helperImageFactory
+     * @param CustomerRepositoryInterface    $customer
+     * @param CountryFactory                 $countryFactory
+     * @param AttributeInterface             $attributeInterface
+     * @param Attribute                      $productAttr
+     * @param SearchCriteriaBuilder          $searchCriteriaBuilder
+     * @param ManagerInterface               $eventManager
+     * @param Filesystem                     $filesystem
+     * @param Reader                         $moduleReader
+     * @param TimezoneInterface              $timezone
+     * @param Repository                     $assetRepos
+     * @param ShipmentRepositoryInterface    $shipmentRepository
+     * @param StoreManagerInterface          $storeManagerInterface
+     * @param Data                           $helper
+     * @param WeSupplyMappings               $weSupplyMappings
+     * @param Logger                         $logger
+     * @param PurchasedCollectionFactory     $linksFactory
+     * @param PurchasedItemCollectionFactory $itemsFactory
      */
     public function __construct(
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepositoryInterface,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customer,
-        \Magento\Catalog\Api\ProductRepositoryInterfaceFactory $productRepositoryInterfaceFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManagerInterface,
-        Attribute $productAttr,
+        ProductRepositoryInterface $productRepositoryInterface,
+        ImageFactory $helperImageFactory,
+        CustomerRepositoryInterface $customer,
+        CountryFactory $countryFactory,
         AttributeInterface $attributeInterface,
-        \WeSupply\Toolbox\Helper\WeSupplyMappings $weSupplyMappings,
+        Attribute $productAttr,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ManagerInterface $eventManager,
+        Filesystem $filesystem,
+        Reader $moduleReader,
         TimezoneInterface $timezone,
-        \WeSupply\Toolbox\Helper\Data $helper,
-        \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Framework\View\Asset\Repository $assetRepos,
-        \Magento\Catalog\Helper\ImageFactory $helperImageFactory
-    )
-    {
-        $this->orderRepositoryInterface = $orderRepositoryInterface;
-        $this->eventManager = $eventManager;
-        $this->countryFactory = $countryFactory;
-        $this->logger = $logger;
-        $this->customer = $customer;
-        $this->productRepositoryInterfaceFactory = $productRepositoryInterfaceFactory;
-        $this->storeManagerInterface = $storeManagerInterface;
-        $this->productAttr = $productAttr;
-        $this->attributeInterface = $attributeInterface;
-        $this->weSupplyMappings = $weSupplyMappings;
-        $this->weSupplyStatusMappedArray = $weSupplyMappings->mapOrderStateToWeSupplyStatus();
-        $this->timezone = $timezone;
-        $this->_helper = $helper;
-        $this->moduleReader = $moduleReader;
-        $this->assetRepos = $assetRepos;
+        Repository $assetRepos,
+        ShipmentRepositoryInterface $shipmentRepository,
+        StoreManagerInterface $storeManagerInterface,
+        Data $helper,
+        WeSupplyMappings $weSupplyMappings,
+        Logger $logger,
+        PurchasedCollectionFactory $linksFactory,
+        PurchasedItemCollectionFactory $itemsFactory
+    ) {
+        $this->productRepositoryInterface = $productRepositoryInterface;
         $this->helperImageFactory = $helperImageFactory;
+        $this->customer = $customer;
+        $this->countryFactory = $countryFactory;
+        $this->attributeInterface = $attributeInterface;
+        $this->productAttr = $productAttr;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->eventManager = $eventManager;
+        $this->filesystem = $filesystem;
+        $this->moduleReader = $moduleReader;
+        $this->timezone = $timezone;
+        $this->assetRepos = $assetRepos;
+        $this->shipmentRepository = $shipmentRepository;
+        $this->storeManagerInterface = $storeManagerInterface;
+        $this->_helper = $helper;
+        $this->weSupplyMappings = $weSupplyMappings;
+        $this->logger = $logger;
+        $this->linksFactory = $linksFactory;
+        $this->itemsFactory = $itemsFactory;
+
+        $this->weSupplyStatusMappedArray = $weSupplyMappings->mapOrderStateToWeSupplyStatus();
     }
 
     /**
-     * @param $flag
-     */
-    public function setDebug($flag)
-    {
-        $this->debug = $flag;
-    }
-
-    /**
-     * @param $orderId
+     * @param $order
      * @param $existingOrderData
-     * @return array|mixed
-     * @throws NoSuchEntityException
+     * @return array|bool|mixed
      * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function gatherInfo($orderId, $existingOrderData)
+    public function gatherInfo($order, $existingOrderData)
     {
-        try {
-            $order = $this->orderRepositoryInterface->get($orderId);
-        } catch (\Exception $ex) {
-            $this->logger->error("WeSupply Error: Order with id $orderId not found");
-            return [];
-        }
         $orderData = $order->getData();
-        $this->orderStatusLabel = $order->getStatusLabel();
-        if (!is_string($this->orderStatusLabel)) {
-            $this->orderStatusLabel = $order->getStatusLabel()->__toString();
-        }
-
-        $storeManager = $this->storeManagerInterface->getStore($orderData['store_id']);
-        $this->mediaUrl = $storeManager->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+        $this->orderStatusLabel = ucfirst($orderData['status']);
 
         $carrierCode = '';
+        $supplierCode = $this->_helper->recursivelyGetArrayData(['store_id'], $orderData);
         if ($shippingMethod = $order->getShippingMethod()) {
             $shippingMethodArr = explode('_', $shippingMethod);
             $carrierCode = reset($shippingMethodArr);
             if (isset($this->weSupplyMappings::MAPPED_CARRIER_CODES[$carrierCode])) {
                 $carrierCode = $this->weSupplyMappings::MAPPED_CARRIER_CODES[$carrierCode];
             }
+            if ($extAttrs = $order->getExtensionAttributes()) {
+                $extAttrsArr = $extAttrs->__toArray();
+                if (isset($extAttrsArr['pickup_location_code'])) {
+                    $supplierCode = $extAttrsArr['pickup_location_code'];
+                }
+            }
         }
 
         $orderData['carrier_code'] = $carrierCode;
+        $orderData['supplier_code'] = $supplierCode;
         $orderData['wesupply_updated_at'] = date('Y-m-d H:i:s');
 
         unset($orderData['extension_attributes']);
@@ -289,14 +339,16 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
         $shipmentData = [];
         $shipmentCollection = $order->getShipmentsCollection();
 
+        $inventorySourcesByItemIds = $this->_fetchInventorySourcesByItems($orderData);
         if ($shipmentCollection->getSize()) {
             foreach ($shipmentCollection->getItems() as $shipment) {
                 $tracks = $shipment->getTracksCollection();
 
                 foreach ($tracks->getItems() as $track) {
-                    $shipmentTracks[$track['parent_id']]['track_number'] = $track['track_number'];
-                    $shipmentTracks[$track['parent_id']]['title'] = $track['title'];
-                    $shipmentTracks[$track['parent_id']]['carrier_code'] = $track['carrier_code'];
+                    $trackId = $track->getParentId();
+                    $shipmentTracks[$trackId]['track_number'] = $track['track_number'];
+                    $shipmentTracks[$trackId]['title'] = $track['title'];
+                    $shipmentTracks[$trackId]['carrier_code'] = $track['carrier_code'];
                 }
 
                 $sItems = $shipmentItems = $shipment->getItemsCollection();
@@ -305,18 +357,30 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
                 }
                 foreach ($sItems as $shipmentItem) {
                     /** Default empty values for non existing tracking */
-                    if (!isset($shipmentTracks[$shipmentItem['parent_id']])) {
-                        $shipmentTracks[$shipmentItem['parent_id']]['track_number'] = '';
-                        $shipmentTracks[$shipmentItem['parent_id']]['title'] = '';
-                        $shipmentTracks[$shipmentItem['parent_id']]['carrier_code'] = '';
+                    $shipmentId = $shipmentItem->getParentId();
+                    if (!isset($shipmentTracks[$shipmentId])) {
+                        $shipmentTracks[$shipmentId]['track_number'] = '';
+                        $shipmentTracks[$shipmentId]['title'] = '';
+                        $shipmentTracks[$shipmentId]['carrier_code'] =
+                            $this->_helper->recursivelyGetArrayData(['carrier_code'], $orderData);
                     }
-                    $shipmentData[$shipmentItem['order_item_id']][] = array_merge([
-                        'qty' => $shipmentItem['qty'],
-                        'sku' => $shipmentItem['sku']
-                    ], $shipmentTracks[$shipmentItem['parent_id']]);
+
+                    $shipmentTracks[$shipmentId]['inventory_source'] =
+                        !empty($inventorySourcesByItemIds) && isset($inventorySourcesByItemIds[$shipmentId]) ?
+                            $inventorySourcesByItemIds[$shipmentId] :
+                            $this->_helper->recursivelyGetArrayData(['store_id'], $orderData);
+
+                    $shipmentData[$shipmentItem['order_item_id']][] = array_merge(
+                        [
+                            'qty' => $shipmentItem['qty'],
+                            'sku' => $shipmentItem['sku']
+                        ],
+                        $shipmentTracks[$shipmentId]
+                    );
                 }
             }
         }
+
         $orderData['shipmentTracking'] = $shipmentData;
 
         /** Set payment data */
@@ -328,45 +392,37 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
             ['orderData' => $orderData]
         );
 
-        $orderData = $this->mapFieldsForWesupplyStructure($orderData, $existingOrderData);
-
-        return $orderData;
-
+        return $this->mapFieldsForWesupplyStructure($orderData, $existingOrderData);
     }
 
     /**
      * Prepares the order information for db storage
      * @param array $orderData
-     * @return string
+     * @return mixed|string
      */
     public function prepareForStorage($orderData)
     {
-        $orderInfo = $this->convertInfoToXml($orderData);
-        return $orderInfo;
+        return $this->convertInfoToXml($orderData);
     }
 
     /**
      * Returns the order last updated time
      * @param array $orderData
-     * @return string
+     * @return mixed|string
      */
     public function getUpdatedAt($orderData)
     {
         return $orderData['OrderModified'];
-//        return $orderData['WesupplyUpdatedAt'];
-//        return $orderData['wesupply_updated_at'];
-//        return $orderData['updated_at'];
     }
 
     /**
      * Return the store id from the order information array
      * @param array $orderData
-     * @return int
+     * @return int|mixed
      */
     public function getStoreId($orderData)
     {
         return $orderData['StoreId'];
-        //return $orderData['store_id'];
     }
 
     /**
@@ -385,19 +441,23 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     protected function modifyToLocalTimezone($date)
     {
-        $formatedDate = '';
-
         if ($date) {
             try {
-                $formatedDate = $this->timezone->formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM, null, null, 'yyyy-MM-dd HH:mm:ss');
+                $formattedDate = $this->timezone->formatDateTime(
+                    $date,
+                    \IntlDateFormatter::SHORT,
+                    \IntlDateFormatter::MEDIUM,
+                    null,
+                    null,
+                    'yyyy-MM-dd HH:mm:ss'
+                );
             } catch (\Exception $e) {
                 $this->logger->error("WeSupply Error when changing date to local timezone:" . $e->getMessage());
-                return FALSE;
+                return false;
             }
-
         }
 
-        return $formatedDate;
+        return $formattedDate ?? date('Y-m-d H:i:s');
     }
 
     /**
@@ -409,118 +469,59 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     protected function mapFieldsForWesupplyStructure($orderData, $existingOrderData)
     {
-        $updatedAt = $this->modifyToLocalTimezone($orderData['updated_at']);
-        if (!$updatedAt) {
-            $updatedAt = $this->modifyToLocalTimezone(date('Y-m-d H:i:s'));
-        }
-
-        $createdAt = $this->modifyToLocalTimezone($orderData['created_at']);
-        if (!$createdAt) {
-            $createdAt = $this->modifyToLocalTimezone(date('Y-m-d H:i:s'));
-        }
-
         $finalOrderData = [];
-        // $finalOrderData['MagentoVersion'] = $this->productMetadata->getEdition();
-        $finalOrderData['OrderDate'] = $createdAt;
-        $finalOrderData['LastModifiedDate'] = $updatedAt;
+        $this->mapOrderStateToWeSupply($orderData, $finalOrderData);
         $finalOrderData['StoreId'] = $this->_helper->recursivelyGetArrayData(['store_id'], $orderData);
-        // $finalOrderData['OrderModified'] = $this->modifyToLocalTimezone($this->_helper->recursivelyGetArrayData(['wesupply_updated_at'], $orderData));
-        $finalOrderData['OrderModified'] = $this->_helper->recursivelyGetArrayData(['wesupply_updated_at'], $orderData);
-        $finalOrderData['OrderPaymentTypeId'] = '';
         $finalOrderData['OrderID'] = self::PREFIX . $this->_helper->recursivelyGetArrayData(['entity_id'], $orderData);
         $finalOrderData['OrderNumber'] = $this->_helper->recursivelyGetArrayData(['increment_id'], $orderData);
+        $finalOrderData['OrderExternalOrderID'] = $this->_helper->recursivelyGetArrayData(['increment_id'], $orderData);
+        $finalOrderData['OrderDate'] = $this->modifyToLocalTimezone($orderData['created_at']);
+        $finalOrderData['OrderModified'] = $this->_helper->recursivelyGetArrayData(['wesupply_updated_at'], $orderData);
+        $finalOrderData['LastModifiedDate'] = $this->modifyToLocalTimezone($orderData['updated_at']);
         $finalOrderData['FirstName'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'firstname'], $orderData);
         $finalOrderData['LastName'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'lastname'], $orderData);
         $finalOrderData['OrderContact'] = $finalOrderData['FirstName'] . ' ' . $finalOrderData['LastName'];
+        $finalOrderData['OrderShippingAddress1'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'street'], $orderData);
+        $finalOrderData['OrderShippingCity'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'city'], $orderData);
+        $finalOrderData['OrderShippingStateProvince'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'region'], $orderData);
+        $finalOrderData['OrderShippingCountry'] = $this->getCountryName($this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData));
+        $finalOrderData['OrderShippingCountryCode'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData);
+        $finalOrderData['OrderShippingZip'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'postcode'], $orderData);
+        $finalOrderData['OrderShippingPhone'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'telephone'], $orderData);
         $finalOrderData['OrderAmount'] = $this->_helper->recursivelyGetArrayData(['base_subtotal'], $orderData);
         $finalOrderData['OrderAmountShipping'] = $this->_helper->recursivelyGetArrayData(['base_shipping_amount'], $orderData);
         $finalOrderData['OrderAmountTax'] = $this->_helper->recursivelyGetArrayData(['base_tax_amount'], $orderData);
         $finalOrderData['OrderAmountTotal'] = $this->_helper->recursivelyGetArrayData(['base_grand_total'], $orderData);
         $finalOrderData['OrderAmountCoupon'] = number_format(0, 4, '.', '');
         $finalOrderData['OrderAmountGiftCard'] = $this->_helper->recursivelyGetArrayData(['base_gift_cards_amount'], $orderData, '0.0000');
-        $finalOrderData['OrderShippingAddress1'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'street'], $orderData);
-        $finalOrderData['OrderShippingCity'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'city'], $orderData);
-        $finalOrderData['OrderShippingStateProvince'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'region'], $orderData);
-        $finalOrderData['OrderShippingZip'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'postcode'], $orderData);
-        $finalOrderData['OrderShippingPhone'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'telephone'], $orderData);
-        $finalOrderData['OrderShippingCountry'] = $this->getCountryName($this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData));
-        $finalOrderData['OrderShippingCountryCode'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData);
+        $finalOrderData['OrderPaymentTypeId'] = '';
         $finalOrderData['OrderPaymentType'] = $this->_helper->recursivelyGetArrayData(['paymentInfo', 'additional_information', 'method_title'], $orderData);
         $finalOrderData['OrderDiscountDetailsTotal'] = $this->_helper->recursivelyGetArrayData(['base_discount_amount'], $orderData);
-        $finalOrderData['OrderExternalOrderID'] = $this->_helper->recursivelyGetArrayData(['increment_id'], $orderData);
         $finalOrderData['CurrencyCode'] = $this->_helper->recursivelyGetArrayData(['order_currency_code'], $orderData);
-        // $orderStatusInfo = $this->mapOrderStateToWeSupply($orderData);
-        $finalOrderData['OrderStatus'] = ($this->mapOrderStateToWeSupply($orderData))['OrderStatus'];
-        $finalOrderData['OrderStatusId'] = ($this->mapOrderStateToWeSupply($orderData))['OrderStatusId'];
-
         $finalOrderData['EstimateUTCOffset'] = $this->_helper->recursivelyGetArrayData(['delivery_utc_offset'], $orderData, 0);
         $finalOrderData['EstimateUTCTimestamp'] = $this->applyOffset(
             $this->unifyDeliveryTimestamps($this->_helper->recursivelyGetArrayData(['delivery_timestamp'], $orderData, '')),
             $finalOrderData['EstimateUTCOffset']
         );
 
-        /**
-         * Customer data
-         */
-        $customerIsGuest = $this->_helper->recursivelyGetArrayData(['customer_is_guest'], $orderData);
-        $customerId = $customerIsGuest ? intval(664616765 . '' . $orderData['entity_id']) : $this->_helper->recursivelyGetArrayData(['customer_id'], $orderData);
+        /** Collect customer data */
+        $this->collectCustomerGeneralData($finalOrderData, $orderData);
+        $this->collectCustomerBillingData($finalOrderData, $orderData);
+        $this->collectCustomerShippingData($finalOrderData, $orderData);
 
-        $finalOrderData['OrderCustomer']['IsGuest'] = $customerIsGuest;
-        $finalOrderData['OrderCustomer']['CustomerID'] = $customerId;
-
-        try {
-            $customer = $this->customer->getById($customerId);
-            $finalOrderData['OrderCustomer']['CustomerCreateDate'] = $customer->getCreatedAt();
-            $finalOrderData['OrderCustomer']['CustomerModifiedDate'] = $customer->getUpdatedAt();
-        } catch (NoSuchEntityException $e) {
-            $finalOrderData['OrderCustomer']['CustomerCreateDate'] = $finalOrderData['OrderDate'];
-            $finalOrderData['OrderCustomer']['CustomerModifiedDate'] = $finalOrderData['LastModifiedDate'];
-        }
-
-        /**
-         * Customer billing data
-         */
-        $finalOrderData['OrderCustomer']['CustomerFirstName'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'firstname'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerLastName'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'lastname'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerName'] = $finalOrderData['OrderCustomer']['CustomerFirstName'] . ' ' . $finalOrderData['OrderCustomer']['CustomerLastName'];
-        $finalOrderData['OrderCustomer']['CustomerEmail'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'email'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerAddress1'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'street'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerAddress2'] = ''; // not saved separately in magento
-        $finalOrderData['OrderCustomer']['CustomerCity'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'city'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerStateProvince'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'region'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerPostalCode'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'postcode'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerCountry'] = $this->getCountryName($this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'country_id'], $orderData));
-        $finalOrderData['OrderCustomer']['CustomerCountryCode'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'country_id'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerPhone'] = $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'telephone'], $orderData);
-
-        /**
-         * Customer shipping data
-         */
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressID'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'entity_id'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressContact'] =
-            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'firstname'], $orderData) . ' ' .
-            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'lastname'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressAddress1'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'street'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressCity'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'city'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressState'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'region'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressZip'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'postcode'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressCountry'] = $this->getCountryName($this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData));
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressCountryCode'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData);
-        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressPhone'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'telephone'], $orderData);
-
-        /**
-         * Order items
-         */
+        /** * Order items */
         $orderItems = $this->prepareOrderItems($orderData, $existingOrderData);
-
-        /**
-         * if we only have virtual or downloadable products in order, we are not updating wesupply_orders table
-         */
-        if (count($orderItems) == 0) {
-            return FALSE;
+        if (count($orderItems) === 0) {
+            return false;
         }
 
         $finalOrderData['OrderItems'] = $orderItems;
+
+        if (count($orderItems) === $this->availableDownloadableItems) {
+            // force orders status to complete
+            $finalOrderData['OrderStatus'] = 'Complete';
+            $finalOrderData['OrderStatusId'] = $this->weSupplyMappings::WESUPPLY_ORDER_COMPLETE;
+        }
 
         $this->eventManager->dispatch(
             'wesupply_order_mapping_info_after',
@@ -578,7 +579,7 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     protected function convertInfoToXml($orderData)
     {
-        $xmlData = $this->array2xml($orderData, FALSE);
+        $xmlData = $this->array2xml($orderData, false);
         $xmlData = str_replace("<?xml version=\"1.0\"?>\n", '', $xmlData);
 
         return $xmlData;
@@ -591,26 +592,23 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      * @param string $xmlAttribute
      * @return mixed
      */
-    private function array2xml($array, $xml = FALSE, $xmlAttribute = '')
+    private function array2xml($array, $xml = false, $xmlAttribute = '')
     {
-        if ($xml === FALSE) {
+        if ($xml === false) {
             $xml = new \SimpleXMLElement('<Order/>');
         }
 
         foreach ($array as $key => $value) {
-            /**
-             *  had to comment out str_replace because there is a field in Wesupply that uses an underscore (_)
-             *  Field Name: Item_CouponAmount
-             */
-            //$key = str_replace("_", "", ucwords($key, '_'));
             $key = ucwords($key, '_');
-            if (is_object($value)) continue;
+            if (is_object($value)) {
+                continue;
+            }
             if (is_array($value)) {
                 if (!is_numeric($key)) {
                     $this->array2xml($value, $xml->addChild($key), $key);
                 } else {
                     //mapping for $key to proper
-                    $xmlAttribute = $this->mapXmlAttributeForChildrens($xmlAttribute);
+                    $xmlAttribute = $this->mapXmlAttributeForChildren($xmlAttribute);
                     $this->array2xml($value, $xml->addChild($xmlAttribute), $key);
                 }
             } else {
@@ -633,7 +631,7 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      * @param $key
      * @return mixed
      */
-    private function mapXmlAttributeForChildrens($key)
+    private function mapXmlAttributeForChildren($key)
     {
         $mappings = [
             'OrderItems' => 'Item',
@@ -659,13 +657,14 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
     }
 
     /**
+     * Due to possibility of endless order statuses in magento2
+     * we are transferring the order status label and order state mapped to WeSupply order status
+     *
      * @param $orderData
-     * @return array
-     * due to posibility of endless order statuses in magento2, we are transfering the order status label and order state mapped to WeSupply order status
+     * @param $finalOrderData
      */
-    protected function mapOrderStateToWeSupply($orderData)
+    protected function mapOrderStateToWeSupply($orderData, &$finalOrderData)
     {
-
         $orderStatusId = $this->weSupplyStatusMappedArray[\Magento\Sales\Model\Order::STATE_NEW];
 
         if (isset($orderData['state'])) {
@@ -675,21 +674,15 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
             }
         }
 
-        $statusInfo = [
-            'OrderStatus' => $this->orderStatusLabel,
-            'OrderStatusId' => $orderStatusId
-        ];
-
-        return $statusInfo;
-
+        $finalOrderData['OrderStatus'] = $this->orderStatusLabel;
+        $finalOrderData['OrderStatusId'] = $orderStatusId;
     }
-
 
     /**
      * @param $status
-     * @return array
+     * @param $information
      */
-    protected function getItemStatusInfo($status)
+    protected function getItemStatusInfo($status, &$information)
     {
         switch ($status) {
             case 'canceled':
@@ -704,6 +697,18 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
                 $orderStatus = 'Shipped';
                 $orderStatusId = 3;
                 break;
+            case 'instore_pickup':
+                $orderStatus = 'Ready for Pickup';
+                $orderStatusId = 15;
+                break;
+            case 'virtual':
+                $orderStatus = 'Virtual';
+                $orderStatusId = 50;
+                break;
+            case 'download_available':
+                $orderStatus = 'Downloadable';
+                $orderStatusId = 60;
+                break;
             default:
                 $orderStatus = 'Processing';
                 $orderStatusId = 4;
@@ -711,47 +716,34 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
 
         }
 
-        $statusInfo = [
-            'ItemStatus' => $orderStatus,
-            'ItemStatusId' => $orderStatusId
-        ];
-
-        return $statusInfo;
+        $information['ItemStatus'] = $orderStatus;
+        $information['ItemStatusId'] = $orderStatusId;
     }
-
 
     /**
      * @param $orderData
      * @param $existingOrderData
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     protected function prepareOrderItems($orderData, $existingOrderData)
     {
         $orderItems = [];
+        $this->availableDownloadableItems = 0;
 
         $itemFeeShipping = $this->_helper->recursivelyGetArrayData(['base_shipping_amount'], $orderData, 0);
         $orderItemsData = $orderData['OrderItems'];
 
         foreach ($orderItemsData as $item) {
-            /**
-             * we exclude downloadable and virtual products to be sent to WeSupply
-             */
-            if (in_array($item['product_type'], self::EXCLUDED_ITEMS)) {
-                continue;
-            }
 
-            $addedToShipment = FALSE;
             $generalData = [];
             $generalData['ItemID'] = $this->_helper->recursivelyGetArrayData(['item_id'], $item);
-            $generalData['ItemLevelSupplierName'] = $this->_helper->recursivelyGetArrayData(['store_id'], $orderData);
             $generalData['ItemPrice'] = $this->_helper->recursivelyGetArrayData(['base_price'], $item);
             $generalData['ItemCost'] = $this->_helper->recursivelyGetArrayData(['base_cost'], $item, $generalData['ItemPrice']);
             $generalData['ItemAddressID'] = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'entity_id'], $orderData);
             $generalData['Option1'] = '';
             $generalData['Option2'] = $this->_fetchProductOptionsAsArray($item);
             $generalData['Option3'] = $this->_fetchProductBundleOptionsAsArray($item);
-            // $generalData['OptionHidden'] = $this->_fetchProductAttributesToExport($item);
             $generalData['ItemProduct'] = [];
             $generalData['ItemProduct']['ProductID'] = $this->_helper->recursivelyGetArrayData(['product_id'], $item);
             $generalData['ItemProduct']['ProductCode'] = $this->_helper->recursivelyGetArrayData(['name'], $item);
@@ -764,99 +756,129 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
              */
             $generalData = $this->_fetchInvariableData($existingOrderData, $item, $generalData);
 
-            $qtyOrdered = intval($this->_helper->recursivelyGetArrayData(['qty_ordered'], $item));
-            $qtyCanceled = intval($this->_helper->recursivelyGetArrayData(['qty_canceled'], $item, 0));
-            $qtyRefunded = intval($this->_helper->recursivelyGetArrayData(['qty_refunded'], $item, 0));
-            $qtyShipped = intval($this->_helper->recursivelyGetArrayData(['qty_shipped'], $item, 0));
-            $qtyProcessing = $qtyOrdered - $qtyCanceled - $qtyRefunded - $qtyShipped;
+            $itemQtyGrouped = $this->splitItemQty($item, $orderData['shipmentTracking']);
+            $itemTotals = $this->getItemTotals($item);
 
-            $itemTotal = $this->_helper->recursivelyGetArrayData(['row_total'], $item);
-            $taxTotal = $this->_helper->recursivelyGetArrayData(['tax_amount'], $item);
-            $discountTotal = $this->_helper->recursivelyGetArrayData(['discount_amount'], $item);
+            $initItemStatus = '';
+            $carrierCode = $orderData['carrier_code'];
+
+            /** Send information about downloadable items */
+            $generalData['ItemDownloadUrl'] = '';
+            if ($item['product_type'] === DownloadableType::TYPE_DOWNLOADABLE) {
+                $carrierCode = 'downloadable';
+                $initItemStatus = 'download_available';
+                $generalData['ItemDownloadUrl'] = $this->_getProductDownloadUrl($item);
+            }
+
+            /** Send information about virtual items */
+            if ($item['product_type'] === ProductType::TYPE_VIRTUAL) {
+                $carrierCode = 'virtual';
+                $initItemStatus = 'virtual';
+            }
 
             /** Send information about shipped items */
+            $addedToShipment = false;
             $shippedItems = $orderData['shipmentTracking'];
             foreach ($shippedItems as $itemId => $shipment) {
                 if ($itemId == $this->_helper->recursivelyGetArrayData(['item_id'], $item)) {
                     foreach ($shipment as $trackingInformation) {
-                        // $carrierCode = isset($trackingInformation['carrier_code']) ? $trackingInformation['carrier_code'] : $orderData['carrier_code'];
-                        $carrierCode = $this->_helper->recursivelyGetArrayData(['carrier_code'], $trackingInformation, $this->_helper->recursivelyGetArrayData(['carrier_code'], $orderData));
+                        $carrierCode = $this->_helper->recursivelyGetArrayData(
+                            ['carrier_code'],
+                            $trackingInformation
+                        );
+
                         if (isset($this->weSupplyMappings::MAPPED_CARRIER_CODES[$carrierCode])) {
                             $carrierCode = $this->weSupplyMappings::MAPPED_CARRIER_CODES[$carrierCode];
                         }
+
+                        $itemStatus = $carrierCode == $this->weSupplyMappings::INSTORE_PICKUP_LABEL ?
+                            'instore_pickup' : 'shipped';
+
                         $itemInfo = $this->getItemSpecificInformation(
                             $itemFeeShipping,
-                            $itemTotal,
-                            $taxTotal,
-                            $discountTotal,
-                            $qtyOrdered,
+                            $itemTotals['row_total'],
+                            $itemTotals['tax_amount'],
+                            $itemTotals['discount_amount'],
+                            $itemQtyGrouped['qty_ordered'],
                             $trackingInformation['qty'],
-                            'shipped',
+                            $itemStatus,
                             $trackingInformation['title'],
                             $trackingInformation['track_number'],
+                            $trackingInformation['inventory_source'],
                             $carrierCode
                         );
+
+                        $itemFeeShipping = 0; // reset shipping fee because its amount was assigned for the very firs shipped item
+                        if ($this->groupItemsWithSameTracking($orderItems, $trackingInformation['track_number'], $itemId, $itemInfo)) {
+                            continue;
+                        }
+
                         $generalData = array_merge($generalData, $itemInfo);
                         $orderItems[] = $generalData;
-                        $addedToShipment = TRUE;
+                        $addedToShipment = true;
                     }
                 }
             }
 
-            if ($qtyCanceled && !$addedToShipment) {
+            /** Send information about canceled items */
+            if ($itemQtyGrouped['qty_canceled'] > 0) {
                 $itemInfo = $this->getItemSpecificInformation(
                     $itemFeeShipping,
-                    $itemTotal,
-                    $taxTotal,
-                    $discountTotal,
-                    $qtyOrdered,
-                    $qtyCanceled,
+                    $itemTotals['row_total'],
+                    $itemTotals['tax_amount'],
+                    $itemTotals['discount_amount'],
+                    $itemQtyGrouped['qty_ordered'],
+                    $itemQtyGrouped['qty_canceled'],
                     'canceled',
                     '',
                     '',
-                    $this->_helper->recursivelyGetArrayData(['carrier_code'], $orderData)
+                    $this->_helper->recursivelyGetArrayData(['supplier_code'], $orderData),
+                    $carrierCode
                 );
+
                 $generalData = array_merge($generalData, $itemInfo);
                 $orderItems[] = $generalData;
             }
 
-            /** For more detailed data we might use information  from teh created credit memos */
-            if ($qtyRefunded && !$addedToShipment) {
+            /** For more detailed data we might use information  from the created credit memos */
+            if ($itemQtyGrouped['qty_refunded'] > 0 && !$addedToShipment) {
                 $itemInfo = $this->getItemSpecificInformation(
                     $itemFeeShipping,
-                    $itemTotal,
-                    $taxTotal,
-                    $discountTotal,
-                    $qtyOrdered,
-                    $qtyRefunded,
+                    $itemTotals['row_total'],
+                    $itemTotals['tax_amount'],
+                    $itemTotals['discount_amount'],
+                    $itemQtyGrouped['qty_ordered'],
+                    $itemQtyGrouped['qty_refunded'],
                     'refunded',
                     '',
                     '',
-                    $this->_helper->recursivelyGetArrayData(['carrier_code'], $orderData)
+                    $this->_helper->recursivelyGetArrayData(['supplier_code'], $orderData),
+                    $carrierCode
                 );
+
                 $generalData = array_merge($generalData, $itemInfo);
                 $orderItems[] = $generalData;
             }
 
             /** Send information about items still in processed state */
-            if ($qtyProcessing > 0 && !$addedToShipment) {
-
+            if ($itemQtyGrouped['qty_processing'] > 0) {
                 $itemInfo = $this->getItemSpecificInformation(
                     $itemFeeShipping,
-                    $itemTotal,
-                    $taxTotal,
-                    $discountTotal,
-                    $qtyOrdered,
-                    $qtyProcessing,
+                    $itemTotals['row_total'],
+                    $itemTotals['tax_amount'],
+                    $itemTotals['discount_amount'],
+                    $itemQtyGrouped['qty_ordered'],
+                    $itemQtyGrouped['qty_processing'],
+                    $initItemStatus,
                     '',
                     '',
-                    '',
-                    $this->_helper->recursivelyGetArrayData(['carrier_code'], $orderData)
+                    $this->_helper->recursivelyGetArrayData(['supplier_code'], $orderData),
+                    $carrierCode
                 );
+
                 $generalData = array_merge($generalData, $itemInfo);
                 $orderItems[] = $generalData;
             }
-
             $itemFeeShipping = 0;
         }
 
@@ -869,33 +891,41 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      * @param $taxTotal
      * @param $discountTotal
      * @param $qtyOrdered
-     * @param $qtyShipped
-     * @param $status
+     * @param $qtyCurrent
+     * @param $itemStatus
      * @param $shippingService
      * @param $shippingTracking
+     * @param $inventorySource
      * @param $carrierCode
      * @return array
      */
-    protected function getItemSpecificInformation($itemFeeShipping, $itemTotal, $taxTotal, $discountTotal, $qtyOrdered, $qtyShipped, $status, $shippingService, $shippingTracking, $carrierCode)
-    {
+    protected function getItemSpecificInformation(
+        $itemFeeShipping,
+        $itemTotal,
+        $taxTotal,
+        $discountTotal,
+        $qtyOrdered,
+        $qtyCurrent,
+        $itemStatus,
+        $shippingService,
+        $shippingTracking,
+        $inventorySource,
+        $carrierCode
+    ) {
         $information = [];
-        $information['ItemQuantity'] = $qtyShipped;
+        $information['ItemQuantity'] = $qtyCurrent;
         $information['ItemShippingService'] = $shippingService;
-        /**
-         * new field added ItemPOShipper
-         */
         $information['ItemPOShipper'] = $carrierCode;
         $information['ItemShippingTracking'] = $shippingTracking;
-        $information['ItemTotal'] = number_format(($qtyShipped * $itemTotal) / $qtyOrdered, 4, '.', '');
-        $information['ItemTax'] = number_format(($qtyShipped * $taxTotal) / $qtyOrdered, 4, '.', '');
-        $information['ItemDiscountDetailsTotal'] = number_format(($qtyShipped * $discountTotal) / $qtyOrdered, 4, '.', '');
-        $statusInfo = $this->getItemStatusInfo($status);
-        $information['ItemStatus'] = $statusInfo['ItemStatus'];
-        $information['ItemStatusId'] = $statusInfo['ItemStatusId'];
+        $information['ItemLevelSupplierName'] = $inventorySource;
+        $information['ItemTotal'] = number_format(($qtyCurrent * $itemTotal) / $qtyOrdered, 4, '.', '');
+        $information['ItemTax'] = number_format(($qtyCurrent * $taxTotal) / $qtyOrdered, 4, '.', '');
+        $information['ItemDiscountDetailsTotal'] = number_format(($qtyCurrent * $discountTotal) / $qtyOrdered, 4, '.', '');
+        $this->getItemStatusInfo($itemStatus, $information);
+
         /**
-         *  new fields added
-         *   ItemShipping -  the first item will have shipping value, all other items will have 0 value
-         *   Item_CouponAmount - will always have 0, the discount amount is set trough OrderDiscountDetailsTotal field
+         *  ItemShipping - the first item will have shipping value, all other items will have 0 value
+         *  Item_CouponAmount - will always have 0, the discount amount is set trough OrderDiscountDetailsTotal field
          */
         $information['ItemShipping'] = number_format($itemFeeShipping, 4, '.', '');
         $information['Item_CouponAmount'] = number_format(0, 4, '.', '');
@@ -910,25 +940,22 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
 
     private function _fetchProductBundleOptionsAsArray($item)
     {
-        $bundleArray = array();
+        $bundleArray = [];
         /**
          * bundle product options
          */
         $productOptions = $item['product_options'];
         if (isset($productOptions['bundle_options'])) {
-            foreach ($productOptions['bundle_options'] AS $bundleOptions) {
-                $bundleProductInfo = array();
+            foreach ($productOptions['bundle_options'] as $bundleOptions) {
+                $bundleProductInfo = [];
                 $bundleProductInfo['label'] = $bundleOptions['label'];
                 $finalOptionsCounter = 0;
-                foreach ($bundleOptions['value'] AS $finalOptions) {
+                foreach ($bundleOptions['value'] as $finalOptions) {
                     $bundleProductInfo['product_' . $finalOptionsCounter] = $finalOptions;
                     $finalOptionsCounter++;
-
                 }
                 $bundleArray['value_' . $bundleOptions['option_id']] = $bundleProductInfo;
-
             }
-
         }
 
         return $bundleArray;
@@ -1027,7 +1054,7 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     private function _fetchProductOptionsAsArray($item)
     {
-        $optionsArray = array();
+        $optionsArray = [];
         /**
          * configurable product options
          */
@@ -1062,14 +1089,15 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     private function _fetchProductImage($item)
     {
-        $productImage = null;
+        $storeManager = $this->storeManagerInterface->getStore($item['store_id']);
+        $this->mediaUrl = $storeManager->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
 
         $productOptions = $item['product_options'];
         if (isset($productOptions['simple_sku'])) { // first, look for associated simple product image
             $_product = $this->_getProductBySku($productOptions['simple_sku']);
             if (!is_null($_product)) {
                 $productImage = $_product->getImage();
-                if ($this->isValidProductImage($productImage)) {
+                if ($this->isValidProductImage($productImage) && $this->checkRealMediaDir($productImage)) {
                     return $this->mediaUrl . self::PRODUCT_IMAGE_SUBDIRECTORY . trim($productImage, '/');
                 }
             }
@@ -1078,12 +1106,15 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
         $_product = $this->_getProductById($item['product_id']);
         if (!is_null($_product)) {
             $productImage = $_product->getImage();
-            if ($this->isValidProductImage($productImage)) {
+            if ($this->isValidProductImage($productImage) && $this->checkRealMediaDir($productImage)) {
                 return $this->mediaUrl . self::PRODUCT_IMAGE_SUBDIRECTORY . trim($productImage, '/');
             }
         }
 
-        // finally try to get the custom placeholder image
+        /**
+         * finally try to get the custom placeholder image
+         * if the above methods failed
+         */
         $imageUrl = $this->helperImageFactory->create()->getDefaultPlaceholderUrl('image');
 
         return $this->convertToUnversionedFrontendUrl($imageUrl, $item['store_id']) ?? '';
@@ -1095,7 +1126,12 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     private function _fetchProductUrl($item)
     {
-        return $this->_getProductById($item['product_id'])->getProductUrl();
+        $product = $this->_getProductById($item['product_id']);
+        if (!is_null($product)) {
+            return $product->getProductUrl();
+        }
+
+        return '#';
     }
 
     /**
@@ -1131,13 +1167,49 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
     }
 
     /**
+     * @param $item
+     * @return string
+     */
+    private function _getProductDownloadUrl($item)
+    {
+        $purchased = $this->linksFactory->create()
+            ->addFieldToFilter('order_id', $item['order_id'])
+            ->addFieldToFilter('order_item_id', $item['item_id'])
+            ->getFirstItem();
+
+        if (!$purchased->getPurchasedId()) {
+            return '';
+        }
+
+        $purchasedItem = $this->itemsFactory->create()->addFieldToFilter(
+                'purchased_id', ['in' => $purchased->getPurchasedId()]
+            )->addFieldToFilter(
+                'status', ['nin' => [Item::LINK_STATUS_PENDING_PAYMENT, Item::LINK_STATUS_PAYMENT_REVIEW]]
+            )->setOrder(
+                'item_id',
+                'desc'
+            )->getFirstItem();
+
+        if ($purchasedItem->getStatus() !== Item::LINK_STATUS_AVAILABLE) {
+            return '';
+        }
+
+        $this->availableDownloadableItems++;
+
+        return $this->storeManagerInterface->getStore($item['store_id'])
+                ->getBaseUrl(UrlInterface::URL_TYPE_LINK)
+            . 'downloadable/download/link/'
+            . $purchasedItem->getLinkHash();
+    }
+
+    /**
      * @param $productId
      * @return ProductInterface
      */
     private function _getProductById($productId)
     {
         try {
-            return $this->productRepositoryInterfaceFactory->create()->getById($productId);
+            return $this->productRepositoryInterface->getById($productId);
         } catch (NoSuchEntityException $e) {
             $this->logger->error('Wesupply error: ' . $e->getMessage());
         }
@@ -1150,7 +1222,7 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
     private function _getProductBySku($productSku)
     {
         try {
-            return $this->productRepositoryInterfaceFactory->create()->get($productSku);
+            return $this->productRepositoryInterface->get($productSku);
         } catch (NoSuchEntityException $e) {
             $this->logger->error('Wesupply error: ' . $e->getMessage());
         }
@@ -1188,11 +1260,7 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
 
     private function isValidProductImage($productImage)
     {
-        return (
-            $productImage &&
-            !empty($productImage) &&
-            strpos($productImage, 'no_selection') === FALSE
-        );
+        return (!empty($productImage) && strpos($productImage, 'no_selection') === false);
     }
 
     /**
@@ -1204,17 +1272,18 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     protected function _fetchInvariableData($existingOrderData, $item, &$generalData)
     {
-        $existingItemKey = FALSE;
+        $existingItemKey = false;
         if ($existingOrderData) {// check if this is the first sync or it is an update
             if ($this->_isMultiProducts($existingOrderData['OrderItems']['Item'])) {
-                $found = array_filter($existingItemData = $existingOrderData['OrderItems']['Item'],
+                $found = array_filter($existingOrderData['OrderItems']['Item'],
                     function ($existingItemData) use ($item) {
-                    return $existingItemData['ItemID'] == $item['item_id'];
-                });
+                        return $existingItemData['ItemID'] == $item['item_id'];
+                    }
+                );
                 $existingItemKey = key($found);
             }
 
-            $origItemData = FALSE !== $existingItemKey ?
+            $origItemData = false !== $existingItemKey ?
                 $existingOrderData['OrderItems']['Item'][$existingItemKey] :
                 $existingOrderData['OrderItems']['Item'];
 
@@ -1262,16 +1331,29 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
     }
 
     /**
-     * @param $orderData
-     * @return string
+     * Check image file and update mediaUrl
+     *
+     * @param $productImage
+     * @return bool
      */
-    private function _getCustomerPhone($orderData)
+    private function checkRealMediaDir($productImage)
     {
-        if ($phone = $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'telephone'], $orderData)) {
-            return $phone;
+        $mediaDir = $this->filesystem
+            ->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
+
+        if (!file_exists($mediaDir . self::PRODUCT_IMAGE_SUBDIRECTORY . trim($productImage, '/'))) {
+            // remove pub directory and recheck image file
+            $replacement = '$1$3';
+            $pattern = '/(^.*)(pub\/)(.*)/i';
+            $mediaDir = preg_replace($pattern, $replacement, $mediaDir, 1);
+            if (!file_exists($mediaDir . self::PRODUCT_IMAGE_SUBDIRECTORY . trim($productImage, '/'))) {
+                return false;
+            }
+            // update mediaUrl
+            $this->mediaUrl = preg_replace($pattern, $replacement, $this->mediaUrl);
         }
 
-        return $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'telephone'], $orderData) ?? '';
+        return true;
     }
 
     /**
@@ -1280,10 +1362,190 @@ class OrderInfoBuilder implements OrderInfoBuilderInterface
      */
     private function _isMultiProducts($arr)
     {
-        if (array() === $arr) {
+        if ([] === $arr) {
             return true;
         }
 
         return array_keys($arr) === range(0, count($arr) - 1);
+    }
+
+    /**
+     * @param $orderData
+     * @return array
+     */
+    private function _fetchInventorySourcesByItems($orderData)
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('order_id', $orderData['entity_id'])->create();
+
+        try {
+            $shipments = $this->shipmentRepository->getList($searchCriteria);
+            foreach ($shipments->getItems() as $shipment) {
+                $shipmentDetails = $this->shipmentRepository->get($shipment->getEntityId());
+                $extensionAttr = $shipmentDetails->getExtensionAttributes();
+                foreach ($shipmentDetails->getItems() as $item) {
+                    if (!method_exists($extensionAttr, 'getSourceCode')) {
+                        $inventorySourcesByItemIds[$item->getParentId()] = $this->_helper->recursivelyGetArrayData(['store_id'], $orderData);
+                        continue;
+                    }
+
+                    $inventorySourcesByItemIds[$item->getParentId()] = $extensionAttr->getSourceCode() != 'default' ?
+                        $extensionAttr->getSourceCode() :
+                        $this->_helper->recursivelyGetArrayData(['store_id'], $orderData);
+                }
+            }
+        } catch (Exception $exception) {
+            $this->logger->error('Error while fetching MSI ' . $exception->getMessage());
+        }
+
+        return $inventorySourcesByItemIds ?? [];
+    }
+
+    /**
+     * @param $orderItems
+     * @param $trackingNo
+     * @param $currItemId
+     * @param $currItemInfo
+     * @return bool
+     */
+    private function groupItemsWithSameTracking(&$orderItems, $trackingNo, $currItemId, $currItemInfo)
+    {
+        $found = array_filter($orderItems, function ($orderedItem) use ($trackingNo, $currItemId) {
+            return $orderedItem['ItemShippingTracking'] == $trackingNo && $orderedItem['ItemID'] == $currItemId;
+        });
+
+        if (!empty($found)) {
+            $foundKey = key($found);
+            $orderItems[$foundKey]['ItemQuantity'] += $currItemInfo['ItemQuantity'];
+            $orderItems[$foundKey]['ItemTotal'] += $currItemInfo['ItemTotal'];
+            $orderItems[$foundKey]['ItemTax'] += $currItemInfo['ItemTax'];
+            $orderItems[$foundKey]['ItemDiscountDetailsTotal'] += $currItemInfo['ItemDiscountDetailsTotal'];
+            $orderItems[$foundKey]['Item_CouponAmount'] += $currItemInfo['Item_CouponAmount'];
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $item
+     * @param $shippedItems
+     * @return array
+     */
+    private function splitItemQty($item, $shippedItems)
+    {
+        $qtySplit = [];
+        $qtySplit['qty_ordered']    = floatval($this->_helper->recursivelyGetArrayData(['qty_ordered'], $item));
+        $qtySplit['qty_canceled']   = floatval($this->_helper->recursivelyGetArrayData(['qty_canceled'], $item, 0));
+        $qtySplit['qty_refunded']   = floatval($this->_helper->recursivelyGetArrayData(['qty_refunded'], $item, 0));
+        $qtySplit['qty_shipped']    = !empty($shippedItems[$item['item_id']]) ?
+            array_reduce($shippedItems[$item['item_id']], function($carry, $sItem) {
+                $carry += floatval($sItem['qty']);
+                return $carry;
+            }) : 0;
+        $qtySplit['qty_processing'] =
+            $qtySplit['qty_ordered'] -
+            $qtySplit['qty_canceled'] -
+            $qtySplit['qty_refunded'] -
+            $qtySplit['qty_shipped'];
+
+        return $qtySplit;
+    }
+
+    /**
+     * @param $item
+     * @return array
+     */
+    private function getItemTotals($item)
+    {
+        return [
+            'row_total' => $this->_helper->recursivelyGetArrayData(['row_total'], $item),
+            'tax_amount' => $this->_helper->recursivelyGetArrayData(['tax_amount'], $item),
+            'discount_amount' => $this->_helper->recursivelyGetArrayData(['discount_amount'], $item)
+        ];
+    }
+
+    /**
+     * @param $finalOrderData
+     * @param $orderData
+     * @throws LocalizedException
+     */
+    private function collectCustomerGeneralData(&$finalOrderData, $orderData)
+    {
+        $customerIsGuest = $this->_helper->recursivelyGetArrayData(['customer_is_guest'], $orderData);
+        $customerId = $customerIsGuest ?
+            intval(664616765 . '' . $orderData['entity_id']) :
+            $this->_helper->recursivelyGetArrayData(['customer_id'], $orderData);
+
+        $finalOrderData['OrderCustomer']['IsGuest'] = $customerIsGuest;
+        $finalOrderData['OrderCustomer']['CustomerID'] = $customerId;
+
+        try {
+            $customer = $this->customer->getById($customerId);
+            $finalOrderData['OrderCustomer']['CustomerCreateDate'] = $customer->getCreatedAt();
+            $finalOrderData['OrderCustomer']['CustomerModifiedDate'] = $customer->getUpdatedAt();
+        } catch (NoSuchEntityException $e) {
+            $finalOrderData['OrderCustomer']['CustomerCreateDate'] = $finalOrderData['OrderDate'];
+            $finalOrderData['OrderCustomer']['CustomerModifiedDate'] = $finalOrderData['LastModifiedDate'];
+        }
+    }
+
+    /**
+     * @param $finalOrderData
+     * @param $orderData
+     */
+    private function collectCustomerBillingData(&$finalOrderData, $orderData)
+    {
+        $finalOrderData['OrderCustomer']['CustomerFirstName'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'firstname'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerLastName'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'lastname'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerName'] =
+            $finalOrderData['OrderCustomer']['CustomerFirstName'] . ' ' . $finalOrderData['OrderCustomer']['CustomerLastName'];
+        $finalOrderData['OrderCustomer']['CustomerEmail'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'email'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerAddress1'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'street'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerAddress2'] = ''; // not saved separately in magento
+        $finalOrderData['OrderCustomer']['CustomerCity'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'city'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerStateProvince'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'region'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerPostalCode'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'postcode'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerCountry'] =
+            $this->getCountryName($this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'country_id'], $orderData));
+        $finalOrderData['OrderCustomer']['CustomerCountryCode'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'country_id'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerPhone'] =
+            $this->_helper->recursivelyGetArrayData(['billingAddressInfo', 'telephone'], $orderData);
+    }
+
+    /**
+     * @param $finalOrderData
+     * @param $orderData
+     */
+    private function collectCustomerShippingData(&$finalOrderData, $orderData)
+    {
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressID'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'entity_id'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressContact'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'firstname'], $orderData) . ' ' .
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'lastname'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressAddress1'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'street'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressCity'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'city'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressState'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'region'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressZip'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'postcode'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressCountry'] =
+            $this->getCountryName($this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData));
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressCountryCode'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'country_id'], $orderData);
+        $finalOrderData['OrderCustomer']['CustomerShippingAddresses']['CustomerShippingAddress']['AddressPhone'] =
+            $this->_helper->recursivelyGetArrayData(['shippingAddressInfo', 'telephone'], $orderData);
     }
 }

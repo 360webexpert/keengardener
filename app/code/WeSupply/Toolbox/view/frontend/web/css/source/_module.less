@@ -484,10 +484,8 @@
             display: none;
         }
     }
-    .embedded-iframe-container {
-        iframe.embedded-iframe.ws-stores-view {
-            height: 820px;
-        }
+    iframe.embedded-iframe.ws-stores-view {
+        height: 820px;
     }
     #order-view-container {
         height: 1000px;
@@ -575,6 +573,30 @@
     }
     .theme-pearl .ws_embed_sms_notification .inline-block .ws-embedded-sms-notification-form-dsg-2 .ws-country-pc-dsg2 {
         height: 34px;
+    }
+    @media screen and (max-width: 767px) {
+        .theme-pearl {
+            .checkout-shipping-method {
+                .table-checkout-shipping-method {
+                    thead {
+                        display: none;
+                    }
+                    tbody {
+                        padding-bottom: 20px;
+                        tr.row {
+                            display: flex;
+                            margin-left: 0;
+                            padding-bottom: 0;
+                            &:first-child,
+                            &.row-eta,
+                            td.col {
+                                border: 0 none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     /* quick fix for non pearl users */
     body:not(.theme-pearl) {

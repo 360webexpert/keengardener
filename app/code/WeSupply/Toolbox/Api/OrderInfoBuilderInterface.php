@@ -11,11 +11,11 @@ interface OrderInfoBuilderInterface
     /**
      * Gathers the informatio for wesupply api from Magento order id
      *
-     * @param $orderId
+     * @param $order
      * @param $existingOrderData
      * @return mixed
      */
-    public function gatherInfo($orderId, $existingOrderData);
+    public function gatherInfo($order, $existingOrderData);
 
     /**
      * Prepares the order information for db storage

@@ -548,6 +548,30 @@ class Estimates extends AbstractHelper
     }
 
     /**
+     * @return mixed
+     */
+    public function getArrivalLabel()
+    {
+        return $this->scopeConfig->getValue('wesupply_api/step_5/estimation_label_arrival', ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAtZipLabel()
+    {
+        return $this->scopeConfig->getValue('wesupply_api/step_5/estimation_label_zip', ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderWithinLabel()
+    {
+        return $this->scopeConfig->getValue('wesupply_api/step_5/estimation_label_order_within', ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
      * @param array $attributes
      * @return array
      */
@@ -739,6 +763,11 @@ class Estimates extends AbstractHelper
             default:
                 return $value ?? '';
         }
+    }
+
+    public function estimationRangeEnabled()
+    {
+        return $this->scopeConfig->getValue('wesupply_api/step_5/add_estimation_range', ScopeInterface::SCOPE_STORE);
     }
 
     public function getEstimationRange()

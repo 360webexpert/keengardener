@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="wesupply_cron">
+        <job name="ws_updates_check" instance="WeSupply\Toolbox\Cron\Order\UpdatesCheck" method="execute">
+            <schedule>*/5 * * * *</schedule>
+        </job>
+        <job name="ws_update_awaiting" instance="WeSupply\Toolbox\Cron\Order\UpdateAwaiting" method="execute">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="ws_mass_delete" instance="WeSupply\Toolbox\Cron\Order\MassDelete" method="execute">
+            <schedule>0 3 * * *</schedule>
+        </job>
+    </group>
+</config>

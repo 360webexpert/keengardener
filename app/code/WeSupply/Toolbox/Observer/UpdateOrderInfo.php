@@ -5,29 +5,34 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use WeSupply\Toolbox\Api\OrderInfoBuilderInterface;
-use WeSupply\Toolbox\Api\OrderRepositoryInterface;
+use WeSupply\Toolbox\Api\OrderRepositoryInterface as WeSupplyOrderRepositoryInterface;
 use WeSupply\Toolbox\Helper\Data as WeSupplyHelper;
 use WeSupply\Toolbox\Logger\Logger as Logger;
-use WeSupply\Toolbox\Model\Order;
 
 class UpdateOrderInfo implements ObserverInterface
 {
     /**
      * @var OrderRepositoryInterface
      */
-    protected $weSupplyOrderRepository;
+    protected $orderRepositoryInterface;
 
     /**
-     * @var Order
+     * @var WeSupplyOrderRepositoryInterface
      */
-    protected $weSupplyOrderFactory;
+    protected $weSupplyOrderRepository;
 
     /**
      * @var OrderInfoBuilderInterface
      */
     protected $orderInfoBuilder;
+
+    /**
+     * @var DateTime
+     */
+    protected $dateTime;
 
     /**
      * @var Http
@@ -50,63 +55,71 @@ class UpdateOrderInfo implements ObserverInterface
     protected $logger;
 
     /**
-     * @var TimezoneInterface
-     */
-    protected $timezone;
-
-    /**
      * UpdateOrderInfo constructor.
-     * @param OrderRepositoryInterface $weSupplyOrderRepository
-     * @param Order $weSupplyOrderFactory
-     * @param OrderInfoBuilderInterface $orderInfoBuilder
-     * @param Http $request
-     * @param Json $json
-     * @param WeSupplyHelper $helper
-     * @param Logger $logger
-     * @param TimezoneInterface $timezone
+     *
+     * @param OrderRepositoryInterface         $orderRepositoryInterface
+     * @param WeSupplyOrderRepositoryInterface $weSupplyOrderRepository
+     * @param OrderInfoBuilderInterface        $orderInfoBuilder
+     * @param DateTime                         $dateTime
+     * @param Http                             $request
+     * @param Json                             $json
+     * @param WeSupplyHelper                   $helper
+     * @param Logger                           $logger
      */
     public function __construct(
-        OrderRepositoryInterface $weSupplyOrderRepository,
-        Order $weSupplyOrderFactory,
+        OrderRepositoryInterface $orderRepositoryInterface,
+        WeSupplyOrderRepositoryInterface $weSupplyOrderRepository,
         OrderInfoBuilderInterface $orderInfoBuilder,
+        DateTime $dateTime,
         Http $request,
         Json $json,
         WeSupplyHelper $helper,
-        Logger $logger,
-        TimezoneInterface $timezone
+        Logger $logger
     )
     {
+        $this->orderRepositoryInterface = $orderRepositoryInterface;
         $this->weSupplyOrderRepository = $weSupplyOrderRepository;
-        $this->weSupplyOrderFactory = $weSupplyOrderFactory;
         $this->orderInfoBuilder = $orderInfoBuilder;
+        $this->dateTime = $dateTime;
         $this->request = $request;
         $this->json = $json;
         $this->helper = $helper;
         $this->logger = $logger;
-        $this->timezone = $timezone;
     }
 
     /**
      * @param Observer $observer
-     * @return $this|void
+     *
+     * @return $this
      */
     public function execute(Observer $observer)
     {
         $orderId = $observer->getData('orderId');
-        if ($this->helper->shouldIgnoreOrder($orderId)) {
-            /**
-             * no recording or updates for order
-             * if it match the filter 'Orders To Be Exported/Updated'
-             */
+
+        try {
+            $order = $this->orderRepositoryInterface->get($orderId);
+        } catch (\Exception $ex) {
+            $this->logger->error("WeSupply Error: Order with id $orderId not found. Error: " . $ex->getMessage());
             return $this;
         }
 
         try {
             $weSupplyOrder = $this->weSupplyOrderRepository->getByOrderId($orderId);
+
+            /** check if should skip from import the order that was just placed  */
+            if ($this->helper->shouldIgnoreOrder($order, $weSupplyOrder)) {
+                return $this;
+            }
+
+            /** check if should skip from update already placed order */
             if ($this->request->getFrontName() === 'admin' /** check only for updates from magento admin */
-                && (
-                    !$weSupplyOrder->getId() /** in case of order update for order that was excluded at the time when it was placed */
-                    || $weSupplyOrder->isExcluded() /** backwards compatibility for order already saved in the past */
+                && !$weSupplyOrder->getId() && (
+                    /** in case of pending order update for order that was excluded at the time when it was placed */
+                    ($order->getStatus() === 'pending' && $order->getExcludeImportPending()) ||
+                    /** in case of complete order update for order that was excluded at the time when it was placed */
+                    ($order->getStatus() === 'complete' && $order->getExcludeImportComplete())
+                    /** backwards compatibility for order already saved in the past and excluded at the time when it was placed  */
+                    || $weSupplyOrder->isExcluded()
                 )
             ) {
                 return $this;
@@ -116,9 +129,22 @@ class UpdateOrderInfo implements ObserverInterface
             $jsonOrderData = $this->json->serialize($existingOrderXml);
             $existingOrderData = $this->json->unserialize($jsonOrderData);
 
-            $orderData = $this->orderInfoBuilder->gatherInfo($orderId, $existingOrderData ?? null);
+            /** check if should skip from re-import the order that was deleted by cron */
+            $timeDateOffset = $this->dateTime->date(
+                'Y-m-d H:i:s', strtotime(
+                    '-6 months', $this->dateTime->gmtTimestamp()
+                )
+            );
+            if (empty($existingOrderData) && $order->getCreatedAt() < $timeDateOffset) {
+                return $this;
+            }
+
+            /** build order data */
+            $orderData = $this->orderInfoBuilder->gatherInfo($order, $existingOrderData ?? null);
+
+            /** check order data and skip empty order */
             if (empty($orderData)) {
-                $this->logger->error("WeSupply Error: OrderInfo gathering with order id $orderId is empty");
+                $this->logger->error("WeSupply Error: OrderInfoBuilder failed for order id $orderId");
                 return $this;
             }
 
@@ -129,9 +155,8 @@ class UpdateOrderInfo implements ObserverInterface
             $weSupplyOrder->setStoreId($this->orderInfoBuilder->getStoreId($orderData));
             $weSupplyOrder->setInfo($orderInfo);
 
-            /** updated at in default Magento 2 UTC */
-            $weSupplyOrder->setUpdatedAt(date("Y-m-d H:i:s"));
             $this->weSupplyOrderRepository->save($weSupplyOrder);
+
         } catch (\Exception $ex) {
             $this->logger->error("WeSupply Error: " . $ex->getMessage());
         }

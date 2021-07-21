@@ -123,7 +123,7 @@ class OrderRepository implements OrderRepositoryInterface
         $this->resource->load($this->order, $magentoOrderId, 'order_id');
 
         if ($this->order->getId() && $triggerUpdate === TRUE) {
-            $this->triggerOrderUpdate();
+             $this->triggerOrderUpdate();
         }
 
         return $this->order;
@@ -202,9 +202,19 @@ class OrderRepository implements OrderRepositoryInterface
     }
 
     /**
+     * @param Data\OrderInterface $order
      *
+     * @return mixed|void
      */
-    private function triggerOrderUpdate()
+    public function setOrder($order)
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * Update WeSupply order record
+     */
+    public function triggerOrderUpdate()
     {
         $this->eventManager->dispatch(
             'wesupply_order_update',

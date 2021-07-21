@@ -160,21 +160,25 @@ class AppendEstimations
         if (!$this->estimatesHelper->hideEstimations($this->concatShipperMethod())) {
             $estimatedTimestamp = $this->getEstimationTimestamp();
             if ($this->validateTimestamp($estimatedTimestamp)) {
-                $this->addEstimationRange($estimatedTimestamp);
+
+                if ($this->estimatesHelper->estimationRangeEnabled()) {
+                    $estimatedTimestamp = $this->addEstimationRange($estimatedTimestamp);
+                }
+
                 // date format
                 $estimationsFormat = $this->helper->getDeliveryEstimationsFormat();
                 if (is_array($estimatedTimestamp)) { // Case of ETA as range
+                    $extensibleAttribute->setDeliveryTimestamp(implode(',', $estimatedTimestamp));
                     $estimatedDelivery = date($estimationsFormat, $estimatedTimestamp[0]);
                     if (date('y-m-d', $estimatedTimestamp[0]) != date('y-m-d', $estimatedTimestamp[1])) {
                         $estimatedDelivery .= ' - ' . date($estimationsFormat, $estimatedTimestamp[1]);
                     }
                 } else {
+                    $extensibleAttribute->setDeliveryTimestamp($estimatedTimestamp);
                     $estimatedDelivery = date($estimationsFormat, $estimatedTimestamp);
                 }
 
                 // finally set ETA
-//                $extensibleAttribute->setDeliveryRequestId($this->estimations['request_id']);
-                $extensibleAttribute->setDeliveryTimestamp(implode(',', $estimatedTimestamp));
                 $extensibleAttribute->setDeliveryTime(__('ETA: ') . $estimatedDelivery);
             }
         }
@@ -251,14 +255,21 @@ class AppendEstimations
      * @param $estimatedTimestamp
      * @return array
      */
-    private function addEstimationRange(&$estimatedTimestamp)
+    private function addEstimationRange($estimatedTimestamp)
     {
+        $shipperMethod = $this->concatShipperMethod();
+        $estimationsRange = $this->estimatesHelper->getApplyEstimationRangeTo() === 'all_shipping_methods' ?
+            $this->estimatesHelper->getEstimationRange() :
+            $this->estimatesHelper->getEstimationsRangeByShipperMethod($shipperMethod);
+
+        if (empty($estimationsRange)) {
+            return $estimatedTimestamp;
+        }
+
         // memorize estimated timestamp
         $origEstimatedTimestamp = $estimatedTimestamp;
         // reset estimated timestamp
         $estimatedTimestamp = [];
-        $shipperMethod = $this->concatShipperMethod();
-        $estimationsRange = $this->estimatesHelper->getEstimationsRangeByShipperMethod($shipperMethod);
         if (is_array($origEstimatedTimestamp)) {
             // it is already requested as range (ETA Display Mode When Multiple Products In Cart)
             $estimatedTimestamp[0] = $origEstimatedTimestamp[0];

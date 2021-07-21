@@ -10,6 +10,7 @@ namespace WeSupply\Toolbox\Observer;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use WeSupply\Toolbox\Helper\Data as WeSupplyHelper;
 
 /**
  * Class SaveQuoteToOrder
@@ -23,30 +24,42 @@ class SaveQuoteToOrder implements ObserverInterface
     private $timezone;
 
     /**
+     * @var WeSupplyHelper
+     */
+    protected $wsHelper;
+
+    /**
      * SaveQuoteToOrder constructor.
+     *
      * @param TimezoneInterface $timezone
+     * @param WeSupplyHelper    $wsHelper
      */
     public function __construct(
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        WeSupplyHelper $wsHelper
     )
     {
         $this->timezone = $timezone;
+        $this->wsHelper = $wsHelper;
     }
 
     /**
-     * Saves data get from WeSupply estimates api
-     *
      * @param EventObserver $observer
+     *
      * @return $this|void
      */
     public function execute(EventObserver $observer)
     {
+        $order = $observer->getEvent()->getOrder();
+
+        $order->setData('exclude_import_pending', $this->wsHelper->excludePendingOrders());
+        $order->setData('exclude_import_complete', $this->wsHelper->excludeCompleteOrders());
+
         $quote = $observer->getEvent()->getQuote();
         if (!$quote->getDeliveryTimestamp()) {
             return $this;
         }
 
-        $order = $observer->getEvent()->getOrder();
         $order->setData('delivery_timestamp', $quote->getDeliveryTimestamp());
         $order->setData('delivery_utc_offset', $this->timezone->scopeDate()->getOffset());
 

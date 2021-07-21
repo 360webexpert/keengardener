@@ -115,13 +115,16 @@ class FetchSingleOrder extends Action
      */
     protected function fetchOrder()
     {
+        $params = $this->getRequest()->getParams();
+        $triggerUpdate = !empty($params['update']);
+
         $orderId = $this->cleanOrderId();
         switch ($this->orderIdIsInternal) {
             case TRUE;
-                $order = $this->orderRepository->getByOrderId($orderId, TRUE);
+                $order = $this->orderRepository->getByOrderId($orderId, $triggerUpdate);
                 break;
             default:
-                $order = $this->orderRepository->getByOrderNumber($orderId, TRUE);
+                $order = $this->orderRepository->getByOrderNumber($orderId, $triggerUpdate);
                 break;
         }
 

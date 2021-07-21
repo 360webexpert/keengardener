@@ -690,6 +690,7 @@ class WeSupplyApi implements WeSupplyApiInterface
     {
         $accessToken = $this->getToken();
         if (!$accessToken) {
+            $this->messageManager->addErrorMessage('Please make sure the credentials and Access Key configured in WeSupply > Providers > Magento are correct.');
             $this->logger->error('Access token not found or couldn\'t be generated!');
             return false;
         }
@@ -725,15 +726,18 @@ class WeSupplyApi implements WeSupplyApiInterface
                             $wsMessage .= $detail . '. ';
                         }
                     }
+                    $this->messageManager->addErrorMessage('Please make sure the credentials and Access Key configured in WeSupply > Providers > Magento are correct.');
                     $this->logger->error('WeSupply response error with status ' . $this->curlClient->getStatus() . ' | ' . $wsMessage);
                     return false;
                 case Http::STATUS_CODE_404:
+                    $this->messageManager->addErrorMessage('Bed request. API url not found. Contact support!');
                     $this->logger->error('WeSupply ApiEndpoint not found: ' . $this->getApiUrl($endpoint));
                     return false;
                 default:
                     return $response ?? false;
             }
         } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage('The connection between WeSupply and Magento has timed out. Please try again in a few minutes.');
             $this->logger->error('WeSupply response error: ' . $e->getMessage());
             return false;
         }

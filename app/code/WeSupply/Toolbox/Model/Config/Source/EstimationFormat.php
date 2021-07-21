@@ -1,21 +1,32 @@
 <?php
 namespace WeSupply\Toolbox\Model\Config\Source;
 
-class EstimationFormat implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+
+class EstimationFormat implements ArrayInterface
 {
-
-
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return [
-            ['value' => 'm/d', 'label' => __('mm/dd (01/28)')],
-            ['value' => 'd/m', 'label' => __('dd/mm (28/01)')],
-            ['value' => 'F d', 'label' => __('Month Day (January 28)')],
-            ['value' => 'd F', 'label' => __('Day Month (28 January)')],
-            ['value' => 'M d', 'label' => __('Short Month Day (Jan 28)')],
-            ['value' => 'd M', 'label' => __('Day Short Month (28 Jan)')],
-            ['value' => 'd/m/Y', 'label' => __('dd/mm/yyyy (28/01/2019)')],
-            ['value' => 'm/d/Y', 'label' => __('mm/dd/yyyy (01/28/2019)')],
+            ['value' => 'M d', 'label' => __('Jan 28')],
+            ['value' => 'd M', 'label' => __('28 Jan')],
+            ['value' => 'F d', 'label' => __('January 28')],
+            ['value' => 'd F', 'label' => __('28 January')],
+            ['value' => 'D, M d', 'label' => __('Mon, Jan 28')],
+            ['value' => 'D, F d', 'label' => __('Mon, January 28')],
+            ['value' => 'l, M d', 'label' => __('Monday, Jan 28')],
+            ['value' => 'l, F d', 'label' => __('Monday, January 28')],
+            ['value' => 'D, M d, Y', 'label' => __('Mon, Jan 28, 2021')],
+            ['value' => 'l, M d, Y', 'label' => __('Monday, Jan 28, 2021')],
+            ['value' => 'd/m', 'label' => __('28/01')],
+            ['value' => 'm/d', 'label' => __('01/28')],
+            ['value' => 'd/m/y', 'label' => __('28/01/21')],
+            ['value' => 'm/d/y', 'label' => __('01/28/21')],
+            ['value' => 'd/m/Y', 'label' => __('28/01/2021')],
+            ['value' => 'm/d/Y', 'label' => __('01/28/2021')]
         ];
     }
 }

@@ -132,5 +132,62 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+
+        if (version_compare($context->getVersion(), '1.0.11') < 0) {
+            $setup->getConnection()->addColumn(
+                $setup->getTable('sales_order'),
+                'exclude_import_pending',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'nullable' => true,
+                    'unsigned' => true,
+                    'default' => '0',
+                    'after'    => 'delivery_utc_offset',
+                    'comment' => 'Exclude order while is pending from export'
+                ]
+            );
+        }
+
+        if (version_compare($context->getVersion(), '1.0.12') < 0) {
+            $setup->getConnection()->addColumn(
+                $setup->getTable('sales_order'),
+                'exclude_import_complete',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'nullable' => true,
+                    'unsigned' => true,
+                    'default' => '0',
+                    'after'    => 'exclude_import_pending',
+                    'comment' => 'Exclude complete order from export'
+                ]
+            );
+        }
+
+        if (version_compare($context->getVersion(), '1.0.13') < 0) {
+            $setup->getConnection()->addColumn(
+                $setup->getTable('wesupply_orders'),
+                'awaiting_update',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
+                    'nullable' => false,
+                    'unsigned' => true,
+                    'default' => false,
+                    'after'    => 'store_id',
+                    'comment' => 'Order was updated by ERP or other'
+                ]
+            );
+
+            $setup->getConnection()->changeColumn(
+                $setup->getTable('wesupply_orders'),
+                'updated_at',
+                'updated_at',
+                [
+                    'type'=> \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    'nullable' => false,
+                    'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE,
+                    'comment' => 'Updated At'
+                ]
+            );
+        }
     }
 }

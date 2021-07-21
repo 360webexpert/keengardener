@@ -24,7 +24,63 @@ $ php bin/magento module:enable WeSupply_Toolbox --clear-static-content
 $ php bin/magento setup:upgrade
 ```
 
-###Release Notes  
+###Release Notes
+
+Version 1.10.15, Jul 14th, 2021  
+
+-Optimized database performance by adding a cron job that removes orders older than 6 months from WeSupply table  
+-Enhanced compatibility with 3rd party ERP software by adding a cron job that automatically detects order updates  
+-Fixed an error that was thrown we WeSupply tried to import an order containing a product that no longer exists  
+-Fixed an issue that prevented pickup and curbside orders from being canceled via the frontend  
+
+Version 1.10.14, Jun 8th, 2021  
+
+-New Feature: Added a new option in the Toolbox configuration section that allows for excluding orders in the "Complete" status from being imported into WeSupply (this applies only to orders created directly with the "Complete" status)  
+-Added XSS security enhancements  
+
+Version 1.10.13, May 10th, 2021  
+
+-Extended WeSupply import process to include Virtual and Downloadable products  
+-Optimized the order export functionality to avoid duplicate items in case the shipment is created/updated from an external processor, via an API call  
+-Fixed a bug related to Estimated Delivery Date range calculation and display  
+  
+Version 1.10.12, April 8th, 2021
+
+-New Feature: Added a new option in the Toolbox configuration section that allows for excluding pending orders from being imported into WeSupply  
+-Fixed a bug that prevented estimation ranges from being displayed on the frontend  
+  
+Version 1.10.11, March 11th, 2021  
+
+-New Feature: Implemented the In store pickup functionality  
+-New Feature: Added new admin configuration options for Estimated Delivery Date frontend display  
+-Added Help Center Pages in the Magento Admin WeSupply section  
+-Fixed a height issue related to the Shipment Tracking iFrame  
+  
+Version 1.10.10, February 1st, 2021  
+
+-Fixed an issue specific to Magento 2.4.x which prevented estimates from working on configurable products  
+-Fixed a height issue related to the store locator iframe  
+-Added more detailed error logs in case of failed refunds  
+
+Version 1.10.9, December 8th, 2020  
+
+-Fixed an issue whereby online refunds would sometimes be processed offline  
+-Fixed a small Shipping Method Title display issue on the Checkout Page  
+
+Version 1.10.8, November 25th, 2020  
+
+-Fixed an issue related to processing refunds when the Magento MSI functionality was disabled  
+  
+Version 1.10.7, November 23th, 2020  
+
+-Added compatibility with Magento's In-Store pickup functionality (Magento 2.4.x)  
+-Added more specific messages in case of errors during return process 
+-Optimized iframe resizer for Open in Modal order view behavior  
+-Updated product image path generation process  
+  
+Version 1.10.6, November 5th, 2020  
+
+-Updated order export functionality to include compatibility with the Magento Multi Source Inventory  
   
 Version 1.10.5, October 19th, 2020  
 

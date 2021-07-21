@@ -17,11 +17,14 @@ class WeSupplyMappings extends \Magento\Framework\App\Helper\AbstractHelper
     const WESUPPLY_ORDER_PAYMENT_FAILURE = 8;
     const WESUPPLY_ORDER_RETURN = 9;
 
+    const INSTORE_PICKUP_LABEL = 'In Store Pickup';
+
     const MAPPED_CARRIER_CODES = [
-        'ups'   => 'UPS',
-        'usps'  => 'USPS',
-        'fedex' => 'FedEx',
-        'dhl'   => 'DHL'
+        'ups'     => 'UPS',
+        'usps'    => 'USPS',
+        'fedex'   => 'FedEx',
+        'dhl'     => 'DHL',
+        'instore' => self::INSTORE_PICKUP_LABEL
     ];
 
 
@@ -39,9 +42,11 @@ class WeSupplyMappings extends \Magento\Framework\App\Helper\AbstractHelper
         '12' => '3DS',     //  UPS Three-Day Select
     ];
 
-
-
-
+    const ORDER_FINAL_STATUS_IDS = [
+        self::WESUPPLY_ORDER_COMPLETE,
+        self::WESUPPLY_ORDER_CANCELLED,
+        self::WESUPPLY_ORDER_RETURN
+    ];
 
     /**
      * @return array

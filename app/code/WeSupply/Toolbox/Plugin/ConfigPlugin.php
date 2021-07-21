@@ -169,7 +169,7 @@ class ConfigPlugin
         }
 
         if (isset($serviceIsAvailable['allowed']) && $serviceIsAvailable['allowed'] === false) {
-            $this->messageManager->addErrorMessage(__('In order to enable Delivery Estimation functionality, make sure this addon is activated under your WeSupply account. Please upgrade your plan.'));
+            $this->messageManager->addErrorMessage(__('In order to enable Delivery Estimation functionality, make sure this addon is activated and enabled under your WeSupply account.'));
             $this->resetConfigValues(['step_5/enable_delivery_estimations']);
             $subject->setData('groups', $this->groups);
         }

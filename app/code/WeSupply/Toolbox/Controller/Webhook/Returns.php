@@ -17,7 +17,7 @@ use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Phrase;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use \Magento\Framework\Stdlib\DateTime\DateTimeFactory;
@@ -94,6 +94,11 @@ class Returns extends Action
     protected $creditMemoLoader;
 
     /**
+     * @var
+     */
+    protected $creditMemo;
+
+    /**
      * @var CreditmemoManagementInterface
      */
     protected $creditMemoManagement;
@@ -160,6 +165,11 @@ class Returns extends Action
     protected $finalSuccessMessage = '';
 
     /**
+     * @var string
+     */
+    protected $finalErrorMessage = '';
+
+    /**
      * @var array
      */
     protected $returnDetails = [];
@@ -168,6 +178,16 @@ class Returns extends Action
      * @var array
      */
     protected $creditMemoData = [];
+
+    /**
+     * @var ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
+     * @var string
+     */
+    private $orderHistory = 'Order history not collected yet.';
 
     /**
      * Returns constructor.
@@ -186,6 +206,7 @@ class Returns extends Action
      * @param DateTimeFactory $dateTimeFactory
      * @param ReturnslistInterface $returnsList
      * @param GiftcardInterface $giftCardInterface
+     * @param ManagerInterface $messageManager
      * @param WeSupplyApiInterface $weSupplyApiInterface
      * @param PriceHelper $priceHelper
      * @param Helper $helper
@@ -207,6 +228,7 @@ class Returns extends Action
         StoreManagerInterface $storeManager,
         DateTimeFactory $dateTimeFactory,
         GiftcardInterface $giftCardInterface,
+        ManagerInterface $messageManager,
         ReturnslistInterface $returnsList,
         WeSupplyApiInterface $weSupplyApiInterface,
         PriceHelper $priceHelper,
@@ -226,6 +248,7 @@ class Returns extends Action
         $this->storeManager = $storeManager;
         $this->dateTimeFactory = $dateTimeFactory;
         $this->giftCardInterface = $giftCardInterface;
+        $this->messageManager = $messageManager;
         $this->returnsList = $returnsList;
         $this->weSupplyApiInterface = $weSupplyApiInterface;
         $this->priceHelper = $priceHelper;
@@ -233,6 +256,7 @@ class Returns extends Action
         $this->helper = $helper;
         $this->webhook = $webhook;
 
+        $this->requestLogId = uniqid();
         $this->resource = $resourceConnection;
         $this->connection = $resourceConnection->getConnection();
 
@@ -245,69 +269,77 @@ class Returns extends Action
     public function execute()
     {
         $resultJson = $this->resultJsonFactory->create();
-
-        if (!$this->webhook->canProceedsRequest()) {
-            $error = $this->webhook->getError();
-            $this->logger->addError($error['status-message']);
-
-            return $resultJson->setData($error);
-        }
-
         $this->params = $this->getRequest()->getParams();
-        if (!$this->webhook->validateParams('return', $this->params)) {
+
+        if (!$this->requestIsAllowed()) {
             $error = $this->webhook->getError();
+            $error['payment-logs'] = $this->orderHistory;
             $this->logger->addError($error['status-message']);
 
             return $resultJson->setData($error);
         }
 
-        $this->returnDetails = $this->webhook->proceed(
-            self::WESUPPLY_API_ENDPOINT,
-            'GET',
-            [
-                'provider' => 'Magento',
-                'reference' => $this->params['reference']
-            ]
-        );
+        if (!$this->getWeSupplyReturnDetails()) {
+            $error = $this->webhook->getError();
+            $error['payment-logs'] = $this->orderHistory;
+            $this->logger->addError($error['status-message']);
 
-        if ($this->webhook->getError() || !$this->returnDetails) {
-            return $resultJson->setData($this->webhook->getError());
+            return $resultJson->setData($error);
         }
 
-        $this->matchRefundTypeAmountPairs();
-
-        /**
-         * First, we need to check what type of refund was requested in order to proceed
-         * Gift Card and Store Credit is only available for Magento Commerce (Enterprise)
-         */
-        if (
-            !$this->isEnterprise() &&
-            ($this->checkRefundMethodExists('gift_card') || $this->checkRefundMethodExists('credit'))
-        ) {
-            $hasGiftCard = false;
-            $message = 'refund is only available for Magento Commerce.';
-            if ($this->checkRefundMethodExists('gift_card')) {
-                $hasGiftCard = true;
-                $message = __('Gift Card %1', $message);
-            }
-            if ($this->checkRefundMethodExists('credit')) {
-                $message = !$hasGiftCard ? __('Store Credit %1', $message) : __('Store Credit and %1', $message);
-            }
-            return $resultJson->setData(['success' => false, 'status-title' => 'Refund Failed', 'status-message' => $message]);
-        }
-
-        // create credit memo
-        $this->requestLogId = uniqid();
+        // prepare credit memo data
+        $this->pairRefundTypeAmountPairs();
         $this->prepareCreditMemoParams();
-        $creditMemo = $this->createCreditMemo();
 
-        // save processed refund
-        if ($creditMemo['success'] === TRUE) {
-            $this->saveProcessedReturn($this->params['reference']);
+        // get the order and prepare order history for ws logs
+        $order = $this->getOrder();
+        $this->collectOrderHistoryComments($order);
+
+        // further checks to make sure credit memo and refund are allowed on order
+        if (!$this->canCreateCreditMemoOnOrder($order)) {
+            $this->logger->addError($this->finalErrorMessage);
+
+            return $resultJson->setData([
+                'success' => false,
+                'status-title' => 'Refund Failed',
+                'status-message' => $this->finalErrorMessage,
+                'payment-logs' => $this->orderHistory
+            ]);
         }
 
-        return $resultJson->setData(
-            ['success' => $creditMemo['success'], 'status-title' => $creditMemo['status-title'], 'status-message' => $creditMemo['status-message']]
+        if (!$this->refundMethodIsAllowed()) {
+            $this->logger->addError($this->finalErrorMessage);
+
+            return $resultJson->setData([
+                'success' => false,
+                'status-title' => 'Refund Failed',
+                'status-message' => $this->finalErrorMessage,
+                'payment-logs' => $this->orderHistory
+            ]);
+        }
+
+        // continue with creating credit memo
+        $creditMemoResponse = $this->createCreditMemo($order);
+
+        // refresh order history comments
+        $this->collectOrderHistoryComments($order);
+
+        if ($creditMemoResponse['success'] === false) {
+            $this->logger->addError($creditMemoResponse['status-message']);
+
+            $creditMemoResponse['payment-logs'] = $this->orderHistory;
+            return $resultJson->setData($creditMemoResponse);
+        }
+
+        // save processed refund to avoid duplicate refund
+        $this->saveProcessedReturn($this->params['reference']);
+
+        return $resultJson->setData([
+                'success' => $creditMemoResponse['success'],
+                'status-title' => $creditMemoResponse['status-title'],
+                'status-message' => $creditMemoResponse['status-message'],
+                'payment-logs' => $this->orderHistory
+            ]
         );
     }
 
@@ -326,16 +358,36 @@ class Returns extends Action
         $this->creditMemoData['comment_text'] .= $this->collectReturnAdminComments();
         $this->creditMemoData['comment_text'] .= $this->addAdditionalAdminComments();
         $this->creditMemoData['send_email'] = false; // not set !!!
-        $this->creditMemoData['store_credit_amount'] = $this->checkRefundMethodExists('credit') ? $this->getStoreCreditAmount() : 0;
-        $this->creditMemoData['gift_card_amount'] = $this->checkRefundMethodExists('gift_card') ? $this->getGiftCardAmount() : 0;
+        $this->creditMemoData['store_credit_amount'] = $this->checkRequestedRefundMethod('credit') ? $this->getStoreCreditAmount() : 0;
+        $this->creditMemoData['gift_card_amount'] = $this->checkRequestedRefundMethod('gift_card') ? $this->getGiftCardAmount() : 0;
 
         $this->creditMemoData['adjustment_negative'] += $this->creditMemoData['gift_card_amount'];
     }
 
     /**
+     * Additional credit memo data
+     *
+     * @param $storeCreditAmount
+     * @return string
+     */
+    private function appendAdditionalCreditMemoData($storeCreditAmount)
+    {
+        if ($storeCreditAmount > 0) { // only available for Magento Enterprise
+            $this->creditMemoData['refund_customerbalance_return'] = $storeCreditAmount;
+            $this->creditMemoData['refund_customerbalance_return_enable'] = 1;
+
+            $formattedAmount = $this->priceHelper->currency($storeCreditAmount, true, false);
+            $storeCreditMessage = ' of which ' . $formattedAmount . ' were refunded to Store Credit';
+        }
+
+        return $storeCreditMessage ?? '';
+    }
+
+    /**
+     * @param $order
      * @return array
      */
-    private function createCreditMemo()
+    private function createCreditMemo($order)
     {
         /**
             Expected params:
@@ -352,25 +404,10 @@ class Returns extends Action
             $creditMemoData['items'] = $itemToCredit;
          */
 
-        $order = $this->getOrder();
-        if (!$order) {
-            return [
-                'success' => false,
-                'status-title' => 'Refund Failed',
-                'status-message' => __('Order with ID %1 was not found.', $this->creditMemoData['increment_id'])
-            ];
-        }
-
-        if ($order->getPayment()->getMethodInstance()->isOffline() && !$this->creditMemoData['do_offline']) {
-            $paymentInfo = $order->getPayment()->getAdditionalInformation();
-            return [
-                'success' => false,
-                'status-title' => 'Refund Failed',
-                'status-message' => __('Only offline type refunds are allowed for this order. Payment type used was %1.', $paymentInfo['method_title'])
-            ];
-        }
-
-        // clear unnecessary data before load credit memo
+        /**
+         * memorize and clear unnecessary data
+         * before load credit memo
+         */
         $orderIncrementId = $this->creditMemoData['increment_id'];
         unset($this->creditMemoData['increment_id']);
         $giftCardAmount = $this->creditMemoData['gift_card_amount'];
@@ -379,70 +416,68 @@ class Returns extends Action
         unset($this->creditMemoData['store_credit_amount']);
 
         try {
-            $storeCreditMessage = '';
-            if ($storeCreditAmount > 0) { // only available for Magento Enterprise
-                $this->creditMemoData['refund_customerbalance_return'] = $storeCreditAmount;
-                $this->creditMemoData['refund_customerbalance_return_enable'] = 1;
-
-                $storeCreditMessage = (__('of which %1 were refunded to Store Credit', $this->priceHelper->currency($storeCreditAmount, true, false)));
-            }
+            $storeCreditMessage = $this->appendAdditionalCreditMemoData($storeCreditAmount);
 
             $this->creditMemoLoader->setOrderId($order->getId());
             $this->creditMemoLoader->setCreditmemo($this->creditMemoData);
 
-            $creditMemo = $this->creditMemoLoader->load();
-            if (!$creditMemo) {
+            $invoiceIds = []; // try to get invoices
+            $invoices = $order->getInvoiceCollection();
+            foreach ($invoices as $invoice) {
+                if ($invoice->canRefund()) {
+                    $invoiceIds[] = $invoice->getIncrementId();
+                }
+            }
+
+            if (empty($invoiceIds)) {
+                return [
+                    'success' => false,
+                    'status-title' => 'Refund Failed',
+                    'status-message' => 'Invoice not found or cannot be refunded. Check Magento order #' . $orderIncrementId
+                ];
+            }
+
+            $this->creditMemo = $this->creditMemoLoader->load();
+            if (!$this->creditMemo) {
+                $message = $this->collectSessionMessages();
+                if (empty($message)) {
+                    $message = 'Unable to create Credit Memo and process the refund.';
+                }
+
                 return [
                     'success' => false,
                     'reason' => 'order-locked',
                     'status-title' => 'Refund Failed',
-                    'status-message' => __('Unable to create Credit Memo and process the refund. Possible reasons: order not completed, order not invoiced, other reason. Check Magento order #%1', $orderIncrementId)
+                    'status-message' => $message . '. Check Magento order #' . $orderIncrementId
                 ];
             }
 
-            if (!$creditMemo->isValidGrandTotal()) {
+            $invoiceObj = $this->invoice->loadByIncrementId(reset($invoiceIds));
+            $this->creditMemo->setInvoice($invoiceObj);
+
+            if (!$this->creditMemo->isValidGrandTotal()) {
                 return [
                     'success' => false,
                     'status-title' => 'Refund Failed',
-                    'status-message' => __('The credit memo\'s total must be positive.')
+                    'status-message' => 'The credit memo\'s total must be positive.'
                 ];
             }
 
             if (!empty($this->creditMemoData['comment_text'])) {
-                $creditMemo->addComment(
+                $this->creditMemo->addComment(
                     $this->creditMemoData['comment_text'],
-                    isset($this->creditMemoData['comment_customer_notify']), // is not set anywhere
-                    isset($this->creditMemoData['is_visible_on_front']) // is not set anywhere
+                    isset($this->creditMemoData['comment_customer_notify']),
+                    isset($this->creditMemoData['is_visible_on_front'])
                 );
 
-                $creditMemo->setCustomerNote($this->creditMemoData['comment_text']);
-                $creditMemo->setCustomerNoteNotify(isset($this->creditMemoData['comment_customer_notify']));
+                $this->creditMemo->setCustomerNote($this->creditMemoData['comment_text']);
+                $this->creditMemo->setCustomerNoteNotify(isset($this->creditMemoData['comment_customer_notify']));
             }
 
-            $creditMemo->getOrder()->setCustomerNoteNotify(!empty($this->creditMemoData['send_email']));
-
-            if (!$this->creditMemoData['do_offline']) {
-                $invoiceIds = [];
-                $invoices = $order->getInvoiceCollection();
-                foreach ($invoices as $invoice) {
-                    if ($invoice->canRefund()) {
-                        $invoiceIds[] = $invoice->getIncrementId();
-                    }
-                }
-
-                if (!$invoiceIds) {
-                    return [
-                        'success' => false,
-                        'status-title' => 'Refund Failed',
-                        'status-message' => __('Invoice not found or cannot be refunded. Check Magento order #%1', $orderIncrementId)
-                    ];
-                }
-                $invoiceObj = $this->invoice->loadByIncrementId(reset($invoiceIds));
-                $creditMemo->setInvoice($invoiceObj);
-            }
+            $this->creditMemo->getOrder()->setCustomerNoteNotify(!empty($this->creditMemoData['send_email']));
 
             // create refund and generate gift card
-            if ($this->creditMemoManagement->refund($creditMemo, (bool)$this->creditMemoData['do_offline'])) {
+            if ($this->creditMemoManagement->refund($this->creditMemo, (bool)$this->creditMemoData['do_offline'])) {
 
                 if ($giftCardAmount > 0) { // only available for Magento Enterprise
                     $giftCardMessage = $this->generateGiftCard($order, $giftCardAmount);
@@ -450,16 +485,16 @@ class Returns extends Action
                     $this->pushSuccessMessage($giftCardMessage);
                 }
 
-                $this->pushSuccessMessage(__('Created Credit Memo %1 in amount of %2 %3; Request log ID: %4',
-                    $creditMemo->getIncrementId(),
-                    $this->priceHelper->currency($creditMemo->getBaseGrandTotal(), true, false),
-                    $storeCreditMessage,
-                    $this->requestLogId
-                ));
+                $this->pushSuccessMessage(
+                    'Created Credit Memo ' . $this->creditMemo->getIncrementId() .
+                    ' in amount of ' . $this->priceHelper->currency($this->creditMemo->getBaseGrandTotal(), true, false) .
+                    $storeCreditMessage .
+                    '. Request log ID: ' . $this->requestLogId
+                );
             }
 
-            if (!empty($creditMemoData['send_email'])) {
-                $this->creditMemoSender->send($creditMemo);
+            if (!empty($this->creditMemoData['send_email'])) {
+                $this->creditMemoSender->send($this->creditMemo);
             }
 
             return [
@@ -474,7 +509,7 @@ class Returns extends Action
             return [
                 'success' => false,
                 'status-title' => 'Refund Failed',
-                'status-message' => __('Credit Memo not created! %1. Check Magento order #%2', $responseMessage, $orderIncrementId)
+                'status-message' => 'Credit Memo not created! ' . $responseMessage . '. Check Magento order #' . $orderIncrementId
             ];
         }
     }
@@ -482,7 +517,7 @@ class Returns extends Action
     /**
      * @param $order
      * @param $giftCardAmount
-     * @return array|Phrase
+     * @return array|string
      */
     private function generateGiftCard($order, $giftCardAmount)
     {
@@ -495,12 +530,12 @@ class Returns extends Action
             $this->giftCardInterface->createAndDeliverGiftCard($giftCardAmount, $customerEmail, $customerName, $websiteId);
 
             $giftCardCode = $this->giftCardInterface->getGeneratedCode();
-            $orderHistoryComment = __('Created Gift Card %1 in amount of %2', $giftCardCode, $this->priceHelper->currency($giftCardAmount, true, false));
+            $orderHistoryComment = 'Created Gift Card ' . $giftCardCode . ' in amount of ' . $this->priceHelper->currency($giftCardAmount, true, false);
             $order->addStatusHistoryComment($orderHistoryComment)->save();
 
             return $orderHistoryComment;
         } catch (\Exception $e) {
-            $message = __('Error occurred while creating Gift Card. Message %1', $e->getMessage());
+            $message = 'Error occurred while creating Gift Card. Message ' . $e->getMessage();
             return ['success' => false, 'status-title' => 'Refund Failed', 'status-message' => $message];
         }
     }
@@ -510,7 +545,7 @@ class Returns extends Action
      */
     private function getOfflineFlag()
     {
-        if ($this->checkRefundMethodExists('refund')) {
+        if ($this->checkRequestedRefundMethod('refund')) {
             return false; // online
         }
 
@@ -572,7 +607,7 @@ class Returns extends Action
      */
     private function getStoreCreditAmount()
     {
-        if ($this->checkRefundMethodExists('credit')) {
+        if ($this->checkRequestedRefundMethod('credit')) {
             return $this->returnDetails['logistics']['refund_types_amount']['credit'];
         }
 
@@ -584,7 +619,7 @@ class Returns extends Action
      */
     private function getGiftCardAmount()
     {
-        if ($this->checkRefundMethodExists('gift_card')) {
+        if ($this->checkRequestedRefundMethod('gift_card')) {
             return $this->returnDetails['logistics']['refund_types_amount']['gift_card'];
         }
 
@@ -681,11 +716,11 @@ class Returns extends Action
 
     /**
      *
-     * Match refund method type with its corresponding refund amount
+     * Pair refund method type with its corresponding refund amount
      *
      * @return void
      */
-    private function matchRefundTypeAmountPairs()
+    private function pairRefundTypeAmountPairs()
     {
         $this->returnDetails['logistics']['refund_types_amount'] = [];
         if (
@@ -700,7 +735,7 @@ class Returns extends Action
         }
     }
 
-    private function checkRefundMethodExists($key)
+    private function checkRequestedRefundMethod($key)
     {
         if (
             array_key_exists($key, $this->returnDetails['logistics']['refund_types_amount']) &&
@@ -722,6 +757,15 @@ class Returns extends Action
     }
 
     /**
+     * @param string $message
+     * @return void
+     */
+    private function pushErrorMessage($message)
+    {
+        $this->finalErrorMessage .= $message . '. ';
+    }
+
+    /**
      * @return string
      */
     private function addAdditionalAdminComments()
@@ -736,5 +780,151 @@ class Returns extends Action
         $additionalComment .= 'Request log ID: ' . $this->requestLogId;
 
         return $additionalComment;
+    }
+
+    /**
+     * Initial check to validate request
+     *
+     * @return bool
+     */
+    private function requestIsAllowed()
+    {
+        if (
+            !$this->webhook->canProceedsRequest() ||
+            !$this->webhook->validateParams('return', $this->params)
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get return details from WeSupply
+     *
+     * @return bool
+     */
+    private function getWeSupplyReturnDetails()
+    {
+        $this->returnDetails = $this->webhook->proceed(
+            self::WESUPPLY_API_ENDPOINT,
+            'GET',
+            [
+                'provider' => 'Magento',
+                'reference' => $this->params['reference']
+            ]
+        );
+
+        if (empty($this->returnDetails)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if requested refund type is available
+     *
+     * @return bool
+     */
+    private function refundMethodIsAllowed()
+    {
+        if (
+            !$this->isEnterprise() &&
+            ($this->checkRequestedRefundMethod('gift_card') || $this->checkRequestedRefundMethod('credit'))
+        ) {
+            if ($this->checkRequestedRefundMethod('gift_card')) {
+                $this->pushErrorMessage('Gift Card refund is only available for Magento Commerce.');
+
+                return false;
+            }
+            if ($this->checkRequestedRefundMethod('credit')) {
+                $this->pushErrorMessage('Store Credit refund is only available for Magento Commerce.');
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check multiple reason
+     * for credit memo creation on the given order
+     *
+     * @param $order
+     * @return false
+     */
+    private function canCreateCreditMemoOnOrder($order)
+    {
+        if (!$order) {
+            $this->pushErrorMessage('Order with ID ' . $this->creditMemoData['increment_id'] . ' was not found.');
+            return false;
+        }
+
+        if ($order->canUnhold() || $order->isPaymentReview() ||
+            $order->isCanceled() || $order->getState() === $order::STATE_CLOSED)
+        {
+            if ($order->canUnhold()) {
+                $this->pushErrorMessage('Order with ID ' . $this->creditMemoData['increment_id'] . ' is On Hold');
+            }
+            if ($order->isPaymentReview()) {
+                $this->pushErrorMessage('Order with ID ' . $this->creditMemoData['increment_id'] . ' is in Payment Review');
+            }
+            if ($order->isCanceled()) {
+                $this->pushErrorMessage('Order with ID ' . $this->creditMemoData['increment_id'] . ' is Canceled');
+            }
+            if ($order->getState() === $order::STATE_CLOSED) {
+                $this->pushErrorMessage('Order with ID ' . $this->creditMemoData['increment_id'] . ' is Closed');
+            }
+
+            return false;
+        }
+
+        if ($order->getPayment()->getMethodInstance()->isOffline() && !$this->creditMemoData['do_offline']) {
+            $paymentInfo = $order->getPayment()->getAdditionalInformation();
+            $this->pushErrorMessage('Only offline refunds are allowed for this order. Payment type used was ' . $paymentInfo['method_title']);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return string
+     */
+    private function collectSessionMessages()
+    {
+        $sessionMessages = $this->messageManager->getMessages()->getItems();
+        foreach ($sessionMessages as $sessMsg) {
+            $message = $sessMsg->getText() . ' ';
+        }
+
+        return $message ?? '';
+    }
+
+    /**
+     * @param $order
+     */
+    private function collectOrderHistoryComments($order)
+    {
+        if (!$order) {
+            $this->orderHistory = 'Order with ID ' . $this->creditMemoData['increment_id'] . '  not found => no history!';
+            return;
+        }
+
+        $commentHistory = [];
+        $histories = $order->getStatusHistories();
+        $dateTime = $this->dateTimeFactory->create();
+        foreach ($histories as $record) {
+            $created = $record->getCreatedAt() ? $record->getCreatedAt() : $dateTime->date('Y-m-d H:i:s');
+            $commentHistory[$created]  = $created . ' :: ';
+            $commentHistory[$created] .= 'type: ' . $record->getEntityName() . ' - ';
+            $commentHistory[$created] .= $record->getComment();
+        }
+
+        krsort($commentHistory);
+        $this->orderHistory = implode(' | ', $commentHistory);
     }
 }

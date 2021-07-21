@@ -1,4 +1,5 @@
-<?php if ($block->getDeliveryEstimationsEnabled() && $block->productIsShippable() && $this->getEstimationDisplay()): ?>
+<?php /** @var $block WeSupply\Toolbox\Block\DeliveryEstimate */ ?>
+<?php if ($block->getDeliveryEstimationsEnabled() && $block->productIsShippable() && $block->getEstimationDisplay()): ?>
     <?php
         $helper = $this->helper('WeSupply\Toolbox\Helper\Data');
         $estimatesHelper = $this->helper('WeSupply\Toolbox\Helper\Estimates');
@@ -14,13 +15,13 @@
     <div id="estimation_wrapper" class="estimation-wrapper">
         <div class="heading-container">
             <p class="label">
-                <?= /* @escapeNotVerified */ __('Estimated Arrival') ?>
+                <?= $estimatesHelper->getArrivalLabel() ?>
             </p>
             <img id="loader" class="loader" src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-1.gif') ?>" alt="<?= /* @escapeNotVerified */ __('Loading...') ?>" />
         </div>
         <div class="response-container">
             <span id="date" class="date"></span>
-            <span id="pre_post_code" class="pre-post-code"><?= /* @escapeNotVerified */ __('at ZIP') ?></span>
+            <span id="pre_post_code" class="pre-post-code"><?= $estimatesHelper->getAtZipLabel() ?></span>
             <span id="post_code" class="post-code"></span>
             <span id="error" class="error-massage"></span>
             <div class="input-wrapper">
@@ -29,7 +30,7 @@
             <span id="country_code" class="country-code"></span>
             <div id="estimation_message"></div>
             <div class="order-within-container">
-                <span><?= /* @escapeNotVerified */ __('Order within ') ?></span>
+                <span><?= $estimatesHelper->getOrderWithinLabel() ?></span>
                 <span id="order_within"></span>
             </div>
         </div>
