@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7eb4bb18d90ffa426b4d2657da920567",
+    "content-hash": "9bef4797f2f357481e7913abe45bea07",
     "packages": [
         {
             "name": "amzn/amazon-pay-and-login-magento-2-module",
@@ -14171,6 +14171,58 @@
             "time": "2020-12-02T21:12:59+00:00"
         },
         {
+            "name": "mageplaza/magento-2-blog-extension",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mageplaza/magento-2-blog.git",
+                "reference": "c8418ceea4a7f579b7660fe6a15be5379b33bc21"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mageplaza/magento-2-blog/zipball/c8418ceea4a7f579b7660fe6a15be5379b33bc21",
+                "reference": "c8418ceea4a7f579b7660fe6a15be5379b33bc21",
+                "shasum": ""
+            },
+            "require": {
+                "mageplaza/module-core": "^1.4.5"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Mageplaza\\Blog\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mageplaza",
+                    "email": "support@mageplaza.com",
+                    "homepage": "https://www.mageplaza.com",
+                    "role": "Technical Support"
+                }
+            ],
+            "description": "Magento 2 Blog extension",
+            "keywords": [
+                "blog",
+                "magento 2",
+                "magento 2 blog",
+                "magento2",
+                "mageplaza"
+            ],
+            "support": {
+                "issues": "https://github.com/mageplaza/magento-2-blog/issues",
+                "source": "https://github.com/mageplaza/magento-2-blog/tree/v4.1.0"
+            },
+            "time": "2021-05-11T08:59:12+00:00"
+        },
+        {
             "name": "mageplaza/magento-2-seo-extension",
             "version": "4.1.1",
             "source": {
@@ -14262,6 +14314,60 @@
                 "source": "https://github.com/mageplaza/module-core/tree/v1.4.10"
             },
             "time": "2020-12-07T08:10:17+00:00"
+        },
+        {
+            "name": "mageplaza/module-smtp",
+            "version": "4.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mageplaza/magento-2-smtp.git",
+                "reference": "85c389b2ecf565e5d704131c6c2fbef4d40c9815"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mageplaza/magento-2-smtp/zipball/85c389b2ecf565e5d704131c6c2fbef4d40c9815",
+                "reference": "85c389b2ecf565e5d704131c6c2fbef4d40c9815",
+                "shasum": ""
+            },
+            "require": {
+                "mageplaza/module-core": "^1.4.5"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Mageplaza\\Smtp\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Mageplaza",
+                    "email": "support@mageplaza.com",
+                    "homepage": "https://www.mageplaza.com",
+                    "role": "Technical Support"
+                }
+            ],
+            "description": "SMTP Extension for Magento 2 helps the owner of store simply install SMTP (Simple Mail Transfer Protocol) server which transmits the messages into codes or numbers",
+            "keywords": [
+                "email settings",
+                "gmail smtp",
+                "magento 2",
+                "magento 2 smtp",
+                "magento smtp",
+                "mageplaza",
+                "smtp"
+            ],
+            "support": {
+                "issues": "https://github.com/mageplaza/magento-2-smtp/issues",
+                "source": "https://github.com/mageplaza/magento-2-smtp/tree/v4.5.0"
+            },
+            "time": "2021-07-13T08:59:05+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -15578,6 +15684,52 @@
                 "source": "https://github.com/shipperhq/library-ws/tree/20.5.0"
             },
             "time": "2021-03-30T09:30:34+00:00"
+        },
+        {
+            "name": "shipperhq/module-address-autocomplete",
+            "version": "20.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shipperhq/module-address-autocomplete.git",
+                "reference": "b368bc9bf61ba5061f680db4cb5b9791f8aed2ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shipperhq/module-address-autocomplete/zipball/b368bc9bf61ba5061f680db4cb5b9791f8aed2ff",
+                "reference": "b368bc9bf61ba5061f680db4cb5b9791f8aed2ff",
+                "shasum": ""
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "src/registration.php"
+                ],
+                "psr-4": {
+                    "ShipperHQ\\AddressAutocomplete\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "ShipperHQ",
+                    "email": "sales@shipperhq.com",
+                    "homepage": "http://www.Shipperhq.com"
+                },
+                {
+                    "name": "Zowta LLC"
+                }
+            ],
+            "description": "ShipperHQ Address Autocomplete Tool",
+            "support": {
+                "documentation": "http://docs.shipperhq.com",
+                "issues": "https://github.com/shipperhq/module-address-autocomplete/issues",
+                "source": "https://github.com/shipperhq/module-address-autocomplete/tree/20.4.0"
+            },
+            "time": "2021-06-01T13:37:42+00:00"
         },
         {
             "name": "shipperhq/module-common",

@@ -1,3 +1,0 @@
-select#am_shipping_type option:empty {
-    display: block !important;
-}

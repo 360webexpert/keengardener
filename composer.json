@@ -17,8 +17,11 @@
         "klarna/module-ordermanagement": "5.2.0",
         "magento/composer-root-update-plugin": "~1.1",
         "magento/product-community-edition": "2.3.7",
+        "mageplaza/magento-2-blog-extension": "^4.1",
         "mageplaza/magento-2-seo-extension": "^4.1",
         "mageplaza/module-core": "^1.4",
+        "mageplaza/module-smtp": "^4.5",
+        "shipperhq/module-address-autocomplete": "^20.4",
         "shipperhq/module-shipper": "^20.44",
         "yotpo/magento2-module-yotpo-reviews": "^3.1",
         "yotpo/magento2-module-yotpo-reviews-bundle": "^3.1"
@@ -76,6 +79,10 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "repositories": {
+        "ebizmarts": {
+            "type": "composer",
+            "url": "https://packages.ebizmarts.com"
+        },
         "amasty": {
             "type": "composer",
             "url": "https://composer.amasty.com/community/"

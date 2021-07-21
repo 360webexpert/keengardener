@@ -1,8 +1,0 @@
-    <?php
-    $product = $block->getProduct();
-    ?>
-	<?php $brandInfo = $product->getData('c2c_brand_info'); ?>
-	<?php if (!empty($brandInfo)): ?>
-		<h2><?php echo $product->getAttributeText('manufacturer'); ?></h2>
-		<p><?php echo $brandInfo; ?></p>
-	<?php endif; ?>
