@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="adminhtml_sagepaysuite_reports_tokens_block"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Tokens\Grid\Container" name="adminhtml.sagepaysuite.reports.tokens.grid.container"/>
+        </referenceContainer>
+    </body>
+</page>

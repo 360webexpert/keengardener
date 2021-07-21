@@ -1,0 +1,103 @@
+<?php
+/**
+ * Copyright © 2015 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+$_code   = $block->escapeHtml($block->getMethodCode());
+
+/** @var \Ebizmarts\SagePaySuite\Model\Config $_config */
+$_config = $this->helper('Ebizmarts\SagePaySuite\Helper\Data')->getSagePayConfig();
+$_config->setMethodCode($block->getMethodCode());
+
+$storeId = $block->getBackendSession()->getStoreId();
+$_config->setConfigurationScopeId($storeId);
+
+$_config->setConfigurationScope(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+
+$dropInEnabled = $_config->dropInEnabled();
+?>
+<div id="payment_form_<?php echo /* @noEscape */ $_code ?>" class="admin__page-section-item" style="display:none;"
+    data-mage-init='{"sagepaysuitepiCcForm":{
+                            "url": {
+                                "generateMerchantKey":"<?php echo $this->getUrl('sagepaysuite/pi/generateMerchantKey', []); ?>",
+                                "request":"<?php echo $this->getUrl('sagepaysuite/pi/request', []); ?>"
+                            },
+                            "mode":"<?php echo $_config->getMode(); ?>",
+                            "dropin":"<?php echo (int)$dropInEnabled; ?>"
+                        }
+                    , "validation":{}}'>
+
+    <span id="<?php /* @noEscape */ echo $_code ?>-payment-errors" class="message error" style="display: none;"></span>
+
+    <?php if ($dropInEnabled) : ?>
+        <div id="sp-container"></div>
+        <div id="submit-container">
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button class="action primary checkout" style="display:none;" onclick="window.order.submit(); return false;" id="submit_dropin_payment" type="button">
+                        <span><?php echo __('Submit payment'); ?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <p id="dropin_start_lbl"><?php echo ('Please click on Submit Order to load the secure credit card form.'); ?></p>
+            </div>
+        </div>
+    <?php else : ?>
+        <fieldset class="admin__fieldset">
+            <div class="admin__field">
+                <label class="label admin__field-label" for="<?php echo $_code ?>_cardholder"><?php echo __('Card Holder Name') ?><span class="required">*</span></label>
+                <div class="admin__field-control control">
+                    <input type="text" id="<?php echo $_code ?>_cardholder" title="<?php echo __('Card Holder Name') ?>" class="required-entry input-text admin__control-text" autocomplete="off" value="" />
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="admin__fieldset">
+            <div class="admin__field">
+                <label class="label admin__field-label" for="<?php echo $_code ?>_cc_number"><?php echo __('Credit Card Number') ?><span class="required">*</span></label>
+                <div class="admin__field-control control">
+                    <input data-validate="{required:true, 'validate-cc-number':true}" type="number" id="<?php echo $_code ?>_cc_number" title="<?php echo __('Credit Card Number') ?>" class="validate-digits required-entry no-whitespace input-text admin__control-text validate-cc-number" autocomplete="off" value="" />
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="admin__fieldset">
+            <div id="<?php echo $_code ?>_cc_type_exp_div" class="admin__field">
+                <label class="label admin__field-label" for="<?php /* @noEscape */ echo $_code ?>_expiration" ><?php echo __('Expiration Date') ?><span class="required">*</span></label>
+                <div class="admin__field-control control">
+                    <select data-validate='{"required":true}' id="<?php echo $_code ?>_expiration" class="required-entry month validate-cc-exp required-entry _required select admin__control-select">
+                        <?php $_ccExpMonth = $block->getInfoData('cc_exp_month') ?>
+                        <?php foreach ($block->getCcMonths() as $k => $v) : ?>
+                            <option value="<?php echo $k?$k:'' ?>"<?php if ($k==$_ccExpMonth) :
+                                ?> selected="selected"<?php
+                                           endif ?>><?php echo $v ?></option>
+                        <?php endforeach ?>
+                    </select>
+                    <?php $_ccExpYear = $block->getInfoData('cc_exp_year') ?>
+                    <select data-validate='{"required-entry":true}' id="<?php echo $_code ?>_expiration_yr" class="year required-entry _required select admin__control-select">
+                        <?php foreach ($block->getCcYears() as $k => $v) : ?>
+                            <option value="<?php echo $k?$k:'' ?>"<?php if ($k==$_ccExpYear) :
+                                ?> selected="selected"<?php
+                                           endif ?>><?php echo $v ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <?php if ($block->hasVerification()) : ?>
+            <fieldset class="admin__fieldset hide_if_token_selected">
+                <div id="<?php echo $_code ?>_cc_type_cvv_div" class="admin__field">
+                    <label class="label admin__field-label" for="<?php echo $_code ?>_cc_cid" ><?php echo __('Card Verification Number') ?><span class="required">*</span></label>
+                    <div class="admin__field-control control">
+                        <div class="v-fix">
+                            <input data-validate='{"required-number":true}' type="text" title="<?php echo __('Card Verification Number') ?>" class="admin__control-text input-text cvv required-entry" id="<?php echo $_code ?>_cc_cid" value="" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>

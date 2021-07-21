@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+?>
+<?php
+/**
+ * @var $block \Ebizmarts\SagePaySuite\Block\Customer\TokenList
+ */
+?>
+<?php $_items = $block->getItems(); ?>
+<?php $_maxToken = $block->getMaxTokenPerCustomer(); ?>
+
+<?php if (count($_items) >= $_maxToken) { ?>
+    <!--Max tokens per customer message-->
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You are currently using all your credit card token slots.'); ?></span></div>
+<?php } ?>
+
+<?php if (count($_items)) : ?>
+    <div class="table-wrapper sagepaysuite-tokens">
+        <table id="my-sagepaysuite-tokens-table" class="data table sagepaysuite-tokens-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Saved Credit Cards') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col cc_last_4"><?php /* @escapeNotVerified */ echo __('CC Last 4 Digits') ?></th>
+                    <th scope="col" class="col cc_type"><?php /* @escapeNotVerified */ echo __('CC Type') ?></th>
+                    <th scope="col" class="col cc_exp"><?php /* @escapeNotVerified */ echo __('Expiration Date') ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($_items as $_item) : ?>
+                <tr>
+                    <td data-th="<?php echo $block->escapeHtml(__('CC Last 4 Digits')) ?>" class="col cc_last_4">
+                        <?php /* @escapeNotVerified */ echo __(ucfirst($_item['cc_last_4'])) ?>
+                    </td>
+                    <td data-th="<?php echo $block->escapeHtml(__('CC Type')) ?>" class="col cc_type">
+                        <?php /* @escapeNotVerified */ echo __(ucfirst($_item["cc_type"])) ?>
+                    </td>
+                    <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col cc_exp">
+                        <?php /* @escapeNotVerified */ echo $_item["cc_exp_month"] . "/" . $_item["cc_exp_year"] ?>
+                    </td>
+                    <td data-th="Actions" class="col actions">
+                        <a href="<?php echo $this->getUrl('sagepaysuite/token/delete', ["token_id"=>$_item["id"], "customer_area" => true]); ?>" class="action delete">
+                            <span>Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php else : ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have not saved any credit card tokens yet.'); ?></span></div>
+<?php endif; ?>
+
+<div class="actions-toolbar">
+    <div class="secondary">
+        <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+            <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
+        </a>
+    </div>
+</div>

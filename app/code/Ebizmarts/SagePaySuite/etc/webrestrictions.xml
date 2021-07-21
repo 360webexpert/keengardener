@@ -1,0 +1,15 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_WebsiteRestriction:etc/webrestrictions.xsd">
+    <action path="sagepaysuite_server_success" type="generic"/>
+    <action path="sagepaysuite_server_notify" type="generic"/>
+    <action path="sagepaysuite_server_cancel" type="generic"/>
+    <action path="sagepaysuite_server_redirectToSuccess" type="generic"/>
+
+    <action path="sagepaysuite_pi_callback3D" type="generic"/>
+    <action path="sagepaysuite_pi_callback3DV2" type="generic"/>
+
+    <action path="sagepaysuite_paypal_callback" type="generic"/>
+    <action path="sagepaysuite_paypal_processing" type="generic"/>
+
+    <action path="sagepaysuite_form_failure" type="generic"/>
+    <action path="sagepaysuite_form_success" type="generic"/>
+</config>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="order.create.billing.method.form">
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">sagepaysuiteform</argument>
+                <argument name="template" xsi:type="string">Ebizmarts_SagePaySuite::form/payment-form.phtml</argument>
+            </action>
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">sagepaysuitepi</argument>
+                <argument name="template" xsi:type="string">Ebizmarts_SagePaySuite::pi/payment-form.phtml</argument>
+            </action>
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">sagepaysuiterepeat</argument>
+                <argument name="template" xsi:type="string">Ebizmarts_SagePaySuite::repeat/payment-form.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

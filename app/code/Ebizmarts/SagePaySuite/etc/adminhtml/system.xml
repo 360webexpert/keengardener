@@ -1,0 +1,386 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="sagepaysuite" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Opayo (formerly Sage Pay)</label>
+                <group id="version" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Ebizmarts\SagePaySuite\Block\Adminhtml\System\Config\Fieldset\Version</frontend_model>
+                </group>
+                <group id="global" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Basic Settings</label>
+                    <field id="license" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>License Key</label>
+                        <config_path>sagepaysuite/global/license</config_path>
+                    </field>
+                    <field id="vendorname" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Vendorname</label>
+                        <config_path>sagepaysuite/global/vendorname</config_path>
+                    </field>
+                    <field id="mode" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Mode</label>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\Mode</source_model>
+                        <config_path>sagepaysuite/global/mode</config_path>
+                    </field>
+                    <field id="protocol" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Protocol</label>
+                        <comment><![CDATA[Protocol 4.00 may not be available for live mode yet. Please check the link <a target="_blank" href="https://www.sagepay.co.uk/strong-customer-authentication-faqs">HERE</a> for more information]]></comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\Protocol</source_model>
+                        <config_path>sagepaysuite/global/protocol</config_path>
+                    </field>
+                    <field id="currency" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Currency</label>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\Currency</source_model>
+                        <config_path>sagepaysuite/global/currency</config_path>
+                    </field>
+                    <field id="token" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Save Credit Card Tokens</label>
+                        <comment><![CDATA[Customer's credit card will be saved as a secure token for quick access in the future. Your merchant account needs to have this feature enabled.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>sagepaysuite/global/token</config_path>
+                    </field>
+                    <field id="reporting_user" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reporting API User</label>
+                        <comment><![CDATA[Your merchant's credentials, same as the ones to access Opayo's dashboard.]]></comment>
+                        <config_path>sagepaysuite/global/reporting_user</config_path>
+                    </field>
+                    <field id="reporting_password" translate="label" type="obscure" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Reporting API Password</label>
+                        <config_path>sagepaysuite/global/reporting_password</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    </field>
+                </group>
+                <group id="advanced" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Advanced Settings</label>
+                    <field id="threedsecure" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>3D Secure Authentication</label>
+                        <comment><![CDATA[The 3D Secure configuration is also declared in Opayo's dashboard and will be overwritten by this setting if not set to 'default'.]]></comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\ThreeDSecure</source_model>
+                        <config_path>sagepaysuite/advanced/threedsecure</config_path>
+                    </field>
+                    <field id="avscvc" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Avs/Cvc Authentication</label>
+                        <comment><![CDATA[The Avs/Cvc configuration is also declared in Opayo's dashboard and will be overwritten by this setting if not set to 'default'.]]></comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\AvsCvc</source_model>
+                        <config_path>sagepaysuite/advanced/avscvc</config_path>
+                    </field>
+                    <field id="fraud_autoinvoice" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Auto-invoice Authorized Orders with Low Risk of Fraud</label>
+                        <comment><![CDATA[If payment action is to DEFER or AUTHORIZE the orders will be automatically invoiced by a cron if the risk of fraud is low.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>sagepaysuite/advanced/fraud_autoinvoice</config_path>
+                    </field>
+                    <field id="basket_format" translate="label" type="select" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Basket</label>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\BasketFormat</source_model>
+                        <config_path>sagepaysuite/advanced/basket_format</config_path>
+                    </field>
+                    <!--<field id="fraud_notify" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">-->
+                        <!--<label>Notify Fraud Result</label>-->
+                        <!--<source_model>Ebizmarts\SagePaySuite\Model\Config\Source\FraudNotify</source_model>-->
+                        <!--<config_path>sagepaysuite/advanced/fraud_notify</config_path>-->
+                    <!--</field>-->
+                    <field id="giftaid" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Gift Aid</label>
+                        <comment><![CDATA[This allows the gift aid acceptance box to appear for this transaction on the payment page. This only appears if your vendor account is Gift Aid enabled.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>sagepaysuite/advanced/giftaid</config_path>
+                    </field>
+                    <field id="invoice_confirmation_notification" translate="label comment" type="select" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Send email on automatic invoice?</label>
+                        <comment><![CDATA[If payment action is Authorize and Capture, an invoice confirmation email is sent]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>sagepaysuite/advanced/invoice_confirmation_notification</config_path>
+                    </field>
+                    <field id="max_token" translate="label" type="text" sortOrder="32" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Max amount of tokens per customer</label>
+                        <can_be_empty>0</can_be_empty>
+                        <config_path>sagepaysuite/advanced/max_token</config_path>
+                    </field>
+                </group>
+                <group id="sagepaysuiteform" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Opayo FORM Integration</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuiteform/active</config_path>
+                    </field>
+                    <field id="payment_action" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment Action</label>
+                        <comment><![CDATA[Details of all possible payment actions can be found <a target="_blank" href="http://www.sagepay.co.uk/support/12/36/transaction-types">here</a>.]]></comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\PaymentAction</source_model>
+                        <config_path>payment/sagepaysuiteform/payment_action</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <config_path>payment/sagepaysuiteform/title</config_path>
+                    </field>
+                    <field id="encrypted_password" translate="label" type="obscure" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Encrypted Password</label>
+                        <config_path>payment/sagepaysuiteform/encrypted_password</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    </field>
+                    <field id="send_email" translate="label" type="select" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Send Email</label>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\FormSendEmail</source_model>
+                        <config_path>payment/sagepaysuiteform/send_email</config_path>
+                    </field>
+                    <field id="vendor_email" translate="label" type="text" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Vendor Email</label>
+                        <comment><![CDATA[If you wish to use multiple email addresses, you should add them using the : (colon) character as a separator. e.g. me@mail1.com:me@mail2.com.]]></comment>
+                        <config_path>payment/sagepaysuiteform/vendor_email</config_path>
+                    </field>
+                    <field id="email_message" translate="label" type="textarea" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Email Message</label>
+                        <comment><![CDATA[A message to the customer which is inserted into the successful transaction emails only. If provided this message is included toward the top of the customer confirmation emails.]]></comment>
+                        <config_path>payment/sagepaysuiteform/email_message</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                        <config_path>payment/sagepaysuiteform/sort_order</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/sagepaysuiteform/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <config_path>payment/sagepaysuiteform/specificcountry</config_path>
+                    </field>
+                    <field id="min_order_total" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Minimum Order Total</label>
+                        <config_path>payment/sagepaysuiteform/min_order_total</config_path>
+                    </field>
+                    <field id="max_order_total" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Maximum Order Total</label>
+                        <config_path>payment/sagepaysuiteform/max_order_total</config_path>
+                    </field>
+                    <field id="model"></field>
+                </group>
+                <group id="sagepaysuitepi" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Opayo Pi Integration (recommended)</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuitepi/active</config_path>
+                    </field>
+                    <field id="active_moto" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enabled MOTO</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuitepi/active_moto</config_path>
+                    </field>
+                    <field id="payment_action" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment Action</label>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\PiPaymentAction</source_model>
+                        <config_path>payment/sagepaysuitepi/payment_action</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <config_path>payment/sagepaysuitepi/title</config_path>
+                    </field>
+                    <field id="key" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Key</label>
+                        <config_path>payment/sagepaysuitepi/key</config_path>
+                    </field>
+                    <field id="password" translate="label" type="obscure" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Password</label>
+                        <config_path>payment/sagepaysuitepi/password</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    </field>
+                    <field id="use_dropin" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Drop-in interface</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuitepi/use_dropin</config_path>
+                    </field>
+                    <field id="threed_new_window" translate="label" type="select" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Open 3D verification in new window</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuitepi/threed_new_window</config_path>
+                    </field>
+                    <field id="challengewindowsize" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Challenge Window Size</label>
+                        <comment>Dimensions of the challenge window that has been displayed to the Cardholder.</comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\PiChallengeWindowSize</source_model>
+                        <config_path>payment/sagepaysuitepi/challengewindowsize</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                        <config_path>payment/sagepaysuitepi/sort_order</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/sagepaysuitepi/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <config_path>payment/sagepaysuitepi/specificcountry</config_path>
+                    </field>
+                    <field id="min_order_total" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Minimum Order Total</label>
+                        <config_path>payment/sagepaysuitepi/min_order_total</config_path>
+                    </field>
+                    <field id="max_order_total" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Maximum Order Total</label>
+                        <config_path>payment/sagepaysuitepi/max_order_total</config_path>
+                    </field>
+                    <field id="model"></field>
+                </group>
+                <group id="sagepaysuiteserver" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Opayo SERVER Integration</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuiteserver/active</config_path>
+                    </field>
+                    <field id="payment_action" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment Action</label>
+                        <comment><![CDATA[Details of all possible payment actions can be found <a target="_blank" href="http://www.sagepay.co.uk/support/12/36/transaction-types">here</a>.]]></comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\PaymentAction</source_model>
+                        <config_path>payment/sagepaysuiteserver/payment_action</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <config_path>payment/sagepaysuiteserver/title</config_path>
+                    </field>
+                    <field id="profile" translate="label" type="select" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Low Profile Enabled</label>
+                        <comment><![CDATA[A LOW profile returns the simplified payment pages which have only one step and minimal formatting. You will NOT be able to accept PayPal transactions or Local European Payments if enabled.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuiteserver/profile</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                        <config_path>payment/sagepaysuiteserver/sort_order</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/sagepaysuiteserver/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <config_path>payment/sagepaysuiteserver/specificcountry</config_path>
+                    </field>
+                    <field id="min_order_total" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Minimum Order Total</label>
+                        <config_path>payment/sagepaysuiteserver/min_order_total</config_path>
+                    </field>
+                    <field id="max_order_total" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Maximum Order Total</label>
+                        <config_path>payment/sagepaysuiteserver/max_order_total</config_path>
+                    </field>
+                    <field id="model"></field>
+                </group>
+                <group id="sagepaysuitepaypal" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Opayo PayPal Integration</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuitepaypal/active</config_path>
+                    </field>
+                    <field id="payment_action" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment Action</label>
+                        <comment><![CDATA[Details of all possible payment actions can be found <a target="_blank" href="http://www.sagepay.co.uk/support/12/36/transaction-types">here</a>.]]></comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\PaymentAction</source_model>
+                        <config_path>payment/sagepaysuitepaypal/payment_action</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <config_path>payment/sagepaysuitepaypal/title</config_path>
+                    </field>
+                    <field id="billing_agreement" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Billing Agreement</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuitepaypal/billing_agreement</config_path>
+                    </field>
+                    <field id="force_xml" translate="label" type="select" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Force XML Basket</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuitepaypal/force_xml</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                        <config_path>payment/sagepaysuitepaypal/sort_order</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/sagepaysuitepaypal/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <config_path>payment/sagepaysuitepaypal/specificcountry</config_path>
+                    </field>
+                    <field id="min_order_total" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Minimum Order Total</label>
+                        <config_path>payment/sagepaysuitepaypal/min_order_total</config_path>
+                    </field>
+                    <field id="max_order_total" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Maximum Order Total</label>
+                        <config_path>payment/sagepaysuitepaypal/max_order_total</config_path>
+                    </field>
+                    <field id="model"></field>
+                </group>
+                <group id="sagepaysuiterepeat" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Opayo REPEAT Integration (Backend Only)</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/sagepaysuiterepeat/active</config_path>
+                    </field>
+                    <field id="payment_action" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Payment Action</label>
+                        <comment><![CDATA[Details of all possible payment actions can be found <a target="_blank" href="http://www.sagepay.co.uk/support/12/36/transaction-types">here</a>.]]></comment>
+                        <source_model>Ebizmarts\SagePaySuite\Model\Config\Source\PaymentActionRepeat</source_model>
+                        <config_path>payment/sagepaysuiterepeat/payment_action</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <frontend_class>validate-number</frontend_class>
+                        <config_path>payment/sagepaysuiterepeat/sort_order</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/sagepaysuiterepeat/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <can_be_empty>1</can_be_empty>
+                        <config_path>payment/sagepaysuiterepeat/specificcountry</config_path>
+                    </field>
+                    <field id="min_order_total" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Minimum Order Total</label>
+                        <config_path>payment/sagepaysuiterepeat/min_order_total</config_path>
+                    </field>
+                    <field id="max_order_total" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Maximum Order Total</label>
+                        <config_path>payment/sagepaysuiterepeat/max_order_total</config_path>
+                    </field>
+                    <field id="model"></field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

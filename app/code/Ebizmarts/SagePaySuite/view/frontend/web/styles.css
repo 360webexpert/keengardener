@@ -1,0 +1,112 @@
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+.sagepaysuite-payment-icon {
+    max-width: 100px;
+}
+
+.sagepaysuite-tokens {
+    margin: 0 0 30px 0;
+    background-color: #f5f5f5;
+    padding: 10px 25px;
+}
+
+.sagepaysuite-tokens .token-list {
+    margin-bottom: 10px;
+}
+
+.sagepaysuite-tokens .token-row{
+    display: table;
+    border-bottom: 1px solid #ccc;
+    padding: 9px 50px 0 10px;
+}
+
+.sagepaysuite-tokens .token-row a {
+    font-size: 10px;
+}
+
+.sagepaysuite-tokens .token-row input {
+    float: left;
+    margin-right: 10px;
+}
+
+.sagepaysuite-tokens .token-row p {
+    float: left;
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+.sagepaysuite-tokens .token-row img {
+    float: left;
+    margin: -1px 20px 0 0;
+    height: 20px;
+}
+
+.use-saved-card-link {
+    display:none;
+}
+
+.using-new-card-message {
+    display:none;
+    border-bottom: 1px solid #ccc;
+    padding: 5px 0 10px;
+}
+
+.paypal-payment-method-logo {
+    background-image: url('images/paypal_checkout.png');
+    width: 100%;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+}
+
+.opayo-payment-method-logo {
+    background-image: url('images/opayo_logo.jpg');
+    width: 100%;
+    height: 33px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+}
+
+
+#sagepaysuitepi-3Dsecure-iframe {
+    width: 100%;
+    min-height: 600px;
+    border: 0;
+}
+
+.sagepaysuiteserver-modal .action-close,
+.sagepaysuite-modal .action-close {
+    display: none;
+}
+
+.sagepaysuiteserver-modal .modal-header {
+    display: none;
+}
+
+.sagepaysuiteserver-modal .modal-content {
+    padding: 0 !important;
+}
+
+.sp-scroll-wrapper {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+    /* important:  dimensions or positioning here! */
+}
+
+.sagepaysuiteserver_embed_normal {
+    width: 100%;
+    min-height: 1100px;
+    border: 0;
+}
+
+.sagepaysuiteserver_embed_low {
+    width: 100%;
+    min-height: 500px;
+    border: 0;
+}
+

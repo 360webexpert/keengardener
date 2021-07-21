@@ -1,0 +1,225 @@
+version: 2.1
+
+orbs:
+  sagepay: pruebas/ebizmarts-sagepay@0.0.5
+
+executors:
+  my-executor:
+    docker:
+      - image: circleci/php:7.1
+    environment:
+      PHP_UNIT_VERSION: 6.2
+      SNIFFER_SEVERITY: 10
+      SNIFFER_VERSION: v5
+      MAGENTO_PATH: /home/circleci/magento2
+      MAGENTO_VERSION: 232EE
+      MAGENTO_VERSION_235: 235EE
+      MAGENTO_WEB_SERVER_CONF: https://gist.githubusercontent.com/bcerban/25f3a2d93c19dc562020e0197f78685c/raw/70f1f314ad8ba5d302b911fe622a57ccec60a868/magento2.conf
+      MAGENTO_COMPOSER_AUTH: https://gist.githubusercontent.com/centerax/5e42abec89d62a1308ba/raw/4b3242361c0690e234266afb3520c2940ac1055a/auth.json
+      LIBSODIUM_VERSION: 1.0.18
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_DATABASE: circle_test
+      MYSQL_USER: magento
+      MYSQL_PASSWORD: magento
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    working_directory: ~/
+
+jobs:
+    DownloadTools232EE:
+      executor: my-executor
+      steps:
+        - sagepay/download-pre-compiled-magento-no-sampledata:
+            version: $MAGENTO_VERSION
+        - sagepay/download-tools:
+            version: $MAGENTO_VERSION
+        - persist_to_workspace:
+            root: /home/circleci
+            paths:
+              - ./
+    DownloadTools235EE:
+      executor: my-executor
+      steps:
+        - sagepay/download-pre-compiled-magento-no-sampledata:
+            version: $MAGENTO_VERSION_235
+        - sagepay/download-tools:
+            version: $MAGENTO_VERSION_235
+        - persist_to_workspace:
+            root: /home/circleci
+            paths:
+              - ./
+    PHP 71 Code Sniffer:
+      docker:
+        - image: circleci/php:7.1-apache
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-cs
+    PHP 71 Unit Tests:
+      docker:
+        - image: circleci/php:7.1-apache
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-unit-tests
+    PHP 71 Compile and API test:
+        docker:
+          - image: ebizmarts/magento2-php71:0.0.1
+          - image: circleci/mysql:5.6
+            environment:
+              MYSQL_USER: magento
+              MYSQL_PASSWORD: magento
+              MYSQL_ROOT_PASSWORD: root
+              MYSQL_DATABASE: circle_test
+              MYSQL_ALLOW_EMPTY_PASSWORD: true
+        executor: my-executor
+        steps:
+          - attach_workspace:
+              at: ~/magento2
+          - run: sudo sh -c 'echo "199.188.207.57 test.sagepay.com pi-test.sagepay.com" >> /etc/hosts'
+          - run: sudo apt-get update
+          - sagepay/install-mariadb-and-setup-webserver
+          - sagepay/magento-compile-and-setup-upgrade
+          - sagepay/run-api-functional-tests
+    PHP 71 unit tests with coverage:
+      docker:
+        - image: circleci/php:7.1-apache
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-unit-tests:
+            coverage: --coverage-text
+    PHP 72 Code Sniffer:
+      docker:
+        - image: circleci/php:7.2-apache
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-cs
+    PHP 72 Unit Tests:
+      docker:
+        - image: circleci/php:7.2-apache
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-unit-tests
+    PHP 72 Compile and API test:
+        docker:
+          - image: ebizmarts/magento2-php72:0.0.2
+          - image: circleci/mysql:5.6
+            environment:
+              MYSQL_USER: magento
+              MYSQL_PASSWORD: magento
+              MYSQL_ROOT_PASSWORD: root
+              MYSQL_DATABASE: circle_test
+              MYSQL_ALLOW_EMPTY_PASSWORD: true
+        executor: my-executor
+        steps:
+          - attach_workspace:
+              at: ~/magento2
+          - run: sudo sh -c 'echo "199.188.207.57 test.sagepay.com pi-test.sagepay.com" >> /etc/hosts'
+          - run: sudo apt-get update
+          - sagepay/install-mariadb-and-setup-webserver
+          - sagepay/magento-compile-and-setup-upgrade
+          - sagepay/run-api-functional-tests
+    PHP 72 unit tests with coverage:
+      docker:
+        - image: circleci/php:7.2-apache
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-unit-tests:
+            coverage: --coverage-text
+    PHP 73 Code Sniffer:
+      docker:
+        - image: circleci/php:7.3.9-apache-stretch
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-cs
+    PHP 73 Unit Tests:
+      docker:
+        - image: circleci/php:7.3.9-apache-stretch
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-unit-tests
+    PHP 73 Compile and API test:
+        docker:
+          - image: ebizmarts/magento2-php73:0.0.4
+          - image: circleci/mysql:5.6
+            environment:
+              MYSQL_USER: magento
+              MYSQL_PASSWORD: magento
+              MYSQL_ROOT_PASSWORD: root
+              MYSQL_DATABASE: circle_test
+              MYSQL_ALLOW_EMPTY_PASSWORD: true
+        executor: my-executor
+        steps:
+          - attach_workspace:
+              at: ~/magento2
+          - run: sudo sh -c 'echo "199.188.207.57 test.sagepay.com pi-test.sagepay.com" >> /etc/hosts'
+          - run: sudo apt-get update
+
+          - sagepay/install-mariadb-and-setup-webserver
+          - sagepay/magento-compile-and-setup-upgrade
+          - sagepay/run-api-functional-tests
+    PHP 73 unit tests with coverage:
+      docker:
+        - image: circleci/php:7.3.9-apache-stretch
+      executor: my-executor
+      steps:
+        - attach_workspace:
+            at: ~/magento2
+        - sagepay/run-php-unit-tests:
+            coverage: --coverage-text
+
+workflows:
+  version: 2.1
+  build_test_dist:
+    jobs:
+      - DownloadTools232EE
+      - DownloadTools235EE
+      - PHP 71 Unit Tests:
+          requires:
+            - PHP 71 Code Sniffer
+      - PHP 71 Code Sniffer:
+          requires:
+            - DownloadTools232EE
+      - PHP 71 Compile and API test:
+          requires:
+            - PHP 71 Unit Tests
+      - PHP 71 unit tests with coverage:
+          requires:
+            - PHP 71 Compile and API test
+      - PHP 72 Unit Tests:
+          requires:
+            - PHP 72 Code Sniffer
+      - PHP 72 Code Sniffer:
+          requires:
+            - DownloadTools232EE
+      - PHP 72 Compile and API test:
+          requires:
+            - PHP 72 Unit Tests
+      - PHP 72 unit tests with coverage:
+          requires:
+            - PHP 72 Compile and API test
+      - PHP 73 Unit Tests:
+          requires:
+            - PHP 73 Code Sniffer
+      - PHP 73 Code Sniffer:
+          requires:
+            - DownloadTools235EE
+      - PHP 73 Compile and API test:
+          requires:
+            - PHP 73 Unit Tests
+      - PHP 73 unit tests with coverage:
+          requires:
+            - PHP 73 Compile and API test

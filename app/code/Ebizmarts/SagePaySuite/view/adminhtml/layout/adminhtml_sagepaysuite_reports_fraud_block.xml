@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.sagepaysuite.reports.fraud.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="sagepaysuite.reports.fraud.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">tokensGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Ebizmarts\SagePaySuite\Model\ResourceModel\FraudReport\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">transaction_id</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/index"/>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="sagepaysuite.reports.fraud.grid.columnSet" as="grid.columnSet">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="transaction_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Transaction #</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Fraud\Grid\Renderer\TransactionId</argument>
+                            <argument name="header_css_class" xsi:type="string">col-transaction_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-transaction_id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="order_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Order #</argument>
+                            <argument name="index" xsi:type="string">order_id</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Fraud\Grid\Renderer\OrderId</argument>
+                            <argument name="header_css_class" xsi:type="string">col-order_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-order_id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="txn_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Opayo VPSTxId</argument>
+                            <argument name="index" xsi:type="string">txn_id</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="header_css_class" xsi:type="string">col-txn_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-txn_id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="fraud_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Fraud #</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Fraud\Grid\Renderer\FraudId</argument>
+                            <argument name="header_css_class" xsi:type="string">col-fraud_id</argument>
+                            <argument name="column_css_class" xsi:type="string">col-fraud_id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="recommendation">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Recommendation</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Fraud\Grid\Renderer\Recommendation</argument>
+                            <argument name="header_css_class" xsi:type="string">col-recommendation</argument>
+                            <argument name="column_css_class" xsi:type="string">col-recommendation</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="detail">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Detail</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Fraud\Grid\Renderer\Detail</argument>
+                            <argument name="header_css_class" xsi:type="string">col-detail</argument>
+                            <argument name="column_css_class" xsi:type="string">col-detail</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="provider">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Provider</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Fraud\Grid\Renderer\Provider</argument>
+                            <argument name="header_css_class" xsi:type="string">col-provider</argument>
+                            <argument name="column_css_class" xsi:type="string">col-provider</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="rules">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Rules</argument>
+                            <argument name="index" xsi:type="string">transaction_id</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Fraud\Grid\Renderer\Rules</argument>
+                            <argument name="header_css_class" xsi:type="string">col-rules</argument>
+                            <argument name="column_css_class" xsi:type="string">col-rules</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

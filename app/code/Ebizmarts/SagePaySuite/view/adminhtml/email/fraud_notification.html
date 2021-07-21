@@ -1,0 +1,52 @@
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<!--@subject Sage Pay Fraud Notification @-->
+
+<style>
+    li {
+        padding-bottom: 20px;
+    }
+</style>
+
+<h1>{{trans "Opayo Fraud Notification"}}</h1>
+
+<ul>
+    <li>
+        <b>{{trans "Transaction #: "}}</b>
+        {{var transaction_id}}
+    </li>
+    <li>
+        <b>{{trans "Order #: "}}</b>
+        <!--<a href="{{var order_url}}">{{var order_id}}</a>-->
+        {{var order_id}}
+    </li>
+    <li>
+        <b>{{trans "Opayo VPSTxId: "}}</b>
+        {{var vps_tx_id}}
+    </li>
+    <li>
+        <b>{{trans "Opayo Fraud #: "}}</b>
+        {{var fraud_id}}
+    </li>
+    <li>
+        <b>{{trans "Recommendation: "}}</b>
+        {{var recommendation}}
+    </li>
+    <li>
+        <b>{{trans "Detail: "}}</b>
+        {{var detail}}
+    </li>
+    <li>
+        <b>{{trans "Provider: "}}</b>
+        {{var provider}}
+    </li>
+    <li>
+        <b>{{trans "Rules: "}}</b>
+        {{var rules}}
+    </li>
+</ul>

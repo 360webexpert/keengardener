@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+$_code = $block->getMethodCode();
+$_config = $this->helper('Ebizmarts\SagePaySuite\Helper\Data')->getSagePayConfig();
+?>
+
+
+<div id="payment_form_<?php echo $_code ?>" class="admin__page-section-item" style="display:none;"
+    data-mage-init='{"sagepaysuiteRepeatForm":{
+            "url": {
+                "request" : "<?php echo $this->getUrl('sagepaysuite/repeat/request', []); ?>"
+            },
+            "mode": "<?php echo $_config->getMode(); ?>"
+}}'>
+
+    <span id="<?php echo $_code ?>-payment-errors" class="message error" style="display: none;"></span>
+
+    <fieldset class="admin__fieldset">
+    <div class="admin__field">
+        <label class="label admin__field-label" for="<?php echo $_code ?>_vpstxid"><?php echo __('VPSTxId') ?><span class="required">*</span></label>
+        <div class="admin__field-control control">
+            <input type="text" id="<?php echo $_code ?>_vpstxid" title="<?php echo __('VPSTxId') ?>" class="input-text admin__control-text" value="" />
+        </div>
+    </div>
+    </fieldset>
+</div>

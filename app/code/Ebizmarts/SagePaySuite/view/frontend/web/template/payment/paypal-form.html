@@ -1,0 +1,53 @@
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
+        <label data-bind="attr: {'for': getCode()}" class="label">
+            <div class="payment-icon sagepaysuite-payment-icon paypal-payment-method-logo"></div>
+        </label>
+    </div>
+    <div class="payment-method-content">
+
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <fieldset class="fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
+            <span data-bind="attr: {id: getCode() + '-payment-errors'}" class="message error" style="display: none;"></span>
+            <div class="payment-method-note">
+                <strong>
+                    <!-- ko text: $t('You will be redirected to the PayPal website.') --><!-- /ko -->
+                </strong>
+            </div>
+        </fieldset>
+
+        <!--terms and conditions -->
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="click: preparePayment, enable: (getCode() == isChecked()), css: {disabled: !isPlaceOrderActionAllowed()}"
+                        disabled>
+                    <span data-bind="text: $t('Continue to PayPal')"></span>
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

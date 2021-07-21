@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="sagepaysuite_fraud_notification" label="Opayo Fraud Notification" file="fraud_notification.html" type="html" module="Ebizmarts_SagePaySuite" area="adminhtml"/>
+</config>

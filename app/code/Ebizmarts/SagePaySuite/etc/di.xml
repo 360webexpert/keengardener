@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- 3Dv2 -->
+    <type name="\Ebizmarts\SagePaySuite\Model\PiRequest">
+        <plugin name="strongCustomerAuthentication"
+                type="Ebizmarts\SagePaySuite\Plugin\StrongCustomerAuthRequestData"
+                sortOrder="1"
+                disabled="false"
+        />
+    </type>
+    <!-- 3Dv2 -->
+
+    <type name="Ebizmarts\SagePaySuite\Model\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="Ebizmarts\SagePaySuite\Model\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">SagePaySuiteLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="Request" xsi:type="object">Ebizmarts\SagePaySuite\Model\Logger\Request</item>
+                <item name="Cron" xsi:type="object">Ebizmarts\SagePaySuite\Model\Logger\Cron</item>
+                <item name="Exception" xsi:type="object">Ebizmarts\SagePaySuite\Model\Logger\Exception</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- plugin to check if exist incrementId looking by incrementId and storeId -->
+    <type name="\Magento\Sales\Model\OrderIncrementIdChecker">
+        <plugin name="SagePaySuite_OrderIncrementIdChecker" type="\Ebizmarts\SagePaySuite\Plugin\OrderIncrementIdChecker"/>
+    </type>
+    <!-- plugin to check if exist incrementId looking by incrementId and storeId -->
+
+    <preference for="Ebizmarts\SagePaySuite\Api\ServerManagementInterface" type="Ebizmarts\SagePaySuite\Model\ServerRequestManagement" />
+    <preference for="Ebizmarts\SagePaySuite\Api\GuestServerManagementInterface" type="Ebizmarts\SagePaySuite\Model\GuestServerRequestManagement" />
+
+    <preference for="Ebizmarts\SagePaySuite\Api\Data\PiRequestInterface" type="Ebizmarts\SagePaySuite\Api\Data\PiRequest" />
+    <preference for="Ebizmarts\SagePaySuite\Api\Data\ResultInterface" type="Ebizmarts\SagePaySuite\Api\Data\Result" />
+    <preference for="Ebizmarts\SagePaySuite\Api\Data\FormResultInterface" type="Ebizmarts\SagePaySuite\Api\Data\FormResult" />
+
+    <preference for="Ebizmarts\SagePaySuite\Api\FormManagementInterface" type="Ebizmarts\SagePaySuite\Model\FormRequestManagement" />
+    <preference for="Ebizmarts\SagePaySuite\Api\GuestFormManagementInterface" type="Ebizmarts\SagePaySuite\Model\GuestFormRequestManagement" />
+
+    <preference for="Ebizmarts\SagePaySuite\Api\PayPalManagementInterface" type="Ebizmarts\SagePaySuite\Model\PayPalRequestManagement" />
+    <preference for="Ebizmarts\SagePaySuite\Api\GuestPayPalManagementInterface" type="Ebizmarts\SagePaySuite\Model\GuestPayPalRequestManagement" />
+
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\FraudScreenResponseInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\FraudScreenResponse" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\FraudScreenRuleInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\FraudScreenRule" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultPaymentMethodInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultPaymentMethod" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResult" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultCardInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultCard" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\Data\PiResultInterface" type="\Ebizmarts\SagePaySuite\Api\Data\PiResult" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultThreeDInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultThreeD" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultAmountInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiTransactionResultAmount" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiMerchantSessionKeyRequestInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiMerchantSessionKeyRequest" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiMerchantSessionKeyResponseInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiMerchantSessionKeyResponse" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiThreeDSecureRequestInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiThreeDSecureRequest" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\SagePayData\PiRefundRequestInterface" type="\Ebizmarts\SagePaySuite\Api\SagePayData\PiRefundRequest" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\Data\HttpResponseInterface" type="\Ebizmarts\SagePaySuite\Api\Data\HttpResponse" />
+
+    <preference for="\Ebizmarts\SagePaySuite\Api\PiMerchantInterface" type="\Ebizmarts\SagePaySuite\Model\PiMsk" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\PiManagementInterface" type="\Ebizmarts\SagePaySuite\Model\PiRequestManagement" />
+    <preference for="\Ebizmarts\SagePaySuite\Api\GuestPiManagementInterface" type="\Ebizmarts\SagePaySuite\Model\GuestPiRequestManagement" />
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sagePayCheckFraud" xsi:type="object">Ebizmarts\SagePaySuite\Commands\CheckFraudCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sagepay_fraud" xsi:type="object">sales_grid.sagepay_fraud</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sagepay_threeDSecure" xsi:type="object">sales_grid.sagepay_threeDSecure</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sagepay_addressValidation" xsi:type="object">sales_grid.sagepay_addressValidation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sagepay_postcodeCheck" xsi:type="object">sales_grid.sagepay_postcodeCheck</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sagepay_cvTwoCheckT" xsi:type="object">sales_grid.sagepay_cvTwoCheck</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

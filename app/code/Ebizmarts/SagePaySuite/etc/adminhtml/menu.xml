@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Ebizmarts_SagePaySuite::report_sagepaysuite" title="Opayo" module="Ebizmarts_SagePaySuite" sortOrder="90" parent="Magento_Reports::report" resource="Ebizmarts_SagePaySuite::report_sagepaysuite"/>
+        <add id="Ebizmarts_SagePaySuite::report_sagepaysuite_token_report" title="Credit Card Tokens" module="Ebizmarts_SagePaySuite" sortOrder="10" parent="Ebizmarts_SagePaySuite::report_sagepaysuite" action="sagepaysuite/reports_tokens" resource="Ebizmarts_SagePaySuite::token_report"/>
+        <add id="Ebizmarts_SagePaySuite::report_sagepaysuite_fraud_report" title="Fraud " module="Ebizmarts_SagePaySuite" sortOrder="20" parent="Ebizmarts_SagePaySuite::report_sagepaysuite" action="sagepaysuite/reports_fraud" resource="Ebizmarts_SagePaySuite::fraud_report"/>
+    </menu>
+</config>

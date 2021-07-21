@@ -1,0 +1,53 @@
+<style type="text/css">
+
+    #sagepaysuite-version-container {
+        background: #f8f8f8;
+        border: 1px solid #e3e3e3;
+        padding: 1.5rem;
+    }
+
+    #sagepaysuite-version-container img {
+        width: 250px;
+        margin-bottom: 10px;
+    }
+
+    #sagepaysuite-version-container h2 {
+        color:#EA7601;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    #sagepaysuite-version-container p {
+        font-size: 12px;
+    }
+
+    #sagepaysuite-version-container a.signUpLink {
+        font-size: 12px;
+        background-color:#EA7601;
+        color:white;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    #sagepaysuite-version-container a.signUpLink:hover {
+        text-decoration: none;
+    }
+
+</style>
+
+<div id="sagepaysuite-version-container">
+    <img src="https://ebizmarts-website.s3.amazonaws.com/Logo_Ebizmarts.png"/>
+    <h2>Ebizmarts Opayo Suite <?php echo $this->getVersion()?></h2>
+    <p>
+        <a target="_blank" href="https://ebizmarts.com"><b>ebizmarts</b></a> <?php /* @escapeNotVerified */ echo __('is an Opayo approved partner') ?>.
+        <a target="_blank" href="https://bit.ly/31aIIVB" class="signUpLink"><?php /* @escapeNotVerified */ echo __('Get an Opayo Account Now!') ?></a>
+
+    </p>
+    <p>Need assistance?
+        <a target="_blank" href="mailto:sagepay@ebizmarts-desk.zendesk.com"><?php /* @escapeNotVerified */ echo __('Submit a ticket') ?></a>
+    </p>
+    <p>Got feedback?
+        <a target="_blank" href="mailto:support@ebizmarts-desk.zendesk.com"><?php /* @escapeNotVerified */ echo __('Email us') ?></a> or
+        <a target="_blank" href="https://store.ebizmarts.com/subscribe-to-our-newsletter"><?php /* @escapeNotVerified */ echo __('Subscribe to our newsletter') ?></a>
+    </p>
+</div>

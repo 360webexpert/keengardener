@@ -1,0 +1,38 @@
+{
+    "name": "ebizmarts/sagepaysuite",
+    "version": "1.3.17",
+    "description": "Official Opayo integration for Magento 2.",
+    "require": {
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/module-sales": "102.0.*",
+        "magento/module-store": "101.0.*",
+        "magento/module-quote": "101.1.*",
+        "magento/module-checkout": "100.3.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-payment": "100.3.*",
+        "magento/module-catalog": "103.0.*",
+        "magento/framework": "102.0.*",
+        "phpseclib/phpseclib": "2.0.*"
+    },
+    "type": "magento2-module",
+    "autoload": {
+        "psr-4": {"Ebizmarts\\SagePaySuite\\":""},
+        "files": ["registration.php"]
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "support": {
+        "email": "sagepay@ebizmarts-desk.zendesk.com",
+        "wiki": "http://wiki.ebizmarts.com",
+        "forum": "http://ebizmarts.com/forums/view/2"
+    },
+    "authors": [
+        {
+            "name": "Ebizmarts Corp",
+            "email": "info@ebizmarts.com",
+            "homepage": "http://ebizmarts.com"
+        }
+    ]
+}

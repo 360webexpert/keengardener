@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="adminhtml.sagepaysuite.reports.tokens.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="sagepaysuite.reports.tokens.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">tokensGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Ebizmarts\SagePaySuite\Model\ResourceModel\TokenReport\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">id</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                    <argument name="use_ajax" xsi:type="string">1</argument>
+                    <argument name="grid_url" xsi:type="url" path="*/*/index"/>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="sagepaysuite.reports.tokens.grid.columnSet" as="grid.columnSet">
+                    <arguments>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="path" xsi:type="string">customer/index/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getCustomerId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Customer</argument>
+                            <argument name="index" xsi:type="string">email</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="header_css_class" xsi:type="string">col-customer</argument>
+                            <argument name="column_css_class" xsi:type="string">col-customer</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="cc_last_4">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">CC Last 4</argument>
+                            <argument name="index" xsi:type="string">cc_last_4</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="header_css_class" xsi:type="string">col-cc_last_4</argument>
+                            <argument name="column_css_class" xsi:type="string">col-cc_last_4</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="cc_type">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">CC Type</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="index" xsi:type="string">cc_type</argument>
+                            <argument name="header_css_class" xsi:type="string">col-cc_type</argument>
+                            <argument name="column_css_class" xsi:type="string">col-cc_type</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="created_at">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Creation Date</argument>
+                            <argument name="index" xsi:type="string">created_at</argument>
+                            <argument name="type" xsi:type="string">date</argument>
+                            <argument name="header_css_class" xsi:type="string">col-created_at</argument>
+                            <argument name="column_css_class" xsi:type="string">col-created_at</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Action</argument>
+                            <argument name="index" xsi:type="string">id</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="renderer" xsi:type="string">Ebizmarts\SagePaySuite\Block\Adminhtml\Template\Reports\Tokens\Grid\Renderer\Action</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

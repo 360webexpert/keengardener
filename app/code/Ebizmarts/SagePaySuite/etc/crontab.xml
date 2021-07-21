@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="ebizmarts_sagepaysuite_cancel_orders" instance="Ebizmarts\SagePaySuite\Model\Cron" method="cancelPendingPaymentOrders">
+            <schedule>*/2 * * * *</schedule>
+        </job>
+        <job name="ebizmarts_sagepaysuite_check_fraud" instance="Ebizmarts\SagePaySuite\Model\Cron" method="checkFraud">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+    </group>
+</config>

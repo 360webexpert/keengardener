@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © 2015 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+$_code = $block->getMethodCode();
+
+?>
+
+<div id="payment_form_<?php echo $_code ?>" class="admin__page-section-item" style="display:none;"
+     data-mage-init='{"sagepaysuiteFormForm":{"serviceUrl":"<?php echo $this->getUrl('sagepaysuite/form/request', []); ?>"}}'>
+
+    <span id="<?php echo $_code ?>-payment-errors" class="message error" style="display: none;"></span>
+
+    <img style="margin-top: 10px; max-height: 45px;" class="payment-icon sagepaysuite-payment-icon" src="https://www.sagepay.co.uk/files/logo_0.png"/>
+
+    <div class="message message-warning warning">
+        <p><?php echo __("This integration is deprecated and will be removed on the next release.") ?></p>
+        <p><?php echo __("Please use Direct with DropIn interface.") ?></p>
+    </div>
+
+    <div class="payment-method-note">
+        <strong><?php echo __("You will be redirected to Opayo to complete payment.") ?></strong>
+    </div>
+
+    <!-- #### sagepay form request form #### -->
+    <form
+        data-bind="attr: {id: getCode() + '-form'}"
+        style="display:none;"
+        method="POST"
+        action="">
+        <input type="hidden" name="VPSProtocol" value=""/>
+        <input type="hidden" name="TxType" value=""/>
+        <input type="hidden" name="Vendor" value=""/>
+        <input type="hidden" name="Crypt" value=""/>
+    </form>
+</div>

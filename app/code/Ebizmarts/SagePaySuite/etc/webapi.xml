@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <route url="/V1/sagepay/server" method="POST">
+        <service class="Ebizmarts\SagePaySuite\Api\ServerManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+
+    <route url="/V1/sagepay-guest/server" method="POST">
+        <service class="Ebizmarts\SagePaySuite\Api\GuestServerManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/sagepay/form/:cartId" method="GET">
+        <service class="Ebizmarts\SagePaySuite\Api\FormManagementInterface" method="getEncryptedRequest"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+
+    <route url="/V1/sagepay/form-guest/:cartId" method="GET">
+        <service class="Ebizmarts\SagePaySuite\Api\GuestFormManagementInterface" method="getEncryptedRequest"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/sagepay/paypal/:cartId" method="GET">
+        <service class="Ebizmarts\SagePaySuite\Api\PayPalManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+
+    <route url="/V1/sagepay/paypal-guest/:cartId" method="GET">
+        <service class="Ebizmarts\SagePaySuite\Api\GuestPayPalManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <route url="/V1/sagepay/pi-msk" method="GET">
+        <service class="Ebizmarts\SagePaySuite\Api\PiMerchantInterface" method="getSessionKey"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+        <data>
+            <parameter name="quote" force="true">null</parameter>
+        </data>
+    </route>
+
+    <route url="/V1/sagepay/pi" method="POST">
+        <service class="Ebizmarts\SagePaySuite\Api\PiManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+
+    <route url="/V1/sagepay-guest/pi" method="POST">
+        <service class="Ebizmarts\SagePaySuite\Api\GuestPiManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+</routes>

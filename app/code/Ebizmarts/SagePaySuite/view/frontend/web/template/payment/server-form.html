@@ -1,0 +1,90 @@
+<!--
+/**
+ * Copyright © 2017 ebizmarts. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label data-bind="attr: {'for': getCode()}" class="label">
+            <div class="payment-icon sagepaysuite-payment-icon opayo-payment-method-logo"></div>
+            <span data-bind="text: getTitle()"></span>
+        </label>
+    </div>
+    <div class="payment-method-content">
+
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <!-- ko if: (customerHasTokens())-->
+        <div id="sagepaysuiteserver-tokens" class="sagepaysuite-tokens">
+            <div class="token-list">
+                <div class="message warning message-max-tokens" style="display: none;"><!-- ko text: $t('You are currently using all your credit card token slots.') --><!-- /ko --></div>
+                <!-- ko foreach: {data: getCustomerTokens()} -->
+                <div data-bind="attr: { 'id': $parent.getCode() + '-tokenrow-' + id }" class="token-row">
+                    <input type="radio"
+                           data-bind="attr: { 'id': $parent.getCode() + '-token-' + id, 'name': $parent.getCode() + '-token' }">
+                    <label data-bind="attr: { 'for': $parent.getCode() + '-token-' + id }">
+                        <p data-bind="html: '**********' + cc_last_4"></p>
+                        <img data-bind="attr: {
+                        'src': $parent.getIcons(cc_type) }">
+                        <a class="delete-token-link" href="#"
+                           data-bind="click: function () { $parent.deleteToken(id); return false; }"><!-- ko text: $t('delete') --><!-- /ko --></a>
+                    </label>
+                </div>
+                <!--/ko-->
+            </div>
+            <a class="add-new-card-link" href="#" data-bind="click: addNewCard"><!-- ko text: $t('Add new card') --><!-- /ko --></a>
+            <p class="using-new-card-message"><!-- ko text: $t('You will be using a new credit card.') --><!-- /ko --></p>
+            <a class="use-saved-card-link" href="#" data-bind="click: useSavedTokens"><!-- ko text: $t('Use a saved card') --><!-- /ko --></a>
+        </div>
+        <!--/ko-->
+
+        <!-- ko if: (getTokenizationState()) -->
+        <div id="sagepay-server-remembertoken-container">
+            <li>
+                <!-- ko text: $t('Do you wish to have your credit card details remembered for faster checkout next time?') -->
+                <!-- /ko -->
+                <input checked="checked" type="checkbox" name="payment[remembertoken]" value="1" id="remembertoken"/>
+            </li>
+        </div>
+        <!--/ko-->
+
+        <fieldset class="fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
+            <span data-bind="attr: {id: getCode() + '-payment-errors'}" class="message error"
+                  style="display: none;"></span>
+
+            <div class="payment-method-note">
+                <strong>
+                    <!-- ko text: $t('A secure Sage Pay iframe will open for you to input credit card details.') -->
+                    <!-- /ko -->
+                </strong>
+            </div>
+        </fieldset>
+
+        <!--terms and conditions -->
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+
+        <div id="sagepaysuiteserver-actions-toolbar" class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="click: preparePayment, enable: (getCode() == isChecked()), css: {disabled: !isPlaceOrderActionAllowed()}"
+                        disabled>
+                    <span data-bind="text: $t('Continue')"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
