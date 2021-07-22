@@ -253,6 +253,7 @@ return [
         'Mageplaza_Blog' => 1,
         'Mageplaza_AbandonedCart' => 1,
         'Mageplaza_CouponCode' => 1,
+        'Mageplaza_FreeGifts' => 1,
         'Mageplaza_ImageOptimizer' => 1,
         'Mageplaza_LayeredNavigation' => 1,
         'Mageplaza_LayeredNavigationPro' => 1,
