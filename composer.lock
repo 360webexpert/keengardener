@@ -14216,10 +14216,6 @@
                 "magento2",
                 "mageplaza"
             ],
-            "support": {
-                "issues": "https://github.com/mageplaza/magento-2-blog/issues",
-                "source": "https://github.com/mageplaza/magento-2-blog/tree/v4.1.0"
-            },
             "time": "2021-05-11T08:59:12+00:00"
         },
         {
@@ -23610,5 +23606,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "1.1.0"
 }
