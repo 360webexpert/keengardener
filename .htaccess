@@ -423,3 +423,10 @@ ErrorDocument 403 /pub/errors/404.php
     </FilesMatch>
 
 </IfModule>
+
+# Password protection
+
+#AuthType Basic
+#AuthName "Admin"
+#AuthUserFile /home/keengardener/public_html/.htpasswd
+#Require valid-user
