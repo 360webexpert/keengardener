@@ -57,7 +57,7 @@ atlassian*
 /pub/media/tmp/*
 !/pub/media/tmp/.htaccess
 /pub/media/captcha/*
-!pub/media/porto/web/css/custom.css
+!/pub/media/porto/web/css/custom.css
 /pub/static/*
 !/pub/static/.htaccess
 
