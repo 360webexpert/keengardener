@@ -1311,6 +1311,7 @@ table .col{width:auto}
 .single-images .caption:after{content:"";display:table;clear:both}
 @media (min-width:1200px){.layout-fullwidth.page-layout-2columns-left .sidebar-main,.layout-fullwidth.page-layout-2columns-right .sidebar-additional{width:20%}
 .layout-fullwidth.page-layout-2columns-left .column.main,.layout-fullwidth.page-layout-2columns-right .column.main{width:80%}
+.mpblog-post-index .page-layout-2columns-right .column.main {width: 75%;}
 .layout-fullwidth .main-upsell-product-detail .container{max-width:none;padding-left:20px;padding-right:20px}}
 .sticky-logo .logo{max-width:none}
 @media (max-width:767px){.catalog-product-view.page-layout-2columns-right:not(.weltpixel-quickview-catalog-product-view):not(.weltpixel_quickview-catalog_product-view) .sidebar.sidebar-additional.open .sidebar-title{padding-left:20px;padding-right:20px}}
