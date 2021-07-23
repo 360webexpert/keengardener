@@ -1,5 +1,10 @@
 /* Header Styles */
-
+.sidebar .fa, .sidebar .fas {
+    font-family: 'Font Awesome 5 Free'!important;
+}
+.sidebar i.fa.fa-folder-open-o {
+	font-family: FontAwesome!important;
+}
 header.page-header.type14 .panel.header .block-search {
 	display:inline;
 }
