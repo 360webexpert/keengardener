@@ -33,7 +33,7 @@
             <p>
                 {{trans "Thank you for your order from %store_name. Your order has now been either despatched from our warehouse or if any item(s) on your order are advertised as being sent direct from our suppliers at the time of ordering then this is also confirmation that your order has been raised with them." store_name=$store.frontend_name}}
             </p>
-            <p>{{trans "Your shipping confirmation is below which contains the carrier which your order has been despatched with and the tracking number; for orders delivered direct from our suppliers this confirms your order has been sent to our suppliers for processing. Please note orders that contain pre-order and direct from supplier items as well in stock items will be sent with multiple shipments."}}</p>
+            <p>{{trans "Please note orders that contain pre-order and direct from supplier items as well in stock items will be sent across multiple shipments."}}</p>
              <p>{{trans 'If you have any questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}.</p>
 
             <h1>{{trans "Details for Order #%order_id" shipment_id=$shipment.increment_id order_id=$order.increment_id}}</h1>
