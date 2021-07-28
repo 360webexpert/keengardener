@@ -294,7 +294,7 @@ body {
 	font-family:oswald;
 }
 input[type="text"], input[type="password"], input[type="url"], input[type="tel"], input[type="search"], input[type="number"], input[type="datetime"], input[type="email"] {
-	text-transform:uppercase;
+	/*text-transform:uppercase;*/
 }
 .prev-next-products .product-nav.product-prev .product-pop {
 	margin-left:-60px;
