@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="mpfreegifts" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Free Gifts</label>
+            <tab>mageplaza</tab>
+            <resource>Mageplaza_FreeGifts::configuration</resource>
+
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Configuration</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Select <strong>Yes</strong> to enable this module.]]></comment>
+                </field>
+
+                <field id="gift_layout" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Gift List Layout</label>
+                    <source_model>Mageplaza\FreeGifts\Model\System\Config\Source\GiftLayout</source_model>
+                    <comment>Gift list layout for frontend popup modal.</comment>
+                </field>
+
+                <field id="allow_notice" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Notice For Gift</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="notice" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Notice Content</label>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="allow_notice">1</field>
+                    </depends>
+                </field>
+
+                <field id="hide_notification" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Allow customers to hide gift notification</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="icon" translate="label comment" type="image" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Gift Icon</label>
+                    <backend_model>Mageplaza\FreeGifts\Model\System\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">mageplaza/freegifts</upload_dir>
+                    <base_url type="media" scope_info="1">mageplaza/freegifts</base_url>
+                    <comment>
+                        <![CDATA[
+                            <span>Recommended dimension: 20x20px</span>
+                            <br/>
+                            <span>Recommended image file: <strong>.png</strong> <strong>.gif</strong> <strong>.jpg</strong></span>
+                        ]]>
+                    </comment>
+                </field>
+                <field id="allow_reminder" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Reminder about free gifts</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="notify_message" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Notification Message</label>
+                    <depends>
+                        <field id="allow_reminder">1</field>
+                    </depends>
+                    <comment>Replacing the {url checkout/cart} with the actual cart to redirect to the cart page</comment>
+                </field>
+            </group>
+
+            <group id="display" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Button Display</label>
+                <field id="cart_page" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show At Cart Page</label>
+                    <comment>
+                        <![CDATA[
+                            If <strong>Yes</strong>, Add Gift Button for Automatic Cart Rule will be displayed at Cart Index Page
+                        ]]>
+                    </comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="cart_item" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show At Cart Item</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="product_page" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Gifts At Product Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Customers can see gift list and add gifts at Product Detail Pages</comment>
+                </field>
+                <field id="enable_popup" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show Gift List As Popup</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[
+                            If <strong>No</strong>, Gift List will be displayed under Add To Cart button
+                        ]]>
+                    </comment>
+                    <depends>
+                        <field id="product_page">1</field>
+                    </depends>
+                </field>
+                <field id="auto_popup" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Open Popup Automatically</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Always open free gift popup on cart page if any free gift is available</comment>
+                </field>
+            </group>
+
+            <group id="design" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Button Design</label>
+                <field id="label" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Button Label</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="background_color" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Button Color</label>
+                    <validate>required-entry jscolor {hash:true,refine:false}</validate>
+                </field>
+                <field id="text_color" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Text Color</label>
+                    <validate>required-entry jscolor {hash:true,refine:false}</validate>
+                </field>
+            </group>
+
+        </section>
+    </system>
+</config>

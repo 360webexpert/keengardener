@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var \Mageplaza\FreeGifts\Block\Product\GiftIcon $block
+ */
+?>
+<?php if ($block->isShowIcon()): ?>
+    <div id="mpfreegifts-gift-icon" class="mpfreegifts-gift-icon" data-mage-init='{"giftIcon":<?= $block->getGalleryData()?>}'>
+        <img id="mpfreegifts-gift-icon-img"
+             class="mpfreegifts-gift-icon-img" alt="<?= /** @noEscape */__('Gift Icon') ?>"
+             src="<?= /** @noEscape */$block->getGiftIcon() ?>"
+        />
+    </div>
+<?php endif; ?>

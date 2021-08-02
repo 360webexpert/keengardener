@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Core::css/grid-mageplaza.css"/>
+        <css src="Mageplaza_Core::css/owl.carousel.css"/>
+        <css src="Mageplaza_Core::css/owl.theme.css"/>
+        <css src="Mageplaza_FreeGifts::css/free_gifts.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <referenceContainer name="product.info.form.content">
+                <block class="Mageplaza\FreeGifts\Block\Product\GiftInput" name="mpfreegifts_giftInput" after="product.info.addtocart"/>
+            </referenceContainer>
+
+            <referenceBlock name="product.info.options.wrapper.bottom">
+                <block class="Mageplaza\FreeGifts\Block\Product\GiftInput" name="mpfreegifts_giftInput_additional" after="product.info.addtocart"/>
+            </referenceBlock>
+
+            <referenceContainer name="product.info.main">
+                <block class="Mageplaza\FreeGifts\Block\Product\GiftProduct" name="mpfreegifts_giftModal" />
+            </referenceContainer>
+            <block class="Mageplaza\FreeGifts\Block\Product\GiftProduct" name="mpfreegifts_giftBlock" before="product.info.details" />
+        </referenceContainer>
+        <referenceContainer name="alert.urls">
+            <block class="Mageplaza\FreeGifts\Block\Product\GiftIcon" name="mpfreegifts.gift.icon" template="Mageplaza_FreeGifts::product/gift_icon.phtml" ifconfig="mpfreegifts/general/enabled"/>
+        </referenceContainer>
+    </body>
+</page>

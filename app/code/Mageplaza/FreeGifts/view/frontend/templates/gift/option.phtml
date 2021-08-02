@@ -1,0 +1,54 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<?php
+/** @var \Mageplaza\FreeGifts\Block\Gift\Option $block */
+$gift = $block->getGiftData();
+?>
+
+<div id="<?= /* @noEscape */ 'mpfreegifts-option-modal-' .$gift['id'] ?>" class="mpfreegifts-option-modal">
+    <form id="<?= /* @noEscape */ 'mpfreegifts-option-form-' .$gift['id'] ?>"
+          enctype="multipart/form-data" class="mpfreegifts-option-form">
+        <input type="hidden" name="rule_id" value="<?= /* @noEscape */ $gift['rule_id'] ?>" />
+        <input type="hidden" name="gift_id" value="<?= /* @noEscape */ $gift['id'] ?>" />
+        <input type="hidden" name="gift_name" value="<?= /* @noEscape */ $gift['name'] ?>" />
+        
+        <?= $block->getConfigOptionHtml() ?>
+        <?= $block->getCustomOptionHtml() ?>
+    </form>
+    
+    <div class="mpfreegifts-option-form-footer">
+        <button class="action primary"
+                id="<?= /* @noEscape */ 'mpfreegifts-option-add-' .$gift['id'] ?>"
+                type="button">
+            <?= /* @noEscape */ __('Add Gift')?>
+        </button>
+    </div>
+
+    <script type="text/x-magento-init">
+        {
+            "<?= /* @noEscape */ '#mpfreegifts-option-form-' .$gift['id'] ?>": {
+                "Magento_Catalog/js/validate-product": {}
+            }
+        }
+    </script>
+</div>

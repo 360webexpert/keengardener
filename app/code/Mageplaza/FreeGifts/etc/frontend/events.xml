@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_cart_save_after">
+        <observer name="mpfreegifts_cart_save_after_observer" instance="Mageplaza\FreeGifts\Observer\CartSaveAfter" />
+    </event>
+    <event name="checkout_cart_add_product_complete">
+        <observer name="mpfreegifts_cart_save_after_observer" instance="Mageplaza\FreeGifts\Observer\CartAddComplete" />
+    </event>
+
+    <event name="customer_login">
+        <observer name="mpfreegifts_customer_auth_after" instance="Mageplaza\FreeGifts\Observer\ScreenFreeGift" />
+    </event>
+    <event name="controller_action_predispatch_stores_store_switch">
+        <observer name="mpfreegifts_customer_store_switch" instance="Mageplaza\FreeGifts\Observer\ScreenFreeGift" />
+    </event>
+    <event name="controller_action_predispatch_checkout_index_index">
+        <observer name="mpfreegifts_checkout_index_index" instance="Mageplaza\FreeGifts\Observer\ScreenFreeGift" />
+    </event>
+</config>

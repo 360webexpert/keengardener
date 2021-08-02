@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="editor"/>
+    <head>
+        <css src="Mageplaza_FreeGifts::css/rule.css"/>
+    </head>
+    <body>
+        <referenceContainer name="left">
+            <block class="Mageplaza\FreeGifts\Block\Adminhtml\Rule\Edit\Tabs" name="mpfreegifts_rule_edit_tabs">
+                <block class="Mageplaza\FreeGifts\Block\Adminhtml\Rule\Edit\Tab\General" name="mpfreegifts_rule_edit_tab_general"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">mpfreegifts_general_tab</argument>
+                    <argument name="block" xsi:type="string">mpfreegifts_rule_edit_tab_general</argument>
+                </action>
+
+                <block class="Mageplaza\FreeGifts\Block\Adminhtml\Rule\Edit\Tab\Conditions" name="mpfreegifts_rule_edit_tab_conditions"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">mpfreegifts_conditions_tab</argument>
+                    <argument name="block" xsi:type="string">mpfreegifts_rule_edit_tab_conditions</argument>
+                </action>
+
+                <block class="Mageplaza\FreeGifts\Block\Adminhtml\Rule\Edit\Tab\Actions" name="mpfreegifts_rule_edit_tab_actions"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">mpfreegifts_actions_tab</argument>
+                    <argument name="block" xsi:type="string">mpfreegifts_rule_edit_tab_actions</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Mageplaza\FreeGifts\Block\Adminhtml\Rule\Edit" name="mpfreegifts_rule_edit"/>
+        </referenceContainer>
+    </body>
+</page>

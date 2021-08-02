@@ -1,0 +1,127 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<?php
+/** @var \Mageplaza\FreeGifts\Block\Adminhtml\Rule\Gift\Listing $block */
+?>
+
+<div class="mpfreegifts-add-btn-container">
+    <button type="button" class="action-default" id="mpfreegifts-add-gift">
+        <span><?= /* @noEscape */
+            __('Add Gift') ?></span>
+    </button>
+</div>
+
+<div id="mpfreegifts-grid-listing-wrapper">
+    <?= /* @noEscape */
+    $block->getGridListingHtml() ?>
+</div>
+
+<div id="mpfreegifts-product-grid-wrapper"></div>
+
+<div id="mpfreegifts-gift-item-edit-wrapper">
+    <div class="page-main-actions">
+        <div class="page-actions" data-ui-id="page-actions-toolbar-content-header">
+            <div class="page-actions-inner" data-title="<?= /* @noEscape */ __('Update') ?>">
+                <div class="page-actions-buttons">
+                    <button title="<?= /* @noEscape */ __('Update') ?>"
+                            id="mpfreegifts-gift-item-edit-btn"
+                            type="button"
+                            class="scalable primary">
+                        <span><?= /* @noEscape */ __('Update') ?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <form id="mpfreegifts-gift-item-edit-form" data-mage-init='{"validation":{}}'>
+        <fieldset class="fieldset admin__fieldset fieldset-wide">
+            <input type="hidden" name="gift_id" value ="" id="mpfreegifts-edit-gift_id">
+            <input type="hidden" name="product_price" value ="" id="mpfreegifts-edit-product_price">
+            <div class="admin__field field">
+                <label class="label admin__field-label" for="mpfreegifts-edit-discount_type">
+                    <span><?= /* @noEscape */ __('Discount Type') ?></span>
+                </label>
+                <div class="admin__field-control control">
+                    <div class="admin__field">
+                        <select id="mpfreegifts-edit-discount_type"
+                                class="select admin__control-select"
+                                name="discount_type">
+                            <?php foreach ($block->getDiscountType() as $type): ?>
+                                <option value="<?= /* @noEscape */ $type['value']?>">
+                                    <?= /* @noEscape */ $type['label']?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin__field field">
+                <label class="label admin__field-label" for="mpfreegifts-edit-gift_price">
+                    <span><?= /* @noEscape */ __('Gift Price') ?></span>
+                </label>
+                <div class="admin__field-control control">
+                    <div class="admin__field">
+                        <input type="text" id="mpfreegifts-edit-gift_price"
+                               class="input-text admin__control-text"
+                               name="gift_price">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin__field field">
+                <label class="label admin__field-label" for="mpfreegifts-edit-free_shipping">
+                    <span><?= /* @noEscape */ __('Free Shipping') ?></span>
+                </label>
+                <div class="admin__field-control control">
+                    <div class="admin__field">
+                        <select id="mpfreegifts-edit-free_shipping"
+                                class="select admin__control-select"
+                                name="free_shipping">
+                            <?php foreach ($block->getFreeShipOption() as $option): ?>
+                                <option value="<?= /* @noEscape */ $option['value']?>">
+                                    <?= /* @noEscape */ $option['label']?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "#mpfreegifts-grid-listing-wrapper": {
+            "Mageplaza_FreeGifts/js/rule/gift_listing": {
+                "productGridUrl" : "<?= /* @noEscape */$block->getProductGridUrl() ?>",
+                "addGiftUrl" : "<?= /* @noEscape */$block->getAddGiftUrl() ?>",
+                "updateItemUrl" : "<?= /* @noEscape */$block->getUpdateItemUrl() ?>",
+                "ruleId" : "<?= /* @noEscape */$block->getCurrentRuleId() ?>",
+                "systemConfig" : <?= /* @noEscape */$block->getSystemConfig() ?>
+            }
+        }
+    }
+</script>

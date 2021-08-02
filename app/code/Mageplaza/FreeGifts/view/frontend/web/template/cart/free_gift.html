@@ -1,0 +1,166 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<div class="mpfreegifts-add-gift-btn" data-bind="attr: { id: item_id === 'cart' ? 'mpfreegifts-cart-btn' : '' }">
+    <button type="button" class="mpfreegifts-btn action primary checkout" data-bind="click: showModal">
+        <span data-bind="text: button_label"></span>
+    </button>
+</div>
+
+<div data-bind="attr: {id: 'mpfreegifts-modal-item-' + item_id}, afterRender: autoPopup()" class="mpfreegifts-modal">
+    <div class="mpfreegifts-item-left">
+        <strong data-bind="attr: {id: 'mpfreegifts-available-item-' + item_id}, text: calculateItemLeft()"></strong>
+        <span data-bind="i18n: ' Free Gift(s) Left'"></span>
+    </div>
+
+    <!-- ko if: layout === 'grid' -->
+    <!-- ko foreach: {data: rules, as: 'rule'}  -->
+    <div class="mpfreegifts-rule-grid">
+        <div class="row-mp gift-row" data-bind="foreach: {data: rule.gifts, as: 'gift'}">
+            <div class="gift-container col-mp mp-lg-3 mp-md-4 mp-sm-6 mp-xs-12">
+                <div class="gift-item">
+                    <div>
+                        <img class="mpfreegifts-gift-image" src="#" alt="gift-image" data-bind="attr: { src: gift.image, alt: gift.name }">
+                    </div>
+                    <div class="mpfreegifts-gift-name text-center"><span data-bind="html: gift.name"></span></div>
+                    <div class="text-center mpfreegifts-gift-price">
+                        <div class="mpfreegifts-gift-original-price" data-bind="text: gift.final_price"></div>
+                        <div class="mpfreegifts-gift-final-price" data-bind="text: gift.gift_price"></div>
+                    </div>
+                    <div class="mpfreegifts-gift-action text-center">
+                        <!-- ko if: !gift.added -->
+                        <button class="action primary"
+                                data-bind="click: $parents[1].giftAction.bind($data, $parents[1], $parents[0].rule_id, $parents[1].option_url, $parents[1].item_id),
+                                            enable: $parents[0].max_gift - $parents[0].total_added > 0">
+                            <span data-bind="i18n: 'Add'"></span>
+                        </button>
+                        <!-- /ko -->
+
+                        <!-- ko if: gift.added -->
+                        <button class="action primary mpfreegifts-action-remove"
+                                data-bind="click: $parents[1].giftAction.bind($data, $parents[1], $parents[0].rule_id, $parents[1].remove_url, $parents[1].item_id)">
+                            <span data-bind="i18n: 'Remove'"></span>
+                        </button>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: layout === 'list' -->
+    <!-- ko foreach: {data: rules, as: 'rule'}  -->
+    <div class="mpfreegifts-rule-list">
+        <div class="table-wrapper">
+            <table class="data table">
+                <caption class="table-caption" data-bind="text: rule.name"></caption>
+
+                <colgroup class="mpfreegifts-gift-image-col"></colgroup>
+                <colgroup class="mpfreegifts-gift-name-col"></colgroup>
+                <colgroup class="mpfreegifts-gift-price-col"></colgroup>
+                <colgroup class="mpfreegifts-gift-action-col"></colgroup>
+
+                <thead>
+                <tr>
+                    <th scope="col" colspan="2" class="col image" data-bind="i18n: 'Gift'"></th>
+                    <th scope="col" class="col price" data-bind="i18n: 'Price'"></th>
+                    <th scope="col" class="col actions" data-bind="i18n: 'Action'"></th>
+                </tr>
+                </thead>
+
+                <tbody data-bind="foreach: {data: rule.gifts, as: 'gift'}">
+                <tr class="gift-item">
+                    <td class="col image">
+                        <img class="mpfreegifts-gift-image" src="#" alt="gift-image" data-bind="attr: { src: gift.image, alt: gift.name }">
+                    </td>
+                    <td class="col name mpfreegifts-gift-name" data-bind="attr: { 'data-th': $t('Gift') }">
+                        <span data-bind="html: gift.name"></span>
+                    </td>
+                    <td class="col price mpfreegifts-gift-price" data-bind="attr: { 'data-th': $t('Price') }">
+                        <div class="mpfreegifts-gift-original-price" data-bind="text: gift.final_price"></div>
+                        <div class="mpfreegifts-gift-final-price" data-bind="text: gift.gift_price"></div>
+
+                    </td>
+                    <td class="col actions mpfreegifts-gift-action" data-bind="attr: { 'data-th': $t('Action') }">
+                        <!-- ko if: !gift.added -->
+                        <button class="action primary"
+                                data-bind="click: $parents[1].giftAction.bind($data, $parents[1], $parents[0].rule_id, $parents[1].option_url, $parents[1].item_id),
+                                            enable: $parents[0].max_gift - $parents[0].total_added > 0">
+                            <span data-bind="i18n: 'Add'"></span>
+                        </button>
+                        <!-- /ko -->
+
+                        <!-- ko if: gift.added -->
+                        <button class="action primary mpfreegifts-action-remove"
+                                data-bind="click: $parents[1].giftAction.bind($data, $parents[1], $parents[0].rule_id, $parents[1].remove_url, $parents[1].item_id)">
+                            <span data-bind="i18n: 'Remove'"></span>
+                        </button>
+                        <!-- /ko -->
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: layout === 'slider' -->
+    <!-- ko foreach: {data: rules, as: 'rule'}  -->
+    <div class="mpfreegifts-rule-slider owl-carousel owl-theme">
+        <!-- ko foreach: {data: rule.gifts, as: 'gift'}  -->
+        <div class="gift-container item">
+            <div class="gift-item">
+                <div>
+                    <img class="mpfreegifts-gift-image" src="#" alt="gift-image" data-bind="attr: { src: gift.image, alt: gift.name }">
+                </div>
+                <div class="mpfreegifts-gift-name text-center"><span data-bind="html: gift.name"></span></div>
+                <div class="text-center mpfreegifts-gift-price">
+                    <div class="mpfreegifts-gift-original-price" data-bind="text: gift.final_price"></div>
+                    <div class="mpfreegifts-gift-final-price" data-bind="text: gift.gift_price"></div>
+                </div>
+                <div class="mpfreegifts-gift-action text-center">
+                    <!-- ko if: !gift.added -->
+                    <button class="action primary"
+                            data-bind="click: $parents[1].giftAction.bind($data, $parents[1], $parents[0].rule_id, $parents[1].option_url, $parents[1].item_id),
+                                            enable: $parents[0].max_gift - $parents[0].total_added > 0">
+                        <span data-bind="i18n: 'Add'"></span>
+                    </button>
+                    <!-- /ko -->
+                    <!-- ko if: gift.added -->
+                    <button class="action primary mpfreegifts-action-remove"
+                            data-bind="click: $parents[1].giftAction.bind($data, $parents[1], $parents[0].rule_id, $parents[1].remove_url, $parents[1].item_id)">
+                        <span data-bind="i18n: 'Remove'"></span>
+                    </button>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <hr>
+    <!-- /ko -->
+    <!-- /ko -->
+</div>

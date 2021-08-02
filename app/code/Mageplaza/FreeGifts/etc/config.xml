@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mpfreegifts>
+            <general>
+                <enabled>1</enabled>
+                <gift_layout>grid</gift_layout>
+                <allow_notice>1</allow_notice>
+                <notice>You Deserved It!</notice>
+                <hide_notification>1</hide_notification>
+                <allow_reminder>0</allow_reminder>
+                <notify_message><![CDATA[You have free gift(s). <a href="{url checkout/cart}#choose-gift">Check your available gifts!</a>]]></notify_message>
+            </general>
+            <display>
+                <cart_page>1</cart_page>
+                <cart_item>1</cart_item>
+                <product_page>1</product_page>
+                <enable_popup>1</enable_popup>
+                <auto_popup>0</auto_popup>
+            </display>
+            <design>
+                <label>Add Free Gift</label>
+                <background_color>#0099e5</background_color>
+                <text_color>#FFFFFF</text_color>
+            </design>
+        </mpfreegifts>
+    </default>
+</config>

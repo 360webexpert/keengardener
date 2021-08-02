@@ -1,0 +1,91 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<?php /** @var \Mageplaza\FreeGifts\Block\Product\GiftProduct $block */?>
+
+<?php if ($block->isPopupModal() && $block->calculateItemLeft() <= 0 && $block->getValidatedItemRules()):?>
+<div class="message-warning warning message" data-ui-id="message-warning">
+    <div>
+        <span><?= /* @noEscape */ __('All free gifts have been added. You can change gift option in your ') ?></span>
+        <a href="<?= /* @noEscape */ $block->getUrl('checkout/cart') ?>"><?= /* @noEscape */ __('shopping cart') ?></a>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php if ($block->isShowGifts()):?>
+    <div id="mpfreegifts-<?= /* @noEscape */ $block->getTemplateMarker() ?>-container"
+         data-bind="scope: 'mpfreegifts_product_<?= /* @noEscape */ $block->getTemplateMarker() ?>'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    
+    <script type="text/x-magento-init">
+        {
+            "#mpfreegifts-<?= /* @noEscape */ $block->getTemplateMarker() ?>-container": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "mpfreegifts_product_<?= /* @noEscape */ $block->getTemplateMarker() ?>": {
+                            "component": "Mageplaza_FreeGifts/js/gift/product",
+                            "config": {
+                                "layout" : "<?= /* @noEscape */ $block->getTemplateMarker() ?>",
+                                "gift_layout" : "<?= /* @noEscape */ $block->getHelperData()->getGiftLayout() ?>",
+                                "item_id" : "<?= /* @noEscape */ $block->getProductId() ?>",
+                                "rules" : <?= /* @noEscape */ $block->getValidatedItemRules() ?>,
+                                "option_url" : "<?= /* @noEscape */ $block->getUrl('mpfreegifts/gift/option') ?>",
+                                "add_url" : "<?= /* @noEscape */ $block->getUrl('mpfreegifts/gift/add') ?>"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <?php if ($block->isPopupModal()):?>
+        <div id="mpfreegifts-selected-container" class="message-success success message" data-ui-id="message-success">
+            <div id="mpfreegifts-selected-header">
+                <?= /* @noEscape */ __('Selected free gifts:') ?>
+            </div>
+            <ul id="mpfreegifts-selected-ul"></ul>
+        </div>
+    <?php endif; ?>
+    <div id="mpfreegifts-option-wrapper"></div>
+<?php endif; ?>
+<?php if ($block->isShowList()) :
+    $itemRule = current($block->getValidItemRules());
+    $gifts = $itemRule['gifts'];
+?>
+<h3><?= __('Free when you buy this product')?></h3>
+<div class="mpfreegifts_all_gift row-mp">
+    <?php foreach ($gifts as $gift) : ?>
+        <div class="mpfreegifts_gift_item col-mp mp-3">
+            <img class="mpfreegifts_gift_item_image" src="<?= $gift['image'] ?: '' ?>" alt="<?= __('Gift item image')?>">
+            <span class="mpfreegifts_gift_item_name"><?= $gift['name'] ?: ''?></span>
+            <div class="mpfreegifts_gift_item_price">
+                <span class="mpfreegifts_gift_item_final_price"><?= $gift['final_price']?></span>
+                <span><?= __('Free')?></span>
+            </div>
+        </div>
+    <?php endforeach;;?>
+</div>
+<?php endif; ?>
+
+

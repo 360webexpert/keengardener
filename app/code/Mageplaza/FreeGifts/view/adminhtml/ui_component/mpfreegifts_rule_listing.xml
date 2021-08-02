@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            <item name="provider" xsi:type="string">mpfreegifts_rule_listing.mpfreegifts_rule_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <spinner>freegifts_rule_columns</spinner>
+        <deps>
+            <dep>mpfreegifts_rule_listing.mpfreegifts_rule_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="mpfreegifts_rule_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">rule_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="mpfreegifts_rule_listing_data_source">
+            <settings>
+                <requestFieldName>rule_id</requestFieldName>
+                <primaryFieldName>main_table.rule_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filters name="listing_filters">
+            <filterSelect name="website_filter" provider="${ $.parentName }">
+                <settings>
+                    <caption translate="true">All Websites</caption>
+                    <options class="Mageplaza\FreeGifts\Ui\Component\Listing\Column\Website\Options"/>
+                    <label translate="true">Website</label>
+                    <dataScope>website_filter</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="customer_group_filter" provider="${ $.parentName }">
+                <settings>
+                    <caption translate="true">All Customer Group</caption>
+                    <options class="Mageplaza\FreeGifts\Ui\Component\Listing\Column\CustomerGroup\Options"/>
+                    <label translate="true">Customer Group</label>
+                    <dataScope>customer_group_filter</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <url path="mpfreegifts/rule/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                    <confirm>
+                        <message translate="true">Delete selected rule(s)?</message>
+                        <title translate="true">Delete Rule</title>
+                    </confirm>
+                </settings>
+            </action>
+            <action name="status">
+                <settings>
+                    <type>status</type>
+                    <label translate="true">Change status</label>
+                    <actions>
+                        <action name="0">
+                            <type>active</type>
+                            <label translate="true">Active</label>
+                            <url path="mpfreegifts/rule/massStatus">
+                                <param name="status">1</param>
+                            </url>
+                        </action>
+                        <action name="1">
+                            <type>inactive</type>
+                            <label translate="true">Inactive</label>
+                            <url path="mpfreegifts/rule/massStatus">
+                                <param name="status">0</param>
+                            </url>
+                        </action>
+                    </actions>
+                </settings>
+            </action>
+        </massaction>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+
+    <columns name="freegifts_rule_columns">
+        <settings>
+            <editorConfig>
+                <param name="clientConfig" xsi:type="array">
+                    <item name="saveUrl" xsi:type="url" path="mpfreegifts/rule/gridEdit"/>
+                    <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                </param>
+                <param name="indexField" xsi:type="string">rule_id</param>
+                <param name="enabled" xsi:type="boolean">true</param>
+                <param name="selectProvider" xsi:type="string">mpfreegifts_rule_listing.mpfreegifts_rule_listing.freegifts_rule_columns.ids</param>
+            </editorConfig>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">mpfreegifts_rule_listing.mpfreegifts_rule_listing.freegifts_rule_columns_editor</item>
+                    <item name="target" xsi:type="string">startEdit</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                        <item name="1" xsi:type="boolean">true</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
+
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>rule_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="rule_id">
+            <settings>
+                <filter>textRange</filter>
+                <sorting>desc</sorting>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="name">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Name</label>
+            </settings>
+        </column>
+        <column name="status" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <editor>
+                    <editorType>select</editorType>
+                </editor>
+                <options class="Mageplaza\FreeGifts\Model\Source\Status"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <column name="apply_for" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Mageplaza\FreeGifts\Model\Source\Apply"/>
+                <dataType>select</dataType>
+                <label translate="true">Apply For</label>
+                <visible>true</visible>
+            </settings>
+        </column>
+        <column name="state" component="Mageplaza_FreeGifts/js/rule/state" class="Mageplaza\FreeGifts\Ui\Component\Listing\Columns\State">
+            <settings>
+                <dataType>select</dataType>
+                <label translate="true">State</label>
+                <sortable>false</sortable>
+                <visible>true</visible>
+            </settings>
+        </column>
+        <column name="website_id" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Website"/>
+                <dataType>select</dataType>
+                <label translate="true">Website</label>
+                <sortable>false</sortable>
+                <visible>true</visible>
+            </settings>
+        </column>
+        <column name="customer_group_ids" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Mageplaza\FreeGifts\Model\Source\CustomerGroup"/>
+                <dataType>select</dataType>
+                <label translate="true">Customer Groups</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="priority">
+            <settings>
+                <filter>text</filter>
+                <editor>
+                    <editorType>text</editorType>
+                </editor>
+                <label translate="true">Priority</label>
+            </settings>
+        </column>
+        <column name="from_date" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <timezone>false</timezone>
+                <dateFormat>MMM d, y</dateFormat>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <visible>false</visible>
+                <label translate="true">Active From</label>
+            </settings>
+        </column>
+        <column name="to_date" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <timezone>false</timezone>
+                <dateFormat>MMM d, y</dateFormat>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <visible>false</visible>
+                <label translate="true">Active To</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Mageplaza\FreeGifts\Ui\Component\Listing\Columns\EditAction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="editUrlPath" xsi:type="string">mpfreegifts/rule/edit</item>
+                    <item name="urlEntityParamName" xsi:type="string">rule_id</item>
+                </item>
+            </argument>
+            <settings>
+                <indexField>rule_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

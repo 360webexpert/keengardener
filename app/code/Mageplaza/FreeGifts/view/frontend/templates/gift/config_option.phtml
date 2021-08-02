@@ -1,0 +1,47 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<?php /** @var \Mageplaza\FreeGifts\Block\Gift\ConfigOption $block */ ?>
+
+<div class="fieldset" style="margin-bottom: 20px;">
+    <?php foreach ($block->getConfigArray() as $option):?>
+        <div class="field required">
+            <label class="label" for="<?= /* @noEscape */ $option['attribute_id'] ?>">
+                <span><?= /* @noEscape */ $option['label'] ?></span>
+            </label>
+            
+            <div class="control">
+                <select name="<?= /* @noEscape */ $block->getSelectName($option['attribute_id']) ?>"
+                        class="required product-custom-option admin__control-select"
+                        data-validate='{"required":true}'
+                        id="<?= /* @noEscape */ $option['attribute_id'] ?>">
+                    <option value=""><?= /* @noEscape */  __('-- Please Select --') ?></option>
+                    <?php foreach ($option['values'] as $value):?>
+                        <option value="<?= /* @noEscape */ $value['value_index'] ?>">
+                            <?= /* @noEscape */ $value['store_label'] ?>
+                        </option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        </div>
+    <?php endforeach;?>
+</div>

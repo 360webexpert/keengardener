@@ -1,0 +1,366 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/* --------------------- Begin - Common --------------------- */
+.mpfreegifts-add-gift-btn {
+    margin-bottom: 20px;
+}
+
+#mpfreegifts-cart-btn {
+    width: 71%;
+    display: none;
+}
+
+.mpfreegifts-btn:hover {
+    opacity: 0.9;
+}
+
+.mpfreegifts-modal, .mpfreegifts-option-modal {
+    display: none;
+}
+
+.mpfreegifts-item-left {
+    text-align: right;
+    font-size: 1.8rem;
+    margin: 5px 0;
+    z-index: 10;
+}
+
+.mpfreegifts-modal .mpfreegifts-item-left {
+    background: #ffffff;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+}
+
+.mpfreegifts-action-remove {
+    border-color: #ff5501 !important;
+    background: #ff5501 !important;
+    color: #fff;
+}
+
+.mpfreegifts-action-remove:hover {
+    background: #e64d00 !important;
+    border-color: #e64d00 !important;
+}
+
+.mpfreegifts-gift-original-price {
+    text-decoration: line-through;
+    font-size: 1.5rem;
+}
+
+.mpfreegifts-gift-final-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.mpfreegifts-gift-name {
+    font-size: 1.8rem;
+    font-weight: 400;
+    height: 45px;
+}
+
+.mpfreegifts-gift-image {
+    display: block;
+    margin: auto;
+    height: 220px;
+    width: auto !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mpfreegifts-rule-grid .gift-item,
+.mpfreegifts-rule-slider .gift-item {
+    border-radius: 7px;
+    border: 2px solid transparent;
+    box-sizing: border-box;
+}
+
+.gift-item:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    transition: 0.2s ease-in-out;
+}
+
+.mpfreegifts-gift-name, .mpfreegifts-gift-price, .mpfreegifts-gift-action {
+    margin-top: 15px;
+}
+
+#mpfreegifts-block-container {
+    clear: both !important;
+}
+
+.mpfreegifts-block-header {
+    margin: 5px 0;
+    display: flex;
+}
+
+.mpfreegifts-block-header .mpfreegifts-item-left {
+    text-align: right;
+    font-size: 1.8rem;
+}
+
+.mpfreegifts-block-header .mpfreegifts-header-text {
+    text-align: left;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.mpfreegifts-block-header .mpfreegifts-header-text,
+.mpfreegifts-block-header .mpfreegifts-item-left {
+    width: 49%;
+}
+
+.mpfreegifts-block-icon {
+    color: #ffffff;
+    font-size: 2rem !important;
+}
+.mpfreegifts-block-icon span {
+    display: block;
+    border-radius: 50%;
+    font-weight: bolder;
+    padding: 0 0.5rem;
+    background-color: #d9d9d9;
+}
+
+.mpfreegifts-selected-icon span{
+    background-color: #4CAF50 !important;
+}
+
+.mpfreegifts-update-btn {
+    text-align: right;
+}
+
+.mpfreegifts-selected {
+    border-radius: 7px;
+    border: 2px solid #4CAF50 !important;
+    box-sizing: border-box;
+}
+
+.mpfreegifts-rule-grid .mpfreegifts-block-icon,
+.mpfreegifts-rule-slider .mpfreegifts-block-icon {
+    position: absolute;
+    top: -10px;
+    left: 5px;
+}
+
+.mpfreegifts-gift-image-container {
+    position: relative
+}
+
+.mpfreegifts-block .gift-item:hover,
+.mpfreegifts-modal .gift-item:hover {
+    cursor: pointer;
+}
+
+#mpfreegifts-selected-container {
+    display: none;
+}
+
+#mpfreegifts-selected-header {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+#mpfreegifts-selected-ul {
+    margin-bottom: 0 !important;
+}
+
+#mpfreegifts-selected-ul li {
+    font-size: 1.5rem;
+}
+
+@media only screen and (max-width: 767px) {
+    #mpfreegifts_item_cart .mpfreegifts-add-gift-btn{
+        width: 100%;
+        text-align: center;
+    }
+
+    .mpfreegifts-gift-name {
+        font-size: 1.5rem;
+        height: min-content;
+    }
+
+    #mpfreegifts-cart-btn {
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 767px) {
+    .mpfreegifts_modal .modal-inner-wrap {
+        width: 70% !important;
+    }
+}
+
+/* --------------------- End - Common --------------------- */
+
+/* --------------------- Begin - Item Notice --------------------- */
+.mpfreegifts-notice-content {
+    background: #fdf0d5;
+    color: #6f4400;
+    padding: 0.6rem 1.5rem;
+    text-shadow: none;
+    margin-left: 10px;
+}
+
+.mpfreegifts-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.mpfreegifts-image {
+    padding-top: 0.5rem;
+}
+
+.mpfreegifts-notice {
+    display: flex;
+}
+/* --------------------- End - Item Notice --------------------- */
+
+/* --------------------- Begin - List Layout --------------------- */
+.mpfreegifts-rule-list {
+    margin-top: 40px;
+    display: inline-block;
+    width: 100%;
+}
+
+.mpfreegifts-block .mpfreegifts-rule-list {
+    margin-top: 10px;
+}
+
+.mpfreegifts-gift-image-col {
+    width: 20% !important;
+}
+
+.mpfreegifts-gift-selected-col {
+    width: 3% !important;
+}
+
+.mpfreegifts-gift-name-col {
+    width: 25% !important;
+}
+
+.mpfreegifts-gift-price-col, .mpfreegifts-gift-action-col {
+    width: 15% !important;
+}
+
+.mpfreegifts-rule-list .mpfreegifts-gift-image {
+    width: 80px;
+    height: 80px;
+}
+
+.mpfreegifts-rule-list .mpfreegifts-gift-name,
+.mpfreegifts-rule-list .mpfreegifts-gift-action {
+    padding-top: 35px;
+}
+
+.mpfreegifts-rule-list .mpfreegifts-gift-price {
+    padding-top: 30px;
+}
+
+.mpfreegifts-rule-list .mpfreegifts-gift-name,
+.mpfreegifts-rule-list .mpfreegifts-gift-price,
+.mpfreegifts-rule-list .mpfreegifts-gift-action{
+    margin-top: 0;
+}
+
+.mpfreegifts-rule-list .mpfreegifts-block-icon span  {
+    width: 2rem;
+}
+
+@media only screen and (max-width: 767px) {
+    .mpfreegifts-rule-list td.image {
+        display: none !important;
+    }
+
+    .mpfreegifts-rule-list td.price {
+        display: flex !important;
+    }
+
+    .mpfreegifts-rule-list td.price div {
+        padding-right: 20px;
+    }
+
+    .mpfreegifts-rule-list .mpfreegifts-gift-name,
+    .mpfreegifts-rule-list .mpfreegifts-gift-action,
+    .mpfreegifts-rule-list .mpfreegifts-gift-price {
+        padding-top: 0;
+    }
+}
+/* --------------------- End - List Layout --------------------- */
+
+/* --------------------- Begin - Grid Layout --------------------- */
+.mpfreegifts-rule-grid {
+    margin-top: 30px;
+    display: inline-block;
+    width: 100%;
+}
+
+.mpfreegifts-rule-grid .gift-item {
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    padding: 15px 0;
+}
+
+.mpfreegifts-rule-grid .gift-container {
+    padding: 0 35px;
+}
+
+@media only screen and (max-width: 767px) {
+    .mpfreegifts-rule-grid .gift-container {
+        padding: 0;
+    }
+}
+/* --------------------- End - Grid Layout --------------------- */
+
+/* --------------------- Begin - Slider Layout --------------------- */
+.mpfreegifts-rule-slider {
+    margin: 30px 0;
+}
+
+.mpfreegifts-rule-slider .gift-container {
+    padding: 20px;
+}
+
+.mpfreegifts-rule-slider .gift-item {
+    box-sizing: border-box;
+    padding: 15px 0;
+}
+/* --------------------- End - Slider Layout --------------------- */
+
+/* --------------------- Begin - Cart Notification --------------------- */
+#mpfreegifts-notification {
+    display: none;
+}
+
+#mpfreegifts-notification #message-content {
+    display: flex;
+}
+
+.mpfreegifts-notify-message, .mpfreegifts-notify-hide-btn {
+    width: 50%;
+}
+
+.mpfreegifts-notify-hide-btn {
+    text-align: right;
+}
+/* --------------------- End - Cart Notification --------------------- */

@@ -1,0 +1,66 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+
+<!-- ko if: ($parents[1].mpfreegifts_notice || $parents[1].mpfreegifts_icon) -->
+<div class="mpfreegifts-notice">
+    <!-- ko if: $parents[1].mpfreegifts_icon -->
+    <div class="mpfreegifts-image">
+        <img data-bind="attr: {src: $parents[1].mpfreegifts_icon}"
+             src="#"
+             class="mpfreegifts-icon"
+             alt="mpfreegifts_icon">
+    </div>
+    <!-- /ko -->
+
+    <!-- ko if: $parents[1].mpfreegifts_notice -->
+    <div class="mpfreegifts-notice-content">
+        <span data-bind="text: $parents[1].mpfreegifts_notice"></span>
+    </div>
+    <!-- /ko -->
+</div>
+
+<style>
+    div.mpfreegifts-notice ~ div.details-qty input.item-qty {
+        pointer-events: none;
+    }
+    .mpfreegifts-notice-content {
+        background: #fdf0d5;
+        color: #6f4400;
+        padding: 0.6rem 1.5rem;
+        text-shadow: none;
+        margin-left: 10px;
+    }
+
+    .mpfreegifts-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .mpfreegifts-image {
+        padding-top: 0.5rem;
+    }
+
+    .mpfreegifts-notice {
+        display: flex;
+    }
+</style>
+<!-- /ko -->

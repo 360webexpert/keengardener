@@ -1,0 +1,58 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+
+<?php /** @var \Mageplaza\FreeGifts\Block\Cart\Notification $block */?>
+
+<?php if ($block->isEnabled() && $block->getRuleCartPage()): ?>
+    <div class="messages" id="mpfreegifts-notification">
+        <div class="message message-success success">
+            <div data-ui-id="messages-message-success" id="message-content">
+                <div class="mpfreegifts-notify-message"><span><?= /* @noEscape */ __('You have free gift(s)') ?></span></div>
+
+                <?php if ($block->allowHideNotify()): ?>
+                    <div class="mpfreegifts-notify-hide-btn">
+                        <a href="" id="mpfreegifts-notify-hide"><?= /* @noEscape */ __('Don\'t show this again') ?></a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div id="mpfreegifts-option-wrapper"></div>
+
+    <script type="text/x-magento-init">
+        {
+            "#mpfreegifts-notification": {
+                "Mageplaza_FreeGifts/js/cart/notification": {
+                    "quoteId" : "<?= /* @noEscape */ $block->getQuoteId() ?>"
+                }
+            }
+        }
+    </script>
+<?php endif; ?>
+<style>
+    .mpfreegifts-btn {
+        color: <?= /* @noEscape */ $block->getHelperData()->getTextColor() . '!important' ?>;
+        background-color: <?= /* @noEscape */ $block->getHelperData()->getButtonColor() . '!important' ?>;
+        border: 1px solid <?= /* @noEscape */ $block->getHelperData()->getButtonColor() . '!important' ?>;
+    }
+</style>

@@ -1,0 +1,152 @@
+"Add New Rule","Add New Rule"
+Save,Save
+"Save and Continue Edit","Save and Continue Edit"
+Delete,Delete
+"Are you sure you want to delete this rule?","Are you sure you want to delete this rule?"
+"Edit Rule ""%1""","Edit Rule ""%1"""
+"Create New Rule","Create New Rule"
+Actions,Actions
+Type,Type
+"Apply for","Apply for"
+"Number of gifts allowed","Number of gifts allowed"
+"If empty or zero, no limitation","If empty or zero, no limitation"
+"Show notice for gift","Show notice for gift"
+"If yes, a notice will be shown under gift item","If yes, a notice will be shown under gift item"
+"Notice Content","Notice Content"
+"You deserve it!","You deserve it!"
+"Discard Subsequent Rules","Discard Subsequent Rules"
+"Gift List","Gift List"
+Automatic,Automatic
+"Gifts will be added/removed automatically when items are added/removed","Gifts will be added/removed automatically when items are added/removed"
+Manual,Manual
+"A popup will be displayed for customers to select gifts","A popup will be displayed for customers to select gifts"
+"Use Config Settings","Use Config Settings"
+Condition,Condition
+Conditions,Conditions
+"Conditions (don't add conditions if rule is applied to all products)","Conditions (don't add conditions if rule is applied to all products)"
+"Apply the rule only if the following conditions are met (leave blank for all products)","Apply the rule only if the following conditions are met (leave blank for all products)"
+General,General
+Name,Name
+Status,Status
+Description,Description
+State,State
+Website,Website
+"Customer Groups","Customer Groups"
+"Active From","Active From"
+"Active To","Active To"
+Priority,Priority
+"Default is 0, 0 is the highest priority.","Default is 0, 0 is the highest priority."
+"Item Information","Item Information"
+Running,Running
+Schedule,Schedule
+Finished,Finished
+Free,Free
+Percent,Percent
+Fixed,Fixed
+"Are you sure to delete selected items?","Are you sure to delete selected items?"
+"Product ID","Product ID"
+Sku,Sku
+"Original Price","Original Price"
+"Discount Type","Discount Type"
+"Gift Price","Gift Price"
+"Free Shipping","Free Shipping"
+Action,Action
+Quantity,Quantity
+Price,Price
+"Special Price","Special Price"
+"Special To Date","Special To Date"
+Visibility,Visibility
+"Dummy Input","Dummy Input"
+Add,Add
+Edit,Edit
+Yes,Yes
+No,No
+"You deleted the rule","You deleted the rule"
+"This rule no longer exists","This rule no longer exists"
+"The selected rule no longer exists.","The selected rule no longer exists."
+"Create New %1","Create New %1"
+"Rule name cannot be empty","Rule name cannot be empty"
+"Manage Rules","Manage Rules"
+"A total of %1 record(s) have been deleted.","A total of %1 record(s) have been deleted."
+"A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
+"Rule with empty gift list will not take effect.","Rule with empty gift list will not take effect."
+"You saved the rule.","You saved the rule."
+"This gift is already added.","This gift is already added."
+"Maximum number of gifts added.","Maximum number of gifts added."
+"This gift is currently out of stock.","This gift is currently out of stock."
+"This quote item does not exist.","This quote item does not exist."
+"This quote does not exist.","This quote does not exist."
+"Current quote does not contain this item.","Current quote does not contain this item."
+"This item is not a free gift.","This item is not a free gift."
+"Quote with id '%1' does not exist.","Quote with id '%1' does not exist."
+"Rule with id '%1' does not exist.","Rule with id '%1' does not exist."
+"Gift with id '%1' is currently out of stock.","Gift with id '%1' is currently out of stock."
+"Gift with id '%1' does not belong to the current rule.","Gift with id '%1' does not belong to the current rule."
+"Rule with id '%1' is invalid for the current quote.","Rule with id '%1' is invalid for the current quote."
+"Maximum number of gifts added for quote with id '%1'.","Maximum number of gifts added for quote with id '%1'."
+"Gift with id '%1' requires custom options.","Gift with id '%1' requires custom options."
+"Gift with id '%1' is already added.","Gift with id '%1' is already added."
+Subtotal,Subtotal
+"Cart Rule","Cart Rule"
+"Item Rule","Item Rule"
+Active,Active
+Inactive,Inactive
+List,List
+Grid,Grid
+Slider,Slider
+"Add Gift","Add Gift"
+Update,Update
+"You have free gift(s)","You have free gift(s)"
+"Don't show this again","Don't show this again"
+"-- Please Select --","-- Please Select --"
+"All free gifts have been added. You can change gift option in your ","All free gifts have been added. You can change gift option in your "
+"shopping cart","shopping cart"
+"Selected free gifts:","Selected free gifts:"
+" Free Gift(s) Left"," Free Gift(s) Left"
+Remove,Remove
+Gift,Gift
+"You have Free Gifts. ","You have Free Gifts. "
+Please,Please
+Select,Select
+them,them
+"Select Free Gift(s)","Select Free Gift(s)"
+"Request Error","Request Error"
+"Update Gift Item","Update Gift Item"
+"Select Gift List Product","Select Gift List Product"
+"Select Free Gifts","Select Free Gifts"
+Error,Error
+"This gift is already selected.","This gift is already selected."
+"Select Gift Options","Select Gift Options"
+"Free Gifts","Free Gifts"
+"General Configuration","General Configuration"
+Enable,Enable
+"Select <strong>Yes</strong> to enable this module.","Select <strong>Yes</strong> to enable this module."
+"Gift List Layout","Gift List Layout"
+"Gift list layout for frontend popup modal.","Gift list layout for frontend popup modal."
+"Show Notice For Gift","Show Notice For Gift"
+"Allow customers to hide gift notification","Allow customers to hide gift notification"
+"Gift Icon","Gift Icon"
+"<span>Recommended dimension: 20x20px</span>
+                            <br/>
+                            <span>Recommended image file: <strong>.png</strong> <strong>.gif</strong> <strong>.jpg</strong></span>","<span>Recommended dimension: 20x20px</span>
+                            <br/>
+                            <span>Recommended image file: <strong>.png</strong> <strong>.gif</strong> <strong>.jpg</strong></span>"
+"Button Display","Button Display"
+"Show At Cart Page","Show At Cart Page"
+"Show At Cart Item","Show At Cart Item"
+"Show Gifts At Product Page","Show Gifts At Product Page"
+"Customers can see gift list and add gifts at Product Detail Pages","Customers can see gift list and add gifts at Product Detail Pages"
+"Show Gift List As Popup","Show Gift List As Popup"
+"If <strong>No</strong>, Gift List will be displayed under Add To Cart button","If <strong>No</strong>, Gift List will be displayed under Add To Cart button"
+"Button Design","Button Design"
+"Button Label","Button Label"
+"Button Color","Button Color"
+"Text Color","Text Color"
+"All Websites","All Websites"
+"All Customer Group","All Customer Group"
+"Customer Group","Customer Group"
+"Delete selected rule(s)?","Delete selected rule(s)?"
+"Delete Rule","Delete Rule"
+"Change status","Change status"
+ID,ID
+"Apply For","Apply For"

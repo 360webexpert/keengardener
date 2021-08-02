@@ -1,0 +1,158 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<!-- ko if: calculateItemLeft() > 0  -->
+<!-- ko if: layout === 'modal'  -->
+<div class="message-success success message" data-ui-id="message-success">
+    <div>
+        <span data-bind="i18n: 'You have Free Gifts. '"></span>
+        <span data-bind="i18n: 'Please'"></span>
+        <a href="#" data-bind="click: showModal"><span data-bind="i18n: 'Select'"></span></a>
+        <span data-bind="i18n: 'them'"></span>
+    </div>
+</div>
+<!-- /ko -->
+
+<div data-bind="attr: {class: 'mpfreegifts-' + layout, id: 'mpfreegifts-modal-item-' + item_id}">
+    <!-- ko if: layout === 'block'  -->
+    <div class="mpfreegifts-block-header">
+        <div class="mpfreegifts-header-text">
+            <span data-bind="i18n: 'Select Free Gift(s)'"></span>
+        </div>
+        <div class="mpfreegifts-item-left">
+            <strong data-bind="attr: {id: 'mpfreegifts-available-item'}, text: calculateItemLeft()"></strong>
+            <span data-bind="i18n: ' Free Gift(s) Left'"></span>
+        </div>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko if: layout === 'modal'  -->
+    <div class="mpfreegifts-item-left">
+        <strong data-bind="attr: {id: 'mpfreegifts-available-item'}, text: calculateItemLeft()"></strong>
+        <span data-bind="i18n: ' Free Gift(s) Left'"></span>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko if: gift_layout === 'slider'  -->
+    <!-- ko foreach: {data: rules, as: 'rule'}  -->
+    <div class="mpfreegifts-rule-slider owl-carousel owl-theme">
+        <!-- ko foreach: {data: rule.gifts, as: 'gift'}  -->
+        <div class="gift-container item">
+            <div class="gift-item" data-bind="attr: {id: 'gift-' + $parents[0].rule_id +'-'+ gift.id}, click: $parents[1].selectGift.bind($data, $parents[0], $parents[1])">
+                <div class="mpfreegifts-gift-image-container">
+                    <img class="mpfreegifts-gift-image" src="#" alt="gift-image" data-bind="attr: { src: gift.image, alt: gift.name }">
+                    <div class="mpfreegifts-block-icon">
+                        <span>&#10003;</span>
+                    </div>
+                </div>
+                <div class="mpfreegifts-gift-name text-center"><span data-bind="html: gift.name"></span></div>
+                <div class="text-center mpfreegifts-gift-price">
+                    <div class="mpfreegifts-gift-original-price" data-bind="text: gift.final_price"></div>
+                    <div class="mpfreegifts-gift-final-price" data-bind="text: gift.gift_price"></div>
+                </div>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <hr>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: gift_layout === 'grid'  -->
+    <!-- ko foreach: {data: rules, as: 'rule'}  -->
+    <div class="mpfreegifts-rule-grid">
+        <div class="row-mp gift-row" data-bind="foreach: {data: rule.gifts, as: 'gift'}">
+            <!-- ko if: !gift.added  -->
+            <div class="gift-container col-mp mp-lg-3 mp-md-4 mp-sm-6 mp-xs-12">
+                <div class="gift-item" data-bind="attr: {id: 'gift-' + $parents[0].rule_id +'-'+ gift.id}, click: $parents[1].selectGift.bind($data, $parents[0], $parents[1])">
+                    <div class="mpfreegifts-gift-image-container">
+                        <img class="mpfreegifts-gift-image" src="#" alt="gift-image" data-bind="attr: { src: gift.image, alt: gift.name }">
+                        <div class="mpfreegifts-block-icon">
+                            <span>&#10003;</span>
+                        </div>
+                    </div>
+                    <div class="mpfreegifts-gift-name text-center"><span data-bind="html: gift.name"></span></div>
+                    <div class="text-center mpfreegifts-gift-price">
+                        <div class="mpfreegifts-gift-original-price" data-bind="text: gift.final_price"></div>
+                        <div class="mpfreegifts-gift-final-price" data-bind="text: gift.gift_price"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <hr>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: gift_layout === 'list'  -->
+    <!-- ko foreach: {data: rules, as: 'rule'}  -->
+    <div class="mpfreegifts-rule-list">
+        <div class="table-wrapper">
+            <table class="data table">
+                <caption class="table-caption" data-bind="text: rule.name"></caption>
+
+                <colgroup class="mpfreegifts-gift-selected-col"></colgroup>
+                <colgroup class="mpfreegifts-gift-image-col"></colgroup>
+                <colgroup class="mpfreegifts-gift-name-col"></colgroup>
+                <colgroup class="mpfreegifts-gift-price-col"></colgroup>
+
+                <thead>
+                <tr>
+                    <th scope="col" class="col selected"></th>
+                    <th scope="col" colspan="2" class="col image" data-bind="i18n: 'Gift'"></th>
+                    <th scope="col" class="col price" data-bind="i18n: 'Price'"></th>
+                </tr>
+                </thead>
+
+                <tbody data-bind="foreach: {data: rule.gifts, as: 'gift'}">
+                <tr class="gift-item" data-bind="attr: {id: 'gift-' + $parents[0].rule_id +'-'+ gift.id}, click: $parents[1].selectGift.bind($data, $parents[0], $parents[1])">
+                    <td class="col selected">
+                        <span class="mpfreegifts-block-icon">
+                            <span>&#10003;</span>
+                        </span>
+                    </td>
+                    <td class="col image">
+                        <img class="mpfreegifts-gift-image" src="#" alt="gift-image" data-bind="attr: { src: gift.image, alt: gift.name }">
+                    </td>
+                    <td class="col name mpfreegifts-gift-name" data-bind="attr: { 'data-th': $t('Gift') }">
+                        <span data-bind="html: gift.name"></span>
+                    </td>
+                    <td class="col price mpfreegifts-gift-price" data-bind="attr: { 'data-th': $t('Price') }">
+                        <div class="mpfreegifts-gift-original-price" data-bind="text: gift.final_price"></div>
+                        <div class="mpfreegifts-gift-final-price" data-bind="text: gift.gift_price"></div>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <!-- ko if: layout === 'modal'  -->
+    <div class="mpfreegifts-update-btn">
+        <button type="button" data-bind="i18n: 'Update', click: closeModal"></button>
+    </div>
+    <!-- /ko -->
+</div>
+<!-- /ko -->

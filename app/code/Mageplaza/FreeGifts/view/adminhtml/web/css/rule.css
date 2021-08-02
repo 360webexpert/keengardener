@@ -1,0 +1,76 @@
+/**
+* Mageplaza
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the mageplaza.com license that is
+* available through the world-wide-web at this URL:
+* https://www.mageplaza.com/LICENSE.txt
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade this extension to newer
+* version in the future.
+*
+* @category    Mageplaza
+* @package     Mageplaza_FreeGifts
+* @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+* @license     https://www.mageplaza.com/LICENSE.txt
+*/
+
+.mpfreegifts-add-btn-container {
+    text-align: right;
+}
+
+#mpfreegifts-product-grid-wrapper, #mpfreegifts-gift-item-edit-wrapper {
+    display: none;
+}
+
+#mpfreegifts_product_grid {
+    margin-top: 10px;
+}
+
+#mpfreegifts-gift-item-edit-form fieldset {
+    margin-top: 40px;
+}
+
+#mpfreegifts-edit-gift_price {
+    width: 50%;
+}
+
+.mpfreegifts-state-running,
+.mpfreegifts-state-schedule,
+.mpfreegifts-state-finished {
+    font-weight: bold;
+    line-height: 17px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 5px 10px !important;
+}
+
+.mpfreegifts-state-running {
+    border: 1px solid #5b8116;
+    background: #d0e5a9;
+    color: #185b00;
+}
+
+.mpfreegifts-state-schedule {
+    border: 1px solid #5b8116;
+    background:#e9efdf;
+    color:#37af0c;
+}
+
+.mpfreegifts-state-finished {
+    background: #feeee1;
+    border: 1px solid #ed4f2e;
+    color: #ed4f2e;
+}
+
+.mp-freegifts-use-config-settings {
+    margin-top: 5px;
+}
+
+.mp-freegifts-use-config-settings label {
+    float: none !important;
+    vertical-align: middle;
+}

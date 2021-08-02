@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Mageplaza_FreeGifts::freegifts"
+             title="Free Gifts"
+             module="Mageplaza_FreeGifts"
+             sortOrder="100"
+             resource="Mageplaza_FreeGifts::freegifts"
+             parent="Magento_Backend::marketing"/>
+
+        <add id="Mageplaza_FreeGifts::rule"
+             title="Rules Management"
+             module="Mageplaza_FreeGifts"
+             sortOrder="10" action="mpfreegifts/rule"
+             resource="Mageplaza_FreeGifts::rule"
+             parent="Mageplaza_FreeGifts::freegifts"/>
+
+        <add id="Mageplaza_FreeGifts::configuration"
+             title="Configuration"
+             module="Mageplaza_FreeGifts"
+             sortOrder="100"
+             action="adminhtml/system_config/edit/section/mpfreegifts"
+             resource="Mageplaza_FreeGifts::configuration"
+             parent="Mageplaza_FreeGifts::freegifts"/>
+    </menu>
+</config>

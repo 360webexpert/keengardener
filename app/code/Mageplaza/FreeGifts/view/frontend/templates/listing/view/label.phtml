@@ -1,0 +1,38 @@
+<?php
+/**
+ * @var \Mageplaza\FreeGifts\Block\Listing\Label $block
+ */
+?>
+
+<?php if ($block->isShowIcon()) : ?>
+    <div id="mpfreegifts-gift-icon" class="mpfreegifts-gift-icon" style="<?= $block->getLabelPosition() ?>">
+        <img id="mpfreegifts-gift-icon-img"
+             class="mpfreegifts-gift-icon-img" alt="<?= /** @noEscape */__('Gift Icon') ?>"
+             src="<?= /** @noEscape */$block->getGiftIcon() ?>"
+        />
+    </div>
+
+    <script>
+        require([
+            'jquery'
+        ], function ($) {
+            var products = $('.item.product.product-item');
+
+            products.each(function () {
+                var product    = $(this);
+                var productImg = product.find('.product-image-wrapper'),
+                    labelEl    = product.find('.mpfreegifts-gift-icon');
+
+                if (!productImg.length) {
+                    productImg = product.find('.product.photo.product-item-photo');
+                }
+
+                productImg.css({'overflow': 'unset'});
+                productImg.append(labelEl);
+
+                labelEl.show();
+            })
+        });
+    </script>
+
+<?php endif; ?>

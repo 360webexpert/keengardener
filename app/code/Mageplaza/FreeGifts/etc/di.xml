@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_FreeGifts
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Mageplaza\FreeGifts\Api\ProductGiftInterface" type="Mageplaza\FreeGifts\Model\Api\ProductGift"/>
+    <preference for="Mageplaza\FreeGifts\Api\Data\FreeGiftItemInterface" type="Mageplaza\FreeGifts\Model\Api\Data\FreeGiftItem"/>
+    <preference for="Mageplaza\FreeGifts\Api\Data\FreeGiftButtonInterface" type="Mageplaza\FreeGifts\Model\Api\Data\FreeGiftButton"/>
+    <preference for="Mageplaza\FreeGifts\Api\Data\AddGiftItemInterface" type="Mageplaza\FreeGifts\Model\Api\Data\AddGiftItem"/>
+    <preference for="Mageplaza\FreeGifts\Api\Data\FreeGiftResponseInterface" type="Mageplaza\FreeGifts\Model\Api\Data\FreeGiftResponse"/>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="mpfreegifts_rule_listing_data_source" xsi:type="string">Mageplaza\FreeGifts\Model\ResourceModel\Rule\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Sales\Model\Order\Item">
+        <plugin name="mpfreegifts_Sale_Order_Notice" type="Mageplaza\FreeGifts\Plugin\SaleNotice\Order"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Invoice\Item">
+        <plugin name="mpfreegifts_Sale_Invoice_Notice" type="Mageplaza\FreeGifts\Plugin\SaleNotice\Invoice"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Shipment\Item">
+        <plugin name="mpfreegifts_Sale_Shipment_Notice" type="Mageplaza\FreeGifts\Plugin\SaleNotice\Shipment"/>
+    </type>
+    <type name="Magento\Sales\Model\Order\Creditmemo\Item">
+        <plugin name="mpfreegifts_Sale_Shipment_Notice" type="Mageplaza\FreeGifts\Plugin\SaleNotice\CreditMemo"/>
+    </type>
+
+    <type name="Magento\OfflineShipping\Model\SalesRule\Calculator">
+        <plugin name="mpfreegifts_Free_Shipping_Calculator" type="Mageplaza\FreeGifts\Plugin\Shipping\AroundFreeShipping"/>
+    </type>
+    <type name="Magento\Sales\Block\Items\AbstractItems">
+        <plugin name="mpfreegifts_Abstract_Items_Html" type="Mageplaza\FreeGifts\Plugin\Shipping\MultiShippingNotice"/>
+    </type>
+
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="mpfreegifts_Around_Collect_Totals" type="Mageplaza\FreeGifts\Plugin\Totals\AroundCollectTotals"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address\Total\Subtotal">
+        <plugin name="mpfreegifts_Around_Collect_Subtotal" type="Mageplaza\FreeGifts\Plugin\Totals\AroundCollectSubtotal" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\Model\TotalsInformationManagement">
+        <plugin name="mpfreegifts_After_Totals_Info" type="Mageplaza\FreeGifts\Plugin\Totals\AfterTotalsInformation"/>
+    </type>
+
+    <type name="Magento\Checkout\CustomerData\AbstractItem">
+        <plugin name="mpfreegifts_After_Default_Item" type="Mageplaza\FreeGifts\Plugin\AfterDefaultItem"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="mpfreegifts_After_Order_Item" type="Mageplaza\FreeGifts\Plugin\AfterOrderItem"/>
+    </type>
+
+    <type name="Magento\Quote\Api\GuestCartItemRepositoryInterface">
+        <plugin name="mpfreegifts_QuoteApi_GuestCartItem" type="Mageplaza\FreeGifts\Plugin\QuoteApi\GuestCartItem"/>
+    </type>
+    <type name="Magento\Quote\Api\CartItemRepositoryInterface">
+        <plugin name="mpfreegifts_QuoteApi_CartItem" type="Mageplaza\FreeGifts\Plugin\QuoteApi\CartItem"/>
+    </type>
+
+    <type name="Magento\Quote\Api\GuestCartRepositoryInterface">
+        <plugin name="mpfreegifts_QuoteApi_GuestCart" type="Mageplaza\FreeGifts\Plugin\QuoteApi\GuestCart"/>
+    </type>
+    <type name="Magento\Quote\Api\CartManagementInterface">
+        <plugin name="mpfreegifts_QuoteApi_Cart" type="Mageplaza\FreeGifts\Plugin\QuoteApi\Cart"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="mpfreegifts_catalog_listing_labels" type="Mageplaza\FreeGifts\Plugin\Listing\Label"/>
+    </type>
+</config>
