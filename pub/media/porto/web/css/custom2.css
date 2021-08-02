@@ -833,6 +833,7 @@ header.page-header.type14 .nav-toggle {right: 80px;}
 form#search_mini_form input {top: -40px;
     width: 90%;
     color: #fff;
+    pointer-events: all;
 }
 header.page-header.type14 .block-search .label::before {
     font-size: 21px;

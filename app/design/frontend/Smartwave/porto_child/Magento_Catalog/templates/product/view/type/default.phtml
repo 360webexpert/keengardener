@@ -16,10 +16,10 @@ $qty = $StockState->getStockQty($_product->getId(), $_product->getStore()->getWe
 $config = $block->getLayout()->createBlock(\Magento\Config\Block\System\Config\Form::class);
 $stock_threshold_qty = $config->getConfigValue('cataloginventory/options/stock_threshold_qty');
 
-if($qty < $stock_threshold_qty && $qty != 0)
+/*if($qty < $stock_threshold_qty && $qty != 0)
 {
     echo '<div class="availability only">Only ' . $qty . ' left in stock</div>';
-}
+}*/
 ?>
 <!--
 <?php //if ($block->displayProductStockStatus()): ?>
