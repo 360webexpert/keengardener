@@ -5,12 +5,12 @@
 /.settings
 /.vscode
 atlassian*
-/media/*
 /nbproject
 /robots.txt
 /pub/robots.txt
 /sitemap
 /sitemap.xml
+/media/
 /pub/sitemap
 /pub/sitemap.xml
 /.idea
@@ -33,7 +33,7 @@ atlassian*
 /.php_cs
 /.php_cs.cache
 /grunt-config.json
-/media/*.*
+/media/
 /pub/media/*.*
 !/pub/media/.htaccess
 /pub/media/attribute/*
