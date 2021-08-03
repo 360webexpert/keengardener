@@ -113,6 +113,9 @@ header.page-header .panel.header .block-search {
 div#product\.yotpo\.reviews .yotpo.yotpo-main-widget {
     display: block;
 }
+.catalog-product-view .product.data.items .infinite-loader .btn-load-more {
+    display: none;
+}
 	/* Mobile Tablet Header */
 @media (max-width: 767px) {
 	header.page-header.type14 .navigation li.level0 > a {
@@ -176,6 +179,7 @@ html body.cms-porto_home_21.cms-index-index.page-layout-1column.layout-fullwidth
 }
 .catalog-category-view .sidebar.sidebar-main {
 	padding: 0 35px 50px 0;
+	top: 0 !important;
 }
 .category-cms, .category-image, .category-description {
 	margin:35px 0 0 0;
