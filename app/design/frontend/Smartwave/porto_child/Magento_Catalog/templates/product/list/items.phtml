@@ -187,12 +187,12 @@ $image_height = ($_category_config['ratio_height'])?$_category_config['ratio_hei
         <strong id="block-<?php /* @escapeNotVerified */ echo $class?>-heading" role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo $title; ?></strong>
     </div>
     <div class="block-content content" aria-labelledby="block-<?php /* @escapeNotVerified */ echo $class?>-heading">
-        <?php if ($type == 'related' && $canItemsAddToCart): ?>
+        <?php /*if ($type == 'related' && $canItemsAddToCart): ?>
         <div class="block-actions">
-            <?php /* @escapeNotVerified */ echo __('Check items to add to the cart or') ?>
-            <button type="button" class="action select" role="select-all"><span><?php /* @escapeNotVerified */ echo __('select all') ?></span></button>
+            <?php echo __('Check items to add to the cart or') ?>
+            <button type="button" class="action select" role="select-all"><span><?php  echo __('select all') ?></span></button>
         </div>
-        <?php endif; ?>
+        <?php endif;*/ ?>
         <div class="products wrapper grid <?php if ($type == 'upsell' || $type == 'crosssell'): ?><?php echo $columns; ?><?php endif; ?> products-grid products-<?php /* @escapeNotVerified */ echo $type; ?>">
             <div class="products list items product-items <?php if ($type == 'related' || $type == 'upsell'): ?>owl-carousel<?php endif; ?> <?php if ($type == 'upsell'): ?>owl-middle-narrow<?php endif; ?>">
                 <?php $iterator = 0; ?>

@@ -119,6 +119,12 @@ div#product\.yotpo\.reviews .yotpo.yotpo-main-widget {
 .quicview_popup a.fa {
     font-family: 'FontAwesome' !IMPORTANT;
 }
+#shipping-method-buttons-container > div {
+    display: flex;
+    justify-content: center;
+    float: none;
+    padding-top: 20px;
+}
 	/* Mobile Tablet Header */
 @media (max-width: 767px) {
 	header.page-header.type14 .navigation li.level0 > a {
