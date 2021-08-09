@@ -412,7 +412,92 @@
 					}
 				);
 			</script>
-		<?php if ( $backorder == 0 && $qty < 1 ): ?>
+
+
+		<?php if ($_product->getTypeId() == 'configurable'): ?>
+			<div style="margin-top:15px;clear:both; display: flex; flex-direction: row; flex-wrap: wrap;">
+		<?php $configProduct = $objectManager->create('Magento\Catalog\Model\Product')->load($_product->getId());
+			$_children = $configProduct->getTypeInstance()->getUsedProducts($configProduct);
+			foreach ($_children as $child){
+				$stockitem = $stockRegistry->getStockItem($child->getId(),$child->getStore()->getWebsiteId());
+				$backorder = $stockitem->getBackorders();
+				$direct = $child->getCustomAttribute('c2c_direct_despatch')->getValue();
+				$weight = $child->getWeight(); 
+				$qty = $StockState->getStockQty($child->getId()); ?>
+				<?php if ( $qty < 1 ): ?>
+					<?php if ( $backorder != 0 && $direct == 1 ): ?>
+						<!--position1-->
+						<div class="product_info_block1 show-<?php echo $child->getId();?>" style="display: none;">
+							<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-location" style="font-size:35px;color:#9ec11a;"></i></div>
+							<div class="product_info_text">Delivered direct from our suppliers.<br /><a href="#direct" class="click-header">What does this mean?</a></div>
+						</div>
+					<?php elseif ( $backorder != 0 && $direct == 0 ): ?>
+						<!--position1-->
+						<div class="product_info_block1 show-<?php echo $child->getId();?>" style="display: none;">
+							<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-calendar" style="font-size:35px;color:#9ec11a;"></i></div>
+							<div class="product_info_text">Available for Pre-order.<br /><a href="#pre-order" class="click-header">What does this mean?</a></div>
+						</div>					
+					<?php endif; ?>
+				<?php else : ?>
+					<!--position1-->
+					<div class="product_info_block1 show-<?php echo $child->getId();?>" style="display: none;">
+						<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-check" style="font-size:35px;color:#9ec11a;"></i></div>
+						<div class="product_info_text">In stock now ready for fast despatch.<br /><a href="#in-stock" class="click-header">What does this mean?</a></div>
+					</div>
+				<?php endif; ?>
+
+				<!--position2-->
+				<div class="product_info_block2 show-<?php echo $child->getId();?>" style="display: none;">
+					<div class="product_info_icon" style="margin-top:6px;"><i class="porto-icon-truck" style="font-size:35px;color:#9ec11a;"></i></div>
+					<?php if ( $qty < 1 ): ?>
+						<div class="product_info_text">Usually delivered in <?php echo $oosdeltime; ?>.<br /><a href="#variable-days" class="click-header">What does this mean?</a></div>
+					<?php else : ?>
+						<?php if ( $weight < 2.000001 ): ?>
+							<div class="product_info_text">Usually delivered in 1 - 3 working days.<br /><a href="#1-3days" class="click-header">Select delivery speed in checkout.</a></div>
+						<?php elseif ( $weight > 2.00 && $weight < 30.00 ) : ?>
+							<div class="product_info_text">Usually delivered in 1 working day.<br /><a href="#1day" class="click-header">From day of despatch.</a></div>
+						<?php else : ?>
+							<div class="product_info_text">Usually delivered in 1 - 5 working days.<br /><a href="#1-5days" class="click-header">Select pallet delivery speed in checkout.</a></div>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			<?php }
+			?>
+			
+				
+				
+				<!--position3-->
+				<div class="product_info_block3">
+					<div class="product_info_icon" style="margin-top:7px;"><i class="porto-icon-online-support" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div class="product_info_text">Expert advice 9 - 5pm Monday - Friday.<br /><a href="#advice" class="click-header">More details</a></div>
+				</div>			
+				<!--position4-->
+				<div class="product_info_block4">
+					<div class="product_info_icon" style="margin-top:7px;"><i class="porto-icon-shipping" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div class="product_info_text">Free delivery on orders over &pound;75.<br /><a href="#delivery-terms" class="click-header">Terms apply</a></div>
+				</div>	
+				<!--position5-->			
+				<div class="product_info_block5">
+					<div class="product_info_icon" style="margin-top:5px;"><i class="porto-icon-pound" style="font-size:35px;color:#9ec11a;"></i></div>
+					<div class="product_info_text">Seen a product cheaper? Get in touch.<br /><a href="#lowest-price" class="click-header">Terms apply</a></div>
+				</div>
+				<?php if ( $price > 499.99 ): ?>
+					<!--position6-->
+					<div class="product_info_block6">
+						<div class="product_info_icon" style="margin-top:6px;"><i class="porto-icon-sliders" style="font-size:35px;color:#9ec11a;"></i></div>
+						<div class="product_info_text">Spread the cost of your purchase.<br /><a href="#finance" class="click-header">More details</a></div>
+					</div>
+				<?php else : ?>
+					<!--position6-->
+					<div class="product_info_block6">
+						<div class="product_info_icon" style="margin-top:6px;"><i class="porto-icon-credit-card" style="font-size:35px;color:#9ec11a;"></i></div>
+						<div class="product_info_text">Safe and Secure online payments.<br /><a href="#secure" class="click-header">More details</a></div>
+					</div>
+				<?php endif; ?>
+			</div>
+		<?php
+		else:
+		if ( $backorder == 0 && $qty < 1 ): ?>
 		<?php else : ?>
 			<div style="margin-top:15px;clear:both;border-top: solid 1px #ebebeb;">
 				<?php if ( $qty < 1 ): ?>
@@ -483,6 +568,7 @@
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
+	<?php endif; ?>
 <!-- TESTING -->
 
 
@@ -618,3 +704,31 @@ require([
     }, 1000);
 });
 </script>
+<?php if ($_product->getTypeId() == 'configurable'): ?>
+	<script type="text/javascript">
+		require([
+	    'jquery'        
+	], function ($) {
+		$('#product-options-wrapper select').each(function(el) {
+		    $(this).change(function() {
+		    	setTimeout(function(){
+			    	selected_product_id = $('input[name="selected_configurable_option"]').val();
+			    	if(selected_product_id){
+			    		$('.product_info_block1').hide();
+			    		$('.product_info_block2').hide();
+			    		$('.show-'+selected_product_id).show();
+			    	}
+			    }, 100);
+		    });
+		});
+	});
+	</script>
+	<style type="text/css">
+		.product_info_block1, .product_info_block2, .product_info_block3, .product_info_block4, .product_info_block5, .product_info_block6{
+			outline: 1px solid #ebebeb;
+		}
+		.product-social-links{
+			border: 0;
+		}
+	</style>
+<?php endif;?>
