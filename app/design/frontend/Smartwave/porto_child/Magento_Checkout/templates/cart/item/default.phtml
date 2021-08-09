@@ -148,3 +148,14 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
         </td>
     </tr>
 </tbody>
+<script type="text/javascript">
+    require(['jquery'], function($){
+        $(document).ready(function() {
+            $(document).on('keydown', '#shipping-zip-form input', function (event) {
+                if (event.keyCode === 10 || event.keyCode === 13) {
+                    event.preventDefault();
+                }
+            });
+        });
+    });
+</script>
