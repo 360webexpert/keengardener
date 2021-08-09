@@ -1,0 +1,49 @@
+<?php
+/*
+ * @author     M2E Pro Developers Team
+ * @copyright  M2E LTD
+ * @license    Commercial use is forbidden
+ */
+
+// @codingStandardsIgnoreFile
+?>
+
+<?php if ($block->getData('is_migration')) : ?>
+    <p>Inventory and Order synchronization is not running. The Module interface is unavailable. M2E Pro can be put under maintenance automatically due to the following reasons:</p>
+
+    <ul style="margin-left: 30px; max-width: 800px;">
+        <li>
+            <p>
+                Module awaits importing of M2E Pro table dump from Magento v1.x.
+                Please import the created dump into the MySQL database of Magento v2.x.
+                After that, open <a href="<?php echo $block->getData('migration_wizard_url'); ?>">Migration Wizard</a>.
+                At Wizard Step 2, click <b>Continue</b> to proceed.
+            </p>
+        </li>
+        <li>
+            <p>
+                Import of M2E Pro table dump from Magento v1.x failed.
+                To resolve the issue, please try to import the dump again.
+                After that, open <a href="<?php echo $block->getData('migration_wizard_url'); ?>">Migration Wizard</a>.
+                At Wizard Step 2, click <b>Continue</b> to proceed.
+            </p>
+        </li>
+    </ul>
+
+    <p>If the issue persists, please contact our Support at <a href="mailto:support@m2epro.com">support@m2epro.com</a>.</p>
+
+<?php else : ?>
+    <p>Inventory and Order synchronization is not running. The Module interface is unavailable. M2E Pro can be put under maintenance automatically due to the following reasons:</p>
+
+    <ul style="margin-left: 30px; max-width: 800px;">
+        <li>
+            <p>Module installation failed, e.g. due to the incorrect installation via Magento Component Manager, incompatibility of Magento and its Modules, or other technical issues.</p>
+        </li>
+        <li>
+            <p>Module upgrade failed, e.g. due to the improper M2E Pro tables updating or php %magento2_installation_dir%/bin/magento setup:upgrade command running.</p>
+        </li>
+    </ul>
+
+    <p>Please contact Support at <a href="mailto:support@m2epro.com">support@m2epro.com</a> to resolve the issue.</p>
+
+<?php endif; ?>

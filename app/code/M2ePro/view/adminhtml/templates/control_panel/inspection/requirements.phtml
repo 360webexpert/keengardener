@@ -1,0 +1,55 @@
+<?php
+/*
+ * @author     M2E Pro Developers Team
+ * @copyright  M2E LTD
+ * @license    Commercial use is forbidden
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Ess\M2ePro\Block\Adminhtml\ControlPanel\Inspection\Requirements $block */
+
+?>
+
+<style>
+    #controlPanel_inspection_requirements td {
+        border: none;
+    }
+</style>
+
+<table id="controlPanel_inspection_requirements" class="form-list admin__table-primary" cellspacing="0" cellpadding="0">
+
+    <tr>
+        <td class="label" style="width:200px;">
+            <strong><?php echo $block->__('Properties'); ?></strong>
+        </td>
+        <td class="value" style="width:250px;">
+            <strong><?php echo $block->__('Minimum / Recommended Value'); ?></strong>
+        </td>
+        <td class="value" style="width:250px;">
+            <strong><?php echo $block->__('Configuration Value'); ?></strong>
+        </td>
+        <td class="value" style="width:100px;">
+        </td>
+    </tr>
+
+    <?php foreach ($block->getManager()->getChecks() as $check) { ?>
+        <?php if ($check->getRenderer()->getHideIfMeet() && $check->isMeet()) : continue; endif; ?>
+
+        <tr>
+            <td class="label">
+                <label><?php echo $check->getRenderer()->getTitle(); ?></label>
+            </td>
+            <td class="value">
+                <?php echo $check->getRenderer()->getMin(); ?>
+            </td>
+            <td class="value">
+                <?php echo $check->getRenderer()->getReal(); ?>
+            </td>
+            <td class="value">
+                <?php echo $check->getRenderer()->getAdditional(); ?>
+            </td>
+        </tr>
+    <?php } ?>
+
+</table>

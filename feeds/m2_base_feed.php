@@ -62,14 +62,15 @@ foreach ( $products as $_product )
       $condition = 'new';
 	  $stockItem = $_product->getExtensionAttributes()->getStockItem();
    	  $qty = $stockItem->getQty(); 
+   	  $backorders = $stockItem->getBackorders(); 
 	  $mpn = substr( $reference, strpos( $reference, '-') + 1);
 	  $direct = $product->getAttributeText('c2c_direct_despatch');
-	  $oos = $product->getOosAllowOrder();
+	  //$oos = $product->getOosAllowOrder();
 	  //$gtin = $product->getEan();
 	  $gtin = $product->getResource()->getAttribute('c2c_ean_1')->setStoreId(0)->getFrontend()->getValue($product);
 	  
 	  //Removes any items marked out of stock on website *Google Base Fix 27/04*
-	  if ($oos == 0 && $qty <= 0):
+	  if ($backorders == 0 && $qty <= 0):
 		$availability = 'out of stock';  
 	  
 	  //Filters brands that are available for sale on pre-order or direct from being listed as out of stock and will pay for marketing
