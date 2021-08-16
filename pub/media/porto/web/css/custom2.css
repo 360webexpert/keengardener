@@ -125,7 +125,12 @@ div#product\.yotpo\.reviews .yotpo.yotpo-main-widget {
     float: none;
     padding-top: 20px;
 }
+.product-image-wrapper{
+	padding-bottom: unset !important;
+	height: auto;
+}
 	/* Mobile Tablet Header */
+
 @media (max-width: 767px) {
 	header.page-header.type14 .navigation li.level0 > a {
 		line-height:1em;

@@ -30,7 +30,11 @@ $_category_config = $_portohelper->getConfig('porto_settings/category');
 $_category_grid_config = $_portohelper->getConfig('porto_settings/category_grid');
 $_product_label_config = $_portohelper->getConfig('porto_settings/product_label');
 $_lazyload = $_portohelper->getConfig('porto_settings/optimization/lazyload');
+
+
 ?>
+ 
+
 <?php $iterator = 1; ?>
 <?php if (!$_productCollection->count()): ?>
     <div class="message info empty"><div><?php echo __('We can\'t find products matching the selection.') ?></div></div>
@@ -410,8 +414,25 @@ $_lazyload = $_portohelper->getConfig('porto_settings/optimization/lazyload');
             <?php endforeach; ?>
         </ol>
     </div>
+<?php
+/*$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$categoryFactory = $objectManager->create('Magento\Catalog\Helper\Category');
+$categoryFactory->getStoreCategories(false,false,true);*/
+
+/*$currentCategory = $this->getCurrentCategory();
+$childCategory=$currentCategory->getChildrenCategories()->addIsActiveFilter();
+echo count($childCategory);*/
+?>
+
     <?php if(isset($_category_grid_config['infinite_scroller']) && $_category_grid_config['infinite_scroller']):?>
-    <div class="infinite-loader"><div class="loading"><?php echo __("Loading ..."); ?></div><a href="javascript:void(0)" class="btn-load-more"><?php echo __("Load More ..."); ?></a></div>
+        <?php $total_prd = $_productCollection->count(); 
+       // if($_productCollection->count() != $total_prd){
+        ?>
+        <div class="infinite-loader">
+            <div class="loading"><?php echo __("Loading ..."); ?></div>
+            <a href="javascript:void(0)" class="btn-load-more"><?php echo __("Load More ..."); ?></a>
+        </div>
+        <?php //} ?>
     <?php endif;?>
     <?php echo $block->getToolbarHtml() ?>
     <?php if (!$block->isRedirectToCartEnabled()) : ?>

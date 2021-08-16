@@ -158,3 +158,29 @@
 ?>
 </div>
 <a href="javascript:void(0)" id="totop"><em class="porto-icon-up-open"></em></a>
+<script type="text/javascript">
+require(['jquery'], function($){
+ /* Code...
+script for write a review open review tab
+ */
+    setTimeout(function(){ 
+ 
+    $('#maincontent .write-review-btn-hidden').attr('href','#tab-label-product_yotpo_reviews');
+    $("#maincontent .write-review-btn-hidden").on('click', function(){
+        console.log('clicked');
+            $('div#tab-label-product_yotpo_reviews').trigger('click');
+              /*$(".product .data.item.title").each(function(){
+                //alert($(this).text())
+                var  review_text = $(this).children().children().text();
+                console.log(review_text);
+                
+                if(review_text=='Product Reviews'){
+                    $(this).children().children().addClass('b-click');
+                    
+                    $(this).addClass('active');
+                }
+              });*/
+    }); 
+}, 4000);
+});       
+</script>

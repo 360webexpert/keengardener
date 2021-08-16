@@ -45,6 +45,7 @@
                             }
                             $alias = $layout->getElementAlias($name);
                             $label = $block->getChildData($alias, 'title');
+                             $alias = str_replace(".","_",$alias); 
                             ?>
                             <div class="data item title"
                                  aria-labeledby="tab-label-<?php /* @escapeNotVerified */ echo $alias;?>-title"
