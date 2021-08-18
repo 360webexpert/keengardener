@@ -25,7 +25,8 @@ $_order = $block->getOrder() ?>
                 <tr>
                     <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
                     <?php if ($block->escapeHtml($_item->getTitle()) == 'DPD') {
-                        $tracking_url = 'https://track.dpd.co.uk/parcels/1550'.($block->escapeHtml($_item->getNumber()*19539));
+                        //$tracking_url = 'https://track.dpd.co.uk/parcels/1550'.($block->escapeHtml($_item->getNumber()*19539));
+                        $tracking_url = 'https://track.dpd.co.uk/search?reference=';
                     }elseif ($block->escapeHtml($_item->getTitle()) == 'Royal Mail Tracked 48') {
                         $tracking_url = 'https://www.royalmail.com/track-your-item#/tracking-results/'.$block->escapeHtml($_item->getNumber());
                     }elseif ($block->escapeHtml($_item->getTitle()) == 'The Pallet Network') {
