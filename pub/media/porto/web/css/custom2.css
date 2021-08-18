@@ -126,8 +126,11 @@ div#product\.yotpo\.reviews .yotpo.yotpo-main-widget {
     padding-top: 20px;
 }
 .product-image-wrapper{
-	padding-bottom: unset !important;
+	padding-bottom: unset;
 	height: auto;
+}
+.infinite-loader {
+    display: none;
 }
 	/* Mobile Tablet Header */
 

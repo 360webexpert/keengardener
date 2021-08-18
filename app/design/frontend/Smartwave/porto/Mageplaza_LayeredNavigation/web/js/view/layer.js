@@ -25,7 +25,8 @@ define([
     'jquery-ui-modules/core',
     'jquery-ui-modules/widget',
     'accordion',
-    'productListToolbarForm'
+    'productListToolbarForm',
+    'catalogAddToCart'
 ], function ($, submitFilterAction, ultil) {
     "use strict";
     var next_page = "";
@@ -64,6 +65,8 @@ define([
             });
             if(!next_page){
                 $('.infinite-loader').hide();
+            }else{
+                $('.infinite-loader').show();
             }
             $(".infinite-loader .btn-load-more").click(function(){
                 if(!loading && next_page){
