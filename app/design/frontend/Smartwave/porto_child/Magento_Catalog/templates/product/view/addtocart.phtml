@@ -154,11 +154,7 @@
 												</div>
 											<?php else : ?>
 												<!-- oos and cant order display  oos button -->
-												<div class="box-tocart">
-												    <div class="fieldset">
-														<div class="stock unavailable"><span class="stock_button"><?php echo __('OUT OF STOCK') ?></span></div>
-													</div>
-												</div>
+												<div class="stock unavailable"><span class="stock_button"><?php echo __('OUT OF STOCK') ?></span></div>
 											<?php endif; ?>
 										<?php else : ?>
 											<!-- QTY > 0 -->
@@ -233,7 +229,11 @@
 								<?php else: ?>
 									<?php if ($_product->getIsSalable()): ?>
 									<?php else: ?> <!-- if configurable product without stock available -->
-										<div class="stock unavailable"><span class="stock_button"><?php echo __('OUT OF STOCK') ?></span></div>
+									<div class="box-tocart">
+									    <div class="fieldset">
+											<div class="stock unavailable"><span class="stock_button"><?php echo __('OUT OF STOCK') ?></span></div>
+										</div>
+									</div>
 									<?php endif; ?>
 								<?php endif; ?>
 								<!-- KG add to Cart Functionality -->
