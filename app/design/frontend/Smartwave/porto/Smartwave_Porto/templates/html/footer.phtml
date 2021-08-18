@@ -166,7 +166,7 @@ script for write a review open review tab
     setTimeout(function(){ 
  
     $('#maincontent .write-review-btn-hidden').attr('href','#tab-label-product_yotpo_reviews');
-    $("#maincontent .write-review-btn-hidden").on('click', function(){
+    $(".yotpo-bottomline.star-clickable a").on('click', function(){
         console.log('clicked');
             $('div#tab-label-product_yotpo_reviews').trigger('click');
               /*$(".product .data.item.title").each(function(){
