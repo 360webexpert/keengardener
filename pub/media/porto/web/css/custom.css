@@ -1128,7 +1128,7 @@ ul.scene,ul.scene>li.layer{width:100%;height:100%}
 .subscribe-form .block.newsletter .control input{background-color:#fff;color:#686865;height:44px;border:none;font-size:14px;padding-left:50px;float:left;max-width:475px;width:100%;border-radius:5px 0 0 5px;padding-right:0;margin-right:0}
 .subscribe-form .block.newsletter .control div.mage-error{position:absolute;bottom:-65px}
 .subscribe-form .block.newsletter .actions .action.subscribe{height:44px;line-height:44px;padding:0 20px;text-transform:uppercase;border-radius:0 5px 5px 0;opacity:1;background-color:#1fc0a0}
-.filter-title strong{color:transparent!important;position:fixed;top:22%;left:-1px;width:51px;height:47px;border:#dcdcda solid 1px!important;background-color:#f5f5f5;text-align:center;box-shadow:none;border-radius:0;cursor:pointer;line-height:26px;z-index:9}
+.filter-title strong{color:transparent!important;position:fixed;top:22%;right:-1px;left: auto;width:51px;height:47px;border:#dcdcda solid 1px!important;background-color:#f5f5f5;text-align:center;box-shadow:none;border-radius:0;cursor:pointer;line-height:26px;z-index:9}
 .filter-title strong:before{content:'\f1de';font-family:porto-icons;font-size:27px;color:#818181;line-height:30px;display:block;-webkit-font-smoothing:antialiased}
 @media (min-width:768px){.column.main>.custom-block{display:block;width:25%;float:right;padding-left:30px}
 body:not(.weltpixel-quickview-catalog-product-view):not(.weltpixel_quickview-catalog_product-view).column.main>.custom-block+.product-info-main{width:40.33%}
@@ -1152,9 +1152,9 @@ body.side-header .page-wrapper>.breadcrumbs .items{margin:0;max-width:none}}
 .filter.active .filter-title strong{right:10px;top:0;border:none!important;position:absolute}
 .filter.active .filter-title strong:before{-webkit-font-smoothing:antialiased;font-size:16px;line-height:inherit;color:#fff;content:'\f819';font-family:porto-icons;vertical-align:middle;display:inline-block;font-weight:400;overflow:hidden;speak:none;text-align:center}
 .filter.active .filter-title strong:after{display:none}
-.filter.active .filter-title{background-color:#666;margin:0;height:47px;border:none;width:300px}
-.filter.active .filter-subtitle{color:#fff!important;text-transform:uppercase;font-size:12.5px;font-weight:400;font-family:Oswald;letter-spacing:.025em;z-index:3;padding:8px 30px!important;height:47px;pointer-events:none;width:300px;right:auto;border:0}
-.filter.active .filter-options{padding:10px 30px!important;width:300px;right:auto;top:47px;overflow-y:scroll;overflow-x:hidden}
+.filter.active .filter-title{background-color:#666;margin:0;height:47px;border:none;width:300px;left: auto;}
+.filter.active .filter-subtitle{color:#fff!important;text-transform:uppercase;font-size:12.5px;font-weight:400;font-family:Oswald;letter-spacing:.025em;z-index:3;padding:8px 30px!important;height:47px;pointer-events:none;width:300px;left:auto;right: 0;border:0}
+.filter.active .filter-options{padding:10px 30px!important;width:300px;left:auto;right: 0;top:47px;overflow-y:scroll;overflow-x:hidden}
 .filter.active .block-category-list .block-content,.filter.active .block-category-list .block-title,.filter.active .filter .filter-current-subtitle,.filter.active .filter-options-content,.filter.active .filter-options-title{padding-left:0;padding-right:0}
 body.filter-active .page-wrapper{visibility:visible;height:auto;margin-top:0}
 .filter:before{content:"";display:block;width:100%;height:100%;background:#000;position:fixed;left:0;top:0;opacity:0;visibility:hidden;transition:all .3s}
@@ -1280,8 +1280,8 @@ table .col{width:auto}
 @media (max-width:767px){.block-category-list .block-content,.block-category-list .block-title,.sidebar .custom-block,.sidebar-filterproducts.custom-block+h2,.sidebar-filterproducts.custom-block+h2+h5,.sidebar-filterproducts.custom-block+h2+h5+p,.sidebar-title{padding-left:0;padding-right:0}
 .filter.active .filter-current~.filter-options{top:186px}
 .filter .filter-current,.filter .filter-current+.block-actions{display:none}
-.filter.active .filter-current+.block-actions{position:fixed;left:0;top:150px;margin:0;border:none;z-index:10;display:block;width:300px;line-height:34px;background-color:#f4f4f4;border-top:1px solid #ccc;border-bottom:1px solid #ccc;text-align:right;padding:0 30px}
-.filter.active .filter-current{position:fixed;left:0;top:47px;margin:0;height:103px;border:0;width:300px;z-index:10;padding:17px 0;display:block;background-color:#fff;overflow-y:scroll}
+.filter.active .filter-current+.block-actions{position:fixed;right:0;top:150px;margin:0;border:none;z-index:10;display:block;width:300px;line-height:34px;background-color:#f4f4f4;border-top:1px solid #ccc;border-bottom:1px solid #ccc;text-align:right;padding:0 30px}
+.filter.active .filter-current{position:fixed;right:0;top:47px;margin:0;height:103px;border:0;width:300px;z-index:10;padding:17px 0;display:block;background-color:#fff;overflow-y:scroll}
 .filter-current-subtitle{padding:10px 15px;font-size:13px;font-weight:700;text-transform:uppercase;border:1px solid #ddd;background-color:#f5f5f5;position:relative;cursor:pointer;border-radius:7px;text-decoration:none}
 .filter.active .filter-current .filter-current-subtitle{display:none;padding:15px 30px}
 .filter.active .filter-current .filter-current-subtitle:after,.filter.active .filter-current .filter-current-subtitle:before{display:none}

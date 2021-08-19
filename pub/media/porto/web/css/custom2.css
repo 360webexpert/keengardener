@@ -141,6 +141,10 @@ div#product\.yotpo\.reviews .yotpo.yotpo-main-widget {
     display: flex;
     flex-wrap: wrap;
     align-content: center;
+    justify-content: center;
+}
+.catalog-category-view .product.photo.product-item-photo img{
+	max-height: 315px;
 }
 .catalog-category-view #featured_product .product.photo.product-item-photo {min-height: auto;}
 	/* Mobile Tablet Header */
