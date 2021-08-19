@@ -132,6 +132,17 @@ div#product\.yotpo\.reviews .yotpo.yotpo-main-widget {
 .infinite-loader {
     display: none;
 }
+.catalog-product-view .block.related.owl-top-narrow .block-title {
+    display: none;
+}
+.catalog-category-view .product.photo.product-item-photo {
+    min-height: 315px;
+    max-height: 315px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+.catalog-category-view #featured_product .product.photo.product-item-photo {min-height: auto;}
 	/* Mobile Tablet Header */
 
 @media (max-width: 767px) {
@@ -445,11 +456,12 @@ z-index:100;
 	padding: 0px 50px;
 }
 span.stock_button {
-	color:#fff;
-	background-color:#bd0000;
-	padding:10px 15px;
-	font-weight:bold;
-	border-radius: 5px;
+    color: #fff;
+    background-color: #bd0000;
+    padding: 12px 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    line-height: 3;
 }
 .product-info-main .product-add-form {
 	margin-bottom:15px;

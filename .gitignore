@@ -68,6 +68,8 @@ atlassian*
 !/var/.htaccess
 /vendor/*
 !/vendor/.htaccess
+/feeds/*
+/pub/media/mageplaza/search/*
 /generated/*
 !/generated/.htaccess
 .DS_Store
