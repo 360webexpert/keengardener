@@ -7999,7 +7999,6 @@ redirectMatch 301 ^/product/index/423/garden-tools-garden-hand-tools-cultivators
 redirectMatch 301 ^/product/index/365/bbqs-lifestyle-bbqs.railss$ http://www.keengardener.co.uk
 redirectMatch 301 ^/lightbox/GetGalleryThumbnail.rails%3Fvirtualimagepath%3D/content/images/products/grassmerehead.jpg%26width%3D230%26height%3D220$ http://www.keengardener.co.uk
 redirectMatch 301 ^/product/view/470/hozelock-360-microjet.rails$ http://www.keengardener.co.uk
-redirectMatch 301 ^/barbecue-accessories/3680-cadac-4-egg-set-tapasÂ ..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/pond-equipment/914-hozelock-vorton-14000-ultra-violet-clarif...$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbq..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbqs/1654..$ http://www.keengardener.co.uk
@@ -8009,13 +8008,10 @@ redirectMatch 301 ^/bbqs/1659-napoleon-prestige-pro-600..$ http://www.keengarden
 redirectMatch 301 ^/bbqs/4106-grand-hall-maxim-423-pearl..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/pond-servicing/717-hozelock-bioforce-8000..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/pond-servicing/392-hozelock-bioforce-4500..$ http://www.keengardener.co.uk
-redirectMatch 301 ^/garden-tools/3224-wilkinson-sword-space-saver-cÂ ..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbqs/4..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/garden-fu..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbqs/1656..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/garden...white-led-outdoor-deck-light-2w.html$ http://www.keengardener.co.uk
-redirectMatch 301 ^/barbecue-accessories/3680-cadac-4-egg-set-tapasÂ ..$ http://www.keengardener.co.uk
-redirectMatch 301 ^/garden-tools/3224-wilkinson-sword-space-saver-cÂ ..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/javascript:document.getElementById$ http://www.keengardener.co.uk
 redirectMatch 301 ^/in-the-greenhouse/797-bio-green-black..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbqs/2101-grand-hall-x-series-..$ http://www.keengardener.co.uk
@@ -8026,6 +8022,8 @@ redirectMatch 301 ^/bbqs..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbqs/4102-grand-hal..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbqs/1659-napole..$ http://www.keengardener.co.uk
 Redirect 301 /best-sales http://www.keengardener.co.uk/
+
+
 redirectMatch 301 ^/product/index/296/garden-lighting-victorian-style-lighting-pathway-lanterns.rails$ http://www.keengardener.co.uk
 redirectMatch 301 ^/product/index/44/hose-guns-and-sprinklers.rails$ http://www.keengardener.co.uk
 redirectMatch 301 ^/product/view/428/lacewing-chamber.rails$ http://www.keengardener.co.uk
@@ -8069,7 +8067,6 @@ redirectMatch 301 ^/product/view/93/select-a-light-spot-light-7w.railss$ http://
 redirectMatch 301 ^/product/index/500/planting-and-propagation-mini-greenhouses.railss$ http://www.keengardener.co.uk
 redirectMatch 301 ^/product/index/468/firepits-and-braziers-firepit-and-braziers-over$ http://www.keengardener.co.uk
 redirectMatch 301 ^/bbqs/41$ http://www.keengardener.co.uk
-redirectMatch 301 ^/barbecue-accessories/3680-cadac-4-egg-set-tapasÂ ..$ http://www.keengardener.co.uk
 redirectMatch 301 ^/lightbox/GetGalleryThum$ http://www.keengardener.co.uk
 redirectMatch 301 ^/product/index/508/planting-and-propagation-planting-tunnels-polytunnels.railss$ http://www.keengardener.co.uk
 redirectMatch 301 ^/in-the-greenhouse/797-bio-green-black..$ http://www.keengardener.co.uk
@@ -8078,7 +8075,6 @@ redirectMatch 301 ^/product/index/423/garden-tools-garden-hand-tools-cultivators
 redirectMatch 301 ^/page/view/propagation-advice.railss$ http://www.keengardener.co.uk
 redirectMatch 301 ^/javascript:document.getElementById$ http://www.keengardener.co.uk
 redirectMatch 301 ^/product/index/365/bbqs-lifestyle-bbqs.railss$ http://www.keengardener.co.uk
-redirectMatch 301 ^/garden-tools/3224-wilkinson-sword-space-saver-cÂ ..$ http://www.keengardener.co.uk
 
 ############################################
 ## Redirects 2015 Site
