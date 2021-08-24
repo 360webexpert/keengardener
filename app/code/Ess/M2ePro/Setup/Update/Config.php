@@ -170,10 +170,18 @@ class Config extends AbstractConfig
                 'EbayMotorsAddManagedPayments'
             ],
             'y21_m04' => [
-                'AmazonRelistPrice'
+                'AmazonRelistPrice',
+                'AddShipByDate'
             ],
             'y21_m05' => [
                 'EbayStoreCategoryIDs'
+            ],
+            'y21_m06' => [
+                'FixBrokenUrl',
+                'EbayTaxReference'
+            ],
+            'y21_m07' => [
+                'AmazonIossNumber'
             ]
         ];
     }

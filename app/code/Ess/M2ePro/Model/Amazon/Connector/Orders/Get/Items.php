@@ -168,16 +168,8 @@ class Items extends \Ess\M2ePro\Model\Amazon\Connector\Command\RealTime
 
                 $order['shipping_address'] = $this->parseShippingAddress($shipping, $marketplace);
 
-                $order['shipping_dates'] = [
-                    'ship' => [
-                        'from' => $shipping['ship_date']['from'],
-                        'to' => $shipping['ship_date']['to'],
-                    ],
-                    'delivery' => [
-                        'from' => $shipping['delivery_date']['from'],
-                        'to' => $shipping['delivery_date']['to'],
-                    ],
-                ];
+                $order['shipping_date_to'] = $shipping['ship_date']['to'];
+                $order['delivery_date_to'] = $shipping['delivery_date']['to'];
 
                 $order['currency'] = isset($orderData['currency']) ? trim($orderData['currency']) : '';
                 $order['paid_amount'] = isset($orderData['amount_paid']) ? (float)$orderData['amount_paid'] : 0;
@@ -202,6 +194,7 @@ class Items extends \Ess\M2ePro\Model\Amazon\Connector\Command\RealTime
                         'gift_message'         => trim($item['gift_message']),
                         'currency'             => trim($item['prices']['product']['currency']),
                         'tax_details'          => $item['taxes'],
+                        'ioss_number'          => $item['ioss_number'],
                         'discount_details'     => $item['discounts'],
                         'qty_purchased'        => (int)$item['qty']['ordered'],
                         'qty_shipped'          => (int)$item['qty']['shipped']

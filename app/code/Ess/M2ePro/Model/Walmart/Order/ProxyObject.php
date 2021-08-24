@@ -53,13 +53,27 @@ class ProxyObject extends \Ess\M2ePro\Model\Order\ProxyObject
      */
     public function getShippingData()
     {
-        $shippingData = [
-            'shipping_method' => $this->order->getShippingService(),
-            'shipping_price'  => $this->getBaseShippingPrice(),
-            'carrier_title'   => $this->getHelper('Module\Translation')->__('Walmart Shipping')
-        ];
+        $additionalData = '';
 
-        return $shippingData;
+        $shippingDateTo = $this->order->getShippingDateTo();
+        if (!empty($shippingDateTo)) {
+            $shippingDate = $this->getHelper('Data')->gmtDateToTimezone(
+                $shippingDateTo,
+                false,
+                'M d, Y, H:i:s'
+            );
+            $additionalData .= "Ship By Date: {$shippingDate} | ";
+        }
+
+        if (!empty($additionalData)) {
+            $additionalData = ' | ' . $additionalData;
+        }
+
+        return [
+            'carrier_title'   => $this->getHelper('Module\Translation')->__('Walmart Shipping'),
+            'shipping_method' => $this->order->getShippingService() . $additionalData,
+            'shipping_price'  => $this->getBaseShippingPrice(),
+        ];
     }
 
     /**

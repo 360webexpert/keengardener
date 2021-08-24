@@ -90,6 +90,7 @@ class Builder extends AbstractModel
         // ---------------------------------------
         $this->setData('paid_amount', (float)$data['paid_amount']);
         $this->setData('tax_details', $this->getHelper('Data')->jsonEncode($this->prepareTaxDetails($data)));
+        $this->setData('ioss_number', $data['items'][0]['ioss_number']);
         $this->setData('discount_details', $this->getHelper('Data')->jsonEncode($data['discount_details']));
         $this->setData('currency', $data['currency']);
         $this->setData('qty_shipped', $data['qty_shipped']);
@@ -103,7 +104,8 @@ class Builder extends AbstractModel
         $this->setData('shipping_service', $data['shipping_service']);
         $this->setData('shipping_address', $data['shipping_address']);
         $this->setData('shipping_price', (float)$data['shipping_price']);
-        $this->setData('shipping_dates', $this->getHelper('Data')->jsonEncode($data['shipping_dates']));
+        $this->setData('shipping_date_to', $data['shipping_date_to']);
+        $this->setData('delivery_date_to', $data['delivery_date_to']);
         // ---------------------------------------
 
         $this->items = $data['items'];
